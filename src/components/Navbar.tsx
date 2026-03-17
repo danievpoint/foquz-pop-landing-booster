@@ -44,7 +44,7 @@ const Navbar = () => {
     >
       <div className="absolute inset-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
-        <div className={`absolute inset-0 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`} style={{ backgroundColor: 'hsl(var(--foquz-lightblue))' }} />
+        <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
         {/* Mobile: PNG background */}
         <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
         {/* Desktop: SVG background, overflows downward */}
