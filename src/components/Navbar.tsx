@@ -98,29 +98,29 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - fullscreen overlay */}
+      {/* Mobile menu - fullscreen white overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-x-0 top-[64px] z-[9998] px-4 pt-4"
+            className="lg:hidden fixed inset-0 z-[9998] bg-white"
           >
-            <div className="bg-card comic-outline rounded-2xl p-6 shadow-[4px_4px_0px_0px_#000]">
-              <div className="space-y-6">
-                {mobileLinks.map((l, i) => (
+            <div className="pt-24 px-8">
+              <div className="space-y-8">
+                {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
                   <motion.a
                     key={l.label}
                     href={l.href}
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.08 }}
-                    className="flex items-center gap-4 font-extrabold text-2xl uppercase tracking-wide text-foreground"
+                    className="flex items-center gap-5 font-extrabold text-2xl uppercase tracking-wide text-foreground"
                     onClick={() => setMobileOpen(false)}
                   >
-                    <l.icon size={24} className="text-primary" />
+                    <l.icon size={28} className="text-primary" />
                     {l.label}
                   </motion.a>
                 ))}
