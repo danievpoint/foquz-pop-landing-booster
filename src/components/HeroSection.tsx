@@ -38,21 +38,31 @@ const HeroSection = () => {
             </div>
           </motion.div>
 
-          {/* Product image */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="lg:w-[60%] xl:w-[64%] flex items-end justify-center lg:justify-end lg:pr-[7%] lg:-mt-[5%]"
-          >
+          {/* Spacer for layout on mobile */}
+          <div className="lg:hidden">
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-              className="w-[115%] sm:w-[98%] md:w-[80%] lg:w-[550px] h-auto lg:mt-8 animate-[breathe_3s_ease-in-out_infinite]"
+              className="w-[115%] sm:w-[98%] md:w-[80%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
+
+      {/* Product image – absolute on desktop so it stays fixed relative to bg rays */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+        className="hidden lg:block absolute z-20"
+        style={{ top: '10%', right: '8%', width: '38%' }}
+      >
+        <img
+          src={heroJars}
+          alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+          className="w-full h-auto animate-[breathe_3s_ease-in-out_infinite]"
+        />
+      </motion.div>
     </section>
   );
 };
