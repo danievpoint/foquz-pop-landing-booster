@@ -47,7 +47,7 @@ const Navbar = () => {
       {/* Mobile: PNG background */}
       <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
       {/* Desktop: SVG background, overflows downward */}
-      <img src={navbarHeaderBgSvg} alt="" className="absolute top-[-60%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-75" />
+      <img src={navbarHeaderBgSvg} alt="" className="absolute top-[-120%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-50" />
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative">
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
