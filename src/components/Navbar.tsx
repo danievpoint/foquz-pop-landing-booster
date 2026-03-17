@@ -32,7 +32,7 @@ const Navbar = () => {
     { label: "REVIEWS", href: "/#reviews", icon: Star },
   ];
 
-  const mobileLinks = leftLinks; // Only START, PRODUKTE, BUNDLE on mobile
+  const mobileLinks = [...leftLinks, ...rightLinks.filter(l => l.label === "SO GEHTS")];
 
   const iconClass = `transition-colors cursor-pointer ${scrolled ? "hover:text-primary" : "text-primary-foreground hover:opacity-80"}`;
 
