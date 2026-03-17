@@ -39,12 +39,12 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${scrolled ? "shadow-md border-b-[3px] border-foreground" : ""}`}
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground ${scrolled ? "shadow-md" : ""}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
-        <div className={`absolute inset-0 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`} style={{ backgroundColor: 'hsl(var(--foquz-lightblue))' }} />
+        <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
         {/* Mobile: PNG background */}
         <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
         {/* Desktop: SVG background, overflows downward */}
