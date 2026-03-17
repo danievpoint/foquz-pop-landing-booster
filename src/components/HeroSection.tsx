@@ -5,8 +5,8 @@ import heroBg from "@/assets/hero-bg.svg";
 const HeroSection = () => {
   return (
     <section
-      className="relative overflow-visible bg-cover bg-center"
-      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7' }}
+      className="relative overflow-visible bg-cover"
+      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 30%' }}
     >
       {/* Text content – absolute so it's always top-left */}
       <motion.div
@@ -16,7 +16,9 @@ const HeroSection = () => {
         className="absolute top-[18%] left-[4%] z-20"
       >
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
-          DEIN FOKUS-<span className="text-secondary">UPGRADE.</span>
+          DEIN FOKUS-
+          <br />
+          <span className="text-secondary">UPGRADE.</span>
           <br />
           <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[60px]">JEDERZEIT BEREIT.</span>
         </h1>
@@ -36,14 +38,14 @@ const HeroSection = () => {
         </div>
       </motion.div>
 
-      {/* Product image – absolute, centered on the rays */}
+      {/* Product image – absolute, centered on the rays, 30% smaller */}
       <motion.img
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
         src={heroJars}
         alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-        className="absolute z-10 w-[38%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
+        className="absolute z-10 w-[26.6%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
         style={{ top: '12%', left: '50%', transform: 'translateX(-20%)' }}
       />
     </section>
