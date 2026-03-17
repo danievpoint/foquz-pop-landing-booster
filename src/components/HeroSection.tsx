@@ -5,7 +5,7 @@ import heroBg from "@/assets/hero-bg.svg";
 const HeroSection = () => {
   return (
     <section
-      className="relative overflow-visible bg-cover bg-center"
+      className="relative overflow-visible bg-cover bg-top lg:min-h-[900px]"
       style={{ backgroundImage: `url(${heroBg})` }}
     >
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 md:pt-36 lg:pt-40 xl:pt-48 pb-4 sm:pb-0">
