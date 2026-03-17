@@ -15,7 +15,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="lg:w-[40%] xl:w-[36%] pb-4 sm:pb-8 lg:pb-20"
+            className="lg:w-[40%] xl:w-[36%] pb-4 sm:pb-8 lg:pb-28"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
               DEIN FOKUS-<span className="text-secondary">UPGRADE.</span>
