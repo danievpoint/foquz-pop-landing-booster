@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap');
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 203 92% 89%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 349 80% 59%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 48 100% 55%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 203 92% 89%;
+    --muted-foreground: 0 0% 30%;
+
+    --accent: 158 35% 62%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 349 80% 59%;
+
+    --radius: 1rem;
+
+    /* FOQUZ brand colors */
+    --foquz-lightblue: 203 92% 89%;
+    --foquz-watermelon: 349 80% 59%;
+    --foquz-watermelon-light: 349 72% 77%;
+    --foquz-lemon: 48 100% 55%;
+    --foquz-lemon-light: 56 100% 55%;
+    --foquz-thai: 158 35% 62%;
+    --foquz-thai-light: 173 42% 78%;
+    --foquz-peach: 24 87% 55%;
+    --foquz-blueberry: 229 33% 58%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    overflow-x: clip;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    @apply bg-background text-foreground font-barlow leading-none;
+    overflow-x: clip;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-extrabold uppercase tracking-tight leading-[0.75];
+  }
+
+  p, span, li, a {
+    @apply leading-[0.85];
+  }
+}
+
+@layer components {
+  .comic-shadow {
+    box-shadow: 4px 4px 0px 0px #000;
+  }
+
+  .comic-outline {
+    border: 2px solid #000;
+  }
+
+  .comic-card {
+    @apply comic-outline comic-shadow bg-card rounded-xl;
+  }
+
+  .comic-btn {
+    @apply comic-outline comic-shadow font-extrabold uppercase tracking-wide
+           px-8 py-4 rounded-full text-lg cursor-pointer
+           transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px]
+           hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[4px] active:translate-y-[4px]
+           active:shadow-none;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-6 md:py-10;
+  }
+}
+
+@layer utilities {
+  .text-pop {
+    -webkit-text-stroke: 5px #000;
+    paint-order: stroke fill;
+    text-shadow: 3px 3px 0px #000;
+  }
+
+  @media (min-width: 768px) {
+    .text-pop {
+      -webkit-text-stroke: 10px #000;
+      text-shadow: 5px 5px 0px #000;
+    }
+  }
+}
