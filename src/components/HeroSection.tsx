@@ -6,7 +6,7 @@ const HeroSection = () => {
   return (
     <section
       className="relative overflow-visible bg-cover"
-      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 70%' }}
+      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 90%' }}
     >
       {/* Text content – absolute so it's always top-left */}
       <motion.div
