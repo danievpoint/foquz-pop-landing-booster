@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import heroJars from "@/assets/foquz-hero-jars.png";
+import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.png";
 
 const HeroSection = () => {
