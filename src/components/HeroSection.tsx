@@ -14,8 +14,8 @@ const HeroSection = () => {
         aria-hidden="true"
         className="absolute left-0 w-full pointer-events-none select-none"
         style={{
-          top: "-15%",
-          height: "200%",
+          top: "-52%",
+          height: "240%",
           objectFit: "fill",
         }}
       />
