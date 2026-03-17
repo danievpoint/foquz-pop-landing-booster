@@ -66,8 +66,8 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Center logo */}
-          {/* Logo removed */}
+          {/* Center – clickable area to scroll to top */}
+          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1" />
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
@@ -87,6 +87,7 @@ const Navbar = () => {
           <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
             {mobileOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
           </button>
+          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1" />
           <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={openCart}>
             <ShoppingCart size={20} className="text-foreground" />
             {count > 0 && (
