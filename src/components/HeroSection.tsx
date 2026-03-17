@@ -15,9 +15,9 @@ const HeroSection = () => {
         className="absolute pointer-events-none select-none"
         style={{
           top: "-118%",
-          left: "0",
-          width: "100%",
-          height: "238%",
+          left: "-8%",
+          width: "116%",
+          height: "340%",
           objectFit: "fill",
         }}
       />
