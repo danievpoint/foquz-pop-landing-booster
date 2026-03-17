@@ -39,7 +39,7 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground ${scrolled ? "shadow-md" : ""} lg:overflow-visible`}
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground ${scrolled ? "shadow-md" : ""} overflow-hidden`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       {/* Solid background fallback to prevent content showing through */}
