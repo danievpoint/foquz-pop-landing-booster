@@ -47,7 +47,7 @@ const Navbar = () => {
       {/* Mobile: PNG background */}
       <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
       {/* Desktop: SVG background, full-width cover */}
-      <img src={navbarHeaderBgSvg} alt="" className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none hidden lg:block" />
+      <img src={navbarHeaderBgSvg} alt="" className="absolute inset-0 w-full h-[200%] object-cover object-top pointer-events-none hidden lg:block" />
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative">
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
 
           {/* Center logo */}
-          <img src={foquzLogo} alt="Foquz" className="h-12 absolute left-1/2 -translate-x-1/2 z-10" />
+          {/* Logo removed */}
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
