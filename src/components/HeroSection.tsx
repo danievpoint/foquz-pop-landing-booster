@@ -15,7 +15,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="lg:w-[40%] xl:w-[36%] pb-4 sm:pb-8 lg:pb-20"
+            className="lg:w-[40%] xl:w-[36%] pb-4 sm:pb-8 lg:pb-28"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
               DEIN FOKUS-<span className="text-secondary">UPGRADE.</span>
@@ -43,12 +43,12 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="lg:w-[60%] xl:w-[64%] flex items-end justify-center lg:justify-end"
+            className="lg:w-[60%] xl:w-[64%] flex items-end justify-center lg:justify-end lg:mb-6"
           >
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-              className="w-[115%] sm:w-[98%] md:w-[80%] lg:w-[65%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
+              className="w-[115%] sm:w-[98%] md:w-[80%] lg:w-[62%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
             />
           </motion.div>
         </div>
