@@ -108,7 +108,8 @@ const Navbar = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="lg:hidden fixed inset-x-0 top-0 z-[10000] bg-white flex flex-col" style={{ height: '66vh' }}>
+          className="lg:hidden fixed inset-x-0 top-0 z-[10000] bg-white flex flex-col"
+          style={{ height: '66vh' }}
         >
           {/* Top bar with X, logo, cart */}
           <div className="flex items-center justify-between px-4 py-3">
