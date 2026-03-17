@@ -12,10 +12,12 @@ const HeroSection = () => {
         src={heroBg}
         alt=""
         aria-hidden="true"
-        className="absolute left-0 w-full pointer-events-none select-none"
+        className="absolute pointer-events-none select-none"
         style={{
-          top: "-52%",
-          height: "240%",
+          top: "-78%",
+          left: "-3%",
+          width: "106%",
+          height: "290%",
           objectFit: "fill",
         }}
       />
