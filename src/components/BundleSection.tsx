@@ -16,12 +16,12 @@ const BundleSection = () => {
 
   return (
     <section id="bundle"
-      className="section-padding py-10 md:py-32 relative overflow-hidden"
+      className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden"
       style={{ backgroundColor: "#75559f" }}
     >
       <img src={bundleBg} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-4 lg:gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-4 lg:gap-12 items-center">
           {/* Left: Bundle visual */}
           <motion.div
             className="relative flex items-center justify-center"
@@ -33,7 +33,7 @@ const BundleSection = () => {
               <img
                 src={foquzBox}
                 alt="FOQUZ Starter Bundle Box"
-                className="w-full lg:w-full max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl lg:scale-125"
+                className="w-full lg:w-full max-w-md md:max-w-sm lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl lg:scale-125"
               />
           </motion.div>
 
