@@ -59,6 +59,7 @@ const HeroSection = () => {
           alt=""
           aria-hidden="true"
           className="w-full h-auto block"
+          style={{ minHeight: 'max(700px, 75vh)' }}
         />
 
         {/* Product image – same coordinate space as BG */}
