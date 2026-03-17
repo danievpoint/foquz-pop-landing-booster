@@ -33,7 +33,7 @@ const BundleSection = () => {
               <img
                 src={foquzBox}
                 alt="FOQUZ Starter Bundle Box"
-                className="w-full lg:w-full max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl lg:scale-125"
+                className="w-full lg:w-full max-w-md md:max-w-sm lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl lg:scale-125"
               />
           </motion.div>
 
