@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
 
           {/* Center logo */}
-          <img src={foquzLogo} alt="Foquz" className="h-12 absolute left-1/2 -translate-x-1/2 z-10" />
+          {/* Logo removed */}
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
