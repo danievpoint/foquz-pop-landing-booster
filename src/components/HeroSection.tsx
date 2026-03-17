@@ -46,7 +46,7 @@ const HeroSection = () => {
         src={heroJars}
         alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
         className="absolute z-10 w-[26.6%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
-        style={{ top: '12%', left: '75%', transform: 'translateX(-20%)' }}
+        style={{ top: '12%', left: '60%', transform: 'translateX(-20%)' }}
       />
     </section>
   );
