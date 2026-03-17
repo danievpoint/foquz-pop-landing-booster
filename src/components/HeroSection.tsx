@@ -6,7 +6,7 @@ const HeroSection = () => {
   return (
     <section
       className="relative overflow-visible bg-cover"
-      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 30%' }}
+      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 50%' }}
     >
       {/* Text content – absolute so it's always top-left */}
       <motion.div
@@ -46,7 +46,7 @@ const HeroSection = () => {
         src={heroJars}
         alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
         className="absolute z-10 w-[26.6%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
-        style={{ top: '12%', left: '50%', transform: 'translateX(-20%)' }}
+        style={{ top: '12%', left: '75%', transform: 'translateX(-20%)' }}
       />
     </section>
   );
