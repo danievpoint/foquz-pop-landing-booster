@@ -55,7 +55,7 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
         className="hidden lg:block absolute z-20"
-        style={{ top: '10%', right: '8%', width: '38%' }}
+        style={{ top: '10%', right: '8%', width: '30%' }}
       >
         <img
           src={heroJars}
