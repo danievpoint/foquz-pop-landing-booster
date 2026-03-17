@@ -87,7 +87,7 @@ const HeroSection = () => {
               className="w-[40%] xl:w-[36%]"
             >
               <h1 className="text-7xl xl:text-[80px] leading-[0.95] mb-6 text-primary-foreground text-pop">
-                DEIN FOKUS-<span className="text-secondary">UPGRADE.</span>
+                DEIN FOKUS-<br /><span className="text-secondary">UPGRADE.</span>
                 <br />
                 <span className="text-6xl xl:text-[60px]">JEDERZEIT BEREIT.</span>
               </h1>
