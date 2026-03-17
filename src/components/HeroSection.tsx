@@ -22,7 +22,7 @@ const HeroSection = () => {
               className="pb-4 sm:pb-8"
             >
               <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
-                DEIN FOKUS-<span className="text-secondary">UPGRADE.</span>
+                DEIN FOKUS-<br className="hidden md:inline lg:hidden" /><span className="text-secondary">UPGRADE.</span>
                 <br />
                 <span className="text-3xl sm:text-4xl md:text-5xl">JEDERZEIT BEREIT.</span>
               </h1>
@@ -45,7 +45,7 @@ const HeroSection = () => {
               <img
                 src={heroJars}
                 alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                className="w-[115%] sm:w-[98%] md:w-[80%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
+                className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
               />
             </div>
           </div>
