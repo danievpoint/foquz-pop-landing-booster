@@ -5,21 +5,9 @@ import heroBg from "@/assets/hero-bg.svg";
 const HeroSection = () => {
   return (
     <section
-      className="relative overflow-hidden bg-foquz-lightblue"
-      style={{ aspectRatio: "1920 / 772" }}
+      className="relative overflow-visible bg-cover"
+      style={{ backgroundImage: `url(${heroBg})`, aspectRatio: '16 / 7', backgroundPosition: 'center 260%' }}
     >
-      <img
-        src={heroBg}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
-        style={{
-          objectPosition: "center top",
-          transform: "translateY(38%) scale(1.32)",
-          transformOrigin: "center top",
-        }}
-      />
-
       {/* Text content – absolute so it's always top-left */}
       <motion.div
         initial={{ opacity: 0, x: -60 }}
@@ -50,7 +38,7 @@ const HeroSection = () => {
         </div>
       </motion.div>
 
-      {/* Product image – absolute, centered on the rays */}
+      {/* Product image – absolute, centered on the rays, 30% smaller */}
       <motion.img
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +46,7 @@ const HeroSection = () => {
         src={heroJars}
         alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
         className="absolute z-10 w-[26.6%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
-        style={{ top: "12%", left: "60%", transform: "translateX(-20%)" }}
+        style={{ top: '12%', left: '60%', transform: 'translateX(-20%)' }}
       />
     </section>
   );
