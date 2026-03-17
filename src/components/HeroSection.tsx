@@ -33,7 +33,7 @@ const HeroSection = () => {
 
         {/* Text content – overlaid on the BG */}
         <div className="absolute inset-0 z-10 w-full">
-          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-4 sm:pb-0">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: '12%' }}>
             <div className="flex flex-col lg:flex-row lg:items-start">
               <motion.div
                 initial={{ opacity: 0, x: -60 }}
