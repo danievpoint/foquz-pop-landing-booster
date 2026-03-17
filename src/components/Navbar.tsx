@@ -98,38 +98,57 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - fullscreen white overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-0 z-[9998] bg-white"
-          >
-            <div className="pt-24 px-8">
-              <div className="space-y-8">
-                {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
-                  <motion.a
-                    key={l.label}
-                    href={l.href}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.08 }}
-                    className="flex items-center gap-5 font-extrabold text-2xl uppercase tracking-wide text-foreground"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <l.icon size={28} className="text-primary" />
-                    {l.label}
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
+
+    {/* Mobile menu - fullscreen white overlay OUTSIDE nav so it covers everything */}
+    <AnimatePresence>
+      {mobileOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="lg:hidden fixed inset-0 z-[10000] bg-white flex flex-col"
+        >
+          {/* Top bar with X, logo, cart */}
+          <div className="flex items-center justify-between px-4 py-3">
+            <button onClick={() => setMobileOpen(false)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
+              <X size={24} className="text-foreground" />
+            </button>
+            <img src={foquzLogo} alt="FOQUZ" className="h-10" />
+            <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={() => { setMobileOpen(false); openCart(); }}>
+              <ShoppingCart size={20} className="text-foreground" />
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center comic-outline">
+                  {count}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Menu links */}
+          <div className="pt-8 px-8">
+            <div className="space-y-8">
+              {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
+                <motion.a
+                  key={l.label}
+                  href={l.href}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.08 }}
+                  className="flex items-center gap-5 font-extrabold text-2xl uppercase tracking-wide text-foreground"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <l.icon size={28} className="text-primary" />
+                  {l.label}
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+
     <CartDrawer />
     <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
