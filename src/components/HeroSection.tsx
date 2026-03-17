@@ -41,7 +41,7 @@ const HeroSection = () => {
                 </a>
               </div>
             </motion.div>
-            <div>
+            <div className="md:flex md:justify-center">
               <img
                 src={heroJars}
                 alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
