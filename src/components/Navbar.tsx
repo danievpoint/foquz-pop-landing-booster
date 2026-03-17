@@ -67,7 +67,7 @@ const Navbar = () => {
           </div>
 
           {/* Center – clickable area to scroll to top */}
-          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1" />
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Nach oben scrollen" />
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
