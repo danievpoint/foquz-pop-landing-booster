@@ -144,10 +144,10 @@ const ProductDetail = () => {
       </div>
 
       {/* Product detail */}
-      <section className="container mx-auto px-4 pb-8 md:pb-24">
+      <section className="container mx-auto px-4 pb-8 lg:pb-24">
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
           {/* Image — compact on mobile/tablet */}
-          <div className="rounded-2xl overflow-hidden w-[65%] md:w-[50%] lg:w-full mx-auto lg:mx-0">
+          <div className="rounded-2xl overflow-hidden w-[55%] md:w-[40%] lg:w-full mx-auto lg:mx-0">
             <img
               src={product.image}
               alt={product.name}
@@ -157,7 +157,7 @@ const ProductDetail = () => {
           </div>
 
           {/* Info */}
-          <div className="py-0 md:py-4">
+          <div className="py-0 lg:py-4">
             <h1 className="text-2xl md:text-5xl font-extrabold mb-1 md:mb-2">{product.name}</h1>
             <p className="text-muted-foreground text-sm md:text-lg mb-3 md:mb-6 whitespace-pre-line leading-snug">
               {product.desc}
