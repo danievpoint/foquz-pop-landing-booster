@@ -10,11 +10,10 @@ import TrustBar from "@/components/TrustBar";
 import NewsletterSection from "@/components/NewsletterSection";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
-import { CartProvider } from "@/contexts/CartContext";
 
 const Index = () => {
   return (
-    <CartProvider>
+    <>
       <div className="min-h-screen">
         <Navbar />
         <HeroSection />
@@ -29,7 +28,7 @@ const Index = () => {
         <Footer />
       </div>
       <CookieBanner />
-    </CartProvider>
+    </>
   );
 };
 
