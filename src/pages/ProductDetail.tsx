@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products } from "@/data/products";
+import { allProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
@@ -97,15 +97,8 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
 
-  const product = products.find((p) => p.handle === handle);
-  const otherProducts = products.filter((p) => p.handle !== handle);
-  const bundleProduct = {
-    handle: "starter-bundle",
-    name: "Starter Bundle",
-    image: foquzBox,
-    price: "14,99€",
-    numericPrice: 14.99,
-  };
+  const product = allProducts.find((p) => p.handle === handle);
+  const otherProducts = allProducts.filter((p) => p.handle !== handle);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -170,6 +163,9 @@ const ProductDetail = () => {
 
             <div className="flex items-center gap-3 mb-0.5 md:mb-1">
               <span className="text-2xl md:text-4xl font-black">{product.price}</span>
+              {product.originalPrice && (
+                <span className="text-base md:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+              )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
             <span className="text-[10px] md:text-xs text-muted-foreground mb-3 md:mb-6 block">inkl. MwSt.</span>
@@ -177,21 +173,23 @@ const ProductDetail = () => {
             <button
               onClick={() =>
                 addToCart(1, {
-                  id: product.name,
-                  name: product.name,
+                  id: product.isBundle ? "starter-bundle" : product.name,
+                  name: product.isBundle ? "Starter Bundle (3 Sorten)" : product.name,
                   price: product.numericPrice,
                   image: product.image,
                 })
               }
               className="comic-btn text-xs md:text-base py-2.5 px-8 md:py-3 md:px-10 font-black mb-5 md:mb-8"
-              style={{ backgroundColor: product.color, color: "#000" }}
+              style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
             >
-              FOKUS SICHERN
+              {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
             </button>
 
             {/* Ingredients */}
             <div className="border-t-2 border-foreground/10 pt-4 md:pt-6">
-              <h3 className="font-extrabold text-base md:text-lg mb-3 md:mb-4">WAS STECKT DRIN?</h3>
+              <h3 className="font-extrabold text-base md:text-lg mb-3 md:mb-4">
+                {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
+              </h3>
               <ul className="space-y-1.5 md:space-y-2">
                 {product.ingredients.map((ing) => (
                   <li key={ing} className="flex items-center gap-2 text-xs md:text-sm">
@@ -206,7 +204,7 @@ const ProductDetail = () => {
                 ))}
               </ul>
               <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-3 md:mt-4">
-                100% Natur. Ohne Chemie. Ohne Bullshit.
+                {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
           </motion.div>
@@ -220,40 +218,12 @@ const ProductDetail = () => {
             ENTDECKE AUCH
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 max-w-3xl mx-auto">
-            {/* Bundle card */}
-            <div
-              onClick={() => {
-                addToCart(1, {
-                  id: "starter-bundle",
-                  name: "Starter Bundle (3 Sorten)",
-                  price: 14.99,
-                  image: foquzBox,
-                });
-              }}
-              className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300 cursor-pointer"
-              style={{ backgroundColor: "#75559f" }}
-            >
-              <div className="overflow-hidden">
-                <img
-                  src={foquzBox}
-                  alt="Starter Bundle"
-                  className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-2.5 md:p-4">
-                <h3 className="font-extrabold text-xs md:text-base mb-0.5 text-white">Starter Bundle</h3>
-                <div className="flex items-center gap-1.5 md:gap-2">
-                  <span className="font-black text-sm md:text-lg text-white">14,99€</span>
-                  <span className="text-white/50 line-through text-[10px] md:text-xs">23,97€</span>
-                </div>
-              </div>
-            </div>
-
             {otherProducts.map((p) => (
               <Link
                 key={p.handle}
                 to={`/produkt/${p.handle}`}
-                className="group rounded-xl md:rounded-2xl overflow-hidden bg-card border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
+                className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
+                style={p.isBundle ? { backgroundColor: "#75559f" } : undefined}
               >
                 <div className="overflow-hidden">
                   <img
@@ -263,10 +233,13 @@ const ProductDetail = () => {
                   />
                 </div>
                 <div className="p-2.5 md:p-4">
-                  <h3 className="font-extrabold text-xs md:text-base mb-0.5">{p.name}</h3>
+                  <h3 className={`font-extrabold text-xs md:text-base mb-0.5 ${p.isBundle ? "text-white" : ""}`}>{p.name}</h3>
                   <div className="flex items-center gap-1.5 md:gap-2">
-                    <span className="font-black text-sm md:text-lg">{p.price}</span>
-                    <StockBadge available={isAvailable(p.name)} />
+                    <span className={`font-black text-sm md:text-lg ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
+                    {p.originalPrice && (
+                      <span className="text-muted-foreground/50 line-through text-[10px] md:text-xs">{p.originalPrice}</span>
+                    )}
+                    {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
                   </div>
                 </div>
               </Link>
@@ -277,8 +250,8 @@ const ProductDetail = () => {
 
       <Footer />
 
-      {/* Bundle suggestion banner */}
-      <BundleBanner />
+      {/* Bundle suggestion banner - only on non-bundle pages */}
+      {!product?.isBundle && <BundleBanner />}
     </div>
   );
 };
