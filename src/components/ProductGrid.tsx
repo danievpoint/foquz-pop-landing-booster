@@ -91,12 +91,12 @@ const InfoOverlay = ({
 const InfoButton = ({ onClick, color }: {onClick: () => void;color: string;}) =>
 <button
   onClick={onClick}
-  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-extrabold text-lg leading-none transition-colors duration-200 shrink-0 ml-auto"
+  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center transition-colors duration-200 shrink-0 ml-auto"
   style={{ backgroundColor: color, color: "#000" }}
   title="Inhaltsstoffe anzeigen"
   onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.8"; }}
   onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}>
-    ?
+    <Search size={18} strokeWidth={2.5} />
   </button>;
 
 
