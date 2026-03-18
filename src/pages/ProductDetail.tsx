@@ -181,7 +181,7 @@ const ProductDetail = () => {
                   image: product.image,
                 })
               }
-              className="comic-btn text-xs md:text-base py-2.5 px-8 md:py-3 md:px-10 font-black mb-5 md:mb-8"
+              className="comic-btn text-xs lg:text-base py-2.5 px-8 lg:py-3 lg:px-10 font-black mb-5 lg:mb-8"
               style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
             >
               {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
