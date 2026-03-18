@@ -147,18 +147,14 @@ const ProductDetail = () => {
       <section className="container mx-auto px-4 pb-8 md:pb-24">
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-16 items-start">
           {/* Image — compact on mobile */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0"
-          >
+          <div className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0">
             <img
               src={product.image}
               alt={product.name}
+              fetchPriority="high"
               className="w-full aspect-square object-cover"
             />
-          </motion.div>
+          </div>
 
           {/* Info */}
           <motion.div
