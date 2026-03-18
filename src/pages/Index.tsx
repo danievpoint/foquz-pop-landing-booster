@@ -25,6 +25,9 @@ const Index = () => {
           <ProductGrid />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
+          <MarqueeBanner />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
           <HowToSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
