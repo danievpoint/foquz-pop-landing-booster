@@ -92,9 +92,6 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
               />
             ))}
           </svg>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-foreground/70">
-            {refreshing ? "Lädt…" : pullDistance >= THRESHOLD ? "Loslassen ↑" : "Herunterziehen ↓"}
-          </span>
         </div>
       )}
       {children}
