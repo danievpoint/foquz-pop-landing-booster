@@ -52,15 +52,20 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
-      <div className="hidden lg:block relative w-full" style={{ marginTop: 0, paddingTop: 0, backgroundColor: '#85c8b5' }}>
-        <img
-          src={heroBg}
-          alt=""
-          aria-hidden="true"
-          className="w-full block"
-          style={{ objectFit: 'contain', objectPosition: 'top center', display: 'block', width: '100%', height: 'auto' }}
-        />
+      {/* === DESKTOP (lg+) – fixed hero background without cropping === */}
+      <div
+        className="hidden lg:block relative w-full"
+        style={{
+          marginTop: 0,
+          paddingTop: 0,
+          backgroundImage: `url(${heroBg})`,
+          backgroundSize: '100% auto',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: '#c9e8fb',
+          minHeight: '100vh',
+        }}
+      >
 
         {/* Product image – same coordinate space as BG */}
         <motion.div
