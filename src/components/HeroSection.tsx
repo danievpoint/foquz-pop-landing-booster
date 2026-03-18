@@ -23,9 +23,9 @@ const HeroSection = () => {
               transition={{ duration: 0.7 }}
               className="pb-4 sm:pb-8"
             >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-pop">
-                <span className="text-primary-foreground">KURZ </span><span className="text-secondary">RIECHEN.</span><br />
-                <span className="text-primary-foreground">AB AUF</span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
+                KURZ RIECHEN.<br />
+                AB AUF
                 <br />
                 <span className="text-secondary text-3xl sm:text-4xl md:text-5xl">WOLKE 7.</span>
               </h1>
@@ -97,9 +97,9 @@ const HeroSection = () => {
               transition={{ duration: 0.7 }}
               className="w-[40%] xl:w-[36%]"
             >
-              <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-pop">
-                <span className="text-primary-foreground">KURZ </span><span className="text-secondary">RIECHEN.</span><br />
-                <span className="text-primary-foreground">AB AUF</span>
+              <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
+                KURZ RIECHEN.<br />
+                AB AUF
                 <br />
                 <span className="text-secondary text-[clamp(2.5rem,4vw,3.75rem)]">WOLKE 7.</span>
               </h1>
