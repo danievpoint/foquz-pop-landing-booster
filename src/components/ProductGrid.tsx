@@ -202,7 +202,7 @@ const ProductGrid = () => {
           </p>
 
           {/* Desktop: static grid */}
-          <div className="hidden lg:grid lg:grid-cols-3 gap-8 mx-auto mt-12">
+          <div className="hidden lg:grid lg:grid-cols-3 gap-6 mx-auto mt-8">
             {products.map((p, i) => (
               <motion.div
                 key={p.name}
@@ -213,27 +213,27 @@ const ProductGrid = () => {
                 viewport={{ once: true }}
                 className="flex flex-col"
               >
-                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
+                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-2 block">
                     <img
                       src={p.image}
                       alt={p.name}
-                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
+                      className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-300"
                     />
                 </Link>
-                <div className="py-2">
-                  <Link to={`/produkt/${p.handle}`} className="text-lg mb-1 block hover:opacity-70 transition-opacity">
+                <div className="py-1">
+                  <Link to={`/produkt/${p.handle}`} className="text-base mb-0.5 block hover:opacity-70 transition-opacity">
                     {p.name}
                   </Link>
-                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-2xl font-black">{p.price}</span>
+                  <p className="text-xs text-muted-foreground mb-2 whitespace-pre-line">{p.desc}</p>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-xl font-black">{p.price}</span>
                     <StockBadge available={isAvailable(p.name)} />
                   </div>
-                  <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
+                  <span className="text-[10px] text-muted-foreground mb-2 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                      className="comic-btn bg-card text-foreground text-sm py-2 px-6"
+                      className="comic-btn bg-card text-foreground text-xs py-2 px-5"
                     >
                       FOKUS SICHERN
                     </button>
