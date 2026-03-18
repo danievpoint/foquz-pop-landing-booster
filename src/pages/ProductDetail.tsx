@@ -218,40 +218,12 @@ const ProductDetail = () => {
             ENTDECKE AUCH
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 max-w-3xl mx-auto">
-            {/* Bundle card */}
-            <div
-              onClick={() => {
-                addToCart(1, {
-                  id: "starter-bundle",
-                  name: "Starter Bundle (3 Sorten)",
-                  price: 14.99,
-                  image: foquzBox,
-                });
-              }}
-              className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300 cursor-pointer"
-              style={{ backgroundColor: "#75559f" }}
-            >
-              <div className="overflow-hidden">
-                <img
-                  src={foquzBox}
-                  alt="Starter Bundle"
-                  className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-2.5 md:p-4">
-                <h3 className="font-extrabold text-xs md:text-base mb-0.5 text-white">Starter Bundle</h3>
-                <div className="flex items-center gap-1.5 md:gap-2">
-                  <span className="font-black text-sm md:text-lg text-white">14,99€</span>
-                  <span className="text-white/50 line-through text-[10px] md:text-xs">23,97€</span>
-                </div>
-              </div>
-            </div>
-
             {otherProducts.map((p) => (
               <Link
                 key={p.handle}
                 to={`/produkt/${p.handle}`}
-                className="group rounded-xl md:rounded-2xl overflow-hidden bg-card border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
+                className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
+                style={p.isBundle ? { backgroundColor: "#75559f" } : undefined}
               >
                 <div className="overflow-hidden">
                   <img
@@ -261,10 +233,13 @@ const ProductDetail = () => {
                   />
                 </div>
                 <div className="p-2.5 md:p-4">
-                  <h3 className="font-extrabold text-xs md:text-base mb-0.5">{p.name}</h3>
+                  <h3 className={`font-extrabold text-xs md:text-base mb-0.5 ${p.isBundle ? "text-white" : ""}`}>{p.name}</h3>
                   <div className="flex items-center gap-1.5 md:gap-2">
-                    <span className="font-black text-sm md:text-lg">{p.price}</span>
-                    <StockBadge available={isAvailable(p.name)} />
+                    <span className={`font-black text-sm md:text-lg ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
+                    {p.originalPrice && (
+                      <span className="text-muted-foreground/50 line-through text-[10px] md:text-xs">{p.originalPrice}</span>
+                    )}
+                    {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
                   </div>
                 </div>
               </Link>
