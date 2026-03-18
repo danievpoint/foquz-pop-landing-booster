@@ -9,7 +9,8 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  "Bestpreis sichern",
+  "28% Sparen",
+  "Nasen Stripes und Sticker for free",
 ];
 
 const BundleSection = () => {
@@ -50,10 +51,13 @@ const BundleSection = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-[50px] md:leading-[0.95] text-white mb-2 md:mb-4">
-              VOLLE POWER:<br />HOL DIR DAS BUNDLE!
+              FOQUZ POWER BUNDLE
             </h2>
+            <p className="text-white font-black text-lg lg:text-xl mb-2">
+              Eine Box. Voller Fokus.
+            </p>
             <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg">
-              Alle 3 Sorten in einer Box. Spar 15% und finde heraus, welcher Kick dich am weitesten bringt.
+              Alle 3 Sorten in einer Box. Spare ganze 28% und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
             </p>
 
             {/* Checkpoints */}
