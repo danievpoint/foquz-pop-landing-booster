@@ -53,18 +53,25 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
     };
   }, [onTouchStart, onTouchMove, onTouchEnd]);
 
+  const offset = pulling || refreshing ? pullDistance : 0;
+
   return (
-    <>
-      {pulling || refreshing ? (
+    <div
+      style={{
+        transform: offset > 0 ? `translateY(${offset}px)` : undefined,
+        transition: !pulling ? 'transform 0.3s ease' : undefined,
+      }}
+    >
+      {offset > 0 && (
         <div
-          className="fixed top-0 left-0 right-0 z-[99999] flex items-center justify-center pointer-events-none transition-transform duration-200"
-          style={{ height: pullDistance, opacity: Math.min(pullDistance / THRESHOLD, 1) }}
+          className="fixed top-0 left-0 right-0 z-[99999] flex items-center justify-center pointer-events-none"
+          style={{ height: offset, opacity: Math.min(offset / THRESHOLD, 1) }}
         >
           <div className={`w-8 h-8 border-3 border-foreground/30 border-t-foreground rounded-full ${refreshing ? "animate-spin" : ""}`} />
         </div>
-      ) : null}
+      )}
       {children}
-    </>
+    </div>
   );
 };
 
