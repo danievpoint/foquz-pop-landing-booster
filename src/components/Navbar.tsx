@@ -129,8 +129,8 @@ const Navbar = () => {
           </div>
 
           {/* Menu links */}
-          <div className="pt-8 px-8">
-            <div className="space-y-8">
+          <div className="pt-4 pb-6 px-8">
+            <div className="space-y-5">
               {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
                 <motion.a
                   key={l.label}
