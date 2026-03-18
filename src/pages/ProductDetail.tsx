@@ -27,29 +27,48 @@ const BundleBanner = () => {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="fixed bottom-4 left-0 right-0 z-50 px-4 md:px-6 flex justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
         >
+          {/* Backdrop */}
           <div
-            className="w-full max-w-md md:max-w-lg rounded-2xl p-4 md:p-5 flex items-center gap-4 shadow-2xl border-2 border-foreground/10"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setDismissed(true)}
+          />
+
+          {/* Popup */}
+          <div
+            className="relative w-full max-w-sm md:max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-foreground/10 flex flex-col items-center text-center gap-4"
             style={{ backgroundColor: "#75559f" }}
           >
+            <button
+              onClick={() => setDismissed(true)}
+              className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
             <img
               src={foquzBox}
               alt="Starter Bundle"
-              className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0"
+              className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl"
             />
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-extrabold text-sm md:text-base leading-tight">
-                STARTER BUNDLE – Alle 3 Sorten!
-              </p>
-              <p className="text-white/70 text-xs md:text-sm">
-                Spar 15% · Nur 14,99€
-              </p>
+
+            <h3 className="text-white font-extrabold text-xl md:text-2xl leading-tight">
+              STARTER BUNDLE – Alle 3 Sorten!
+            </h3>
+            <p className="text-white/70 text-sm md:text-base">
+              Spar 15% und teste alle Geschmacksrichtungen in einer Box.
+            </p>
+
+            <div className="flex items-center gap-3">
+              <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
+              <span className="text-white/50 line-through text-base md:text-lg">23,97€</span>
             </div>
+
             <button
               onClick={() => {
                 addToCart(1, {
@@ -60,17 +79,11 @@ const BundleBanner = () => {
                 });
                 setDismissed(true);
               }}
-              className="comic-btn text-xs md:text-sm py-2 px-4 md:py-2.5 md:px-5 font-black shrink-0 flex items-center gap-1.5"
+              className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
-              <ShoppingBag className="w-4 h-4" />
-              BUNDLE
-            </button>
-            <button
-              onClick={() => setDismissed(true)}
-              className="text-white/60 hover:text-white transition-colors shrink-0"
-            >
-              <X className="w-5 h-5" />
+              <ShoppingBag className="w-5 h-5" />
+              BUNDLE SICHERN
             </button>
           </div>
         </motion.div>
