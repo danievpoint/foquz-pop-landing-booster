@@ -32,7 +32,7 @@ export const products: Product[] = [
     handle: "thai-style",
     price: "€7,99",
     numericPrice: 7.99,
-    desc: "Dein Style, dein Kick.\nKräuter-Power für tiefste Konzentration.",
+    desc: "Thailand für die Tasche.\nAbheben ohne Flugticket.",
     image: productThai,
     color: "#85c8b5",
     ingredients: ["Menthol", "Borneol", "Kampferaroma"],
