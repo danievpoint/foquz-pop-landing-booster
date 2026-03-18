@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import foquzLogo from "@/assets/foquz-logo.png";
 
 const Footer = () => {
@@ -45,8 +46,8 @@ const Footer = () => {
           <div>
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4">SHOP</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80">
-              <li><a href="/#sorten" className="hover:opacity-100 transition-opacity">Produkte</a></li>
-              <li><a href="/#bundle" className="hover:opacity-100 transition-opacity">Bundle</a></li>
+              <li><Link to="/#sorten" className="hover:opacity-100 transition-opacity">Produkte</Link></li>
+              <li><Link to="/#bundle" className="hover:opacity-100 transition-opacity">Bundle</Link></li>
               <li><a href="#" className="hover:opacity-100 transition-opacity">Gutschein</a></li>
             </ul>
           </div>
@@ -55,11 +56,11 @@ const Footer = () => {
           <div>
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4">INFO</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80">
-              <li><a href="/ueber-uns" className="hover:opacity-100 transition-opacity">Über uns</a></li>
-              <li><a href="/faq" className="hover:opacity-100 transition-opacity">FAQ</a></li>
-              <li><a href="/das-ist-drin" className="hover:opacity-100 transition-opacity">Das ist drin</a></li>
-              <li><a href="/anleitung" className="hover:opacity-100 transition-opacity">Anleitung</a></li>
-              <li><a href="/b2b-anfragen" className="hover:opacity-100 transition-opacity">B2B Anfragen</a></li>
+              <li><Link to="/ueber-uns" className="hover:opacity-100 transition-opacity">Über uns</Link></li>
+              <li><Link to="/faq" className="hover:opacity-100 transition-opacity">FAQ</Link></li>
+              <li><Link to="/das-ist-drin" className="hover:opacity-100 transition-opacity">Das ist drin</Link></li>
+              <li><Link to="/anleitung" className="hover:opacity-100 transition-opacity">Anleitung</Link></li>
+              <li><Link to="/b2b-anfragen" className="hover:opacity-100 transition-opacity">B2B Anfragen</Link></li>
             </ul>
           </div>
 
@@ -67,11 +68,11 @@ const Footer = () => {
           <div>
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4">LEGAL</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80">
-              <li><a href="/impressum" className="hover:opacity-100 transition-opacity">Impressum</a></li>
-              <li><a href="/datenschutz" className="hover:opacity-100 transition-opacity">Datenschutz</a></li>
-              <li><a href="/agb" className="hover:opacity-100 transition-opacity">AGB</a></li>
-              <li><a href="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity">Widerrufsbelehrung</a></li>
-              <li><a href="/versandbedingungen" className="hover:opacity-100 transition-opacity">Versandbedingungen</a></li>
+              <li><Link to="/impressum" className="hover:opacity-100 transition-opacity">Impressum</Link></li>
+              <li><Link to="/datenschutz" className="hover:opacity-100 transition-opacity">Datenschutz</Link></li>
+              <li><Link to="/agb" className="hover:opacity-100 transition-opacity">AGB</Link></li>
+              <li><Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity">Widerrufsbelehrung</Link></li>
+              <li><Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity">Versandbedingungen</Link></li>
             </ul>
           </div>
 
@@ -79,9 +80,9 @@ const Footer = () => {
           <div className="flex flex-col">
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4">HILFE</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 mb-3 md:mb-4">
-              <li><a href="/hilfe" className="hover:opacity-100 transition-opacity">Help Center</a></li>
-              <li><a href="/faq" className="hover:opacity-100 transition-opacity">FAQ</a></li>
-              <li><a href="/versandbedingungen" className="hover:opacity-100 transition-opacity">Versand</a></li>
+              <li><Link to="/hilfe" className="hover:opacity-100 transition-opacity">Help Center</Link></li>
+              <li><Link to="/faq" className="hover:opacity-100 transition-opacity">FAQ</Link></li>
+              <li><Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity">Versand</Link></li>
             </ul>
             <div className="flex gap-1.5 md:gap-2 mt-auto pt-3 md:pt-4 flex-wrap">
               {["PayPal", "Klarna", "VISA"].map((method) => (
