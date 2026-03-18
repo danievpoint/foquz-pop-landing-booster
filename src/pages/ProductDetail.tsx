@@ -145,9 +145,9 @@ const ProductDetail = () => {
 
       {/* Product detail */}
       <section className="container mx-auto px-4 pb-8 md:pb-24">
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-16 items-start">
-          {/* Image — compact on mobile */}
-          <div className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0">
+        <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
+          {/* Image — compact on mobile/tablet */}
+          <div className="rounded-2xl overflow-hidden w-[65%] md:w-[50%] lg:w-full mx-auto lg:mx-0">
             <img
               src={product.image}
               alt={product.name}
