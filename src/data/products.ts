@@ -48,3 +48,23 @@ export const products: Product[] = [
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
   },
 ];
+
+export const bundleProduct: Product = {
+  name: "Starter Bundle",
+  handle: "starter-bundle",
+  price: "14,99€",
+  originalPrice: "23,97€",
+  numericPrice: 14.99,
+  desc: "Alle 3 Sorten in einer Box.\nSpar 15% und finde heraus, welcher Kick dich am weitesten bringt.",
+  image: foquzBox,
+  color: "#75559f",
+  isBundle: true,
+  ingredients: [
+    "Alle 3 Geschmacksrichtungen enthalten",
+    "PEACH PARTY – Fruchtig & leicht",
+    "THAI STYLE – Kräuter-Power",
+    "LEMON BREEZY – Frisch & belebend",
+  ],
+};
+
+export const allProducts: Product[] = [...products, bundleProduct];
