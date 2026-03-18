@@ -14,16 +14,26 @@ const NewsletterSection = () => {
 
     setLoading(true);
     try {
-      const { error } = await supabase
+      // Save to Supabase
+      const { error: dbError } = await supabase
         .from("newsletter_subscribers")
         .insert({ email: email.trim().toLowerCase() });
 
-      if (error) {
-        if (error.code === "23505") {
-          toast({ title: "Du bist bereits dabei! 💪", description: "Diese E-Mail ist schon angemeldet." });
-        } else {
-          throw error;
-        }
+      if (dbError && dbError.code !== "23505") {
+        throw dbError;
+      }
+
+      // Send to Shopify
+      const { error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
+        body: { email: email.trim().toLowerCase() },
+      });
+
+      if (fnError) {
+        console.error("Shopify newsletter error:", fnError);
+      }
+
+      if (dbError?.code === "23505") {
+        toast({ title: "Du bist bereits dabei! 💪", description: "Diese E-Mail ist schon angemeldet." });
       } else {
         toast({ title: "Willkommen im Squad! 🎉", description: "Du erhältst deinen 10%-Code per E-Mail." });
       }
