@@ -2,42 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import productWatermelon from "@/assets/product-watermelon-new.png";
-import productThai from "@/assets/product-thai-new.png";
-import productLemon from "@/assets/product-lemon-new.png";
+import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
+import { products } from "@/data/products";
 
-const products = [
-  {
-    name: "PEACH PARTY",
-    price: "€14,99",
-    numericPrice: 14.99,
-    desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
-    image: productWatermelon,
-    color: "#e94362",
-    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
-  },
-  {
-    name: "THAI STYLE",
-    price: "€7,99",
-    numericPrice: 7.99,
-    desc: "Dein Style, dein Kick.\nKräuter-Power für tiefste Konzentration.",
-    image: productThai,
-    color: "#85c8b5",
-    ingredients: ["Menthol", "Borneol", "Kampferaroma"],
-  },
-  {
-    name: "LEMON BREEZY",
-    price: "€7,99",
-    numericPrice: 7.99,
-    desc: "Bleib Breezy, nimm's easy.\nFrischer Wind für deine besten Ideen.",
-    image: productLemon,
-    color: "#ffd618",
-    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
-  },
-];
 
 const cardVariants = {
   hidden: { opacity: 0, y: 60 },
