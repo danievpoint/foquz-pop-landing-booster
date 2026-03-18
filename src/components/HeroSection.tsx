@@ -77,22 +77,17 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div
-className="hidden lg:block relative w-full hero-desktop-wrap overflow-visible"
-          style={{
-            marginTop: 0,
-            paddingTop: 0,
-            minHeight: 'unset',
-            height: 'auto',
-            aspectRatio: '1920 / 772',
-          }}
-        >
+        <div className="hidden lg:block relative w-full overflow-visible">
+          {/* SVG defines the natural height */}
           <img
             src={heroBg}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+            fetchPriority="high"
+            className="w-full h-auto block"
           />
+
+          {/* Products – locked to SVG via matching percentages */}
           <div className="absolute z-20 hero-product-img">
             <img
               src={heroJars}
@@ -102,6 +97,7 @@ className="hidden lg:block relative w-full hero-desktop-wrap overflow-visible"
             />
           </div>
 
+          {/* Text overlay */}
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
               <div className="w-[40%] xl:w-[36%]">
