@@ -3,9 +3,9 @@ import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
 
 const steps = [
-  { num: "1", title: "Dose auf:", desc: "Dreh den Deckel deiner Lieblingssorte auf." },
-  { num: "2", title: "Tief einatmen:", desc: "Ein kräftiger Zug durch die Nase genügt." },
-  { num: "3", title: "Fokus an:", desc: "Spüre die Wirkung in nur 2 Sekunden." },
+  { num: "1", title: "DOSE AUF" },
+  { num: "2", title: "NASE DRAUF" },
+  { num: "3", title: "DURCHATMEN" },
 ];
 
 const HowToSection = () => {
@@ -33,12 +33,11 @@ const HowToSection = () => {
             viewport={{ once: true }}
             className="bg-card comic-card p-5 md:p-8 max-w-[260px] transform -rotate-2"
           >
-            <h2 className="text-3xl md:text-4xl mb-6">So gehts...</h2>
+            <h2 className="text-3xl md:text-4xl mb-6">How to Foquz</h2>
             <div className="space-y-4">
               {steps.map((s) => (
                 <p key={s.num} className="text-base">
-                  <span className="font-extrabold">{s.num}. {s.title}</span>{" "}
-                  {s.desc}
+                  <span className="font-extrabold">{s.num}. {s.title}</span>
                 </p>
               ))}
             </div>
