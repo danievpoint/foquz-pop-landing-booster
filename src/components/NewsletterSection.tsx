@@ -54,13 +54,13 @@ const NewsletterSection = () => {
     <>
       <section className="bg-primary py-10 md:py-14">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-black text-primary-foreground mb-1 tracking-tight">
-            JOIN THE SQUAD
+          <h2 className="text-2xl md:text-4xl font-black text-primary-foreground mb-3 tracking-tight">
+            ENTER THE CLOUD
           </h2>
-          <p className="text-sm md:text-base text-primary-foreground/80 mb-5">
-            Newsletter abonnieren &amp; <span className="font-black text-primary-foreground">10% Rabatt</span> sichern
+          <p className="text-sm md:text-base text-primary-foreground/80 mb-5 max-w-lg mx-auto leading-relaxed">
+            Werde Teil der Community. <span className="font-black text-primary-foreground">FOQUZ Cloud Members</span> bekommen als erste Drops, exklusive Deals und Cloud-Only Content — bevor irgendjemand anderes.
           </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
             <Input
               type="email"
               placeholder="Deine E-Mail-Adresse"
@@ -72,11 +72,14 @@ const NewsletterSection = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="h-12 rounded-full px-8 font-extrabold text-base bg-secondary text-secondary-foreground hover:bg-secondary/90 comic-outline"
+              className="h-12 rounded-full px-8 font-extrabold text-base bg-secondary text-secondary-foreground hover:bg-secondary/90 comic-outline whitespace-nowrap"
             >
-              {loading ? "..." : "JETZT JOINEN"}
+              {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
+          <p className="text-xs text-primary-foreground/60">
+            ☁️ 10% Rabatt auf deine erste Order · Kein Spam · Jederzeit kündbar
+          </p>
         </div>
       </section>
 
