@@ -63,7 +63,10 @@ const HeroSection = () => {
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
           backgroundColor: '#c9e8fb',
-          minHeight: '100vh',
+          minHeight: 'unset',
+          height: 'auto',
+          aspectRatio: '1920 / 772',
+          maxHeight: '772px',
         }}
       >
 
