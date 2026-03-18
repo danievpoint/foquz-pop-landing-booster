@@ -226,7 +226,7 @@ const ProductDetail = () => {
             {otherProducts.map((p) => (
               <div
                 key={p.handle}
-                className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
+                className={`group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300 ${p.isBundle ? "col-span-2 sm:col-span-1 max-w-[60%] sm:max-w-none mx-auto" : ""}`}
                 style={p.isBundle ? { backgroundColor: "#75559f" } : undefined}
               >
                 <Link to={`/produkt/${p.handle}`}>
