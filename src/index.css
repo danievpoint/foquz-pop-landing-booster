@@ -68,6 +68,7 @@
   html {
     overflow-x: clip;
     -webkit-overflow-scrolling: touch;
+    background-color: #85c8b5;
   }
 
   body {
