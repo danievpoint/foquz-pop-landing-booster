@@ -188,8 +188,8 @@ const ProductDetail = () => {
             </button>
 
             {/* Ingredients */}
-            <div className="border-t-2 border-foreground/10 pt-3 md:pt-6">
-              <h3 className="font-extrabold text-sm md:text-lg mb-2 md:mb-4">
+            <div className="border-t-2 border-foreground/10 pt-3 lg:pt-6">
+              <h3 className="font-extrabold text-sm lg:text-lg mb-2 lg:mb-4">
                 {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
               </h3>
               <div className="flex flex-wrap gap-1.5 md:hidden">
