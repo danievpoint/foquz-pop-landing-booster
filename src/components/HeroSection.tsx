@@ -53,12 +53,12 @@ const HeroSection = () => {
       </div>
 
       {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
-      <div className="hidden lg:block relative w-full" style={{ height: 'max(800px, 85vh)' }}>
+      <div className="hidden lg:block relative w-full">
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          className="w-full h-auto block"
         />
 
         {/* Product image – same coordinate space as BG */}
