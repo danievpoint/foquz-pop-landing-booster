@@ -17,7 +17,7 @@ const BundleBanner = () => {
 
   useEffect(() => {
     if (dismissed) return;
-    const timer = setTimeout(() => setVisible(true), 3000);
+    const timer = setTimeout(() => setVisible(true), 4000);
     return () => clearTimeout(timer);
   }, [dismissed]);
 
