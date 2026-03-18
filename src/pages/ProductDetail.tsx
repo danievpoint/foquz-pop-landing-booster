@@ -253,7 +253,7 @@ const ProductDetail = () => {
                         image: p.image,
                       })
                     }
-                    className="comic-btn w-full text-[10px] md:text-xs py-1.5 md:py-2 font-black"
+                    className="comic-btn w-full text-[9px] md:text-xs !py-1 !px-2 md:!py-2 md:!px-4 font-black"
                     style={{ backgroundColor: p.isBundle ? "#ffd618" : p.color, color: "#000" }}
                   >
                     FOKUS SICHERN
