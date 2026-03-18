@@ -89,16 +89,16 @@ const HeroSection = () => {
                 <br />
                 <span className="text-[clamp(2.5rem,4vw,3.75rem)]">JEDERZEIT BEREIT.</span>
               </h1>
-              <div className="flex flex-row gap-4">
+              <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
                 <a
                   href="#bundle"
-                  className="comic-btn sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
+                  className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
                 >
                   SPAR-BUNDLE HOLEN
                 </a>
                 <a
                   href="#sorten"
-                  className="comic-btn sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
+                  className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap"
                 >
                   EINZELN KAUFEN
                 </a>
