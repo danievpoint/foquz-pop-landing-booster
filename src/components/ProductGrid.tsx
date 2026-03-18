@@ -15,11 +15,10 @@ products.forEach((p) => {
 });
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: (i: number) => ({
+  hidden: { opacity: 1, y: 0 },
+  visible: () => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.5 }
   })
 };
 
