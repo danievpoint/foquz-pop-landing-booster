@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { allProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
@@ -9,6 +9,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ChevronLeft, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
+
+// Preload all product images on module load
+allProducts.forEach((p) => {
+  const img = new Image();
+  img.src = p.image;
+});
 
 const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
