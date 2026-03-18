@@ -192,7 +192,7 @@ const ProductDetail = () => {
               <h3 className="font-extrabold text-sm lg:text-lg mb-2 lg:mb-4">
                 {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
               </h3>
-              <div className="flex flex-wrap gap-1.5 md:hidden">
+              <div className="flex flex-wrap gap-1.5 lg:hidden">
                 {product.ingredients.map((ing) => (
                   <span
                     key={ing}
