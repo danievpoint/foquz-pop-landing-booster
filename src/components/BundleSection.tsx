@@ -9,7 +9,8 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  "Bestpreis sichern",
+  "28% Sparen",
+  "Nasen Stripes und Sticker for free",
 ];
 
 const BundleSection = () => {
