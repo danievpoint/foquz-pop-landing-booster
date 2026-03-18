@@ -111,6 +111,38 @@
   .section-padding {
     @apply px-4 sm:px-6 lg:px-8 py-6 md:py-10;
   }
+
+  .hero-desktop-wrap {
+    max-height: 772px;
+  }
+
+  .hero-product-img {
+    top: 22%;
+    left: 57%;
+    width: 27%;
+  }
+
+  /* Large monitors (≥ 1920px) */
+  @media (min-width: 1920px) {
+    .hero-desktop-wrap {
+      max-height: 900px;
+    }
+    .hero-product-img {
+      top: 14%;
+      width: 32%;
+    }
+  }
+
+  /* Very large monitors like 42" (≥ 2560px) */
+  @media (min-width: 2560px) {
+    .hero-desktop-wrap {
+      max-height: 1100px;
+    }
+    .hero-product-img {
+      top: 10%;
+      width: 35%;
+    }
+  }
 }
 
 @layer utilities {

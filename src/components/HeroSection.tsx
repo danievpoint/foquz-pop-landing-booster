@@ -57,7 +57,7 @@ const HeroSection = () => {
 
       {/* === DESKTOP (lg+) – fixed hero background without cropping === */}
       <div
-        className="hidden lg:block relative w-full"
+        className="hidden lg:block relative w-full hero-desktop-wrap"
         style={{
           marginTop: 0,
           paddingTop: 0,
@@ -69,7 +69,6 @@ const HeroSection = () => {
           minHeight: 'unset',
           height: 'auto',
           aspectRatio: '1920 / 772',
-          maxHeight: '772px',
         }}
       >
 
@@ -78,8 +77,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="absolute z-20"
-          style={{ top: '22%', left: '57%', width: '27%' }}
+          className="absolute z-20 hero-product-img"
         >
           <img
             src={heroJars}
