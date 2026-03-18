@@ -242,7 +242,7 @@ const ProductDetail = () => {
                     <div className="flex items-center gap-1.5 md:gap-2">
                       <span className={`font-black text-sm md:text-lg ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
                       {p.originalPrice && (
-                        <span className="text-muted-foreground/50 line-through text-[10px] md:text-xs">{p.originalPrice}</span>
+                        <span className={`line-through text-[10px] md:text-xs ${p.isBundle ? "text-white/60" : "text-muted-foreground/50"}`}>{p.originalPrice}</span>
                       )}
                       {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
                     </div>
