@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -27,9 +26,6 @@ const slideVariants = {
 const InfoOverlay = ({
   product,
   onClose
-
-
-
 }: {product: (typeof products)[0];onClose: () => void;}) =>
 <motion.div
   className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -153,7 +149,6 @@ const ProductGrid = () => {
       const dx = Math.abs(touchEndX.current - touchStartX.current);
       const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
       if (!isSwiping.current && dy > 10) {
-        // User is scrolling vertically — don't interfere
         return;
       }
       if (dx > dy && dx > 15) {
@@ -167,10 +162,8 @@ const ProductGrid = () => {
       const diff = touchStartX.current - touchEndX.current;
       const elapsed = Date.now() - touchStartTime.current;
       const velocity = Math.abs(diff) / elapsed;
-      // Trigger on short fast swipes (velocity) or longer drags (distance)
       if (Math.abs(diff) > 30 || velocity > 0.3) {
-        if (diff > 0) goNext();else
-        goPrev();
+        if (diff > 0) goNext(); else goPrev();
       }
     };
 
@@ -217,6 +210,8 @@ const ProductGrid = () => {
                     <img
                   src={p.image}
                   alt={p.name}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                 
                 </Link>
@@ -266,6 +261,7 @@ const ProductGrid = () => {
                         <img
                       src={products[activeIndex].image}
                       alt={products[activeIndex].name}
+                      decoding="async"
                       className="w-full aspect-square object-cover" />
                     
                     </Link>
