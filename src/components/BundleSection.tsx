@@ -21,7 +21,7 @@ const BundleSection = () => {
       className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
       style={{ backgroundColor: "#75559f" }}
     >
-      <img src={bundleBg} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+      <img src={bundleBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
         <div className="grid md:grid-cols-2 gap-4 lg:gap-12 items-center">
           {/* Left: Bundle visual */}
