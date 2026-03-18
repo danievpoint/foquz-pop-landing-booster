@@ -57,7 +57,7 @@ const HeroSection = () => {
 
       {/* === DESKTOP (lg+) – fixed hero background without cropping === */}
       <div
-        className="hidden lg:block relative w-full"
+        className="hidden lg:block relative w-full hero-desktop-wrap"
         style={{
           marginTop: 0,
           paddingTop: 0,
@@ -69,7 +69,6 @@ const HeroSection = () => {
           minHeight: 'unset',
           height: 'auto',
           aspectRatio: '1920 / 772',
-          maxHeight: '772px',
         }}
       >
 
