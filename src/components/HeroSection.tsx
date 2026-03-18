@@ -110,7 +110,7 @@ const HeroSection = () => {
               fetchPriority="high"
               className="w-full h-auto animate-[breathe_3s_ease-in-out_infinite]"
             />
-          </motion.div>
+          </div>
 
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
