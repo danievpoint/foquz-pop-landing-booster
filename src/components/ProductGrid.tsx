@@ -7,6 +7,7 @@ import productThai from "@/assets/product-thai-new.png";
 import productLemon from "@/assets/product-lemon-new.png";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
+import { useProductAvailability } from "@/hooks/useProductAvailability";
 
 const products = [
   {
