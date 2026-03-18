@@ -7,6 +7,7 @@ import productThai from "@/assets/product-thai-new.png";
 import productLemon from "@/assets/product-lemon-new.png";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
+import { useProductAvailability } from "@/hooks/useProductAvailability";
 
 const products = [
   {
@@ -123,6 +124,7 @@ const InfoButton = ({ onClick, color }: { onClick: () => void; color: string }) 
 
 const ProductGrid = () => {
   const { addToCart } = useCart();
+  const { isAvailable } = useProductAvailability();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
@@ -251,7 +253,7 @@ const ProductGrid = () => {
                   <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-2xl font-black">{p.price}</span>
-                    <StockBadge />
+                    <StockBadge available={isAvailable(p.name)} />
                   </div>
                   <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
@@ -298,7 +300,7 @@ const ProductGrid = () => {
                     <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{products[activeIndex].desc}</p>
                     <div className="flex items-center justify-center gap-2 mb-0.5">
                       <span className="text-xl font-black">{products[activeIndex].price}</span>
-                      <StockBadge />
+                      <StockBadge available={isAvailable(products[activeIndex].name)} />
                     </div>
                     <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
                     <div className="flex items-center justify-center gap-3">
