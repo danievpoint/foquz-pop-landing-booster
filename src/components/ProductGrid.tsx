@@ -275,11 +275,11 @@ const ProductGrid = () => {
                       className="w-full aspect-square object-cover" />
                     
                     </Link>
-                  <div className="py-1 text-center">
+                  <div className="py-1 text-center flex flex-col items-center">
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
                       {products[activeIndex].name}
                     </Link>
-                    <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{products[activeIndex].desc}</p>
+                    <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
                     <div className="flex items-center justify-center gap-2 mb-0.5">
                       <span className="text-xl font-black">{products[activeIndex].price}</span>
                       <StockBadge available={isAvailable(products[activeIndex].name)} />
@@ -289,7 +289,6 @@ const ProductGrid = () => {
                       <button
                         onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
                         className="comic-btn bg-card text-foreground text-xs py-2 px-5">
-                        
                         FOKUS SICHERN
                       </button>
                       <InfoButton onClick={() => setInfoProduct(products[activeIndex])} color={products[activeIndex].color} />
