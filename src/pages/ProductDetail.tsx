@@ -165,7 +165,7 @@ const ProductDetail = () => {
       <section className="container mx-auto px-4 pb-8 lg:pb-24">
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
           {/* Image — sticky on desktop */}
-          <div className="rounded-2xl overflow-hidden w-[55%] md:w-[40%] lg:w-full mx-auto lg:mx-0 lg:sticky lg:top-28">
+          <div className="rounded-2xl overflow-hidden w-[55%] md:w-[40%] lg:w-full mx-auto lg:mx-0 lg:self-start">
             <img
               src={product.image}
               alt={product.name}
