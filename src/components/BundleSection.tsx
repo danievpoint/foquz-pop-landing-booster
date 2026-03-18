@@ -79,7 +79,7 @@ const BundleSection = () => {
                   id: "starter-bundle",
                   name: "Starter Bundle (3 Sorten)",
                   price: 14.99,
-                  image: productThai,
+                  image: foquzBox,
                 })
               }
               className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black"
