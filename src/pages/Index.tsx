@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import CookieBanner from "@/components/CookieBanner";
 
 const ProductGrid = lazy(() => import("@/components/ProductGrid"));
 const HowToSection = lazy(() => import("@/components/HowToSection"));
@@ -10,7 +11,6 @@ const ReviewSection = lazy(() => import("@/components/ReviewSection"));
 const TrustBar = lazy(() => import("@/components/TrustBar"));
 const NewsletterSection = lazy(() => import("@/components/NewsletterSection"));
 const Footer = lazy(() => import("@/components/Footer"));
-const CookieBanner = lazy(() => import("@/components/CookieBanner"));
 
 const SectionFallback = () => <div className="min-h-[200px]" />;
 
@@ -45,9 +45,7 @@ const Index = () => {
           <Footer />
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <CookieBanner />
-      </Suspense>
+      <CookieBanner />
     </>
   );
 };

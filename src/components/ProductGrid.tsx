@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -17,9 +18,18 @@ const cardVariants = {
   })
 };
 
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 })
+};
+
 const InfoOverlay = ({
   product,
   onClose
+
+
+
 }: {product: (typeof products)[0];onClose: () => void;}) =>
 <motion.div
   className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -88,6 +98,7 @@ const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
   const touchStartX = useRef(0);
@@ -96,23 +107,27 @@ const ProductGrid = () => {
   useEffect(() => {
     if (!autoPlay) return;
     const timer = setInterval(() => {
+      setDirection(1);
       setActiveIndex((prev) => (prev + 1) % products.length);
     }, 4000);
     return () => clearInterval(timer);
   }, [autoPlay]);
 
   const goTo = useCallback((index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
     setAutoPlay(false);
-  }, []);
+  }, [activeIndex]);
 
   const goNext = useCallback(() => {
     setAutoPlay(false);
+    setDirection(1);
     setActiveIndex((prev) => (prev + 1) % products.length);
   }, []);
 
   const goPrev = useCallback(() => {
     setAutoPlay(false);
+    setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + products.length) % products.length);
   }, []);
 
@@ -138,6 +153,7 @@ const ProductGrid = () => {
       const dx = Math.abs(touchEndX.current - touchStartX.current);
       const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
       if (!isSwiping.current && dy > 10) {
+        // User is scrolling vertically — don't interfere
         return;
       }
       if (dx > dy && dx > 15) {
@@ -151,8 +167,10 @@ const ProductGrid = () => {
       const diff = touchStartX.current - touchEndX.current;
       const elapsed = Date.now() - touchStartTime.current;
       const velocity = Math.abs(diff) / elapsed;
+      // Trigger on short fast swipes (velocity) or longer drags (distance)
       if (Math.abs(diff) > 30 || velocity > 0.3) {
-        if (diff > 0) goNext(); else goPrev();
+        if (diff > 0) goNext();else
+        goPrev();
       }
     };
 
@@ -199,8 +217,6 @@ const ProductGrid = () => {
                     <img
                   src={p.image}
                   alt={p.name}
-                  loading="lazy"
-                  decoding="async"
                   className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                 
                 </Link>
@@ -228,51 +244,53 @@ const ProductGrid = () => {
             )}
           </div>
 
-          {/* Mobile: CSS-transform carousel – all slides pre-rendered, instant swipe */}
+          {/* Mobile: carousel */}
           <div className="lg:hidden mt-3">
             <div
               ref={carouselRef}
-              className="relative overflow-hidden">
+              className="relative overflow-hidden"
+              style={{ minHeight: 380, touchAction: 'pan-y' }}>
               
-              <div
-                className="flex transition-transform duration-300 ease-out"
-                style={{
-                  transform: `translateX(-${activeIndex * 100}%)`,
-                  willChange: 'transform',
-                }}
-              >
-                {products.map((p, i) => (
-                  <div key={p.handle} className="w-full flex-shrink-0 flex flex-col items-center px-2">
-                    <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        decoding="async"
-                        className="w-full aspect-square object-cover"
-                      />
+              <AnimatePresence custom={direction} mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="flex flex-col items-center">
+                  
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
+                        <img
+                      src={products[activeIndex].image}
+                      alt={products[activeIndex].name}
+                      className="w-full aspect-square object-cover" />
+                    
                     </Link>
-                    <div className="py-1 text-center">
-                      <Link to={`/produkt/${p.handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                        {p.name}
-                      </Link>
-                      <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{p.desc}</p>
-                      <div className="flex items-center justify-center gap-2 mb-0.5">
-                        <span className="text-xl font-black">{p.price}</span>
-                        <StockBadge available={isAvailable(p.name)} />
-                      </div>
-                      <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
-                      <div className="flex items-center justify-center gap-3">
-                        <button
-                          onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                          className="comic-btn bg-card text-foreground text-xs py-2 px-5">
-                          FOKUS SICHERN
-                        </button>
-                        <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
-                      </div>
+                  <div className="py-1 text-center">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                      {products[activeIndex].name}
+                    </Link>
+                    <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{products[activeIndex].desc}</p>
+                    <div className="flex items-center justify-center gap-2 mb-0.5">
+                      <span className="text-xl font-black">{products[activeIndex].price}</span>
+                      <StockBadge available={isAvailable(products[activeIndex].name)} />
+                    </div>
+                    <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
+                    <div className="flex items-center justify-center gap-3">
+                      <button
+                        onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
+                        className="comic-btn bg-card text-foreground text-xs py-2 px-5">
+                        
+                        FOKUS SICHERN
+                      </button>
+                      <InfoButton onClick={() => setInfoProduct(products[activeIndex])} color={products[activeIndex].color} />
                     </div>
                   </div>
-                ))}
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Arrows + Dots */}

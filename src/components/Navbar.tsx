@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, ShoppingBag, Star, Layers, BookOpen } from "lucide-react";
+import { Menu, X, Globe, HelpCircle, Search, User, ShoppingCart, ShoppingBag, Star, Layers, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
-import navbarBg from "@/assets/navbar-header-bg.svg";
+import navbarHeaderBgPng from "@/assets/navbar-header-bg.png";
+import navbarHeaderBgSvg from "@/assets/navbar-header-bg.svg";
 import navbarPattern from "@/assets/navbar-pattern.png";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
@@ -16,7 +17,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -33,16 +34,22 @@ const Navbar = () => {
 
   const mobileLinks = [...leftLinks, ...rightLinks.filter(l => l.label === "SO GEHTS")];
 
+  const iconClass = `transition-colors cursor-pointer ${scrolled ? "hover:text-primary" : "text-primary-foreground hover:opacity-80"}`;
+
   return (
     <>
     <nav
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground ${scrolled ? "shadow-md" : ""}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
-      {/* Solid background – no heavy background images */}
-      <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
-      <img src={navbarBg} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" aria-hidden="true" />
-      <img src={navbarPattern} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Solid background fallback to prevent content showing through */}
+        <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
+        {/* Mobile: PNG background */}
+        <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
+        {/* Desktop: SVG background, overflows downward */}
+        <img src={navbarHeaderBgSvg} alt="" className="absolute top-[-86%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-[0.4]" />
+      </div>
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative">
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
@@ -60,9 +67,7 @@ const Navbar = () => {
           </div>
 
           {/* Center – clickable area to scroll to top */}
-          <a href="/" className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Zur Startseite">
-            <img src={foquzLogo} alt="FOQUZ" className="h-10 md:h-12" />
-          </a>
+          <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-secondary comic-outline">
@@ -82,9 +87,7 @@ const Navbar = () => {
           <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
             {mobileOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
           </button>
-          <a href="/" className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Zur Startseite">
-            <img src={foquzLogo} alt="FOQUZ" className="h-9" />
-          </a>
+          <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
           <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={openCart}>
             <ShoppingCart size={20} className="text-foreground" />
             {count > 0 && (

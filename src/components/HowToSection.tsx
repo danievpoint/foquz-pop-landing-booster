@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
 
 const steps = [
@@ -9,38 +9,12 @@ const steps = [
 ];
 
 const HowToSection = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !videoLoaded) {
-          setVideoLoaded(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [videoLoaded]);
-
-  useEffect(() => {
-    if (videoLoaded && videoRef.current) {
-      videoRef.current.src = howtoBgVideo;
-      videoRef.current.load();
-    }
-  }, [videoLoaded]);
-
   return (
-    <section id="howto" ref={sectionRef} className="relative overflow-hidden scroll-mt-20">
+    <section id="howto" className="relative overflow-hidden scroll-mt-20">
+      {/* Full-width lifestyle image */}
       <div className="relative min-h-[600px] md:min-h-[600px]">
         <video
-          ref={videoRef}
+          src={howtoBgVideo}
           autoPlay
           loop
           muted
@@ -48,6 +22,7 @@ const HowToSection = () => {
           preload="none"
           className="w-full h-full object-cover absolute inset-0"
         />
+        
 
         {/* Overlapping white text box */}
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40">
