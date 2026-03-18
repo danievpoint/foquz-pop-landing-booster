@@ -42,6 +42,35 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
   image: "",
 };
 
+const CONFETTI_COLORS = [
+  "hsl(48 100% 55%)",
+  "hsl(349 80% 59%)",
+  "hsl(158 35% 62%)",
+  "hsl(24 87% 55%)",
+  "hsl(229 33% 58%)",
+  "hsl(0 0% 100%)",
+];
+
+let confettiCanvas: HTMLCanvasElement | null = null;
+let confettiInstance: ReturnType<typeof confetti.create> | null = null;
+
+const getConfettiInstance = () => {
+  if (confettiInstance) return confettiInstance;
+
+  confettiCanvas = document.createElement("canvas");
+  confettiCanvas.style.position = "fixed";
+  confettiCanvas.style.top = "0";
+  confettiCanvas.style.left = "0";
+  confettiCanvas.style.width = "100vw";
+  confettiCanvas.style.height = "100vh";
+  confettiCanvas.style.pointerEvents = "none";
+  confettiCanvas.style.zIndex = "99999";
+  document.body.appendChild(confettiCanvas);
+
+  confettiInstance = confetti.create(confettiCanvas, { resize: true });
+  return confettiInstance;
+};
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -58,51 +87,49 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { ...p, qty }];
     });
-    // Fire confetti instantly with high z-index
-    const myCanvas = document.createElement("canvas");
-    myCanvas.style.position = "fixed";
-    myCanvas.style.top = "0";
-    myCanvas.style.left = "0";
-    myCanvas.style.width = "100vw";
-    myCanvas.style.height = "100vh";
-    myCanvas.style.pointerEvents = "none";
-    myCanvas.style.zIndex = "99999";
-    document.body.appendChild(myCanvas);
 
-    const myConfetti = confetti.create(myCanvas, { resize: true, useWorker: true });
+    const myConfetti = getConfettiInstance();
 
-    const colors = ["#ffd618", "#75559f", "#ff6b6b", "#00d4aa", "#ff9f43", "#fff", "#e84393", "#00cec9"];
+    void myConfetti({
+      particleCount: 220,
+      spread: 180,
+      origin: { x: 0.5, y: 0.12 },
+      gravity: 1.15,
+      ticks: 220,
+      startVelocity: 32,
+      decay: 0.92,
+      scalar: 1.35,
+      colors: CONFETTI_COLORS,
+    });
+
     const origins = [
-      { x: 0.0, y: -0.02 },
-      { x: 0.1, y: -0.05 },
-      { x: 0.2, y: -0.02 },
-      { x: 0.35, y: -0.05 },
-      { x: 0.5, y: -0.02 },
-      { x: 0.65, y: -0.05 },
-      { x: 0.8, y: -0.02 },
-      { x: 0.9, y: -0.05 },
-      { x: 1.0, y: -0.02 },
+      { x: 0.05, y: 0.02 },
+      { x: 0.18, y: 0.04 },
+      { x: 0.31, y: 0.02 },
+      { x: 0.44, y: 0.04 },
+      { x: 0.57, y: 0.02 },
+      { x: 0.7, y: 0.04 },
+      { x: 0.83, y: 0.02 },
+      { x: 0.96, y: 0.04 },
     ];
 
-    // Fire all bursts synchronously – zero delay
-    const promises = origins.map((origin, i) =>
-      myConfetti({
-        particleCount: 120,
-        spread: 140,
-        origin,
-        gravity: 0.4,
-        ticks: 400,
-        startVelocity: 65,
-        decay: 0.91,
-        scalar: 1.3,
-        colors,
-        drift: (i - 4) * 0.15,
-      })
+    void Promise.all(
+      origins.map((origin, i) =>
+        myConfetti({
+          particleCount: 110,
+          spread: 100,
+          origin,
+          gravity: 1.05,
+          ticks: 260,
+          startVelocity: 40,
+          decay: 0.91,
+          scalar: 1.25,
+          colors: CONFETTI_COLORS,
+          drift: (i - 4) * 0.18,
+        })
+      )
     );
 
-    Promise.all(promises).then(() => {
-      document.body.removeChild(myCanvas);
-    });
     setIsOpen(true);
   }, []);
 
