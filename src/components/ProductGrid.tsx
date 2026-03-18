@@ -262,15 +262,17 @@ const ProductGrid = () => {
                   transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                   className="flex flex-col items-center"
                 >
-                    <div className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto block">
                         <img
                           src={products[activeIndex].image}
                           alt={products[activeIndex].name}
                           className="w-full aspect-square object-cover"
                         />
-                    </div>
+                    </Link>
                   <div className="py-1 text-center">
-                    <h3 className="text-base font-extrabold mb-0">{products[activeIndex].name}</h3>
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                      {products[activeIndex].name}
+                    </Link>
                     <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{products[activeIndex].desc}</p>
                     <div className="flex items-center justify-center gap-2 mb-0.5">
                       <span className="text-xl font-black">{products[activeIndex].price}</span>
