@@ -49,9 +49,9 @@ const SpeechBubble = ({ children, className = "" }: { children: React.ReactNode;
 const WhyFoquzSection = () => {
   return (
     <section
-      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: `url(${whyfoquzBg})` }}
+      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden"
     >
+      <img src={whyfoquzBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
           {/* Left: empty space for background image to show */}
@@ -81,7 +81,7 @@ const WhyFoquzSection = () => {
                       transition={{ duration: 0.4, delay: i * 0.1 }}
                       className="flex flex-col items-center text-center"
                     >
-                      <img src={p.icon} alt={p.title} className="w-16 h-16 object-contain mb-2" />
+                      <img src={p.icon} alt={p.title} loading="lazy" className="w-16 h-16 object-contain mb-2" />
                       <h3 className="text-sm font-extrabold text-foreground mb-1">
                         {p.title}
                       </h3>

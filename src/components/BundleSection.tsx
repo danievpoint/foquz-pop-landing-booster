@@ -21,7 +21,7 @@ const BundleSection = () => {
       className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
       style={{ backgroundColor: "#75559f" }}
     >
-      <img src={bundleBg} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+      <img src={bundleBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
         <div className="grid md:grid-cols-2 gap-4 lg:gap-12 items-center">
           {/* Left: Bundle visual */}
@@ -36,6 +36,7 @@ const BundleSection = () => {
                 <img
                   src={foquzBox}
                   alt="FOQUZ Starter Bundle Box"
+                  loading="lazy"
                   className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
                 />
               </Link>
