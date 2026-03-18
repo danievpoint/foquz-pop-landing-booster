@@ -98,12 +98,13 @@ const HeroSection = () => {
               transition={{ duration: 0.7 }}
               className="w-[40%] xl:w-[36%]"
             >
-              <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
+              <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-3 text-primary-foreground text-pop">
                 KURZ RIECHEN.<br />
                 AB AUF
                 <br />
                 <span className="text-secondary text-[clamp(2.5rem,4vw,3.75rem)]">WOLKE 7.</span>
               </h1>
+              <p className="text-[clamp(1rem,1.3vw,1.25rem)] text-primary-foreground/80 mb-6 font-medium">Frische für deine Nase.</p>
               <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
                 <a
                   href="#bundle"
