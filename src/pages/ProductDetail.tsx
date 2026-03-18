@@ -203,7 +203,7 @@ const ProductDetail = () => {
                   </span>
                 ))}
               </div>
-              <ul className="hidden md:block space-y-2">
+              <ul className="hidden lg:block space-y-2">
                 {product.ingredients.map((ing) => (
                   <li key={ing} className="flex items-center gap-2 text-sm">
                     <span
@@ -216,7 +216,7 @@ const ProductDetail = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-2 md:mt-4">
+              <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mt-2 lg:mt-4">
                 {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
