@@ -124,9 +124,6 @@
 
   /* Large monitors (≥ 1920px) */
   @media (min-width: 1920px) {
-    .hero-desktop-wrap {
-      max-height: min(900px, 72vh);
-    }
     .hero-product-img {
       top: 14%;
       width: 32%;
@@ -135,9 +132,6 @@
 
   /* Very large monitors like 42" (≥ 2560px) */
   @media (min-width: 2560px) {
-    .hero-desktop-wrap {
-      max-height: min(1100px, 72vh);
-    }
     .hero-product-img {
       top: 10%;
       width: 35%;
