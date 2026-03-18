@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import productThai from "@/assets/product-thai-new.png";
+import foquzBox from "@/assets/foquz-box.png";
 import foquzBox from "@/assets/foquz-box.png";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
