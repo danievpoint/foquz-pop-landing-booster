@@ -4,6 +4,7 @@ import foquzBox from "@/assets/foquz-box.png";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
+import { useProductAvailability } from "@/hooks/useProductAvailability";
 
 const checks = [
   "Alle Sorten testen",
