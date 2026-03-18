@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import CookieBanner from "@/components/CookieBanner";
 
 const ProductGrid = lazy(() => import("@/components/ProductGrid"));
+const MarqueeBanner = lazy(() => import("@/components/MarqueeBanner"));
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
@@ -22,6 +23,9 @@ const Index = () => {
         <HeroSection />
         <Suspense fallback={<SectionFallback />}>
           <ProductGrid />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <MarqueeBanner />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />
