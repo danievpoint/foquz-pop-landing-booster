@@ -51,9 +51,6 @@ const WhyFoquzSection = () => {
                 ))}
               </div>
 
-              <p className="text-foreground/70 text-xs md:text-sm font-medium leading-relaxed">
-                FOQUZ ist der erste Fokus-Boost für die Nase — entwickelt für alle die einen klaren Kopf brauchen, genau dann wenn es drauf ankommt. Mit echten Kräutern und ätherischen Ölen sorgt er für sofortige Frische. Ob in der Tasche, am Schreibtisch, beim Lernen, Zocken oder im Auto — FOQUZ ist immer dabei wenn du ihn brauchst. Kleine Dose, große Wirkung. Stay FOQUZD.
-              </p>
             </SpeechBubble>
           </div>
         </div>
