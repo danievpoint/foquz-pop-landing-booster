@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
-import { fetchProductsAvailability, type ProductAvailability } from "@/lib/shopify";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProductsAvailability } from "@/lib/shopify";
 
 export function useProductAvailability() {
-  const [availability, setAvailability] = useState<ProductAvailability[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProductsAvailability().then((data) => {
-      setAvailability(data);
-      setLoading(false);
-    });
-  }, []);
+  const { data: availability = [], isLoading: loading } = useQuery({
+    queryKey: ["shopify-availability"],
+    queryFn: fetchProductsAvailability,
+    staleTime: 5 * 60 * 1000, // 5 min cache
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 
   const isAvailable = (productName: string): boolean | null => {
     if (loading) return null;
