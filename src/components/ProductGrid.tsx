@@ -190,14 +190,14 @@ const ProductGrid = () => {
       <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10">
         <div className="container mx-auto">
           <motion.h2
-            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
+            className="md:text-[80px] lg:text-[100px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}>
             
             WÄHLE DEINEN VIBE
           </motion.h2>
-          <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
+          <p className="text-muted-foreground font-medium md:text-xl lg:text-2xl text-center max-w-2xl mx-auto text-xs">
             Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
           </p>
 
