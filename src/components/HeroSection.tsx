@@ -53,13 +53,13 @@ const HeroSection = () => {
       </div>
 
       {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
-      <div className="hidden lg:block relative w-full" style={{ marginTop: 0, paddingTop: 0 }}>
+      <div className="hidden lg:block relative w-full" style={{ marginTop: 0, paddingTop: 0, backgroundColor: '#85c8b5' }}>
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="w-full h-auto block"
-          style={{ objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
+          className="w-full block"
+          style={{ objectFit: 'contain', objectPosition: 'top center', display: 'block', width: '100%', height: 'auto' }}
         />
 
         {/* Product image – same coordinate space as BG */}
