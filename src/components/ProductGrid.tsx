@@ -221,7 +221,7 @@ const ProductGrid = () => {
                     />
                 </Link>
                 <div className="py-2">
-                  <Link to={`/produkt/${p.handle}`} className="text-lg mb-1 block hover:opacity-70 transition-opacity">
+                  <Link to={`/produkt/${p.handle}`} className="text-lg font-extrabold mb-1 block hover:opacity-70 transition-opacity">
                     {p.name}
                   </Link>
                   <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
