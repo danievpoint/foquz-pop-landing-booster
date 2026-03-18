@@ -31,22 +31,22 @@ const BundleBanner = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-3 md:p-4"
+          className="fixed bottom-4 left-0 right-0 z-50 px-4 md:px-6 flex justify-center"
         >
           <div
-            className="max-w-lg mx-auto rounded-2xl p-3 flex items-center gap-3 shadow-2xl border-2 border-foreground/10"
+            className="w-full max-w-md md:max-w-lg rounded-2xl p-4 md:p-5 flex items-center gap-4 shadow-2xl border-2 border-foreground/10"
             style={{ backgroundColor: "#75559f" }}
           >
             <img
               src={foquzBox}
               alt="Starter Bundle"
-              className="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover shrink-0"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-white font-extrabold text-xs md:text-sm leading-tight">
+              <p className="text-white font-extrabold text-sm md:text-base leading-tight">
                 STARTER BUNDLE – Alle 3 Sorten!
               </p>
-              <p className="text-white/70 text-[10px] md:text-xs">
+              <p className="text-white/70 text-xs md:text-sm">
                 Spar 15% · Nur 14,99€
               </p>
             </div>
@@ -60,17 +60,17 @@ const BundleBanner = () => {
                 });
                 setDismissed(true);
               }}
-              className="comic-btn text-[10px] md:text-xs py-1.5 px-3 md:py-2 md:px-4 font-black shrink-0 flex items-center gap-1"
+              className="comic-btn text-xs md:text-sm py-2 px-4 md:py-2.5 md:px-5 font-black shrink-0 flex items-center gap-1.5"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
-              <ShoppingBag className="w-3 h-3" />
+              <ShoppingBag className="w-4 h-4" />
               BUNDLE
             </button>
             <button
               onClick={() => setDismissed(true)}
               className="text-white/60 hover:text-white transition-colors shrink-0"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </motion.div>
