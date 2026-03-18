@@ -24,9 +24,9 @@ const cardVariants = {
 };
 
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 120 : -120, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0.3 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -120 : 120, opacity: 0 })
+  exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0.3 })
 };
 
 const InfoOverlay = ({
@@ -256,7 +256,7 @@ const ProductGrid = () => {
               className="relative overflow-hidden"
               style={{ minHeight: 380, touchAction: 'pan-y' }}>
               
-              <AnimatePresence custom={direction} mode="wait">
+              <AnimatePresence custom={direction} initial={false} mode="popLayout">
                 <motion.div
                   key={activeIndex}
                   custom={direction}
@@ -264,7 +264,7 @@ const ProductGrid = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  transition={{ duration: 0.1, ease: "easeOut" }}
                   className="flex flex-col items-center">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">

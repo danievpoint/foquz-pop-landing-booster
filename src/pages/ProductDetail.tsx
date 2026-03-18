@@ -214,7 +214,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Other products */}
-      <section className="py-8 md:py-20 bg-background">
+      <section className="py-8 md:py-20" style={{ backgroundColor: "white" }}>
         <div className="container mx-auto px-4">
           <h2 className="text-xl md:text-4xl font-extrabold text-center mb-4 md:mb-8">
             ENTDECKE AUCH
