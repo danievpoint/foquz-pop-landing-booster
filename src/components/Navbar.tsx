@@ -70,15 +70,15 @@ const Navbar = () => {
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Nach oben scrollen" />
 
           {/* Right pill - cart only */}
-          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
+          <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-secondary comic-outline">
             <button className="relative" onClick={openCart}>
               <ShoppingCart size={18} className="text-secondary-foreground hover:opacity-80 transition-colors cursor-pointer" />
-              {count > 0 && (
-                <span className="absolute -top-2 -right-2 bg-foreground text-background text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
-                  {count}
-                </span>
-              )}
             </button>
+            {count > 0 && (
+              <span className="bg-foreground text-background text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+                {count}
+              </span>
+            )}
           </div>
         </div>
 
