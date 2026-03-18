@@ -6,19 +6,26 @@ const ScrollToHash = () => {
   const isInitialLoad = useRef(true);
 
   useEffect(() => {
-    if (hash) {
-      const behavior = isInitialLoad.current ? "instant" : "smooth";
+    if (isInitialLoad.current) {
+      // On initial page load, always scroll to top regardless of hash
       isInitialLoad.current = false;
+      window.scrollTo({ top: 0, behavior: "instant" });
+      // Clear hash from URL without triggering navigation
+      if (hash) {
+        window.history.replaceState(null, "", pathname || "/");
+      }
+      return;
+    }
+
+    if (hash) {
       setTimeout(() => {
         const el = document.querySelector(hash);
         if (el) {
-          el.scrollIntoView({ behavior });
+          el.scrollIntoView({ behavior: "smooth" });
         }
       }, 100);
     } else {
-      // Always scroll to top when there's no hash (including initial load)
-      window.scrollTo({ top: 0, behavior: isInitialLoad.current ? "instant" : "smooth" });
-      isInitialLoad.current = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [hash, pathname]);
 
