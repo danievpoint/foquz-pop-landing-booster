@@ -97,15 +97,8 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
 
-  const product = products.find((p) => p.handle === handle);
-  const otherProducts = products.filter((p) => p.handle !== handle);
-  const bundleProduct = {
-    handle: "starter-bundle",
-    name: "Starter Bundle",
-    image: foquzBox,
-    price: "14,99€",
-    numericPrice: 14.99,
-  };
+  const product = allProducts.find((p) => p.handle === handle);
+  const otherProducts = allProducts.filter((p) => p.handle !== handle);
 
   useEffect(() => {
     window.scrollTo(0, 0);
