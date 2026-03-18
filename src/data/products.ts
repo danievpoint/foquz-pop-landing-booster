@@ -25,7 +25,7 @@ export const products: Product[] = [
     desc: "Auch Mario wollte nur Peach.\nFruchtige Frische, einfach durchgespielt.",
     image: productWatermelon,
     color: "#e88a3a",
-    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
+    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Pfirsicharoma"],
   },
   {
     name: "THAI STYLE",
