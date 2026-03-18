@@ -145,9 +145,9 @@ const ProductDetail = () => {
 
       {/* Product detail */}
       <section className="container mx-auto px-4 pb-8 md:pb-24">
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-16 items-start">
-          {/* Image — compact on mobile */}
-          <div className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0">
+        <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
+          {/* Image — compact on mobile/tablet */}
+          <div className="rounded-2xl overflow-hidden w-[65%] md:w-[50%] lg:w-full mx-auto lg:mx-0">
             <img
               src={product.image}
               alt={product.name}
@@ -222,9 +222,8 @@ const ProductDetail = () => {
             </div>
 
             {/* Scroll hint – mobile only */}
-            <div className="md:hidden flex flex-col items-center mt-4 animate-bounce">
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Mehr entdecken</span>
-              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
+            <div className="lg:hidden flex justify-center mt-4 animate-bounce">
+              <svg width="24" height="14" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
                 <path d="M2 2L10 10L18 2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
