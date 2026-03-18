@@ -29,6 +29,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <PullToRefresh>
         <BrowserRouter>
           <ScrollToHash />
           <Routes>
