@@ -4,7 +4,7 @@ import heroBg from "@/assets/hero-bg.svg";
 
 const HeroSection = () => {
   return (
-    <section className="relative overflow-visible">
+    <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
       {/* === MOBILE / TABLET (< lg) === */}
       <div className="lg:hidden relative w-full" style={{ minHeight: 'max(700px, 75vh)' }}>
         <img
@@ -53,12 +53,13 @@ const HeroSection = () => {
       </div>
 
       {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
-      <div className="hidden lg:block relative w-full">
+      <div className="hidden lg:block relative w-full" style={{ marginTop: 0, paddingTop: 0 }}>
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
           className="w-full h-auto block"
+          style={{ objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
         />
 
         {/* Product image – same coordinate space as BG */}
