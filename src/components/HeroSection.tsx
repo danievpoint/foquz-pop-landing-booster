@@ -101,10 +101,7 @@ const HeroSection = () => {
             aspectRatio: '1920 / 772',
           }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div
             className="absolute z-20 hero-product-img"
           >
             <img
