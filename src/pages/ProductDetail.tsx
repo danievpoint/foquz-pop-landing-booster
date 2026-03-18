@@ -222,9 +222,8 @@ const ProductDetail = () => {
             </div>
 
             {/* Scroll hint – mobile only */}
-            <div className="md:hidden flex flex-col items-center mt-4 animate-bounce">
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Mehr entdecken</span>
-              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
+            <div className="lg:hidden flex justify-center mt-4 animate-bounce">
+              <svg width="24" height="14" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
                 <path d="M2 2L10 10L18 2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
