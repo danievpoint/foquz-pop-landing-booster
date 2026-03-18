@@ -250,8 +250,8 @@ const ProductDetail = () => {
 
       <Footer />
 
-      {/* Bundle suggestion banner */}
-      <BundleBanner />
+      {/* Bundle suggestion banner - only on non-bundle pages */}
+      {!product?.isBundle && <BundleBanner />}
     </div>
   );
 };
