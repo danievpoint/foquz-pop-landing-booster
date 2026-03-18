@@ -58,7 +58,7 @@ const NewsletterSection = () => {
             ENTER THE CLOUD
           </h2>
           <p className="text-sm md:text-base text-primary-foreground/80 mb-5 max-w-lg mx-auto leading-relaxed">
-            Werde Teil der Community. <span className="font-black text-primary-foreground">FOQUZ Cloud Members</span> bekommen als erste Drops, exklusive Deals und Cloud-Only Content — bevor irgendjemand anderes.
+            Werde Teil der Community. <span className="font-black text-primary-foreground">FOQUZ Cloud Members</span> bekommen als erste Drops, exklusive Deals und Cloud-Only Content — bevor irgendjemand anderes. <span className="font-black text-secondary">Sichere dir jetzt 10% Rabatt</span> auf deine erste Order.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
             <Input
@@ -78,7 +78,7 @@ const NewsletterSection = () => {
             </Button>
           </form>
           <p className="text-xs text-primary-foreground/60">
-            ☁️ 10% Rabatt auf deine erste Order · Kein Spam · Jederzeit kündbar
+            ☁️ Kein Spam · Jederzeit kündbar
           </p>
         </div>
       </section>
