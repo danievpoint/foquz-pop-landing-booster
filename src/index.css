@@ -117,15 +117,16 @@
   }
 
   .hero-product-img {
-    top: 22%;
-    left: 57%;
-    width: 27%;
+    top: 18%;
+    left: 55%;
+    width: 32%;
   }
 
   /* Large monitors (≥ 1920px) */
   @media (min-width: 1920px) {
     .hero-product-img {
       top: 14%;
+      left: 57%;
       width: 32%;
     }
   }
