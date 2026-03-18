@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import confetti from "canvas-confetti";
 
 export interface CartItem {
   id: string;
