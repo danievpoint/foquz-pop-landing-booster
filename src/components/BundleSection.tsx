@@ -61,7 +61,7 @@ const BundleSection = () => {
             </p>
 
             {/* Checkpoints */}
-            <div className="flex flex-wrap gap-2 lg:flex-col lg:gap-3 mb-4 lg:mb-8">
+            <div className="flex flex-col gap-2 lg:gap-3 mb-4 lg:mb-8">
               {checks.map((c) => (
                 <div key={c} className="flex items-center gap-2 lg:gap-3">
                   <span className="w-5 h-5 lg:w-7 lg:h-7 rounded-full flex items-center justify-center text-xs lg:text-sm font-black shrink-0"
