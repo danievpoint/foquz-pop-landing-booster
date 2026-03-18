@@ -96,7 +96,7 @@ const InfoButton = ({ onClick, color }: {onClick: () => void;color: string;}) =>
   title="Inhaltsstoffe anzeigen"
   onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.8"; }}
   onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}>
-    <Search size={18} strokeWidth={2.5} />
+    <Info size={18} strokeWidth={2.5} />
   </button>;
 
 
