@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart, ShoppingBag, Star, Layers, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
+import navbarBg from "@/assets/navbar-header-bg.svg";
 import navbarPattern from "@/assets/navbar-pattern.png";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
