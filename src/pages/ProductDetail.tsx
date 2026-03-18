@@ -209,7 +209,7 @@ const ProductDetail = () => {
                 {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
