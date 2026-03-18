@@ -67,7 +67,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
           className="absolute z-20"
-          style={{ top: '13%', left: '55%', width: '30%' }}
+          style={{ top: '13%', left: '57%', width: '30%' }}
         >
           <img
             src={heroJars}
