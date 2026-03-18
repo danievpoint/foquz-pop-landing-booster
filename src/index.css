@@ -113,7 +113,7 @@
   }
 
   .hero-desktop-wrap {
-    max-height: min(772px, 72vh);
+    /* no longer used – SVG img defines height naturally */
   }
 
   .hero-product-img {
