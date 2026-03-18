@@ -256,8 +256,10 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-xl font-extrabold text-center mb-4">ENTDECKE AUCH</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
-            {otherProducts.map((p) => (
-              <OtherProductCard key={p.handle} p={p} addToCart={addToCart} isAvailable={isAvailable} />
+            {otherProducts.map((p, i) => (
+              <div key={p.handle} className={otherProducts.length % 2 !== 0 && i === otherProducts.length - 1 ? "col-span-2 sm:col-span-1 max-w-[50%] sm:max-w-full mx-auto" : ""}>
+                <OtherProductCard p={p} addToCart={addToCart} isAvailable={isAvailable} />
+              </div>
             ))}
           </div>
         </div>
