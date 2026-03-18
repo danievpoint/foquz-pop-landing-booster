@@ -41,7 +41,6 @@ const NewsletterSection = () => {
         // Activate discount and show popup
         activateNewsletterDiscount();
         setShowPopup(true);
-        toast({ title: "Willkommen im Squad! 🎉", description: "Du erhältst 10% Rabatt auf deine Bestellung." });
       }
       setEmail("");
     } catch {
