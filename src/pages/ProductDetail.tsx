@@ -163,6 +163,9 @@ const ProductDetail = () => {
 
             <div className="flex items-center gap-3 mb-0.5 md:mb-1">
               <span className="text-2xl md:text-4xl font-black">{product.price}</span>
+              {product.originalPrice && (
+                <span className="text-base md:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+              )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
             <span className="text-[10px] md:text-xs text-muted-foreground mb-3 md:mb-6 block">inkl. MwSt.</span>
@@ -170,16 +173,16 @@ const ProductDetail = () => {
             <button
               onClick={() =>
                 addToCart(1, {
-                  id: product.name,
-                  name: product.name,
+                  id: product.isBundle ? "starter-bundle" : product.name,
+                  name: product.isBundle ? "Starter Bundle (3 Sorten)" : product.name,
                   price: product.numericPrice,
                   image: product.image,
                 })
               }
               className="comic-btn text-xs md:text-base py-2.5 px-8 md:py-3 md:px-10 font-black mb-5 md:mb-8"
-              style={{ backgroundColor: product.color, color: "#000" }}
+              style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
             >
-              FOKUS SICHERN
+              {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
             </button>
 
             {/* Ingredients */}
