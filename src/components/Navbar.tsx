@@ -54,7 +54,7 @@ const Navbar = () => {
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
           {/* Left pill */}
-          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
+          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
             {leftLinks.map((l) => (
               <a
                 key={l.label}
@@ -70,7 +70,7 @@ const Navbar = () => {
           <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
           {/* Right pill - cart only */}
-          <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-secondary comic-outline">
+          <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
             <button className="relative" onClick={openCart}>
               <ShoppingCart size={18} className="text-secondary-foreground hover:opacity-80 transition-colors cursor-pointer" />
             </button>
