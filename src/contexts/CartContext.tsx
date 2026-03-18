@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import confetti from "canvas-confetti";
 
 export interface CartItem {
   id: string;
@@ -56,6 +57,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + qty } : i));
       }
       return [...prev, { ...p, qty }];
+    });
+    confetti({
+      particleCount: 80,
+      spread: 100,
+      origin: { y: 0, x: 0.5 },
+      gravity: 1.2,
+      ticks: 90,
+      startVelocity: 30,
     });
     setIsOpen(true);
   }, []);
