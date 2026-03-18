@@ -187,7 +187,9 @@ const ProductDetail = () => {
 
             {/* Ingredients */}
             <div className="border-t-2 border-foreground/10 pt-4 md:pt-6">
-              <h3 className="font-extrabold text-base md:text-lg mb-3 md:mb-4">WAS STECKT DRIN?</h3>
+              <h3 className="font-extrabold text-base md:text-lg mb-3 md:mb-4">
+                {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
+              </h3>
               <ul className="space-y-1.5 md:space-y-2">
                 {product.ingredients.map((ing) => (
                   <li key={ing} className="flex items-center gap-2 text-xs md:text-sm">
@@ -202,7 +204,7 @@ const ProductDetail = () => {
                 ))}
               </ul>
               <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-3 md:mt-4">
-                100% Natur. Ohne Chemie. Ohne Bullshit.
+                {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
           </motion.div>
