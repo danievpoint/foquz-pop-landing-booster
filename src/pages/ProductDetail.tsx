@@ -49,7 +49,7 @@ const BundleBanner = () => {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
           <div
-            className="relative w-full max-w-sm md:max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-foreground/10 flex flex-col items-center text-center gap-4"
+            className="relative w-full max-w-sm md:max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-foreground/10 flex flex-col items-center text-center gap-4 pointer-events-auto"
             style={{ backgroundColor: "#75559f" }}
           >
             <button
