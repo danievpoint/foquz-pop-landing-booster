@@ -42,7 +42,7 @@ export const products: Product[] = [
     handle: "lemon-breezy",
     price: "€7,99",
     numericPrice: 7.99,
-    desc: "Bleib Breezy, nimm's easy.\nFrischer Wind für deine besten Ideen.",
+    desc: "Nimm's Easy, bleib Breezy.\nHol dir einen Tag unter Zitronenbäumen.",
     image: productLemon,
     color: "#ffd618",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
