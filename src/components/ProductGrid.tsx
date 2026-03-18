@@ -260,7 +260,7 @@ const ProductGrid = () => {
                   <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => addToCart(3, { id: p.name, name: `${p.name} Bundle`, price: 14.99, image: p.image })}
+                      onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                       className="comic-btn bg-card text-foreground text-sm py-2 px-6"
                     >
                       FOKUS SICHERN
