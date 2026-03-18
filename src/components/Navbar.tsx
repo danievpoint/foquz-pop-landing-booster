@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart, ShoppingBag, Star, Layers, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
+import navbarBg from "@/assets/navbar-header-bg.svg";
 import navbarPattern from "@/assets/navbar-pattern.png";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
@@ -40,6 +41,8 @@ const Navbar = () => {
     >
       {/* Solid background – no heavy background images */}
       <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
+      <img src={navbarBg} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" aria-hidden="true" />
+      <img src={navbarPattern} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none" aria-hidden="true" />
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative">
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
