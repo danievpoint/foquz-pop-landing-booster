@@ -262,7 +262,7 @@ const ProductGrid = () => {
                   transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                   className="flex flex-col items-center">
                   
-                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto block">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[90%] max-w-md mx-auto block">
                         <img
                       src={products[activeIndex].image}
                       alt={products[activeIndex].name}
@@ -294,23 +294,22 @@ const ProductGrid = () => {
             </div>
 
             {/* Arrows + Dots */}
-            <div className="flex items-center justify-center gap-4 mt-4">
-              <button onClick={goPrev} className="w-8 h-8 rounded-full border-2 border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
-                <ChevronLeft className="w-4 h-4" />
+            <div className="flex items-center justify-center gap-3 mt-3">
+              <button onClick={goPrev} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
+                <ChevronLeft className="w-3 h-3" />
               </button>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {products.map((_, i) =>
                 <button
                   key={i}
                   onClick={() => goTo(i)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
                   } />
-
                 )}
               </div>
-              <button onClick={goNext} className="w-8 h-8 rounded-full border-2 border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
-                <ChevronRight className="w-4 h-4" />
+              <button onClick={goNext} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
+                <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </div>
