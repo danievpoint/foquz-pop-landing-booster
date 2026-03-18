@@ -188,15 +188,26 @@ const ProductDetail = () => {
             </button>
 
             {/* Ingredients */}
-            <div className="border-t-2 border-foreground/10 pt-4 md:pt-6">
-              <h3 className="font-extrabold text-base md:text-lg mb-3 md:mb-4">
+            <div className="border-t-2 border-foreground/10 pt-3 md:pt-6">
+              <h3 className="font-extrabold text-sm md:text-lg mb-2 md:mb-4">
                 {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
               </h3>
-              <ul className="space-y-1.5 md:space-y-2">
+              <div className="flex flex-wrap gap-1.5 md:hidden">
                 {product.ingredients.map((ing) => (
-                  <li key={ing} className="flex items-center gap-2 text-xs md:text-sm">
+                  <span
+                    key={ing}
+                    className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1"
+                  >
+                    <span className="text-[8px]">✓</span>
+                    {ing}
+                  </span>
+                ))}
+              </div>
+              <ul className="hidden md:block space-y-2">
+                {product.ingredients.map((ing) => (
+                  <li key={ing} className="flex items-center gap-2 text-sm">
                     <span
-                      className="w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center text-[9px] md:text-[10px] font-black shrink-0"
+                      className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
                       style={{ backgroundColor: "#ffd618" }}
                     >
                       ✓
@@ -205,9 +216,17 @@ const ProductDetail = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-3 md:mt-4">
+              <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-2 md:mt-4">
                 {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
+            </div>
+
+            {/* Scroll hint – mobile only */}
+            <div className="md:hidden flex flex-col items-center mt-4 animate-bounce">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Mehr entdecken</span>
+              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
+                <path d="M2 2L10 10L18 2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
           </div>
         </div>
