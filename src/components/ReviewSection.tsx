@@ -59,7 +59,7 @@ const ReviewSection = () => {
         <div
           ref={scrollRef}
           className="flex gap-0 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:snap-none lg:pb-4 lg:pt-0"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" as any, touchAction: "pan-x" }}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" as any, touchAction: "pan-x", overscrollBehaviorY: "none", overflowY: "hidden" }}
         >
           {reviews.map((r, i) => (
             <motion.div
