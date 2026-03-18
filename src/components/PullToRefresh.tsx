@@ -33,9 +33,9 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
     if (pullDistance >= THRESHOLD && !refreshing) {
       setRefreshing(true);
       setPullDistance(50);
-      setTimeout(() => {
-        window.location.reload();
-      }, 400);
+      setPulling(false);
+      // Page will reload — keep spinner visible until unload
+      window.location.reload();
     } else {
       setPulling(false);
       setPullDistance(0);
