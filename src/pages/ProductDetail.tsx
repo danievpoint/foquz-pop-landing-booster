@@ -217,7 +217,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Other products */}
-      <section className="py-8 md:py-20" style={{ background: "linear-gradient(135deg, #ffd618 0%, #e88a3a 30%, #e94362 60%, #75559f 100%)" }}>
+      <section className="py-8 md:py-20" style={{ backgroundColor: "#1a1a2e" }}>
         <div className="container mx-auto px-4">
           <h2 className="text-xl md:text-4xl font-extrabold text-center mb-4 md:mb-8">
             ENTDECKE AUCH
