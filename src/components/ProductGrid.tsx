@@ -8,6 +8,11 @@ import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { products } from "@/data/products";
 
+// Preload all product images immediately
+products.forEach((p) => {
+  const img = new Image();
+  img.src = p.image;
+});
 
 const cardVariants = {
   hidden: { opacity: 0, y: 60 },
@@ -19,9 +24,9 @@ const cardVariants = {
 };
 
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 120 : -120, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 })
+  exit: (dir: number) => ({ x: dir > 0 ? -120 : 120, opacity: 0 })
 };
 
 const InfoOverlay = ({
