@@ -53,7 +53,7 @@ const HeroSection = () => {
       </div>
 
       {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
-      <div className="hidden lg:block relative w-full -mt-[62px]">
+      <div className="hidden lg:block relative w-full">
         <img
           src={heroBg}
           alt=""
