@@ -41,7 +41,7 @@ const ReviewSection = () => {
   }, []);
 
   return (
-    <section id="reviews" className="section-padding pt-16 md:pt-24 min-h-[600px]" style={{ backgroundColor: '#ffd618' }}>
+    <section id="reviews" className="section-padding pt-16 md:pt-24 min-h-[600px] scroll-mt-20" style={{ backgroundColor: '#ffd618' }}>
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-12"
