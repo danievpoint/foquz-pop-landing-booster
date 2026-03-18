@@ -144,10 +144,10 @@ const ProductDetail = () => {
       </div>
 
       {/* Product detail */}
-      <section className="container mx-auto px-4 pb-8 md:pb-24">
+      <section className="container mx-auto px-4 pb-8 lg:pb-24">
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
           {/* Image — compact on mobile/tablet */}
-          <div className="rounded-2xl overflow-hidden w-[65%] md:w-[50%] lg:w-full mx-auto lg:mx-0">
+          <div className="rounded-2xl overflow-hidden w-[55%] md:w-[40%] lg:w-full mx-auto lg:mx-0">
             <img
               src={product.image}
               alt={product.name}
@@ -157,20 +157,20 @@ const ProductDetail = () => {
           </div>
 
           {/* Info */}
-          <div className="py-0 md:py-4">
-            <h1 className="text-2xl md:text-5xl font-extrabold mb-1 md:mb-2">{product.name}</h1>
-            <p className="text-muted-foreground text-sm md:text-lg mb-3 md:mb-6 whitespace-pre-line leading-snug">
+          <div className="py-0 lg:py-4">
+            <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
+            <p className="text-muted-foreground text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug">
               {product.desc}
             </p>
 
-            <div className="flex items-center gap-3 mb-0.5 md:mb-1">
-              <span className="text-2xl md:text-4xl font-black">{product.price}</span>
+            <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
+              <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
               {product.originalPrice && (
-                <span className="text-base md:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+                <span className="text-base lg:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
               )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
-            <span className="text-[10px] md:text-xs text-muted-foreground mb-3 md:mb-6 block">inkl. MwSt.</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground mb-3 lg:mb-6 block">inkl. MwSt.</span>
 
             <button
               onClick={() =>
@@ -181,18 +181,18 @@ const ProductDetail = () => {
                   image: product.image,
                 })
               }
-              className="comic-btn text-xs md:text-base py-2.5 px-8 md:py-3 md:px-10 font-black mb-5 md:mb-8"
+              className="comic-btn text-xs lg:text-base py-2.5 px-8 lg:py-3 lg:px-10 font-black mb-5 lg:mb-8"
               style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
             >
               {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
             </button>
 
             {/* Ingredients */}
-            <div className="border-t-2 border-foreground/10 pt-3 md:pt-6">
-              <h3 className="font-extrabold text-sm md:text-lg mb-2 md:mb-4">
+            <div className="border-t-2 border-foreground/10 pt-3 lg:pt-6">
+              <h3 className="font-extrabold text-sm lg:text-lg mb-2 lg:mb-4">
                 {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
               </h3>
-              <div className="flex flex-wrap gap-1.5 md:hidden">
+              <div className="flex flex-wrap gap-1.5 lg:hidden">
                 {product.ingredients.map((ing) => (
                   <span
                     key={ing}
@@ -203,7 +203,7 @@ const ProductDetail = () => {
                   </span>
                 ))}
               </div>
-              <ul className="hidden md:block space-y-2">
+              <ul className="hidden lg:block space-y-2">
                 {product.ingredients.map((ing) => (
                   <li key={ing} className="flex items-center gap-2 text-sm">
                     <span
@@ -216,7 +216,7 @@ const ProductDetail = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-[10px] md:text-xs font-bold text-muted-foreground mt-2 md:mt-4">
+              <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mt-2 lg:mt-4">
                 {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
