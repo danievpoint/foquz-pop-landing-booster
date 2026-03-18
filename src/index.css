@@ -69,6 +69,7 @@
     overflow-x: clip;
     -webkit-overflow-scrolling: touch;
     background-color: #85c8b5;
+    overscroll-behavior-y: none;
   }
 
   body {
