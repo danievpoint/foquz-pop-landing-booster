@@ -13,7 +13,7 @@ const products = [
   {
     name: "PEACH PARTY",
     price: "€14,99",
-    desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
+    numericPrice: 14.99,
     image: productWatermelon,
     
     color: "#e94362",
