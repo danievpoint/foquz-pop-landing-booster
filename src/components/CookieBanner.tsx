@@ -32,7 +32,7 @@ const CookieBanner = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[80] bg-card border-4 border-foreground rounded-2xl p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[10000] bg-card border-4 border-foreground rounded-2xl p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
         >
           <button
             onClick={decline}

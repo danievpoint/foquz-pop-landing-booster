@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Globe, HelpCircle, Search, User, ShoppingCart, ShoppingBag, Star, Layers, BookOpen } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, ShoppingCart, ShoppingBag, Layers, BookOpen, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
 import navbarHeaderBgPng from "@/assets/navbar-header-bg.png";
 import navbarHeaderBgSvg from "@/assets/navbar-header-bg.svg";
-import navbarPattern from "@/assets/navbar-pattern.png";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import LoginModal from "@/components/LoginModal";
@@ -14,27 +14,48 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const { count, openCart } = useCart();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   const leftLinks = [
-    { label: "START", href: "/", icon: ShoppingBag },
-    { label: "PRODUKTE", href: "/#sorten", icon: ShoppingBag },
-    { label: "BUNDLE", href: "/#bundle", icon: Layers },
+    { label: "START", to: "/", icon: ShoppingBag },
+    { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
+    { label: "BUNDLE", to: "/#bundle", icon: Layers },
   ];
 
   const rightLinks = [
-    { label: "SO GEHTS", href: "/#howto", icon: BookOpen },
-    { label: "REVIEWS", href: "/#reviews", icon: Star },
+    { label: "SO GEHTS", to: "/#howto", icon: BookOpen },
+    { label: "REVIEWS", to: "/#reviews", icon: Star },
   ];
 
   const mobileLinks = [...leftLinks, ...rightLinks.filter(l => l.label === "SO GEHTS")];
 
-  const iconClass = `transition-colors cursor-pointer ${scrolled ? "hover:text-primary" : "text-primary-foreground hover:opacity-80"}`;
+  // Helper: for hash links on the same page, scroll to element; otherwise navigate
+  const handleNavClick = (to: string) => {
+    if (to.startsWith("/#")) {
+      const hash = to.slice(1); // e.g. "#sorten"
+      if (location.pathname === "/") {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          setMobileOpen(false);
+          return true; // handled
+        }
+      }
+    }
+    setMobileOpen(false);
+    return false; // let Link handle navigation
+  };
 
   return (
     <>
@@ -56,18 +77,21 @@ const Navbar = () => {
           {/* Left pill */}
           <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
             {leftLinks.map((l) => (
-              <a
+              <Link
                 key={l.label}
-                href={l.href}
+                to={l.to}
+                onClick={(e) => {
+                  if (handleNavClick(l.to)) e.preventDefault();
+                }}
                 className="font-bold text-sm text-secondary-foreground hover:opacity-80 transition-colors"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
 
           {/* Center – clickable area to scroll to top */}
-          <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
+          <Link to="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
@@ -87,7 +111,7 @@ const Navbar = () => {
           <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
             {mobileOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
           </button>
-          <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
+          <Link to="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
           <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={openCart}>
             <ShoppingCart size={20} className="text-foreground" />
             {count > 0 && (
@@ -132,18 +156,23 @@ const Navbar = () => {
           <div className="pt-4 pb-6 px-8">
             <div className="space-y-5">
               {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
-                <motion.a
+                <motion.div
                   key={l.label}
-                  href={l.href}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.08 }}
-                  className="flex items-center gap-5 font-extrabold text-2xl uppercase tracking-wide text-foreground"
-                  onClick={() => setMobileOpen(false)}
                 >
-                  <l.icon size={28} className="text-primary" />
-                  {l.label}
-                </motion.a>
+                  <Link
+                    to={l.to}
+                    onClick={(e) => {
+                      if (handleNavClick(l.to)) e.preventDefault();
+                    }}
+                    className="flex items-center gap-5 font-extrabold text-2xl uppercase tracking-wide text-foreground"
+                  >
+                    <l.icon size={28} className="text-primary" />
+                    {l.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>

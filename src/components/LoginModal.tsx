@@ -21,7 +21,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-[10001] flex items-center justify-center px-4">
           {/* Backdrop */}
           <motion.div
             className="absolute inset-0 bg-foreground/50"
