@@ -3,9 +3,9 @@ import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
 
 const steps = [
-  { num: "1", title: "Dose auf:", desc: "Dreh den Deckel deiner Lieblingssorte auf." },
-  { num: "2", title: "Tief einatmen:", desc: "Ein kräftiger Zug durch die Nase genügt." },
-  { num: "3", title: "Fokus an:", desc: "Spüre die Wirkung in nur 2 Sekunden." },
+  { num: "1", title: "DOSE AUF" },
+  { num: "2", title: "NASE DRAUF" },
+  { num: "3", title: "DURCHATMEN" },
 ];
 
 const HowToSection = () => {
