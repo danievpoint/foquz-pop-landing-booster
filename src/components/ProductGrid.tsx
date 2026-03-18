@@ -256,7 +256,7 @@ const ProductGrid = () => {
               className="relative overflow-hidden"
               style={{ minHeight: 380, touchAction: 'pan-y' }}>
               
-              <AnimatePresence custom={direction} mode="wait">
+              <AnimatePresence custom={direction} initial={false} mode="popLayout">
                 <motion.div
                   key={activeIndex}
                   custom={direction}
