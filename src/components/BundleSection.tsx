@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import foquzBox from "@/assets/foquz-box.png";
-import foquzBox from "@/assets/foquz-box.png";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
