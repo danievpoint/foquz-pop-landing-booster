@@ -54,7 +54,7 @@ const Navbar = () => {
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
           {/* Left pill */}
-          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-secondary comic-outline">
+          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
             {leftLinks.map((l) => (
               <a
                 key={l.label}
