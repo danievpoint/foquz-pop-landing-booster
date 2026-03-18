@@ -23,12 +23,13 @@ const HeroSection = () => {
               transition={{ duration: 0.7 }}
               className="pb-4 sm:pb-8"
             >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-2 sm:mb-3 md:mb-4 text-primary-foreground text-pop">
                 KURZ RIECHEN.<br />
                 AB AUF
                 <br />
                 <span className="text-secondary text-3xl sm:text-4xl md:text-5xl">WOLKE 7.</span>
               </h1>
+              <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 mb-3 sm:mb-5 md:mb-6 font-medium">Frische für deine Nase.</p>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <a
                   href="#bundle"
