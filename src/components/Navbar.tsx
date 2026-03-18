@@ -57,7 +57,9 @@ const Navbar = () => {
           </div>
 
           {/* Center – clickable area to scroll to top */}
-          <a href="/" className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
+          <a href="/" className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Zur Startseite">
+            <img src={foquzLogo} alt="FOQUZ" className="h-10 md:h-12" />
+          </a>
 
           {/* Right pill - cart only */}
           <div className="flex items-center gap-3 rounded-full px-5 py-2.5 bg-secondary comic-outline">
