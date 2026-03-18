@@ -253,7 +253,7 @@ const ProductGrid = () => {
                   <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-2xl font-black">{p.price}</span>
-                    <StockBadge />
+                    <StockBadge available={isAvailable(p.name)} />
                   </div>
                   <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
