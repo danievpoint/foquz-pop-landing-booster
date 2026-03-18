@@ -22,7 +22,7 @@ export const products: Product[] = [
     handle: "peach-party",
     price: "€7,99",
     numericPrice: 7.99,
-    desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
+    desc: "Auch Mario wollte nur Peach.\nFruchtige Frische, einfach durchgespielt.",
     image: productWatermelon,
     color: "#e88a3a",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
