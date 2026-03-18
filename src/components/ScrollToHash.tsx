@@ -1,19 +1,39 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToHash = () => {
   const { hash, pathname } = useLocation();
-  const isInitialLoad = useRef(true);
+  const hasMounted = useRef(false);
+
+  useLayoutEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    if (hash) {
+      window.history.replaceState(null, "", pathname || "/");
+    }
+
+    scrollToTop();
+    requestAnimationFrame(() => {
+      scrollToTop();
+      requestAnimationFrame(scrollToTop);
+    });
+
+    window.addEventListener("load", scrollToTop);
+
+    return () => {
+      window.removeEventListener("load", scrollToTop);
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
 
   useEffect(() => {
-    if (isInitialLoad.current) {
-      // On initial page load, always scroll to top regardless of hash
-      isInitialLoad.current = false;
-      window.scrollTo({ top: 0, behavior: "instant" });
-      // Clear hash from URL without triggering navigation
-      if (hash) {
-        window.history.replaceState(null, "", pathname || "/");
-      }
+    if (!hasMounted.current) {
+      hasMounted.current = true;
       return;
     }
 
@@ -24,9 +44,10 @@ const ScrollToHash = () => {
           el.scrollIntoView({ behavior: "smooth" });
         }
       }, 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [hash, pathname]);
 
   return null;
