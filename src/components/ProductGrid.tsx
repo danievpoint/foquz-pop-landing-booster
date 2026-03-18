@@ -213,15 +213,17 @@ const ProductGrid = () => {
                 viewport={{ once: true }}
                 className="flex flex-col"
               >
-                <div className="rounded-2xl overflow-hidden mb-4">
+                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
                     <img
                       src={p.image}
                       alt={p.name}
                       className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
                     />
-                </div>
+                </Link>
                 <div className="py-2">
-                  <h3 className="text-lg mb-1">{p.name}</h3>
+                  <Link to={`/produkt/${p.handle}`} className="text-lg mb-1 block hover:opacity-70 transition-opacity">
+                    {p.name}
+                  </Link>
                   <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-2xl font-black">{p.price}</span>
