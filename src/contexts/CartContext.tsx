@@ -58,13 +58,27 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { ...p, qty }];
     });
-    confetti({
-      particleCount: 80,
-      spread: 100,
+    // Fire confetti with high z-index so it's above all overlays
+    const myCanvas = document.createElement("canvas");
+    myCanvas.style.position = "fixed";
+    myCanvas.style.top = "0";
+    myCanvas.style.left = "0";
+    myCanvas.style.width = "100vw";
+    myCanvas.style.height = "100vh";
+    myCanvas.style.pointerEvents = "none";
+    myCanvas.style.zIndex = "9999";
+    document.body.appendChild(myCanvas);
+
+    const myConfetti = confetti.create(myCanvas, { resize: true });
+    myConfetti({
+      particleCount: 100,
+      spread: 120,
       origin: { y: 0, x: 0.5 },
       gravity: 1.2,
-      ticks: 90,
-      startVelocity: 30,
+      ticks: 100,
+      startVelocity: 35,
+    }).then(() => {
+      document.body.removeChild(myCanvas);
     });
     setIsOpen(true);
   }, []);
