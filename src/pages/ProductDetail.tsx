@@ -219,30 +219,47 @@ const ProductDetail = () => {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 max-w-3xl mx-auto">
             {otherProducts.map((p) => (
-              <Link
+              <div
                 key={p.handle}
-                to={`/produkt/${p.handle}`}
                 className="group rounded-xl md:rounded-2xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300"
                 style={p.isBundle ? { backgroundColor: "#75559f" } : undefined}
               >
-                <div className="overflow-hidden">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-2.5 md:p-4">
-                  <h3 className={`font-extrabold text-xs md:text-base mb-0.5 ${p.isBundle ? "text-white" : ""}`}>{p.name}</h3>
-                  <div className="flex items-center gap-1.5 md:gap-2">
-                    <span className={`font-black text-sm md:text-lg ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
-                    {p.originalPrice && (
-                      <span className="text-muted-foreground/50 line-through text-[10px] md:text-xs">{p.originalPrice}</span>
-                    )}
-                    {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
+                <Link to={`/produkt/${p.handle}`}>
+                  <div className="overflow-hidden">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
+                  <div className="p-2.5 md:p-4 pb-1 md:pb-2">
+                    <h3 className={`font-extrabold text-xs md:text-base mb-0.5 ${p.isBundle ? "text-white" : ""}`}>{p.name}</h3>
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <span className={`font-black text-sm md:text-lg ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
+                      {p.originalPrice && (
+                        <span className="text-muted-foreground/50 line-through text-[10px] md:text-xs">{p.originalPrice}</span>
+                      )}
+                      {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-2.5 md:px-4 pb-2.5 md:pb-4">
+                  <button
+                    onClick={() =>
+                      addToCart(1, {
+                        id: p.isBundle ? "starter-bundle" : p.name,
+                        name: p.isBundle ? "Starter Bundle (3 Sorten)" : p.name,
+                        price: p.numericPrice,
+                        image: p.image,
+                      })
+                    }
+                    className="comic-btn w-full text-[10px] md:text-xs py-1.5 md:py-2 font-black"
+                    style={{ backgroundColor: p.isBundle ? "#ffd618" : p.color, color: "#000" }}
+                  >
+                    FOKUS SICHERN
+                  </button>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
