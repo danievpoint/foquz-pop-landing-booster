@@ -20,6 +20,7 @@ const HowToSection = () => {
           muted
           playsInline
           preload="none"
+          decoding="async"
           className="w-full h-full object-cover absolute inset-0"
         />
         
