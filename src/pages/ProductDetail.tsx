@@ -158,8 +158,8 @@ const ProductDetail = () => {
 
           {/* Info */}
           <div className="py-0 lg:py-4">
-            <h1 className="text-2xl md:text-5xl font-extrabold mb-1 md:mb-2">{product.name}</h1>
-            <p className="text-muted-foreground text-sm md:text-lg mb-3 md:mb-6 whitespace-pre-line leading-snug">
+            <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
+            <p className="text-muted-foreground text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug">
               {product.desc}
             </p>
 
