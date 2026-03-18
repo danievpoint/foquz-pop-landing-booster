@@ -264,7 +264,7 @@ const ProductGrid = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, position: 'absolute', top: 0, left: 0, right: 0 } as any}
-                  transition={{ duration: 0.25 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
                   style={{ willChange: 'opacity' }}
                   className="flex flex-col items-center w-full">
                   
