@@ -58,7 +58,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { ...p, qty }];
     });
-    // Fire confetti with high z-index so it's above all overlays
+    // Fire confetti instantly with high z-index
     const myCanvas = document.createElement("canvas");
     myCanvas.style.position = "fixed";
     myCanvas.style.top = "0";
@@ -69,32 +69,34 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     myCanvas.style.zIndex = "99999";
     document.body.appendChild(myCanvas);
 
-    const myConfetti = confetti.create(myCanvas, { resize: true });
+    const myConfetti = confetti.create(myCanvas, { resize: true, useWorker: true });
 
-    // All bursts fire immediately, no delays
-    const colors = ["#ffd618", "#75559f", "#ff6b6b", "#00d4aa", "#ff9f43", "#fff"];
+    const colors = ["#ffd618", "#75559f", "#ff6b6b", "#00d4aa", "#ff9f43", "#fff", "#e84393", "#00cec9"];
     const origins = [
-      { x: 0.0, y: -0.05 },
-      { x: 0.15, y: -0.1 },
-      { x: 0.3, y: -0.05 },
-      { x: 0.5, y: -0.1 },
-      { x: 0.7, y: -0.05 },
-      { x: 0.85, y: -0.1 },
-      { x: 1.0, y: -0.05 },
+      { x: 0.0, y: -0.02 },
+      { x: 0.1, y: -0.05 },
+      { x: 0.2, y: -0.02 },
+      { x: 0.35, y: -0.05 },
+      { x: 0.5, y: -0.02 },
+      { x: 0.65, y: -0.05 },
+      { x: 0.8, y: -0.02 },
+      { x: 0.9, y: -0.05 },
+      { x: 1.0, y: -0.02 },
     ];
 
+    // Fire all bursts synchronously – zero delay
     const promises = origins.map((origin, i) =>
       myConfetti({
-        particleCount: 80,
-        spread: 100,
+        particleCount: 120,
+        spread: 140,
         origin,
-        gravity: 0.5,
-        ticks: 350,
-        startVelocity: 55,
-        decay: 0.92,
-        scalar: 1.2,
+        gravity: 0.4,
+        ticks: 400,
+        startVelocity: 65,
+        decay: 0.91,
+        scalar: 1.3,
         colors,
-        drift: (i - 3) * 0.2,
+        drift: (i - 4) * 0.15,
       })
     );
 
