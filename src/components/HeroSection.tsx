@@ -78,20 +78,21 @@ const HeroSection = () => {
 
         {/* === DESKTOP (lg+) === */}
         <div
-          className="hidden lg:block relative w-full hero-desktop-wrap"
+81:           className="hidden lg:block relative w-full hero-desktop-wrap overflow-visible"
           style={{
             marginTop: 0,
             paddingTop: 0,
-            backgroundImage: `url(${heroBg})`,
-            backgroundSize: '100% 100%',
-            backgroundPosition: 'center center',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: '#c9e8fb',
             minHeight: 'unset',
             height: 'auto',
             aspectRatio: '1920 / 772',
           }}
         >
+          <img
+            src={heroBg}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+          />
           <div className="absolute z-20 hero-product-img">
             <img
               src={heroJars}
