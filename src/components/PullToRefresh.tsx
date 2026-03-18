@@ -64,8 +64,12 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
     >
       {offset > 0 && (
         <div
-          className="fixed top-0 left-0 right-0 z-[99999] flex flex-col items-center justify-center pointer-events-none gap-1.5"
-          style={{ height: offset, opacity: Math.min(offset / THRESHOLD, 1) }}
+          className="absolute left-0 right-0 z-[99999] flex items-center justify-center pointer-events-none"
+          style={{
+            top: -offset,
+            height: offset,
+            opacity: Math.min(offset / THRESHOLD, 1),
+          }}
         >
           <svg
             width="28"
