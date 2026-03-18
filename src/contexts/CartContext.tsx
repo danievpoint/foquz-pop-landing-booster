@@ -43,12 +43,18 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 };
 
 const CONFETTI_COLORS = [
-  "hsl(48 100% 55%)",
-  "hsl(349 80% 59%)",
-  "hsl(158 35% 62%)",
-  "hsl(24 87% 55%)",
-  "hsl(229 33% 58%)",
-  "hsl(0 0% 100%)",
+  "#ffd618",   // gelb
+  "#ff4d8d",   // pink
+  "#00d4aa",   // mint
+  "#ff6b6b",   // rot
+  "#75559f",   // lila
+  "#00cec9",   // türkis
+  "#ff9f43",   // orange
+  "#e84393",   // magenta
+  "#55efc4",   // hellgrün
+  "#a29bfe",   // lavendel
+  "#fdcb6e",   // hellgelb
+  "#ffffff",   // weiß
 ];
 
 let confettiCanvas: HTMLCanvasElement | null = null;
