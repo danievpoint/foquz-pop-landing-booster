@@ -41,18 +41,18 @@ const ReviewSection = () => {
   }, []);
 
   return (
-    <section id="reviews" className="section-padding pt-16 md:pt-24 min-h-[600px] scroll-mt-20" style={{ backgroundColor: '#ffd618' }}>
+    <section id="reviews" className="section-padding pt-10 md:pt-24 min-h-0 md:min-h-[600px] scroll-mt-20" style={{ backgroundColor: '#ffd618' }}>
       <div className="container mx-auto">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-6 md:mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-[60px] md:leading-[0.9] mb-4">
+          <h2 className="text-2xl md:text-[60px] md:leading-[0.9] mb-2 md:mb-4">
             DIE COMMUNITY IST BEGEISTERT
           </h2>
-          <p className="text-muted-foreground font-medium text-lg max-w-2xl mx-auto">Über 50.000 Performer vertrauen bereits auf FOQUZ.<br />Das sagen sie über ihren täglichen Gamechanger.</p>
+          <p className="text-muted-foreground font-medium text-sm md:text-lg max-w-2xl mx-auto">Über 50.000 Performer vertrauen bereits auf FOQUZ.<br />Das sagen sie über ihren täglichen Gamechanger.</p>
         </motion.div>
 
         {/* Mobile: full-width cards, swipeable / Desktop: grid */}
