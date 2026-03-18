@@ -190,7 +190,7 @@ const ProductGrid = () => {
       <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10">
         <div className="container mx-auto">
           <motion.h2
-            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
+            className="md:text-[80px] lg:text-[100px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}>
