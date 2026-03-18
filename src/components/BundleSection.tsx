@@ -79,7 +79,7 @@ const BundleSection = () => {
                 addToCart(1, {
                   id: "starter-bundle",
                   name: "Starter Bundle (3 Sorten)",
-                  price: 39.99,
+                  price: 14.99,
                   image: productThai,
                 })
               }
