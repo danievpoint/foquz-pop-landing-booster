@@ -254,7 +254,7 @@ const ProductGrid = () => {
             <div
               ref={carouselRef}
               className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y' }}>
+              style={{ minHeight: 380, touchAction: 'pan-y', willChange: 'transform', contain: 'layout style' }}>
               
               <AnimatePresence custom={direction} initial={false} mode="popLayout">
                 <motion.div
@@ -265,6 +265,7 @@ const ProductGrid = () => {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.1, ease: "easeOut" }}
+                  style={{ willChange: 'transform, opacity' }}
                   className="flex flex-col items-center">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">

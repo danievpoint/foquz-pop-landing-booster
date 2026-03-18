@@ -21,6 +21,7 @@ const HowToSection = () => {
           playsInline
           preload="none"
           className="w-full h-full object-cover absolute inset-0"
+          style={{ contentVisibility: 'auto' }}
         />
         
 
