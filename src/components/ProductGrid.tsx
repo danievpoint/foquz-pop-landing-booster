@@ -197,7 +197,7 @@ const ProductGrid = () => {
             
             WÄHLE DEINEN VIBE
           </motion.h2>
-          <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
+          <p className="text-muted-foreground font-medium md:text-xl lg:text-2xl text-center max-w-2xl mx-auto text-xs">
             Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
           </p>
 
