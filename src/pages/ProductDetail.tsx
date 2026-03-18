@@ -83,7 +83,8 @@ const BundleBanner = () => {
               BUNDLE SICHERN
             </button>
           </div>
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
