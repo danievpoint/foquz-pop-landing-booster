@@ -52,16 +52,13 @@ const NewsletterSection = () => {
 
   return (
     <>
-      <section className="bg-primary py-16">
+      <section className="bg-primary py-10 md:py-14">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-black text-primary-foreground mb-3 tracking-tight">
+          <h2 className="text-2xl md:text-4xl font-black text-primary-foreground mb-1 tracking-tight">
             JOIN THE SQUAD
           </h2>
-          <p className="text-lg md:text-xl text-primary-foreground/80 mb-2">
-            Melde dich für unseren Newsletter an &amp; sichere dir
-          </p>
-          <p className="text-2xl md:text-3xl font-black text-primary-foreground mb-8">
-            10% RABATT auf deine Bestellung
+          <p className="text-sm md:text-base text-primary-foreground/80 mb-5">
+            Newsletter abonnieren &amp; <span className="font-black text-primary-foreground">10% Rabatt</span> sichern
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
