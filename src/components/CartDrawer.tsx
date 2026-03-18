@@ -1,9 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, Tag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const CartDrawer = () => {
-  const { items, count, total, isOpen, closeCart, removeFromCart, updateQty } = useCart();
+  const { items, count, total, discountedTotal, hasNewsletterDiscount, isOpen, closeCart, removeFromCart, updateQty } = useCart();
+
+  const discountAmount = total - discountedTotal;
 
   return (
     <AnimatePresence>
@@ -95,10 +97,26 @@ const CartDrawer = () => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="p-6 border-t-2 border-foreground space-y-4">
+              <div className="p-6 border-t-2 border-foreground space-y-3">
+                {/* Newsletter discount badge */}
+                {hasNewsletterDiscount && (
+                  <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5">
+                    <Tag size={18} className="text-green-600 shrink-0" />
+                    <div className="flex-1">
+                      <span className="text-green-800 font-bold text-sm">Newsletter-Rabatt: 10%</span>
+                    </div>
+                    <span className="text-green-700 font-black text-sm">-€{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-lg">Gesamt</span>
-                  <span className="text-2xl font-black">€{total.toFixed(2)}</span>
+                  <div className="text-right">
+                    {hasNewsletterDiscount && (
+                      <span className="text-sm text-muted-foreground line-through block">€{total.toFixed(2)}</span>
+                    )}
+                    <span className="text-2xl font-black">€{discountedTotal.toFixed(2)}</span>
+                  </div>
                 </div>
                 <button className="comic-btn bg-primary text-primary-foreground w-full text-lg">
                   ZUR KASSE
