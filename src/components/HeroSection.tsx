@@ -2,26 +2,25 @@ import { useState, useEffect } from "react";
 import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
 
-const useImagesLoaded = (srcs: string[]) => {
-  const [loaded, setLoaded] = useState(false);
+// Preload hero images as early as possible
+const heroImagePromise = Promise.all(
+  [heroBg, heroJars].map(
+    (src) =>
+      new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      })
+  )
+);
+
+export const useHeroReady = () => {
+  const [ready, setReady] = useState(false);
   useEffect(() => {
-    let cancelled = false;
-    Promise.all(
-      srcs.map(
-        (src) =>
-          new Promise<void>((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve();
-            img.onerror = () => resolve();
-            img.src = src;
-          })
-      )
-    ).then(() => {
-      if (!cancelled) setLoaded(true);
-    });
-    return () => { cancelled = true; };
+    heroImagePromise.then(() => setReady(true));
   }, []);
-  return loaded;
+  return ready;
 };
 
 const HeroSection = () => {
