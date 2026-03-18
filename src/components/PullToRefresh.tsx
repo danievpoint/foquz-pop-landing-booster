@@ -67,12 +67,31 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
           className="fixed top-0 left-0 right-0 z-[99999] flex flex-col items-center justify-center pointer-events-none gap-1.5"
           style={{ height: offset, opacity: Math.min(offset / THRESHOLD, 1) }}
         >
-          <div
-            className={`w-8 h-8 border-[3px] border-foreground/20 border-t-foreground rounded-full ${refreshing ? "animate-spin" : ""}`}
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            className={refreshing ? "animate-spin" : ""}
             style={{
               transform: !refreshing ? `rotate(${pullDistance * 3}deg)` : undefined,
             }}
-          />
+          >
+            {Array.from({ length: 12 }).map((_, i) => (
+              <line
+                key={i}
+                x1="14"
+                y1="4"
+                x2="14"
+                y2="9"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity={refreshing ? 0.25 + (i / 12) * 0.75 : Math.min(pullDistance / THRESHOLD, 1) * (0.15 + (i / 12) * 0.85)}
+                transform={`rotate(${i * 30} 14 14)`}
+                className="text-foreground"
+              />
+            ))}
+          </svg>
           <span className="text-[11px] font-bold uppercase tracking-wider text-foreground/70">
             {refreshing ? "Lädt…" : pullDistance >= THRESHOLD ? "Loslassen ↑" : "Herunterziehen ↓"}
           </span>
