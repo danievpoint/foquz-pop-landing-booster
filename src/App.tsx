@@ -41,6 +41,7 @@ const App = () => (
           <Route path="/b2b-anfragen" element={<B2BAnfragen />} />
           <Route path="/anleitung" element={<Anleitung />} />
           <Route path="/hilfe" element={<HelpCenter />} />
+          <Route path="/produkt/:handle" element={<ProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
