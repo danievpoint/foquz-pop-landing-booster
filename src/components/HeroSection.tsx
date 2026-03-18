@@ -4,7 +4,7 @@ import heroBg from "@/assets/hero-bg.svg";
 
 const HeroSection = () => {
   return (
-    <section className="relative overflow-visible">
+    <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
       {/* === MOBILE / TABLET (< lg) === */}
       <div className="lg:hidden relative w-full" style={{ minHeight: 'max(700px, 75vh)' }}>
         <img
