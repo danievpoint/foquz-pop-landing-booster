@@ -262,7 +262,7 @@ const ProductGrid = () => {
                   transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                   className="flex flex-col items-center">
                   
-                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[95%] max-w-lg mx-auto block">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
                         <img
                       src={products[activeIndex].image}
                       alt={products[activeIndex].name}
