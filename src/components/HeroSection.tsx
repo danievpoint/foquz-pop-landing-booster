@@ -51,12 +51,7 @@ const HeroSection = () => {
           />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
             <div className="flex flex-col">
-              <motion.div
-                initial={{ opacity: 0, x: -60 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
-                className="pb-4 sm:pb-8"
-              >
+              <div className="pb-4 sm:pb-8">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
                   AB AUF
@@ -77,7 +72,7 @@ const HeroSection = () => {
                     EINZELN KAUFEN
                   </a>
                 </div>
-              </motion.div>
+              </div>
               <div className="md:flex md:justify-center">
                 <img
                   src={heroJars}
@@ -106,10 +101,7 @@ const HeroSection = () => {
             aspectRatio: '1920 / 772',
           }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div
             className="absolute z-20 hero-product-img"
           >
             <img
@@ -118,14 +110,11 @@ const HeroSection = () => {
               fetchPriority="high"
               className="w-full h-auto animate-[breathe_3s_ease-in-out_infinite]"
             />
-          </motion.div>
+          </div>
 
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
-              <motion.div
-                initial={{ opacity: 0, x: -60 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
+              <div
                 className="w-[40%] xl:w-[36%]"
               >
                 <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
@@ -148,7 +137,7 @@ const HeroSection = () => {
                     EINZELN KAUFEN
                   </a>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

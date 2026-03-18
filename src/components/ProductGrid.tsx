@@ -15,11 +15,10 @@ products.forEach((p) => {
 });
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: (i: number) => ({
+  hidden: { opacity: 1, y: 0 },
+  visible: () => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.5 }
   })
 };
 
@@ -200,14 +199,11 @@ const ProductGrid = () => {
     <>
       <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10 scroll-mt-20">
         <div className="container mx-auto">
-          <motion.h2
-            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}>
+          <h2
+            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl">
             
             WÄHLE DEINEN VIBE
-          </motion.h2>
+          </h2>
           <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
             Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
           </p>
