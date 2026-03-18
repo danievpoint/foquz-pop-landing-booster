@@ -137,7 +137,7 @@ const HeroSection = () => {
                     EINZELN KAUFEN
                   </a>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
