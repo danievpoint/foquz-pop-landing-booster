@@ -21,7 +21,7 @@ const MarqueeBanner = () => {
       <motion.div
         className="flex whitespace-nowrap gap-8 md:gap-12"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: isMobile ? 5 : 30, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: isMobile ? 3 : 30, repeat: Infinity, ease: "linear" }}
       >
         {repeated.map((text, i) => (
           <span
