@@ -57,8 +57,11 @@ const NewsletterSection = () => {
           <h2 className="text-3xl md:text-5xl font-black text-primary-foreground mb-3 tracking-tight">
             JOIN THE SQUAD
           </h2>
-          <p className="text-lg md:text-xl text-primary-foreground/80 mb-8">
-            Hol dir 10% Rabatt auf deinen nächsten Drop
+          <p className="text-lg md:text-xl text-primary-foreground/80 mb-2">
+            Melde dich für unseren Newsletter an &amp; sichere dir
+          </p>
+          <p className="text-2xl md:text-3xl font-black text-primary-foreground mb-8">
+            10% RABATT auf deine Bestellung
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
