@@ -58,6 +58,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { ...p, qty }];
     });
+    confetti({
+      particleCount: 80,
+      spread: 100,
+      origin: { y: 0, x: 0.5 },
+      gravity: 1.2,
+      ticks: 90,
+      startVelocity: 30,
+    });
     setIsOpen(true);
   }, []);
 
