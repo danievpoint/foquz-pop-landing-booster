@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
@@ -96,7 +96,7 @@ const InfoButton = ({ onClick, color }: {onClick: () => void;color: string;}) =>
   title="Inhaltsstoffe anzeigen"
   onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.8"; }}
   onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}>
-    <Search size={18} strokeWidth={2.5} />
+    <Info size={18} strokeWidth={2.5} />
   </button>;
 
 
