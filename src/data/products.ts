@@ -17,8 +17,8 @@ export const products: Product[] = [
   {
     name: "PEACH PARTY",
     handle: "peach-party",
-    price: "€14,99",
-    numericPrice: 14.99,
+    price: "€7,99",
+    numericPrice: 7.99,
     desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
     image: productWatermelon,
     color: "#e94362",
