@@ -10,7 +10,7 @@ const steps = [
 
 const HowToSection = () => {
   return (
-    <section id="howto" className="relative overflow-hidden">
+    <section id="howto" className="relative overflow-hidden scroll-mt-20">
       {/* Full-width lifestyle image */}
       <div className="relative min-h-[600px] md:min-h-[600px]">
         <video
