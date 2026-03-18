@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products, allProducts, bundleProduct } from "@/data/products";
+import { allProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
