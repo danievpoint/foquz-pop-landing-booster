@@ -13,15 +13,16 @@ const products = [
   {
     name: "PEACH PARTY",
     price: "€14,99",
+    numericPrice: 14.99,
     desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
     image: productWatermelon,
-    
     color: "#e94362",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
   },
   {
     name: "THAI STYLE",
-    price: "€14,99",
+    price: "€7,99",
+    numericPrice: 7.99,
     desc: "Dein Style, dein Kick.\nKräuter-Power für tiefste Konzentration.",
     image: productThai,
     color: "#85c8b5",
@@ -29,7 +30,8 @@ const products = [
   },
   {
     name: "LEMON BREEZY",
-    price: "€14,99",
+    price: "€7,99",
+    numericPrice: 7.99,
     desc: "Bleib Breezy, nimm's easy.\nFrischer Wind für deine besten Ideen.",
     image: productLemon,
     color: "#ffd618",
@@ -258,7 +260,7 @@ const ProductGrid = () => {
                   <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => addToCart(3, { id: p.name, name: `${p.name} Bundle`, price: 14.99, image: p.image })}
+                      onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                       className="comic-btn bg-card text-foreground text-sm py-2 px-6"
                     >
                       FOKUS SICHERN
@@ -305,7 +307,7 @@ const ProductGrid = () => {
                     <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
                     <div className="flex items-center justify-center gap-3">
                       <button
-                        onClick={() => addToCart(3, { id: products[activeIndex].name, name: `${products[activeIndex].name} Bundle`, price: 14.99, image: products[activeIndex].image })}
+                        onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
                         className="comic-btn bg-card text-foreground text-xs py-2 px-5"
                       >
                         FOKUS SICHERN
