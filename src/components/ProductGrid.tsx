@@ -23,10 +23,16 @@ const cardVariants = {
   })
 };
 
-const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0.3 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0.3 })
+const slideVariantsInstant = {
+  enter: () => ({ opacity: 0 }),
+  center: { opacity: 1 },
+  exit: () => ({ opacity: 0 })
+};
+
+const slideVariantsSmooth = {
+  enter: () => ({ opacity: 0 }),
+  center: { opacity: 1 },
+  exit: () => ({ opacity: 0 })
 };
 
 const InfoOverlay = ({
@@ -256,16 +262,15 @@ const ProductGrid = () => {
               className="relative overflow-hidden"
               style={{ minHeight: 380, touchAction: 'pan-y', willChange: 'transform', contain: 'layout style' }}>
               
-              <AnimatePresence custom={direction} initial={false} mode="popLayout">
+              <AnimatePresence initial={false} mode="wait">
                 <motion.div
                   key={activeIndex}
-                  custom={direction}
-                  variants={slideVariants}
+                  variants={autoPlay ? slideVariantsSmooth : slideVariantsInstant}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.1, ease: "easeOut" }}
-                  style={{ willChange: 'transform, opacity' }}
+                  transition={autoPlay ? { duration: 0.5, ease: "easeInOut" } : { duration: 0 }}
+                  style={{ willChange: 'opacity' }}
                   className="flex flex-col items-center">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
