@@ -33,12 +33,11 @@ const HowToSection = () => {
             viewport={{ once: true }}
             className="bg-card comic-card p-5 md:p-8 max-w-[260px] transform -rotate-2"
           >
-            <h2 className="text-3xl md:text-4xl mb-6">So gehts...</h2>
+            <h2 className="text-3xl md:text-4xl mb-6">How to Foquz</h2>
             <div className="space-y-4">
               {steps.map((s) => (
                 <p key={s.num} className="text-base">
-                  <span className="font-extrabold">{s.num}. {s.title}</span>{" "}
-                  {s.desc}
+                  <span className="font-extrabold">{s.num}. {s.title}</span>
                 </p>
               ))}
             </div>
