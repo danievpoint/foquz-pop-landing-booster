@@ -52,21 +52,23 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* === DESKTOP (lg+) – fixed height, BG covers === */}
-      <div className="hidden lg:block relative w-full h-[100vh] min-h-[700px] max-h-[1000px] -mt-[60px] pt-[60px]">
+      {/* === DESKTOP (lg+) – BG scales naturally, elements use % positioning === */}
+      <div className="hidden lg:block relative w-full">
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="w-full h-auto block"
+          style={{ minHeight: 'max(700px, 75vh)' }}
         />
 
-        {/* Product image */}
+        {/* Product image – same coordinate space as BG */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="absolute z-20 right-[8%] top-1/2 -translate-y-[45%] w-[32%] max-w-[550px]"
+          className="absolute z-20"
+          style={{ top: '13%', left: '52%', width: '30%' }}
         >
           <img
             src={heroJars}
@@ -75,14 +77,14 @@ const HeroSection = () => {
           />
         </motion.div>
 
-        {/* Text content */}
-        <div className="absolute inset-0 z-10 flex items-center">
-          <div className="w-full max-w-[1800px] mx-auto px-8">
+        {/* Text content – overlaid with % padding */}
+        <div className="absolute inset-0 z-10 w-full">
+          <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
-              className="w-[45%] xl:w-[40%]"
+              className="w-[40%] xl:w-[36%]"
             >
               <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
                 DEIN FOKUS-<br /><span className="text-secondary">UPGRADE.</span>
