@@ -78,7 +78,7 @@ const HeroSection = () => {
 
         {/* === DESKTOP (lg+) === */}
         <div
-81:           className="hidden lg:block relative w-full hero-desktop-wrap overflow-visible"
+className="hidden lg:block relative w-full hero-desktop-wrap overflow-visible"
           style={{
             marginTop: 0,
             paddingTop: 0,
