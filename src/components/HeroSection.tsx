@@ -82,6 +82,7 @@ const HeroSection = () => {
           <img
             src={heroJars}
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+            fetchPriority="high"
             className="w-full h-auto animate-[breathe_3s_ease-in-out_infinite]"
           />
         </motion.div>

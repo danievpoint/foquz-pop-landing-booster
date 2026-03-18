@@ -82,7 +82,7 @@ const WhyFoquzSection = () => {
                       transition={{ duration: 0.4, delay: i * 0.1 }}
                       className="flex flex-col items-center text-center"
                     >
-                      <img src={p.icon} alt={p.title} className="w-16 h-16 object-contain mb-2" />
+                      <img src={p.icon} alt={p.title} loading="lazy" className="w-16 h-16 object-contain mb-2" />
                       <h3 className="text-sm font-extrabold text-foreground mb-1">
                         {p.title}
                       </h3>
