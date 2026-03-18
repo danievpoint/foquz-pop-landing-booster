@@ -24,7 +24,7 @@ export const products: Product[] = [
     numericPrice: 7.99,
     desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
     image: productWatermelon,
-    color: "#e94362",
+    color: "#e88a3a",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
   },
   {
