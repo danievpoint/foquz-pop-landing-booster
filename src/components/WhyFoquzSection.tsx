@@ -51,7 +51,7 @@ const WhyFoquzSection = () => {
     <section
       className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden"
     >
-      <img src={whyfoquzBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+      <img src={whyfoquzBg} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
           {/* Left: empty space for background image to show */}

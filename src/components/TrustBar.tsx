@@ -21,6 +21,7 @@ const TrustBar = () => {
         src={trustWoman}
         alt="Frau mit FOQUZ Produkt"
         loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-top"
       />
 
