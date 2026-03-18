@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import foquzBox from "@/assets/foquz-box.png";
+import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
@@ -31,11 +32,13 @@ const BundleSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-              <img
-                src={foquzBox}
-                alt="FOQUZ Starter Bundle Box"
-                className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
-              />
+              <Link to="/produkt/starter-bundle">
+                <img
+                  src={foquzBox}
+                  alt="FOQUZ Starter Bundle Box"
+                  className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
+                />
+              </Link>
           </motion.div>
 
           {/* Right: Text content */}
