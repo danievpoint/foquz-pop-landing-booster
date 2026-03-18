@@ -74,7 +74,7 @@ const Navbar = () => {
             <button className="relative" onClick={openCart}>
               <ShoppingCart size={18} className="text-secondary-foreground hover:opacity-80 transition-colors cursor-pointer" />
               {count > 0 && (
-                <span className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center comic-outline">
+                <span className="absolute -top-2 -right-2 bg-foreground text-background text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
                   {count}
                 </span>
               )}
