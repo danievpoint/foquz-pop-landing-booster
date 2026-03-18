@@ -24,7 +24,7 @@ export const useHeroReady = () => {
 };
 
 const HeroSection = () => {
-  const ready = useImagesLoaded([heroBg, heroJars]);
+  const ready = useHeroReady();
 
   return (
     <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
