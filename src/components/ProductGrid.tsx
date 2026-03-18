@@ -14,42 +14,42 @@ const cardVariants = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.5 },
-  }),
+    transition: { delay: i * 0.15, duration: 0.5 }
+  })
 };
 
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 }),
+  exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 })
 };
 
 const InfoOverlay = ({
   product,
-  onClose,
-}: {
-  product: (typeof products)[0];
-  onClose: () => void;
-}) => (
-  <motion.div
-    className="fixed inset-0 z-50 flex items-center justify-center p-4"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.2 }}
-  >
+  onClose
+
+
+
+}: {product: (typeof products)[0];onClose: () => void;}) =>
+<motion.div
+  className="fixed inset-0 z-50 flex items-center justify-center p-4"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  transition={{ duration: 0.2 }}>
+  
     <div className="absolute inset-0 bg-black/50" onClick={onClose} />
     <motion.div
-      className="relative bg-card rounded-2xl p-8 max-w-sm w-full shadow-2xl border-2 border-foreground/10"
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.9, opacity: 0 }}
-      transition={{ duration: 0.25 }}
-    >
+    className="relative bg-card rounded-2xl p-8 max-w-sm w-full shadow-2xl border-2 border-foreground/10"
+    initial={{ scale: 0.9, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    exit={{ scale: 0.9, opacity: 0 }}
+    transition={{ duration: 0.25 }}>
+    
       <button
-        onClick={onClose}
-        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground/20 hover:bg-foreground/10 transition-colors font-barlow font-extrabold text-sm"
-      >
+      onClick={onClose}
+      className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground/20 hover:bg-foreground/10 transition-colors font-barlow font-extrabold text-sm">
+      
         ✕
       </button>
       <h3 className="font-barlow font-extrabold text-2xl mb-1">
@@ -59,40 +59,40 @@ const InfoOverlay = ({
         {product.name}
       </p>
       <ul className="space-y-2 mb-6">
-        {product.ingredients.map((ing) => (
-          <li key={ing} className="flex items-center gap-2 text-sm">
+        {product.ingredients.map((ing) =>
+      <li key={ing} className="flex items-center gap-2 text-sm">
             <span
-              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
-              style={{ backgroundColor: "#ffd618" }}
-            >
+          className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
+          style={{ backgroundColor: "#ffd618" }}>
+          
               ✓
             </span>
             {ing}
           </li>
-        ))}
+      )}
       </ul>
       <p className="text-xs font-bold text-muted-foreground">
         100% Natur. Ohne Chemie. Ohne Bullshit.
       </p>
     </motion.div>
-  </motion.div>
-);
+  </motion.div>;
 
-const InfoButton = ({ onClick, color }: { onClick: () => void; color: string }) => (
-  <button
-    onClick={onClick}
-    className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-barlow font-bold text-2xl leading-none transition-colors duration-200 hover:border-transparent shrink-0 ml-auto"
-    style={{ backgroundColor: color, color: "#000" }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.opacity = "0.8";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.opacity = "1";
-    }}
-  >
+
+const InfoButton = ({ onClick, color }: {onClick: () => void;color: string;}) =>
+<button
+  onClick={onClick}
+  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-barlow font-bold text-2xl leading-none transition-colors duration-200 hover:border-transparent shrink-0 ml-auto"
+  style={{ backgroundColor: color, color: "#000" }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.opacity = "0.8";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.opacity = "1";
+  }}>
+  
     +
-  </button>
-);
+  </button>;
+
 
 const ProductGrid = () => {
   const { addToCart } = useCart();
@@ -169,8 +169,8 @@ const ProductGrid = () => {
       const velocity = Math.abs(diff) / elapsed;
       // Trigger on short fast swipes (velocity) or longer drags (distance)
       if (Math.abs(diff) > 30 || velocity > 0.3) {
-        if (diff > 0) goNext();
-        else goPrev();
+        if (diff > 0) goNext();else
+        goPrev();
       }
     };
 
@@ -190,35 +190,35 @@ const ProductGrid = () => {
       <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10">
         <div className="container mx-auto">
           <motion.h2
-            className="text-3xl md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4"
+            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+            viewport={{ once: true }}>
+            
             WÄHLE DEINEN VIBE
           </motion.h2>
-          <p className="text-muted-foreground font-medium text-sm md:text-lg text-center max-w-xl mx-auto">
+          <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
             Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
           </p>
 
           {/* Desktop: static grid */}
           <div className="hidden lg:grid lg:grid-cols-3 gap-8 mx-auto mt-12">
-            {products.map((p, i) => (
-              <motion.div
-                key={p.name}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="flex flex-col"
-              >
+            {products.map((p, i) =>
+            <motion.div
+              key={p.name}
+              custom={i}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-col">
+              
                 <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
                     <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
-                    />
+                  src={p.image}
+                  alt={p.name}
+                  className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
+                
                 </Link>
                 <div className="py-2">
                   <Link to={`/produkt/${p.handle}`} className="text-lg font-extrabold mb-1 block hover:opacity-70 transition-opacity">
@@ -232,16 +232,16 @@ const ProductGrid = () => {
                   <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                      className="comic-btn bg-card text-foreground text-sm py-2 px-6"
-                    >
+                    onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
+                    className="comic-btn bg-card text-foreground text-sm py-2 px-6">
+                    
                       FOKUS SICHERN
                     </button>
                     <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
                   </div>
                 </div>
               </motion.div>
-            ))}
+            )}
           </div>
 
           {/* Mobile: carousel */}
@@ -249,8 +249,8 @@ const ProductGrid = () => {
             <div
               ref={carouselRef}
               className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y' }}
-            >
+              style={{ minHeight: 380, touchAction: 'pan-y' }}>
+              
               <AnimatePresence custom={direction} mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -260,14 +260,14 @@ const ProductGrid = () => {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="flex flex-col items-center"
-                >
+                  className="flex flex-col items-center">
+                  
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto block">
                         <img
-                          src={products[activeIndex].image}
-                          alt={products[activeIndex].name}
-                          className="w-full aspect-square object-cover"
-                        />
+                      src={products[activeIndex].image}
+                      alt={products[activeIndex].name}
+                      className="w-full aspect-square object-cover" />
+                    
                     </Link>
                   <div className="py-1 text-center">
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
@@ -282,8 +282,8 @@ const ProductGrid = () => {
                     <div className="flex items-center justify-center gap-3">
                       <button
                         onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
-                        className="comic-btn bg-card text-foreground text-xs py-2 px-5"
-                      >
+                        className="comic-btn bg-card text-foreground text-xs py-2 px-5">
+                        
                         FOKUS SICHERN
                       </button>
                       <InfoButton onClick={() => setInfoProduct(products[activeIndex])} color={products[activeIndex].color} />
@@ -299,15 +299,15 @@ const ProductGrid = () => {
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <div className="flex gap-3">
-                {products.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"
-                    }`}
-                  />
-                ))}
+                {products.map((_, i) =>
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
+                  } />
+
+                )}
               </div>
               <button onClick={goNext} className="w-8 h-8 rounded-full border-2 border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
                 <ChevronRight className="w-4 h-4" />
@@ -319,12 +319,12 @@ const ProductGrid = () => {
 
       {/* Info Overlay */}
       <AnimatePresence>
-        {infoProduct && (
-          <InfoOverlay product={infoProduct} onClose={() => setInfoProduct(null)} />
-        )}
+        {infoProduct &&
+        <InfoOverlay product={infoProduct} onClose={() => setInfoProduct(null)} />
+        }
       </AnimatePresence>
-    </>
-  );
+    </>);
+
 };
 
 export default ProductGrid;
