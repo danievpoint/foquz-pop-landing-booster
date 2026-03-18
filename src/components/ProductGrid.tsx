@@ -24,9 +24,9 @@ const cardVariants = {
 };
 
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 120 : -120, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0.3 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -120 : 120, opacity: 0 })
+  exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0.3 })
 };
 
 const InfoOverlay = ({
