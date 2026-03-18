@@ -2,42 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import productWatermelon from "@/assets/product-watermelon-new.png";
-import productThai from "@/assets/product-thai-new.png";
-import productLemon from "@/assets/product-lemon-new.png";
+import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
+import { products } from "@/data/products";
 
-const products = [
-  {
-    name: "PEACH PARTY",
-    price: "€14,99",
-    numericPrice: 14.99,
-    desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
-    image: productWatermelon,
-    color: "#e94362",
-    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
-  },
-  {
-    name: "THAI STYLE",
-    price: "€7,99",
-    numericPrice: 7.99,
-    desc: "Dein Style, dein Kick.\nKräuter-Power für tiefste Konzentration.",
-    image: productThai,
-    color: "#85c8b5",
-    ingredients: ["Menthol", "Borneol", "Kampferaroma"],
-  },
-  {
-    name: "LEMON BREEZY",
-    price: "€7,99",
-    numericPrice: 7.99,
-    desc: "Bleib Breezy, nimm's easy.\nFrischer Wind für deine besten Ideen.",
-    image: productLemon,
-    color: "#ffd618",
-    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
-  },
-];
 
 const cardVariants = {
   hidden: { opacity: 0, y: 60 },
@@ -243,15 +213,17 @@ const ProductGrid = () => {
                 viewport={{ once: true }}
                 className="flex flex-col"
               >
-                <div className="rounded-2xl overflow-hidden mb-4">
+                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
                     <img
                       src={p.image}
                       alt={p.name}
                       className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
                     />
-                </div>
+                </Link>
                 <div className="py-2">
-                  <h3 className="text-lg mb-1">{p.name}</h3>
+                  <Link to={`/produkt/${p.handle}`} className="text-lg mb-1 block hover:opacity-70 transition-opacity">
+                    {p.name}
+                  </Link>
                   <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-2xl font-black">{p.price}</span>
@@ -290,15 +262,17 @@ const ProductGrid = () => {
                   transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                   className="flex flex-col items-center"
                 >
-                    <div className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-[75%] max-w-sm mx-auto block">
                         <img
                           src={products[activeIndex].image}
                           alt={products[activeIndex].name}
                           className="w-full aspect-square object-cover"
                         />
-                    </div>
+                    </Link>
                   <div className="py-1 text-center">
-                    <h3 className="text-base font-extrabold mb-0">{products[activeIndex].name}</h3>
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                      {products[activeIndex].name}
+                    </Link>
                     <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug">{products[activeIndex].desc}</p>
                     <div className="flex items-center justify-center gap-2 mb-0.5">
                       <span className="text-xl font-black">{products[activeIndex].price}</span>

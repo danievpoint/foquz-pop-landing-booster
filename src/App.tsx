@@ -16,6 +16,7 @@ import Versandbedingungen from "./pages/Versandbedingungen";
 import B2BAnfragen from "./pages/B2BAnfragen";
 import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
+import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/b2b-anfragen" element={<B2BAnfragen />} />
           <Route path="/anleitung" element={<Anleitung />} />
           <Route path="/hilfe" element={<HelpCenter />} />
+          <Route path="/produkt/:handle" element={<ProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
