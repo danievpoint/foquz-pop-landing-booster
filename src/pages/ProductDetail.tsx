@@ -163,14 +163,14 @@ const ProductDetail = () => {
               {product.desc}
             </p>
 
-            <div className="flex items-center gap-3 mb-0.5 md:mb-1">
-              <span className="text-2xl md:text-4xl font-black">{product.price}</span>
+            <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
+              <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
               {product.originalPrice && (
-                <span className="text-base md:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+                <span className="text-base lg:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
               )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
-            <span className="text-[10px] md:text-xs text-muted-foreground mb-3 md:mb-6 block">inkl. MwSt.</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground mb-3 lg:mb-6 block">inkl. MwSt.</span>
 
             <button
               onClick={() =>
