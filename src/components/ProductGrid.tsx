@@ -264,7 +264,7 @@ const ProductGrid = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  transition={{ duration: 0.1, ease: "easeOut" }}
                   className="flex flex-col items-center">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
