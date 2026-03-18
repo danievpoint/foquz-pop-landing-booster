@@ -49,6 +49,12 @@ const CartDrawer = () => {
                   <ShoppingBag size={64} strokeWidth={1} />
                   <p className="mt-4 text-lg font-bold">Dein Warenkorb ist leer</p>
                   <p className="text-sm mt-1">Füge Produkte hinzu, um loszulegen!</p>
+                  {hasNewsletterDiscount && (
+                    <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5 mt-6 text-left">
+                      <Tag size={18} className="text-green-600 shrink-0" />
+                      <span className="text-green-800 font-bold text-sm">10% Newsletter-Rabatt aktiv ✓</span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 items.map((item) => (
