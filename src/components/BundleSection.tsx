@@ -14,6 +14,7 @@ const checks = [
 
 const BundleSection = () => {
   const { addToCart } = useCart();
+  const { isAvailable } = useProductAvailability();
 
   return (
     <section id="bundle"
