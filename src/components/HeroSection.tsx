@@ -72,7 +72,7 @@ const HeroSection = () => {
                     EINZELN KAUFEN
                   </a>
                 </div>
-              </motion.div>
+              </div>
               <div className="md:flex md:justify-center">
                 <img
                   src={heroJars}
