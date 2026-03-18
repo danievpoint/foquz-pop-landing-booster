@@ -7,7 +7,6 @@ const ScrollToHash = () => {
 
   useEffect(() => {
     if (hash) {
-      // Always scroll to hash (even on initial load, e.g. navigating from subpage to /#sorten)
       const behavior = isInitialLoad.current ? "instant" : "smooth";
       isInitialLoad.current = false;
       setTimeout(() => {
@@ -16,10 +15,9 @@ const ScrollToHash = () => {
           el.scrollIntoView({ behavior });
         }
       }, 100);
-    } else if (!isInitialLoad.current) {
-      // Only scroll to top on subsequent navigations, not initial page load
-      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+      // Always scroll to top when there's no hash (including initial load)
+      window.scrollTo({ top: 0, behavior: isInitialLoad.current ? "instant" : "smooth" });
       isInitialLoad.current = false;
     }
   }, [hash, pathname]);
