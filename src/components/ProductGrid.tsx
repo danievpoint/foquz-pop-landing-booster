@@ -256,18 +256,17 @@ const ProductGrid = () => {
             <div
               ref={carouselRef}
               className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y', willChange: 'transform', contain: 'layout style' }}>
+              style={{ minHeight: 380, touchAction: 'pan-y', willChange: 'transform', contain: 'layout style', position: 'relative' }}>
               
-              <AnimatePresence initial={false} mode="wait">
+              <AnimatePresence initial={false} mode="popLayout">
                 <motion.div
                   key={activeIndex}
-                  variants={autoPlay ? slideVariantsSmooth : slideVariantsInstant}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={autoPlay ? { duration: 0.5, ease: "easeInOut" } : { duration: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, position: 'absolute', top: 0, left: 0, right: 0 } as any}
+                  transition={{ duration: 0.25 }}
                   style={{ willChange: 'opacity' }}
-                  className="flex flex-col items-center">
+                  className="flex flex-col items-center w-full">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
                         <img
