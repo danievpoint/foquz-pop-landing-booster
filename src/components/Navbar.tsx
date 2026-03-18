@@ -110,7 +110,7 @@ const Navbar = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="lg:hidden fixed inset-x-0 top-0 z-[10000] bg-white flex flex-col rounded-b-3xl shadow-xl"
-          style={{ height: '66vh' }}
+          style={{ height: 'auto' }}
         >
           {/* Top bar with X, logo, cart */}
           <div className="flex items-center justify-between px-4 py-3">
@@ -129,8 +129,8 @@ const Navbar = () => {
           </div>
 
           {/* Menu links */}
-          <div className="pt-8 px-8">
-            <div className="space-y-8">
+          <div className="pt-4 pb-6 px-8">
+            <div className="space-y-5">
               {mobileLinks.filter(l => l.label !== "START").map((l, i) => (
                 <motion.a
                   key={l.label}
