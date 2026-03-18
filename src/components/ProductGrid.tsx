@@ -14,14 +14,15 @@ const products = [
     name: "PEACH PARTY",
     price: "€14,99",
     numericPrice: 14.99,
+    desc: "Kein Stress, nur Party.\nDie fruchtige Leichtigkeit für deinen Fokus.",
     image: productWatermelon,
-    
     color: "#e94362",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
   },
   {
     name: "THAI STYLE",
-    price: "€14,99",
+    price: "€7,99",
+    numericPrice: 7.99,
     desc: "Dein Style, dein Kick.\nKräuter-Power für tiefste Konzentration.",
     image: productThai,
     color: "#85c8b5",
@@ -29,7 +30,8 @@ const products = [
   },
   {
     name: "LEMON BREEZY",
-    price: "€14,99",
+    price: "€7,99",
+    numericPrice: 7.99,
     desc: "Bleib Breezy, nimm's easy.\nFrischer Wind für deine besten Ideen.",
     image: productLemon,
     color: "#ffd618",
