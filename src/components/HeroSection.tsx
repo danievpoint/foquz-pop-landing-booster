@@ -98,9 +98,10 @@ const HeroSection = () => {
               className="w-[40%] xl:w-[36%]"
             >
               <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
-                DEIN FOKUS-<br /><span className="text-secondary">UPGRADE.</span>
+                KURZ RIECHEN.<br />
+                <span className="text-secondary">AB AUF</span>
                 <br />
-                <span className="text-[clamp(2.5rem,4vw,3.75rem)]">JEDERZEIT BEREIT.</span>
+                <span className="text-[clamp(2.5rem,4vw,3.75rem)]">WOLKE 7.</span>
               </h1>
               <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
                 <a
