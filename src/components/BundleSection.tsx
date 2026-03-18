@@ -68,8 +68,8 @@ const BundleSection = () => {
 
             {/* Price */}
             <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap">
-              <span className="text-2xl md:text-4xl font-black text-white">Nur 39,99€</span>
-              <span className="text-base lg:text-lg text-white/60 line-through">44,97€</span>
+              <span className="text-2xl md:text-4xl font-black text-white">Nur 14,99€</span>
+              <span className="text-base lg:text-lg text-white/60 line-through">23,97€</span>
               <StockBadge variant="light" available={isAvailable("Starter Bundle") ?? true} />
             </div>
 
