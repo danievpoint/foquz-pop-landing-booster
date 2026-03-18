@@ -16,6 +16,7 @@ import Versandbedingungen from "./pages/Versandbedingungen";
 import B2BAnfragen from "./pages/B2BAnfragen";
 import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
+import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
 
 const queryClient = new QueryClient();
