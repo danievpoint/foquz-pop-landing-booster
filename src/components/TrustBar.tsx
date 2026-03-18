@@ -1,11 +1,16 @@
 import { motion } from "framer-motion";
+import iconLeaf from "@/assets/icon-trust-leaf.png";
+import iconBolt from "@/assets/icon-trust-bolt.png";
+import iconNoCoffee from "@/assets/icon-trust-nocoffee.png";
+import iconShipping from "@/assets/icon-trust-shipping.png";
+import iconLegal from "@/assets/icon-trust-legal.png";
 
 const trustItems = [
-  { emoji: "🌿", label: "100% ÄTHERISCHE ÖLE" },
-  { emoji: "⚡", label: "INSTANT-WIRKUNG IN 2 SEK" },
-  { emoji: "🚫", label: "KEIN KOFFEIN, KEIN CRASH" },
-  { emoji: "📦", label: "VERSAND IN 24H" },
-  { emoji: "✅", label: "100% LEGAL & VEGAN" },
+  { icon: iconLeaf, label: "100% ÄTHERISCHE ÖLE" },
+  { icon: iconBolt, label: "INSTANT-WIRKUNG IN 2 SEK" },
+  { icon: iconNoCoffee, label: "KEIN KOFFEIN, KEIN CRASH" },
+  { icon: iconShipping, label: "VERSAND IN 24H" },
+  { icon: iconLegal, label: "100% LEGAL & VEGAN" },
 ];
 
 const TrustBar = () => {
@@ -28,7 +33,7 @@ const TrustBar = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
             >
-              <span className="text-lg md:text-xl">{item.emoji}</span>
+              <img src={item.icon} alt="" className="w-7 h-7 md:w-8 md:h-8 object-contain" />
               <span className="text-[11px] md:text-sm font-extrabold text-foreground tracking-wide">
                 {item.label}
               </span>
