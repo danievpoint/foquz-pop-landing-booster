@@ -78,7 +78,7 @@ const NewsletterSection = () => {
             </Button>
           </form>
           <p className="text-xs text-primary-foreground/60">
-            ☁️ Kein Spam · Jederzeit kündbar
+            Kein Spam · Jederzeit kündbar
           </p>
         </div>
       </section>
