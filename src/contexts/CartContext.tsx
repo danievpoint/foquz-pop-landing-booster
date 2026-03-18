@@ -70,14 +70,37 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     document.body.appendChild(myCanvas);
 
     const myConfetti = confetti.create(myCanvas, { resize: true });
-    myConfetti({
-      particleCount: 100,
-      spread: 120,
-      origin: { y: 0, x: 0.5 },
-      gravity: 1.2,
-      ticks: 100,
-      startVelocity: 35,
-    }).then(() => {
+
+    // Multiple bursts across full width for rich effect
+    const colors = ["#ffd618", "#75559f", "#ff6b6b", "#00d4aa", "#ff9f43"];
+    const origins = [
+      { x: 0.1, y: -0.1 },
+      { x: 0.3, y: -0.05 },
+      { x: 0.5, y: -0.1 },
+      { x: 0.7, y: -0.05 },
+      { x: 0.9, y: -0.1 },
+    ];
+
+    const promises = origins.map((origin, i) =>
+      new Promise<void>((resolve) => {
+        setTimeout(() => {
+          myConfetti({
+            particleCount: 60,
+            spread: 80,
+            origin,
+            gravity: 0.6,
+            ticks: 300,
+            startVelocity: 45,
+            decay: 0.91,
+            scalar: 1.1,
+            colors,
+            drift: (i - 2) * 0.3,
+          }).then(() => resolve());
+        }, i * 80);
+      })
+    );
+
+    Promise.all(promises).then(() => {
       document.body.removeChild(myCanvas);
     });
     setIsOpen(true);
