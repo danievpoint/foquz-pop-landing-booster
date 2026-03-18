@@ -124,6 +124,7 @@ const InfoButton = ({ onClick, color }: { onClick: () => void; color: string }) 
 
 const ProductGrid = () => {
   const { addToCart } = useCart();
+  const { isAvailable } = useProductAvailability();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
