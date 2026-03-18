@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { allProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
@@ -9,6 +9,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ChevronLeft, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
+
+// Preload all product images on module load
+allProducts.forEach((p) => {
+  const img = new Image();
+  img.src = p.image;
+});
 
 const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
@@ -141,26 +147,17 @@ const ProductDetail = () => {
       <section className="container mx-auto px-4 pb-8 md:pb-24">
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-16 items-start">
           {/* Image — compact on mobile */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0"
-          >
+          <div className="rounded-2xl overflow-hidden w-[65%] md:w-full mx-auto md:mx-0">
             <img
               src={product.image}
               alt={product.name}
+              fetchPriority="high"
               className="w-full aspect-square object-cover"
             />
-          </motion.div>
+          </div>
 
           {/* Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="py-0 md:py-4"
-          >
+          <div className="py-0 md:py-4">
             <h1 className="text-2xl md:text-5xl font-extrabold mb-1 md:mb-2">{product.name}</h1>
             <p className="text-muted-foreground text-sm md:text-lg mb-3 md:mb-6 whitespace-pre-line leading-snug">
               {product.desc}
@@ -212,12 +209,12 @@ const ProductDetail = () => {
                 {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Other products */}
-      <section className="py-8 md:py-20" style={{ background: "linear-gradient(135deg, #ffd618 0%, #e88a3a 30%, #e94362 60%, #75559f 100%)" }}>
+      <section className="py-8 md:py-20 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-xl md:text-4xl font-extrabold text-center mb-4 md:mb-8">
             ENTDECKE AUCH
