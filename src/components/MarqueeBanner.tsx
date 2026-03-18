@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 const items = [
   "100% ÄTHERISCHE ÖLE",
   "⚡ INSTANT-WIRKUNG",
@@ -14,15 +12,9 @@ const items = [
 const MarqueeBanner = () => {
   const repeated = [...items, ...items];
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
   return (
     <section className="bg-secondary py-3 md:py-4 overflow-hidden border-y-2 border-foreground">
-      <motion.div
-        className="flex whitespace-nowrap gap-8 md:gap-12"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: isMobile ? 3 : 30, repeat: Infinity, ease: "linear" }}
-      >
+      <div className="marquee-track flex whitespace-nowrap gap-8 md:gap-12">
         {repeated.map((text, i) => (
           <span
             key={i}
@@ -32,7 +24,7 @@ const MarqueeBanner = () => {
             <span className="text-primary">★</span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 };

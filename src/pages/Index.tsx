@@ -1,10 +1,10 @@
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import ProductGrid from "@/components/ProductGrid";
+import MarqueeBanner from "@/components/MarqueeBanner";
 import CookieBanner from "@/components/CookieBanner";
 
-const ProductGrid = lazy(() => import("@/components/ProductGrid"));
-const MarqueeBanner = lazy(() => import("@/components/MarqueeBanner"));
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
@@ -21,12 +21,8 @@ const Index = () => {
       <div className="min-h-screen">
         <Navbar />
         <HeroSection />
-        <Suspense fallback={<SectionFallback />}>
-          <ProductGrid />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <MarqueeBanner />
-        </Suspense>
+        <ProductGrid />
+        <MarqueeBanner />
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />
         </Suspense>

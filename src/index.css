@@ -159,3 +159,19 @@
     }
   }
 }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .marquee-track {
+    animation-duration: 3s;
+  }
+}

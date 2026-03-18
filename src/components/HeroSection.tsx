@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
 
@@ -30,7 +29,6 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
-      {/* Placeholder height while loading */}
       {!ready && (
         <div className="w-full bg-background" style={{ minHeight: 'max(700px, 75vh)' }} />
       )}
@@ -59,16 +57,10 @@ const HeroSection = () => {
                   <span className="text-secondary text-3xl sm:text-4xl md:text-5xl">WOLKE 7.</span>
                 </h1>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                  <a
-                    href="#bundle"
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
-                  >
+                  <a href="#bundle" className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit">
                     SPAR-BUNDLE HOLEN
                   </a>
-                  <a
-                    href="#sorten"
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
-                  >
+                  <a href="#sorten" className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit">
                     EINZELN KAUFEN
                   </a>
                 </div>
@@ -101,9 +93,7 @@ const HeroSection = () => {
             aspectRatio: '1920 / 772',
           }}
         >
-          <div
-            className="absolute z-20 hero-product-img"
-          >
+          <div className="absolute z-20 hero-product-img">
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
@@ -114,9 +104,7 @@ const HeroSection = () => {
 
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
-              <div
-                className="w-[40%] xl:w-[36%]"
-              >
+              <div className="w-[40%] xl:w-[36%]">
                 <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
                   AB AUF
@@ -124,16 +112,10 @@ const HeroSection = () => {
                   <span className="text-secondary text-[clamp(2.5rem,4vw,3.75rem)]">WOLKE 7.</span>
                 </h1>
                 <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
-                  <a
-                    href="#bundle"
-                    className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
-                  >
+                  <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
                     SPAR-BUNDLE HOLEN
                   </a>
-                  <a
-                    href="#sorten"
-                    className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap"
-                  >
+                  <a href="#sorten" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
                     EINZELN KAUFEN
                   </a>
                 </div>
