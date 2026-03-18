@@ -24,9 +24,10 @@ const HeroSection = () => {
               className="pb-4 sm:pb-8"
             >
               <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
-                DEIN FOKUS-<br /><span className="text-secondary">UPGRADE.</span>
+                KURZ RIECHEN.<br />
+                <span className="text-secondary">AB AUF</span>
                 <br />
-                <span className="text-3xl sm:text-4xl md:text-5xl">JEDERZEIT BEREIT.</span>
+                <span className="text-3xl sm:text-4xl md:text-5xl">WOLKE 7.</span>
               </h1>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <a
