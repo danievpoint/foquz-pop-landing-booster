@@ -187,22 +187,22 @@ const ProductGrid = () => {
 
   return (
     <>
-      <section id="sorten" className="section-padding pt-4 md:pt-16 pb-8 md:pb-20 bg-background relative z-10">
+      <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10">
         <div className="container mx-auto">
           <motion.h2
-            className="text-3xl md:text-[48px] md:leading-[0.9] text-center mb-1 md:mb-2"
+            className="text-3xl md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             WÄHLE DEINEN VIBE
           </motion.h2>
-          <p className="text-muted-foreground font-medium text-sm md:text-base text-center max-w-xl mx-auto">
+          <p className="text-muted-foreground font-medium text-sm md:text-lg text-center max-w-xl mx-auto">
             Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
           </p>
 
           {/* Desktop: static grid */}
-          <div className="hidden lg:grid lg:grid-cols-3 gap-5 mx-auto mt-8">
+          <div className="hidden lg:grid lg:grid-cols-3 gap-8 mx-auto mt-12">
             {products.map((p, i) => (
               <motion.div
                 key={p.name}
@@ -213,27 +213,27 @@ const ProductGrid = () => {
                 viewport={{ once: true }}
                 className="flex flex-col"
               >
-                <Link to={`/produkt/${p.handle}`} className="rounded-xl overflow-hidden mb-2 block">
+                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
                     <img
                       src={p.image}
                       alt={p.name}
-                      className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-300"
+                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
                     />
                 </Link>
-                <div className="py-1">
-                  <Link to={`/produkt/${p.handle}`} className="text-base font-extrabold mb-0.5 block hover:opacity-70 transition-opacity">
+                <div className="py-2">
+                  <Link to={`/produkt/${p.handle}`} className="text-lg mb-1 block hover:opacity-70 transition-opacity">
                     {p.name}
                   </Link>
-                  <p className="text-xs text-muted-foreground mb-2 whitespace-pre-line leading-snug">{p.desc}</p>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-xl font-black">{p.price}</span>
+                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-2xl font-black">{p.price}</span>
                     <StockBadge available={isAvailable(p.name)} />
                   </div>
-                  <span className="text-[10px] text-muted-foreground mb-2 block">inkl. MwSt.</span>
-                  <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
+                  <div className="flex items-center gap-3">
                     <button
                       onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                      className="comic-btn bg-card text-foreground text-xs py-1.5 px-5"
+                      className="comic-btn bg-card text-foreground text-sm py-2 px-6"
                     >
                       FOKUS SICHERN
                     </button>
