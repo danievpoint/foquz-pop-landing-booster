@@ -12,7 +12,16 @@ const HowToSection = () => {
   return (
     <section id="howto" className="relative overflow-hidden scroll-mt-20">
       {/* Full-width lifestyle image */}
-      <div className="relative min-h-[600px] md:min-h-[600px]">
+      <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: 'inline-size' }}>
+        <style>{`
+          @container (min-width: 1024px) {
+            .howto-title { font-size: 2.8cqw; margin-bottom: 1.2cqw; }
+            .howto-step { font-size: 1.1cqw; }
+            .howto-steps { gap: 0.8cqw; }
+            .howto-card { padding: 1.5cqw 2cqw; max-width: 18cqw; }
+            .howto-content { padding-top: 5cqw; }
+          }
+        `}</style>
         <video
           src={howtoBgVideo}
           autoPlay
@@ -23,20 +32,19 @@ const HowToSection = () => {
           className="w-full h-full object-cover absolute inset-0"
           style={{ contentVisibility: 'auto' }}
         />
-        
 
         {/* Overlapping white text box */}
-        <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40">
+        <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
           <motion.div
             initial={{ opacity: 0, x: -40, rotate: -2 }}
             whileInView={{ opacity: 1, x: 0, rotate: -2 }}
             viewport={{ once: true }}
-            className="bg-card comic-card p-5 md:p-8 max-w-[260px] transform -rotate-2"
+            className="bg-card comic-card p-5 md:p-8 max-w-[260px] transform -rotate-2 howto-card"
           >
-            <h2 className="text-3xl md:text-4xl mb-6">How to Foquz</h2>
-            <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl mb-6 howto-title">How to Foquz</h2>
+            <div className="space-y-4 howto-steps">
               {steps.map((s) => (
-                <p key={s.num} className="text-base">
+                <p key={s.num} className="text-base howto-step">
                   <span className="font-extrabold">{s.num}. {s.title}</span>
                 </p>
               ))}
@@ -46,13 +54,18 @@ const HowToSection = () => {
       </div>
 
       {/* Mint colored section below */}
-      <div className="bg-foquz-thai section-padding">
+      <div className="bg-foquz-thai section-padding" style={{ containerType: 'inline-size' }}>
+        <style>{`
+          @container (min-width: 1024px) {
+            .howto-banner { font-size: 2cqw; }
+          }
+        `}</style>
         <div className="container mx-auto text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-2xl md:text-3xl font-extrabold text-card uppercase"
+            className="text-2xl md:text-3xl font-extrabold text-card uppercase howto-banner"
           >
             100% aromatisch. 100% legal. 100% Wolke 7.
           </motion.p>

@@ -52,32 +52,42 @@ const NewsletterSection = () => {
 
   return (
     <>
-      <section className="bg-primary py-10 md:py-14">
+      <section className="bg-primary py-10 md:py-14" style={{ containerType: 'inline-size' }}>
+        <style>{`
+          @container (min-width: 1024px) {
+            .nl-headline { font-size: 2.8cqw; margin-bottom: 0.6cqw; }
+            .nl-body { font-size: 1cqw; margin-bottom: 1.2cqw; }
+            .nl-input { font-size: 1cqw !important; height: 3cqw !important; }
+            .nl-btn { font-size: 1cqw !important; height: 3cqw !important; }
+            .nl-form { gap: 0.8cqw; margin-bottom: 1cqw; }
+            .nl-fine { font-size: 0.7cqw; }
+          }
+        `}</style>
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-black text-primary-foreground mb-3 tracking-tight">
+          <h2 className="text-2xl md:text-4xl font-black text-primary-foreground mb-3 tracking-tight nl-headline">
             ENTER THE CLOUD
           </h2>
-          <p className="text-sm md:text-base text-primary-foreground/80 mb-5 max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm md:text-base text-primary-foreground/80 mb-5 max-w-lg mx-auto leading-relaxed nl-body">
             Werde Teil der Community. <span className="font-black text-primary-foreground">FOQUZ Cloud Members</span> bekommen als erste Drops, exklusive Deals und Cloud-Only Content — bevor irgendjemand anderes. <span className="font-black text-primary-foreground">Sichere dir jetzt 10% Rabatt</span> auf deine erste Order.
           </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4 nl-form">
             <Input
               type="email"
               placeholder="Deine E-Mail-Adresse"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-12 bg-primary-foreground text-foreground border-none rounded-full px-5 text-base"
+              className="h-12 bg-primary-foreground text-foreground border-none rounded-full px-5 text-base nl-input"
               required
             />
             <Button
               type="submit"
               disabled={loading}
-              className="h-12 rounded-full px-8 font-extrabold text-base bg-secondary text-secondary-foreground hover:bg-secondary/90 comic-outline whitespace-nowrap"
+              className="h-12 rounded-full px-8 font-extrabold text-base bg-secondary text-secondary-foreground hover:bg-secondary/90 comic-outline whitespace-nowrap nl-btn"
             >
               {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
-          <p className="text-xs text-primary-foreground/60">
+          <p className="text-xs text-primary-foreground/60 nl-fine">
             Kein Spam · Jederzeit kündbar
           </p>
         </div>
