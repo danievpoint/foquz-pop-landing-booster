@@ -117,9 +117,7 @@ const NewsletterPopup = () => {
                 </>
               ) : (
                 <>
-                  <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
-                    <Sparkles className="w-8 h-8 text-accent" />
-                  </div>
+                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-24 h-24 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-2">
                     10% RABATT AKTIVIERT! 🎉
                   </h3>
