@@ -4,12 +4,13 @@ const CrewSection = () => {
   return (
     <section
       className="w-full overflow-hidden -mt-px -mb-px"
-      style={{ height: "clamp(320px, 34vw, 540px)" }}
+      style={{ height: "clamp(380px, 37vw, 620px)" }}
     >
       <img
         src={crewBg}
         alt="FOQUZ Crew"
-        className="w-full h-full object-cover object-bottom block"
+        className="w-full h-full object-cover block"
+        style={{ objectPosition: "center 72%" }}
         loading="lazy"
       />
     </section>
