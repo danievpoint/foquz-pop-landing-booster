@@ -91,13 +91,13 @@ const HeroSection = () => {
           {/* Products – responsive safe area across desktop sizes */}
           <div
             className="absolute z-20 flex items-center justify-center pointer-events-none"
-            style={{ top: '14%', right: '5%', bottom: '12%', width: 'clamp(360px, 31vw, 620px)' }}
+            style={{ top: '12%', left: '50%', bottom: '10%', width: '40%' }}
           >
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
               fetchPriority="high"
-              className="w-[88%] max-w-full max-h-[88%] h-auto object-contain origin-center animate-[breathe_3s_ease-in-out_infinite]"
+              className="w-full max-h-[90%] h-auto object-contain origin-center animate-[breathe_3s_ease-in-out_infinite]"
             />
           </div>
 
