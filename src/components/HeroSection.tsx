@@ -78,7 +78,7 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-hidden">
+        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '1920 / 772' }}>
           <style>{`
             @keyframes hero-float {
               0%, 100% {
@@ -90,10 +90,19 @@ const HeroSection = () => {
             }
           `}</style>
 
-          {/* Grid container – capped width on ultra-wide */}
-          <div className="max-w-screen-2xl mx-auto grid grid-cols-2 items-center gap-8 pt-24 xl:pt-28">
+          {/* Full-width SVG background */}
+          <img
+            src={heroBg}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            className="absolute inset-0 w-full h-full"
+          />
+
+          {/* Content grid on top */}
+          <div className="absolute inset-0 z-10 max-w-screen-2xl mx-auto grid grid-cols-2 items-center gap-8">
             {/* Left column – text & CTAs */}
-            <div className="relative z-10 pl-[6%] py-12">
+            <div className="pl-[6%] py-12 pt-20">
               <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
                 <span className="block text-secondary">AB AUF WOLKE 7.</span>
@@ -111,38 +120,23 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* Right column – visual wrapper (SVG + product locked together) */}
-            <div className="relative" style={{ aspectRatio: '1920 / 772' }}>
-              {/* SVG ray burst fills the wrapper */}
-              <img
-                src={heroBg}
-                alt=""
-                aria-hidden="true"
-                fetchPriority="high"
-                className="absolute inset-0 w-full h-full"
-              />
-              {/* Product image – centered on ray burst */}
+            {/* Right column – product image locked to ray center */}
+            <div className="relative h-full">
               <img
                 src={heroJars}
                 alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
                 fetchPriority="high"
-                className="absolute w-[75%] h-auto pointer-events-none"
+                className="absolute w-[85%] h-auto pointer-events-none"
                 style={{
-                  top: '55%',
-                  left: '50%',
+                  top: '52%',
+                  left: '45%',
                   animation: 'hero-float 3.4s ease-in-out infinite',
                   willChange: 'transform',
                 }}
               />
             </div>
           </div>
-
-          {/* Full-width SVG background behind the grid */}
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-top -z-10"
+        </div>
           />
         </div>
       </div>
