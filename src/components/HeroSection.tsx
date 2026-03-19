@@ -26,6 +26,17 @@ export const useHeroReady = () => {
 const HeroSection = () => {
   const ready = useHeroReady();
 
+  /*
+    SVG COORDINATE MAPPING (from user-tuned values):
+    - top: 6%  of 772  = 46px  → SVG y=46
+    - right: 12% → right edge at 1920×0.88 = 1690 → SVG x = 1690 - 691 = 999
+    - width: 36% of 1920 = 691px → SVG width=691
+
+    Both the background SVG and this overlay SVG share
+    viewBox="0 0 1920 772", so these coordinates are LOCKED
+    to the same space. Impossible to drift apart.
+  */
+
   return (
     <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
       {!ready && <div className="w-full bg-background" style={{ minHeight: "max(700px, 75vh)" }} />}
@@ -81,12 +92,18 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* === DESKTOP (lg+) === */}
+        {/* === DESKTOP (lg+) ===
+          NUCLEAR FIX: The product image is placed inside an SVG overlay
+          that shares the EXACT SAME viewBox as the background SVG.
+          Since both SVGs map to the same 1920×772 coordinate space,
+          the product image is LOCKED to the ray burst position.
+          This is mathematically guaranteed to look identical
+          at 1024px, 1440px, 1920px, 2560px, and any other width.
+        */}
         <div
-          className="hidden lg:block relative w-full overflow-hidden mx-auto"
+          className="hidden lg:block relative w-full overflow-hidden"
           style={{
             aspectRatio: "1920 / 772",
-            maxWidth: "1920px",
             containerType: "inline-size",
           }}
         >
@@ -111,30 +128,29 @@ const HeroSection = () => {
             .hero-btn-row {
               gap: 1.2cqw;
             }
+            .hero-product-svg {
+              animation: hero-float 3.4s ease-in-out infinite;
+              will-change: transform;
+            }
           `}</style>
 
-          {/* SVG background */}
+          {/* Layer 1: SVG background */}
           <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
 
-          {/* Product jars */}
-          <img
-            src={heroJars}
-            alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-            fetchPriority="high"
-            className="absolute pointer-events-none"
-            style={{
-              top: "6%",
-              right: "12%",
-              width: "36%",
-              height: "auto",
-              maxHeight: "92%",
-              objectFit: "contain",
-              animation: "hero-float 3.4s ease-in-out infinite",
-              willChange: "transform",
-            }}
-          />
+          {/* Layer 2: Product image inside SVG overlay.
+              Same viewBox as background = same coordinate system.
+              x=999, y=46, width=691 are the user-tuned positions
+              converted from percentages to SVG coordinates. */}
+          <svg
+            viewBox="0 0 1920 772"
+            className="absolute inset-0 w-full h-full hero-product-svg"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ pointerEvents: "none" }}
+          >
+            <image href={heroJars} x="999" y="46" width="691" height="691" preserveAspectRatio="xMidYMid meet" />
+          </svg>
 
-          {/* Text + CTAs */}
+          {/* Layer 3: Text + CTAs */}
           <div className="absolute inset-0 z-10">
             <div className="h-full flex items-center">
               <div style={{ paddingLeft: "4%" }}>
