@@ -147,10 +147,20 @@
     text-shadow: 3px 3px 0px #000;
   }
 
+  .text-pop-sm {
+    -webkit-text-stroke: 3px #000;
+    paint-order: stroke fill;
+    text-shadow: 2px 2px 0px #000;
+  }
+
   @media (min-width: 768px) {
     .text-pop {
       -webkit-text-stroke: 10px #000;
       text-shadow: 5px 5px 0px #000;
+    }
+    .text-pop-sm {
+      -webkit-text-stroke: 5px #000;
+      text-shadow: 3px 3px 0px #000;
     }
   }
 }

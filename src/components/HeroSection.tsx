@@ -53,7 +53,7 @@ const HeroSection = () => {
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl text-primary-foreground text-pop mb-3 sm:mb-5 md:mb-6 whitespace-nowrap">
+                <p className="text-lg sm:text-xl md:text-2xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-3 sm:mb-5 md:mb-6 whitespace-nowrap">
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -106,7 +106,7 @@ const HeroSection = () => {
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p className="text-[clamp(0.9rem,1.6vw,1.35rem)] text-primary-foreground text-pop mb-6 whitespace-nowrap">
+                <p className="text-[clamp(1rem,1.8vw,1.5rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-6 whitespace-nowrap">
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
                 <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
