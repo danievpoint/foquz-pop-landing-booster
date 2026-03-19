@@ -79,6 +79,17 @@ const HeroSection = () => {
 
         {/* === DESKTOP (lg+) === */}
         <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '2.5 / 1' }}>
+          <style>{`
+            @keyframes hero-breathe-soft {
+              0%, 100% {
+                transform: translate3d(0, 0.5rem, 0) scale(0.987) rotate(-1deg);
+              }
+              50% {
+                transform: translate3d(0, 0, 0) scale(1.013) rotate(1deg);
+              }
+            }
+          `}</style>
+
           {/* SVG background fills container */}
           <img
             src={heroBg}
@@ -92,18 +103,23 @@ const HeroSection = () => {
           <div
             className="absolute z-20 flex items-end justify-center pointer-events-none"
             style={{
-              top: "clamp(6rem, 7vw, 9.5rem)",
-              left: "47%",
-              bottom: "clamp(0.75rem, 1.6vw, 1.75rem)",
-              width: "clamp(31rem, 40vw, 56rem)",
+              top: "clamp(7rem, 8vw, 10.5rem)",
+              left: "46.5%",
+              bottom: "clamp(0.5rem, 1.4vw, 1.5rem)",
+              width: "clamp(33rem, 42vw, 58rem)",
             }}
           >
-            <img
-              src={heroJars}
-              alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-              fetchPriority="high"
-              className="w-full max-h-full h-auto object-contain origin-bottom animate-[breathe_3s_ease-in-out_infinite]"
-            />
+            <div
+              className="flex h-full w-full items-end justify-center motion-reduce:transform-none"
+              style={{ animation: "hero-breathe-soft 3.4s ease-in-out infinite" }}
+            >
+              <img
+                src={heroJars}
+                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                fetchPriority="high"
+                className="w-full max-h-[94%] h-auto object-contain origin-bottom"
+              />
+            </div>
           </div>
 
           {/* Text overlay – vertically centered in container */}
