@@ -102,9 +102,9 @@ const HeroSection = () => {
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
               <div className="w-[40%] xl:w-[36%]">
-                <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop">
-                  KURZ RIECHEN.<br />
-                  <span className="text-secondary">AB AUF WOLKE 7.</span>
+                <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop whitespace-nowrap">
+                  <span className="block">KURZ RIECHEN.</span>
+                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
                 <p className="text-[clamp(0.875rem,1.2vw,1.25rem)] text-primary-foreground/90 mb-6 font-extrabold uppercase tracking-tight">
                   Du entscheidest was Du riechst
