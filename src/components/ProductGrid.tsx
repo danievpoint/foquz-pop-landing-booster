@@ -217,7 +217,7 @@ const ProductGrid = () => {
             <h2 className="pg-headline text-center">
               WÄHLE DEINEN VIBE
             </h2>
-            <p className="pg-subtitle text-muted-foreground font-medium text-center max-w-xl mx-auto">
+            <p className="pg-subtitle text-muted-foreground font-medium text-center max-w-xl mx-auto leading-relaxed">
               Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
             <div className="pg-grid grid grid-cols-3 mx-auto">
