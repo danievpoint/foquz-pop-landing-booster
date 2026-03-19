@@ -11,8 +11,8 @@ const heroImagePromise = Promise.all(
         img.onload = () => resolve();
         img.onerror = () => resolve();
         img.src = src;
-      })
-  )
+      }),
+  ),
 );
 
 export const useHeroReady = () => {
@@ -28,16 +28,14 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden" style={{ zIndex: 1 }}>
-      {!ready && (
-        <div className="w-full bg-background" style={{ minHeight: 'max(700px, 75vh)' }} />
-      )}
+      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(700px, 75vh)" }} />}
 
       <div
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: 'max(700px, 75vh)' }}>
+        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <img
             src={heroBg}
             alt=""
@@ -57,10 +55,16 @@ const HeroSection = () => {
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                  <a href="#bundle" className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit">
+                  <a
+                    href="#bundle"
+                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
+                  >
                     SPAR-BUNDLE HOLEN
                   </a>
-                  <a href="#sorten" className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit">
+                  <a
+                    href="#sorten"
+                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
+                  >
                     EINZELN KAUFEN
                   </a>
                 </div>
@@ -78,62 +82,84 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '1920 / 772' }}>
+        {/*
+          KEY FIX: The SVG viewBox is 1920×772. The ray burst center is at
+          approximately x=1331 y=331 in SVG coordinates, which equals
+          ~69.3% from left, ~42.9% from top.
+
+          Previously the product image was positioned inside a CSS-grid
+          right-column, but the SVG stretched across the full width.
+          This mismatch caused the jars to drift away from the rays
+          on different screen sizes.
+
+          FIX: Position the product image INSIDE the same container as
+          the SVG, using percentages that map to the SVG coordinate space.
+          Both elements share the same aspect-ratio-locked parent, so they
+          always scale together as one unit.
+        */}
+        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
           <style>{`
             @keyframes hero-float {
               0%, 100% {
-                transform: translate(-50%, calc(-50% - 8px));
+                transform: translate(-50%, -50%) translateY(-8px);
               }
               50% {
-                transform: translate(-50%, calc(-50% + 8px));
+                transform: translate(-50%, -50%) translateY(8px);
               }
             }
           `}</style>
 
-          {/* Full-width SVG background */}
+          {/* Full-width SVG background — fills the aspect-ratio container */}
+          <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
+
+          {/* Product image — positioned relative to the SAME container as the SVG.
+              Because both are absolute children of the same aspect-ratio-locked div,
+              percentage positions map directly to SVG coordinates.
+              Ray center ≈ 69.3% left, 42.9% top in SVG space. */}
           <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
+            src={heroJars}
+            alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
-            className="absolute inset-0 w-full h-full"
+            className="absolute pointer-events-none"
+            style={{
+              /* Position: center of image sits on the ray burst center */
+              top: "43%",
+              left: "69%",
+              /* Size: ~38% of the full container width */
+              width: "38%",
+              height: "auto",
+              /* Animation includes the centering offset */
+              animation: "hero-float 3.4s ease-in-out infinite",
+              willChange: "transform",
+            }}
           />
 
-          {/* Content grid on top */}
-          <div className="absolute inset-0 z-10 max-w-screen-2xl mx-auto grid grid-cols-2 items-center gap-8">
-            {/* Left column – text & CTAs */}
-            <div className="pl-[6%] py-12 pt-20">
-              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
-                <span className="block">KURZ RIECHEN.</span>
-                <span className="block text-secondary">AB AUF WOLKE 7.</span>
-              </h1>
-              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
-                DU ENTSCHEIDEST WAS DU RIECHST
-              </p>
-              <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
-                <a href="#bundle" className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
-                  SPAR-BUNDLE HOLEN
-                </a>
-                <a href="#sorten" className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
-                  EINZELN KAUFEN
-                </a>
+          {/* Text overlay — positioned absolutely on the left side */}
+          <div className="absolute inset-0 z-10">
+            <div className="h-full max-w-screen-2xl mx-auto flex items-center">
+              <div className="pl-[6%] py-12 pt-20 max-w-[50%]">
+                <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
+                  <span className="block">KURZ RIECHEN.</span>
+                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
+                </h1>
+                <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
+                  DU ENTSCHEIDEST WAS DU RIECHST
+                </p>
+                <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
+                  <a
+                    href="#bundle"
+                    className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+                  >
+                    SPAR-BUNDLE HOLEN
+                  </a>
+                  <a
+                    href="#sorten"
+                    className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-card text-foreground w-fit whitespace-nowrap"
+                  >
+                    EINZELN KAUFEN
+                  </a>
+                </div>
               </div>
-            </div>
-
-            {/* Right column – product image locked to ray center */}
-            <div className="relative h-full">
-              <img
-                src={heroJars}
-                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                fetchPriority="high"
-                className="absolute w-[85%] h-auto pointer-events-none"
-                style={{
-                  top: '52%',
-                  left: '45%',
-                  animation: 'hero-float 3.4s ease-in-out infinite',
-                  willChange: 'transform',
-                }}
-              />
             </div>
           </div>
         </div>
