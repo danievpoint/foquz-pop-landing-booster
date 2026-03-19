@@ -38,9 +38,6 @@ const Index = () => {
           <NewsletterSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
-          <CrewSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
           <Footer />
         </Suspense>
       </div>
