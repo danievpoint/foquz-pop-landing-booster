@@ -87,7 +87,7 @@ const NewsletterPopup = () => {
 
               {!success ? (
                 <>
-                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-24 h-24 mx-auto mb-3 drop-shadow-lg" />
+                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-1">
                     10% RABATT SICHERN
                   </h3>
