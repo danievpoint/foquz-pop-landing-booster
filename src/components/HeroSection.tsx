@@ -122,11 +122,13 @@ const HeroSection = () => {
             fetchPriority="high"
             className="absolute pointer-events-none"
             style={{
-              /* Position: center of image sits on the ray burst center */
-              top: "43%",
+              /* Position: center of image sits on the ray burst center.
+                 top 50% keeps the jars from clipping above the container.
+                 left 69% aligns with the SVG ray convergence point. */
+              top: "50%",
               left: "69%",
-              /* Size: ~38% of the full container width */
-              width: "38%",
+              /* Size: ~35% of the full container width */
+              width: "35%",
               height: "auto",
               /* Animation includes the centering offset */
               animation: "hero-float 3.4s ease-in-out infinite",
@@ -136,8 +138,8 @@ const HeroSection = () => {
 
           {/* Text overlay — positioned absolutely on the left side */}
           <div className="absolute inset-0 z-10">
-            <div className="h-full max-w-screen-2xl mx-auto flex items-center">
-              <div className="pl-[6%] py-12 pt-20 max-w-[50%]">
+            <div className="h-full flex items-center">
+              <div className="pl-[4%] py-12 max-w-[45%]">
                 <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
