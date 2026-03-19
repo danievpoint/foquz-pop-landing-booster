@@ -100,7 +100,7 @@ const BundleSection = () => {
               onClick={() =>
                 addToCart(1, {
                   id: "starter-bundle",
-                  name: "Starter Bundle (3 Sorten)",
+                  name: "FOQUZ Power Bundle (3 Sorten)",
                   price: 14.99,
                   image: foquzBox,
                 })

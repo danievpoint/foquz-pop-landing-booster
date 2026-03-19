@@ -202,7 +202,7 @@ const ProductDetail = () => {
               onClick={() =>
                 addToCart(1, {
                   id: product.isBundle ? "starter-bundle" : product.name,
-                  name: product.isBundle ? "Starter Bundle (3 Sorten)" : product.name,
+                  name: product.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : product.name,
                   price: product.numericPrice,
                   image: product.image,
                 })
