@@ -171,12 +171,12 @@
 }
 
 .marquee-track {
-  animation: marquee-scroll 30s linear infinite;
+  animation: marquee-scroll 25s linear infinite;
   will-change: transform;
 }
 
 @media (max-width: 767px) {
   .marquee-track {
-    animation-duration: 3s;
+    animation-duration: 15s;
   }
 }
