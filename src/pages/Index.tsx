@@ -20,9 +20,9 @@ const Index = () => {
   return (
     <>
       <div className={`min-h-screen transition-opacity duration-300 ${heroReady ? 'opacity-100' : 'opacity-0'}`}>
+        <MarqueeBanner />
         <Navbar />
         <HeroSection />
-        <MarqueeBanner />
         <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />
