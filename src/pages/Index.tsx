@@ -22,8 +22,8 @@ const Index = () => {
       <div className={`min-h-screen transition-opacity duration-300 ${heroReady ? 'opacity-100' : 'opacity-0'}`}>
         <Navbar />
         <HeroSection />
-        <ProductGrid />
         <MarqueeBanner />
+        <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />
         </Suspense>
