@@ -125,11 +125,11 @@ const HeroSection = () => {
           {/* Text overlay – protected safe area below navbar */}
           <div className="absolute inset-0 z-10 flex items-start">
             <div className="pl-[6%] pt-[clamp(8.5rem,10vw,11.5rem)]">
-              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
+              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[1.5vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
-                <span className="block text-secondary">AB AUF WOLKE 7.</span>
+                <span className="block mt-[0.3em] text-secondary">AB AUF WOLKE 7.</span>
               </h1>
-              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
+              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap mt-[0.8vw]">
                 DU ENTSCHEIDEST WAS DU RIECHST
               </p>
               <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
