@@ -22,6 +22,22 @@ export const useHeroReady = () => {
   return ready;
 };
 
+/*
+  WHY PREVIOUS APPROACHES FAILED:
+
+  The nav is ~107px tall in FIXED PIXELS. The hero scales with screen width.
+  At 1440px wide → hero is 579px tall → nav covers 18.5% = 143 SVG units
+  At 1920px wide → hero is 772px tall → nav covers 13.9% = 107 SVG units
+  At 2560px wide → hero is 1029px tall → nav covers 10.4% = 80 SVG units
+
+  No single SVG y-coordinate can compensate for all three because the nav
+  eats a DIFFERENT percentage on each screen. This is mathematically unsolvable
+  with a fixed y-value.
+
+  THE FIX: Push the hero below the nav with a spacer. Now the nav covers 0%
+  on every screen, and y=55 means y=55 everywhere — truly universal.
+*/
+
 const HeroSection = () => {
   const ready = useHeroReady();
 
@@ -81,95 +97,99 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) ===
-          ARCHITECTURE:
-          1. Container has aspect-ratio: 1920/772 + overflow:hidden
-          2. Background SVG fills it (absolute inset-0)
-          3. Product image lives in a SECOND SVG with the SAME viewBox
-             → coordinates are locked to the background
-          4. Float animation is SVG-native (<animateTransform>)
-             → happens INSIDE the SVG coordinate space
-             → the SVG element itself never moves
-             → overflow:hidden NEVER clips anything
-        */}
-        <div
-          className="hidden lg:block relative w-full overflow-hidden"
-          style={{
-            aspectRatio: "1920 / 772",
-            containerType: "inline-size",
-          }}
-        >
-          <style>{`
-            .hero-title {
-              font-size: 4.2cqw;
-              line-height: 1.1;
-              margin-bottom: 0.8cqw;
-            }
-            .hero-subtitle {
-              font-size: 1.3cqw;
-              margin-bottom: 1.2cqw;
-            }
-            .hero-btn {
-              font-size: 0.9cqw !important;
-              padding: 0.65cqw 1.5cqw !important;
-            }
-            .hero-btn-row {
-              gap: 1.2cqw;
-            }
-          `}</style>
+          Spacer pushes hero below the fixed navbar+marquee (~107px).
+          The nav has its own bg-[hsl(var(--foquz-lightblue))] background
+          which matches the hero, so the visual transition is seamless.
+          Now the ENTIRE hero is visible → SVG coordinates work universally. */}
+        <div className="hidden lg:block">
+          {/* Spacer: MarqueeBanner(~32px) + Navbar(~78px) = ~110px */}
+          <div style={{ height: "110px" }} aria-hidden="true" />
 
-          {/* Layer 1: Background SVG */}
-          <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
-
-          {/* Layer 2: Product image in SVG overlay.
-              viewBox matches background exactly → locked coordinates.
-              Animation is SVG-native → no CSS overflow clipping.
-              y=90 with ±12 float = range 78–102, safely inside 0–772.
-              Bottom edge: 90+650=740, safely inside 772.
-              Image slightly smaller (650 vs 691) to add breathing room. */}
-          <svg
-            viewBox="0 0 1920 772"
-            className="absolute inset-0 w-full h-full"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ pointerEvents: "none", overflow: "visible" }}
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              aspectRatio: "1920 / 772",
+              containerType: "inline-size",
+            }}
           >
-            <g>
-              <animateTransform
-                attributeName="transform"
-                type="translate"
-                values="0 -12; 0 12; 0 -12"
-                dur="3.4s"
-                repeatCount="indefinite"
-                calcMode="spline"
-                keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-              />
-              <image href={heroJars} x="1020" y="90" width="650" height="650" preserveAspectRatio="xMidYMid meet" />
-            </g>
-          </svg>
+            <style>{`
+              .hero-title {
+                font-size: 4.2cqw;
+                line-height: 1.1;
+                margin-bottom: 0.8cqw;
+              }
+              .hero-subtitle {
+                font-size: 1.3cqw;
+                margin-bottom: 1.2cqw;
+              }
+              .hero-btn {
+                font-size: 0.9cqw !important;
+                padding: 0.65cqw 1.5cqw !important;
+              }
+              .hero-btn-row {
+                gap: 1.2cqw;
+              }
+            `}</style>
 
-          {/* Layer 3: Text + CTAs */}
-          <div className="absolute inset-0 z-10">
-            <div className="h-full flex items-center">
-              <div style={{ paddingLeft: "4%" }}>
-                <h1 className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
-                  <span className="block">KURZ RIECHEN.</span>
-                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                </h1>
-                <p className="hero-subtitle font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
-                  DU ENTSCHEIDEST WAS DU RIECHST
-                </p>
-                <div className="flex flex-row hero-btn-row">
-                  <a
-                    href="#bundle"
-                    className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
-                  >
-                    SPAR-BUNDLE HOLEN
-                  </a>
-                  <a
-                    href="#sorten"
-                    className="comic-btn hero-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
-                  >
-                    EINZELN KAUFEN
-                  </a>
+            {/* Layer 1: Background SVG */}
+            <img
+              src={heroBg}
+              alt=""
+              aria-hidden="true"
+              fetchPriority="high"
+              className="absolute inset-0 w-full h-full"
+            />
+
+            {/* Layer 2: Product image in SVG overlay.
+                Same viewBox as background = locked coordinates.
+                Now that the hero starts below the nav, y=55 is truly
+                55 SVG units from the TOP OF THE VISIBLE AREA on every screen.
+                Float ±12: range 43–67 at top, 703–727 at bottom. All inside 0–772. */}
+            <svg
+              viewBox="0 0 1920 772"
+              className="absolute inset-0 w-full h-full"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ pointerEvents: "none" }}
+            >
+              <g>
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values="0 -12; 0 12; 0 -12"
+                  dur="3.4s"
+                  repeatCount="indefinite"
+                  calcMode="spline"
+                  keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+                />
+                <image href={heroJars} x="1010" y="55" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
+              </g>
+            </svg>
+
+            {/* Layer 3: Text + CTAs */}
+            <div className="absolute inset-0 z-10">
+              <div className="h-full flex items-center">
+                <div style={{ paddingLeft: "4%" }}>
+                  <h1 className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
+                    <span className="block">KURZ RIECHEN.</span>
+                    <span className="block text-secondary">AB AUF WOLKE 7.</span>
+                  </h1>
+                  <p className="hero-subtitle font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
+                    DU ENTSCHEIDEST WAS DU RIECHST
+                  </p>
+                  <div className="flex flex-row hero-btn-row">
+                    <a
+                      href="#bundle"
+                      className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+                    >
+                      SPAR-BUNDLE HOLEN
+                    </a>
+                    <a
+                      href="#sorten"
+                      className="comic-btn hero-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
+                    >
+                      EINZELN KAUFEN
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
