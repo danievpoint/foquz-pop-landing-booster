@@ -9,7 +9,7 @@ import NewsletterPopup from "@/components/NewsletterPopup";
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
-const CrewSection = lazy(() => import("@/components/CrewSection"));
+
 const NewsletterSection = lazy(() => import("@/components/NewsletterSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
@@ -36,9 +36,6 @@ const Index = () => {
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <NewsletterSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <CrewSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Footer />
