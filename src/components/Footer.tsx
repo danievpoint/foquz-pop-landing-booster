@@ -6,16 +6,16 @@ const Footer = () => {
     <footer className="bg-background pt-8 md:pt-12 pb-6 md:pb-8" style={{ containerType: 'inline-size' }}>
       <style>{`
         @container (min-width: 1024px) {
-          .ft-logo { height: 4cqw; margin-bottom: 0.6cqw; }
-          .ft-claim { font-size: 1cqw; }
-          .ft-heading { font-size: 0.9cqw; margin-bottom: 0.8cqw; }
-          .ft-link { font-size: 0.8cqw; }
-          .ft-links { gap: 0.4cqw; }
-          .ft-grid { gap: 1.5cqw; margin-bottom: 2cqw; }
-          .ft-social svg { width: 2cqw; height: 2cqw; }
-          .ft-social { gap: 0.8cqw; }
-          .ft-copy { font-size: 0.7cqw; }
-          .ft-payment { font-size: 0.7cqw; padding: 0.3cqw 0.6cqw; }
+          .ft-logo { height: clamp(3rem, 4cqw, 4rem); margin-bottom: clamp(0.375rem, 0.6cqw, 0.625rem); }
+          .ft-claim { font-size: clamp(0.875rem, 1cqw, 1rem); }
+          .ft-heading { font-size: clamp(0.75rem, 0.9cqw, 0.875rem); margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+          .ft-link { font-size: clamp(0.7rem, 0.8cqw, 0.875rem); }
+          .ft-links { gap: clamp(0.25rem, 0.4cqw, 0.5rem); }
+          .ft-grid { gap: clamp(1rem, 1.5cqw, 1.5rem); margin-bottom: clamp(1.5rem, 2cqw, 2rem); }
+          .ft-social svg { width: clamp(1.5rem, 2cqw, 2rem); height: clamp(1.5rem, 2cqw, 2rem); }
+          .ft-social { gap: clamp(0.5rem, 0.8cqw, 0.875rem); }
+          .ft-copy { font-size: clamp(0.625rem, 0.7cqw, 0.75rem); }
+          .ft-payment { font-size: clamp(0.625rem, 0.7cqw, 0.75rem); padding: clamp(0.1875rem, 0.3cqw, 0.375rem) clamp(0.375rem, 0.6cqw, 0.625rem); }
         }
       `}</style>
       <div className="container mx-auto px-4">

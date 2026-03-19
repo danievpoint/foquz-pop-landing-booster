@@ -30,11 +30,11 @@ const WhyFoquzSection = () => {
     >
       <style>{`
         @container (min-width: 1024px) {
-          .why-headline { font-size: 3cqw; line-height: 0.95; margin-bottom: 1.5cqw; }
-          .why-point-title { font-size: 1.5cqw; }
-          .why-point-text { font-size: 0.95cqw; }
-          .why-points { gap: 1.2cqw; margin-bottom: 1.5cqw; }
-          .why-bubble { padding: 2cqw 2.5cqw; }
+          .why-headline { font-size: clamp(1.875rem, 3cqw, 3rem); line-height: 0.95; margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
+          .why-point-title { font-size: clamp(1.125rem, 1.5cqw, 1.5rem); }
+          .why-point-text { font-size: clamp(0.875rem, 0.95cqw, 1rem); }
+          .why-points { gap: clamp(0.75rem, 1.2cqw, 1.25rem); margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
+          .why-bubble { padding: clamp(1.25rem, 2cqw, 2rem) clamp(1.5rem, 2.5cqw, 2.5rem); }
         }
       `}</style>
       <img src={whyfoquzBg} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />

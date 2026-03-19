@@ -24,17 +24,17 @@ const BundleSection = () => {
     >
       <style>{`
         @container (min-width: 1024px) {
-          .bundle-headline { font-size: 3.5cqw; line-height: 0.95; margin-bottom: 0.8cqw; }
-          .bundle-subtitle { font-size: 1.3cqw; margin-bottom: 0.4cqw; }
-          .bundle-body { font-size: 1.1cqw; margin-bottom: 1.5cqw; }
-          .bundle-checks { gap: 0.6cqw; margin-bottom: 1.5cqw; }
-          .bundle-check-icon { width: 1.5cqw; height: 1.5cqw; font-size: 0.7cqw; }
-          .bundle-check-text { font-size: 0.95cqw; }
-          .bundle-price { font-size: 2.5cqw; }
-          .bundle-price-old { font-size: 1.1cqw; }
-          .bundle-price-row { gap: 1cqw; margin-bottom: 1.2cqw; }
-          .bundle-btn { font-size: 1cqw !important; padding: 0.65cqw 2cqw !important; }
-          .bundle-grid { gap: 2.5cqw; }
+          .bundle-headline { font-size: clamp(2.5rem, 3.5cqw, 3.5rem); line-height: 0.95; margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+          .bundle-subtitle { font-size: clamp(1rem, 1.3cqw, 1.25rem); margin-bottom: clamp(0.25rem, 0.4cqw, 0.5rem); }
+          .bundle-body { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
+          .bundle-checks { gap: clamp(0.375rem, 0.6cqw, 0.625rem); margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
+          .bundle-check-icon { width: clamp(1.125rem, 1.5cqw, 1.5rem); height: clamp(1.125rem, 1.5cqw, 1.5rem); font-size: clamp(0.5rem, 0.7cqw, 0.75rem); }
+          .bundle-check-text { font-size: clamp(0.8rem, 0.95cqw, 1rem); }
+          .bundle-price { font-size: clamp(1.75rem, 2.5cqw, 2.5rem); }
+          .bundle-price-old { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
+          .bundle-price-row { gap: clamp(0.625rem, 1cqw, 1rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
+          .bundle-btn { font-size: clamp(0.8rem, 1cqw, 1rem) !important; padding: clamp(0.4rem, 0.65cqw, 0.65rem) clamp(1.25rem, 2cqw, 2rem) !important; }
+          .bundle-grid { gap: clamp(1.5rem, 2.5cqw, 2.5rem); }
         }
       `}</style>
       <img src={bundleBg} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />

@@ -44,18 +44,18 @@ const ReviewSection = () => {
     <section id="reviews" className="section-padding pt-10 md:pt-24 min-h-0 md:min-h-[600px] scroll-mt-20" style={{ backgroundColor: '#ffd618', containerType: 'inline-size' }}>
       <style>{`
         @container (min-width: 1024px) {
-          .review-headline { font-size: 3.8cqw; line-height: 0.9; margin-bottom: 0.8cqw; }
-          .review-subtitle { font-size: 1.1cqw; }
-          .review-grid { gap: 2cqw; padding-bottom: 1cqw; }
-          .review-card { padding: 1.3cqw; }
-          .review-avatar { width: 3.5cqw; height: 3.5cqw; font-size: 1.1cqw; }
-          .review-star { width: 1.2cqw; height: 1.2cqw; }
-          .review-name { font-size: 1cqw; }
-          .review-date { font-size: 0.8cqw; }
-          .review-text { font-size: 0.95cqw; }
-          .review-header { gap: 1cqw; margin-bottom: 1cqw; }
-          .review-stars { gap: 0.2cqw; margin-bottom: 0.2cqw; }
-          .review-section-header { margin-bottom: 2.5cqw; }
+          .review-headline { font-size: clamp(2.5rem, 3.8cqw, 3.75rem); line-height: 0.9; margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+          .review-subtitle { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
+          .review-grid { gap: clamp(1rem, 2cqw, 2rem); padding-bottom: clamp(0.5rem, 1cqw, 1rem); }
+          .review-card { padding: clamp(0.875rem, 1.3cqw, 1.25rem); }
+          .review-avatar { width: clamp(2.5rem, 3.5cqw, 3.5rem); height: clamp(2.5rem, 3.5cqw, 3.5rem); font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
+          .review-star { width: clamp(0.875rem, 1.2cqw, 1.25rem); height: clamp(0.875rem, 1.2cqw, 1.25rem); }
+          .review-name { font-size: clamp(0.875rem, 1cqw, 1rem); }
+          .review-date { font-size: clamp(0.75rem, 0.8cqw, 0.875rem); }
+          .review-text { font-size: clamp(0.875rem, 0.95cqw, 1rem); }
+          .review-header { gap: clamp(0.625rem, 1cqw, 1rem); margin-bottom: clamp(0.625rem, 1cqw, 1rem); }
+          .review-stars { gap: clamp(0.125rem, 0.2cqw, 0.25rem); margin-bottom: clamp(0.125rem, 0.2cqw, 0.25rem); }
+          .review-section-header { margin-bottom: clamp(1.5rem, 2.5cqw, 2.5rem); }
         }
       `}</style>
       <div className="container mx-auto">

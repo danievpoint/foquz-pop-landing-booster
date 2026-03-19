@@ -15,11 +15,11 @@ const HowToSection = () => {
       <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: 'inline-size' }}>
         <style>{`
           @container (min-width: 1024px) {
-            .howto-title { font-size: 2.8cqw; margin-bottom: 1.2cqw; }
-            .howto-step { font-size: 1.1cqw; }
-            .howto-steps { gap: 0.8cqw; }
-            .howto-card { padding: 1.5cqw 2cqw; max-width: 18cqw; }
-            .howto-content { padding-top: 5cqw; }
+            .howto-title { font-size: clamp(1.75rem, 2.8cqw, 2.75rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
+            .howto-step { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
+            .howto-steps { gap: clamp(0.5rem, 0.8cqw, 0.875rem); }
+            .howto-card { padding: clamp(1rem, 1.5cqw, 1.5rem) clamp(1.25rem, 2cqw, 2rem); max-width: clamp(12rem, 18cqw, 18rem); }
+            .howto-content { padding-top: clamp(3rem, 5cqw, 5rem); }
           }
         `}</style>
         <video
@@ -57,7 +57,7 @@ const HowToSection = () => {
       <div className="bg-foquz-thai section-padding" style={{ containerType: 'inline-size' }}>
         <style>{`
           @container (min-width: 1024px) {
-            .howto-banner { font-size: 2cqw; }
+            .howto-banner { font-size: clamp(1.25rem, 2cqw, 2rem); }
           }
         `}</style>
         <div className="container mx-auto text-center">

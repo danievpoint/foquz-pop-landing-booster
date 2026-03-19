@@ -55,12 +55,12 @@ const NewsletterSection = () => {
       <section className="bg-primary py-10 md:py-14" style={{ containerType: 'inline-size' }}>
         <style>{`
           @container (min-width: 1024px) {
-            .nl-headline { font-size: 2.8cqw; margin-bottom: 0.6cqw; }
-            .nl-body { font-size: 1cqw; margin-bottom: 1.2cqw; }
-            .nl-input { font-size: 1cqw !important; height: 3cqw !important; }
-            .nl-btn { font-size: 1cqw !important; height: 3cqw !important; }
-            .nl-form { gap: 0.8cqw; margin-bottom: 1cqw; }
-            .nl-fine { font-size: 0.7cqw; }
+            .nl-headline { font-size: clamp(1.75rem, 2.8cqw, 2.75rem); margin-bottom: clamp(0.375rem, 0.6cqw, 0.625rem); }
+            .nl-body { font-size: clamp(0.875rem, 1cqw, 1rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
+            .nl-input { font-size: clamp(0.875rem, 1cqw, 1rem) !important; height: clamp(2.5rem, 3cqw, 3rem) !important; }
+            .nl-btn { font-size: clamp(0.875rem, 1cqw, 1rem) !important; height: clamp(2.5rem, 3cqw, 3rem) !important; }
+            .nl-form { gap: clamp(0.5rem, 0.8cqw, 0.75rem); margin-bottom: clamp(0.625rem, 1cqw, 1rem); }
+            .nl-fine { font-size: clamp(0.625rem, 0.7cqw, 0.75rem); }
           }
         `}</style>
         <div className="container mx-auto px-4 text-center">

@@ -18,10 +18,10 @@ const TrustBar = () => {
     <section className="bg-background py-8 md:py-10" style={{ containerType: 'inline-size' }}>
       <style>{`
         @container (min-width: 1024px) {
-          .trust-label { font-size: 0.85cqw; }
-          .trust-icon { width: 2cqw; height: 2cqw; }
-          .trust-card { padding: 1.2cqw 1.5cqw; gap: 2cqw; }
-          .trust-item { gap: 0.5cqw; }
+          .trust-label { font-size: clamp(0.7rem, 0.85cqw, 0.875rem); }
+          .trust-icon { width: clamp(1.5rem, 2cqw, 2rem); height: clamp(1.5rem, 2cqw, 2rem); }
+          .trust-card { padding: clamp(0.875rem, 1.2cqw, 1.25rem) clamp(1rem, 1.5cqw, 1.5rem); gap: clamp(1.25rem, 2cqw, 2rem); }
+          .trust-item { gap: clamp(0.3rem, 0.5cqw, 0.5rem); }
         }
       `}</style>
       <div className="container mx-auto">
