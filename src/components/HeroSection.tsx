@@ -106,8 +106,8 @@ const HeroSection = () => {
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p className="text-[clamp(0.875rem,1.2vw,1.25rem)] text-primary-foreground/90 mb-6 font-extrabold uppercase tracking-tight">
-                  Du entscheidest was Du riechst
+                <p className="text-[clamp(1.25rem,2.5vw,2rem)] text-primary-foreground text-pop mb-6 whitespace-nowrap">
+                  DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
                 <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
                   <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
