@@ -13,7 +13,7 @@ const MarqueeBanner = () => {
   const repeated = [...items, ...items, ...items, ...items];
 
   return (
-    <section className="fixed top-0 left-0 right-0 z-[10000] bg-secondary py-[6px] md:py-2 overflow-hidden border-b border-foreground/30" style={{ height: '28px', boxSizing: 'border-box' }} data-banner>
+    <section className="fixed top-0 left-0 right-0 z-[10000] bg-secondary overflow-hidden border-b border-foreground/30 h-[28px] md:h-[32px]" data-banner>
       <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-10">
         {repeated.map((text, i) => (
           <span
