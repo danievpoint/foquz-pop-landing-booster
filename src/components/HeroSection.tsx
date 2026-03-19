@@ -100,37 +100,33 @@ const HeroSection = () => {
         <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
           <style>{`
             @keyframes hero-float {
-              0%, 100% {
-                transform: translate(-50%, -50%) translateY(-8px);
-              }
-              50% {
-                transform: translate(-50%, -50%) translateY(8px);
-              }
+              0%, 100% { transform: translateY(-8px); }
+              50% { transform: translateY(8px); }
             }
           `}</style>
 
           {/* Full-width SVG background — fills the aspect-ratio container */}
           <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
 
-          {/* Product image — positioned relative to the SAME container as the SVG.
-              Because both are absolute children of the same aspect-ratio-locked div,
-              percentage positions map directly to SVG coordinates.
-              Ray center ≈ 69.3% left, 42.9% top in SVG space. */}
+          {/* Product image — positioned from top-right so we can guarantee
+              it never clips above the container. Both this image and the SVG
+              are absolute children of the same aspect-ratio-locked parent,
+              so percentage values map to SVG coordinate space. */}
           <img
             src={heroJars}
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
             className="absolute pointer-events-none"
             style={{
-              /* Position: center of image sits on the ray burst center.
-                 top 50% keeps the jars from clipping above the container.
-                 left 69% aligns with the SVG ray convergence point. */
-              top: "50%",
-              left: "69%",
-              /* Size: ~35% of the full container width */
-              width: "35%",
+              /* top: 3% ensures a safe gap from the top edge even during animation.
+                 right: 5% places it in the right area near the ray burst.
+                 width: 40% matches the visual size from the reference design. */
+              top: "3%",
+              right: "5%",
+              width: "40%",
               height: "auto",
-              /* Animation includes the centering offset */
+              maxHeight: "94%",
+              objectFit: "contain",
               animation: "hero-float 3.4s ease-in-out infinite",
               willChange: "transform",
             }}
