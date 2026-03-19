@@ -82,10 +82,10 @@ const HeroSection = () => {
           <style>{`
             @keyframes hero-breathe-soft {
               0%, 100% {
-                transform: translate3d(0, 0.7rem, 0) scale(0.975) rotate(-1.2deg);
+                transform: translate3d(0, 0.9rem, 0) scale(0.982) rotate(-1deg);
               }
               50% {
-                transform: translate3d(0, 0, 0) scale(1.025) rotate(1.2deg);
+                transform: translate3d(0, 0.35rem, 0) scale(1.02) rotate(1deg);
               }
             }
           `}</style>
@@ -103,21 +103,21 @@ const HeroSection = () => {
           <div
             className="absolute z-20 flex items-end justify-center pointer-events-none"
             style={{
-              top: "clamp(6rem, 7vw, 9.5rem)",
+              top: "clamp(6.75rem, 7.5vw, 10rem)",
               left: "42%",
-              bottom: "0",
+              bottom: "clamp(0.25rem, 0.6vw, 0.6rem)",
               width: "clamp(40rem, 52vw, 72rem)",
             }}
           >
             <div
-              className="flex h-full w-full items-end justify-center motion-reduce:transform-none"
-              style={{ animation: "hero-breathe-soft 3.4s ease-in-out infinite" }}
+              className="flex h-full w-full items-end justify-center origin-bottom motion-reduce:transform-none"
+              style={{ animation: "hero-breathe-soft 3.4s ease-in-out infinite", transformOrigin: "center bottom", willChange: "transform" }}
             >
               <img
                 src={heroJars}
                 alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
                 fetchPriority="high"
-                className="w-full max-h-[98%] h-auto object-contain origin-bottom"
+                className="w-full max-h-[97%] h-auto object-contain origin-bottom"
               />
             </div>
           </div>
