@@ -62,7 +62,7 @@ const HeroSection = () => {
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[1.5] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
+                <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
@@ -114,9 +114,12 @@ const HeroSection = () => {
           >
             <style>{`
               .hero-title {
+                display: flex;
+                flex-direction: column;
+                gap: 0.22em;
                 font-size: 4.2cqw;
-                line-height: 1.55;
-                margin-bottom: 0.8cqw;
+                line-height: 1.08;
+                margin-bottom: 1cqw;
               }
               .hero-subtitle {
                 font-size: 1.3cqw;
