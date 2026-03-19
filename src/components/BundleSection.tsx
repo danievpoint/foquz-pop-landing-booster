@@ -92,7 +92,7 @@ const BundleSection = () => {
             <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
               <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
-              <StockBadge variant="light" available={isAvailable("Starter Bundle") ?? true} />
+              <StockBadge variant="light" available={isAvailable("FOQUZ Power Bundle") ?? true} />
             </div>
 
             {/* CTA */}
