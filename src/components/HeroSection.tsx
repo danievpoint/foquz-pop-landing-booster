@@ -78,17 +78,17 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-visible">
-          {/* SVG defines the natural height */}
+        <div className="hidden lg:block relative w-full overflow-visible" style={{ aspectRatio: '16 / 7' }}>
+          {/* SVG background fills container */}
           <img
             src={heroBg}
             alt=""
             aria-hidden="true"
             fetchPriority="high"
-            className="w-full h-auto block"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
 
-          {/* Products – locked to SVG via matching percentages */}
+          {/* Products – locked via matching percentages */}
           <div className="absolute z-20 hero-product-img">
             <img
               src={heroJars}
@@ -98,9 +98,9 @@ const HeroSection = () => {
             />
           </div>
 
-          {/* Text overlay */}
-          <div className="absolute inset-0 z-10 w-full">
-            <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
+          {/* Text overlay – vertically centered */}
+          <div className="absolute inset-0 z-10 flex items-center">
+            <div className="w-full max-w-[1800px] mx-auto px-8">
               <div className="w-[40%] xl:w-[36%]">
                 <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop whitespace-nowrap">
                   <span className="block">KURZ RIECHEN.</span>
