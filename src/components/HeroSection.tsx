@@ -115,7 +115,7 @@ const HeroSection = () => {
             <style>{`
               .hero-title {
                 font-size: 4.2cqw;
-                line-height: 1.1;
+                line-height: 1.25;
                 margin-bottom: 0.8cqw;
               }
               .hero-subtitle {
