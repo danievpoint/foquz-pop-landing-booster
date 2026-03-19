@@ -51,7 +51,7 @@ const HeroSection = () => {
               <div className="pb-4 sm:pb-8">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
-                  AB AUF <span className="text-secondary">WOLKE 7.</span>
+                  <span className="text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
                 <p className="text-sm sm:text-base md:text-lg text-primary-foreground/90 mb-3 sm:mb-5 md:mb-6 font-bold tracking-wide">
                   Du entscheidest was Du riechst
@@ -104,7 +104,7 @@ const HeroSection = () => {
               <div className="w-[40%] xl:w-[36%]">
                 <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
-                  AB AUF <span className="text-secondary">WOLKE 7.</span>
+                  <span className="text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
                 <p className="text-[clamp(0.875rem,1.2vw,1.25rem)] text-primary-foreground/90 mb-6 font-bold tracking-wide">
                   Du entscheidest was Du riechst
