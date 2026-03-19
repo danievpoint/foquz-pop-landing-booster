@@ -74,7 +74,7 @@ const BundleBanner = () => {
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "Starter Bundle (3 Sorten)", price: 14.99, image: foquzBox });
+                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 14.99, image: foquzBox });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
