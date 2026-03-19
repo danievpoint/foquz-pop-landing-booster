@@ -60,10 +60,10 @@ const BundleBanner = () => {
               <X className="w-6 h-6" />
             </button>
             <Link to="/produkt/starter-bundle" onClick={() => setDismissed(true)}>
-              <img src={foquzBox} alt="Starter Bundle" className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
+              <img src={foquzBox} alt="FOQUZ Power Bundle" className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
             </Link>
             <h3 className="text-white font-extrabold text-xl md:text-2xl leading-tight">
-              STARTER BUNDLE – Alle 3 Sorten!
+              FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
               Spar 15% und teste alle Geschmacksrichtungen in einer Box.
