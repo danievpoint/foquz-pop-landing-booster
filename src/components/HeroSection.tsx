@@ -103,10 +103,10 @@ const HeroSection = () => {
           <div
             className="absolute z-20 flex items-end justify-center pointer-events-none"
             style={{
-              top: "clamp(7rem, 8vw, 10.5rem)",
-              left: "46.5%",
-              bottom: "clamp(0.5rem, 1.4vw, 1.5rem)",
-              width: "clamp(33rem, 42vw, 58rem)",
+              top: "clamp(6.5rem, 7.5vw, 10rem)",
+              left: "45%",
+              bottom: "clamp(0.25rem, 1vw, 1rem)",
+              width: "clamp(36rem, 46vw, 64rem)",
             }}
           >
             <div
