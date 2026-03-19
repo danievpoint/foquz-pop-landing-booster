@@ -116,7 +116,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
         onClick={() =>
           addToCart(1, {
             id: p.isBundle ? "starter-bundle" : p.name,
-            name: p.isBundle ? "Starter Bundle (3 Sorten)" : p.name,
+            name: p.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : p.name,
             price: p.numericPrice,
             image: p.image,
           })
