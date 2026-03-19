@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
 
-// Preload hero images as early as possible
 const heroImagePromise = Promise.all(
   [heroBg, heroJars].map(
     (src) =>
@@ -25,17 +24,6 @@ export const useHeroReady = () => {
 
 const HeroSection = () => {
   const ready = useHeroReady();
-
-  /*
-    SVG COORDINATE MAPPING (from user-tuned values):
-    - top: 6%  of 772  = 46px  → SVG y=46
-    - right: 12% → right edge at 1920×0.88 = 1690 → SVG x = 1690 - 691 = 999
-    - width: 36% of 1920 = 691px → SVG width=691
-
-    Both the background SVG and this overlay SVG share
-    viewBox="0 0 1920 772", so these coordinates are LOCKED
-    to the same space. Impossible to drift apart.
-  */
 
   return (
     <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
@@ -93,12 +81,15 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) ===
-          NUCLEAR FIX: The product image is placed inside an SVG overlay
-          that shares the EXACT SAME viewBox as the background SVG.
-          Since both SVGs map to the same 1920×772 coordinate space,
-          the product image is LOCKED to the ray burst position.
-          This is mathematically guaranteed to look identical
-          at 1024px, 1440px, 1920px, 2560px, and any other width.
+          ARCHITECTURE:
+          1. Container has aspect-ratio: 1920/772 + overflow:hidden
+          2. Background SVG fills it (absolute inset-0)
+          3. Product image lives in a SECOND SVG with the SAME viewBox
+             → coordinates are locked to the background
+          4. Float animation is SVG-native (<animateTransform>)
+             → happens INSIDE the SVG coordinate space
+             → the SVG element itself never moves
+             → overflow:hidden NEVER clips anything
         */}
         <div
           className="hidden lg:block relative w-full overflow-hidden"
@@ -108,10 +99,6 @@ const HeroSection = () => {
           }}
         >
           <style>{`
-            @keyframes hero-float {
-              0%, 100% { transform: translateY(-8px); }
-              50% { transform: translateY(8px); }
-            }
             .hero-title {
               font-size: 4.2cqw;
               line-height: 1.1;
@@ -128,26 +115,33 @@ const HeroSection = () => {
             .hero-btn-row {
               gap: 1.2cqw;
             }
-            .hero-product-svg {
-              animation: hero-float 3.4s ease-in-out infinite;
-              will-change: transform;
-            }
           `}</style>
 
-          {/* Layer 1: SVG background */}
+          {/* Layer 1: Background SVG */}
           <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
 
-          {/* Layer 2: Product image inside SVG overlay.
-              Same viewBox as background = same coordinate system.
-              x=999, y=46, width=691 are the user-tuned positions
-              converted from percentages to SVG coordinates. */}
+          {/* Layer 2: Product image in SVG overlay.
+              viewBox matches background exactly → locked coordinates.
+              Animation is SVG-native → no CSS overflow clipping.
+              y=66 with ±20 SVG-unit float = range 46–86, safely inside 0–772. */}
           <svg
             viewBox="0 0 1920 772"
-            className="absolute inset-0 w-full h-full hero-product-svg"
+            className="absolute inset-0 w-full h-full"
             xmlns="http://www.w3.org/2000/svg"
             style={{ pointerEvents: "none" }}
           >
-            <image href={heroJars} x="999" y="46" width="691" height="691" preserveAspectRatio="xMidYMid meet" />
+            <g>
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                values="0 -15; 0 15; 0 -15"
+                dur="3.4s"
+                repeatCount="indefinite"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+              />
+              <image href={heroJars} x="999" y="66" width="691" height="691" preserveAspectRatio="xMidYMid meet" />
+            </g>
           </svg>
 
           {/* Layer 3: Text + CTAs */}
