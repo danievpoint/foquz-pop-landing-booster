@@ -262,7 +262,7 @@ const ProductGrid = () => {
             <h2 className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl">
               WÄHLE DEINEN VIBE
             </h2>
-            <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
+            <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs leading-relaxed">
               Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
           </div>
