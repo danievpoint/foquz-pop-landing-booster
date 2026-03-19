@@ -67,7 +67,7 @@
   html {
     overflow-x: clip;
     -webkit-overflow-scrolling: touch;
-    background-color: #85c8b5;
+    background-color: hsl(203, 92%, 89%);
     overscroll-behavior-y: none;
   }
 
