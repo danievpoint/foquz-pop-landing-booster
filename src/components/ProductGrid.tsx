@@ -199,56 +199,72 @@ const ProductGrid = () => {
     <>
       <section id="sorten" className="section-padding pt-4 md:pt-24 pb-8 md:pb-28 bg-background relative z-10 scroll-mt-20">
         <div className="container mx-auto">
-          <h2
-            className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl">
-            
-            WÄHLE DEINEN VIBE
-          </h2>
-          <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
-            Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
-          </p>
-
-          {/* Desktop: static grid */}
-          <div className="hidden lg:grid lg:grid-cols-3 gap-8 mx-auto mt-12">
-            {products.map((p, i) =>
-            <motion.div
-              key={p.name}
-              custom={i}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="flex flex-col">
-              
-                <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-4 block">
-                    <img
-                  src={p.image}
-                  alt={p.name}
-                  className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
-                
-                </Link>
-                <div className="py-2">
-                  <Link to={`/produkt/${p.handle}`} className="text-lg font-extrabold mb-1 block hover:opacity-70 transition-opacity">
-                    {p.name}
+          <div className="hidden lg:block" style={{ containerType: 'inline-size' }}>
+            <style>{`
+              .pg-headline { font-size: 3.8cqw; line-height: 0.9; margin-bottom: 0.8cqw; }
+              .pg-subtitle { font-size: 1.1cqw; }
+              .pg-grid { gap: 2cqw; margin-top: 2.5cqw; }
+              .pg-card-title { font-size: 1.2cqw; margin-bottom: 0.2cqw; }
+              .pg-card-desc { font-size: 0.85cqw; margin-bottom: 0.8cqw; }
+              .pg-card-price { font-size: 1.6cqw; }
+              .pg-card-tax { font-size: 0.7cqw; margin-bottom: 0.8cqw; }
+              .pg-card-btn { font-size: 0.85cqw !important; padding: 0.55cqw 1.5cqw !important; }
+              .pg-card-gap { gap: 0.8cqw; margin-bottom: 0.2cqw; }
+              .pg-card-actions { gap: 0.8cqw; }
+              .pg-card-img { margin-bottom: 1cqw; }
+              .pg-card-body { padding: 0.5cqw 0; }
+            `}</style>
+            <h2 className="pg-headline text-center">
+              WÄHLE DEINEN VIBE
+            </h2>
+            <p className="pg-subtitle text-muted-foreground font-medium text-center max-w-xl mx-auto">
+              Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+            </p>
+            <div className="pg-grid grid grid-cols-3 mx-auto">
+              {products.map((p, i) =>
+              <motion.div
+                key={p.name}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="flex flex-col">
+                  <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block">
+                      <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                   </Link>
-                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">{p.desc}</p>
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-2xl font-black">{p.price}</span>
-                    <StockBadge available={isAvailable(p.name)} />
+                  <div className="pg-card-body">
+                    <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity">
+                      {p.name}
+                    </Link>
+                    <p className="pg-card-desc text-muted-foreground whitespace-pre-line">{p.desc}</p>
+                    <div className="pg-card-gap flex items-center">
+                      <span className="pg-card-price font-black">{p.price}</span>
+                      <StockBadge available={isAvailable(p.name)} />
+                    </div>
+                    <span className="pg-card-tax text-muted-foreground block">inkl. MwSt.</span>
+                    <div className="pg-card-actions flex items-center">
+                      <button
+                        onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
+                        className="comic-btn bg-card text-foreground pg-card-btn">
+                        FOKUS SICHERN
+                      </button>
+                      <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
+                    </div>
                   </div>
-                  <span className="text-xs text-muted-foreground mb-3 block">inkl. MwSt.</span>
-                  <div className="flex items-center gap-3">
-                    <button
-                    onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                    className="comic-btn bg-card text-foreground text-sm py-2 px-6">
-                    
-                      FOKUS SICHERN
-                    </button>
-                    <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
-                  </div>
-                </div>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile heading */}
+          <div className="lg:hidden">
+            <h2 className="md:text-[60px] md:leading-[0.9] text-center mb-1 md:mb-4 text-2xl">
+              WÄHLE DEINEN VIBE
+            </h2>
+            <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs">
+              Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+            </p>
           </div>
 
           {/* Mobile: carousel */}
