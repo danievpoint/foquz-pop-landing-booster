@@ -78,7 +78,7 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-visible" style={{ aspectRatio: '16 / 7' }}>
+        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '16 / 7' }}>
           {/* SVG background fills container */}
           <img
             src={heroBg}
@@ -88,35 +88,32 @@ const HeroSection = () => {
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
 
-          {/* Products – locked via matching percentages */}
-          <div className="absolute z-20 hero-product-img">
-            <img
-              src={heroJars}
-              alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-              fetchPriority="high"
-              className="w-full h-auto animate-[breathe_3s_ease-in-out_infinite]"
-            />
-          </div>
+          {/* Products – percentage-based, scales with container */}
+          <img
+            src={heroJars}
+            alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+            fetchPriority="high"
+            className="absolute z-20 animate-[breathe_3s_ease-in-out_infinite]"
+            style={{ top: '12%', left: '52%', width: '38%', height: 'auto' }}
+          />
 
-          {/* Text overlay – vertically centered */}
-          <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full max-w-[1800px] mx-auto px-8">
-              <div className="w-[40%] xl:w-[36%]">
-                <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop whitespace-nowrap">
-                  <span className="block">KURZ RIECHEN.</span>
-                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                </h1>
-                <p className="text-[clamp(1rem,1.8vw,1.5rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-6 whitespace-nowrap">
-                  DU ENTSCHEIDEST WAS DU RIECHST
-                </p>
-                <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
-                  <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
-                    SPAR-BUNDLE HOLEN
-                  </a>
-                  <a href="#sorten" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
-                    EINZELN KAUFEN
-                  </a>
-                </div>
+          {/* Text overlay – percentage-based positioning */}
+          <div className="absolute inset-0 z-10">
+            <div className="absolute" style={{ top: '18%', left: '6%' }}>
+              <h1 className="text-[clamp(3rem,4.5vw,5rem)] leading-[0.95] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
+                <span className="block">KURZ RIECHEN.</span>
+                <span className="block text-secondary">AB AUF WOLKE 7.</span>
+              </h1>
+              <p className="text-[clamp(1rem,1.6vw,1.5rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
+                DU ENTSCHEIDEST WAS DU RIECHST
+              </p>
+              <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
+                <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1vw,1.125rem)] !py-[clamp(0.5rem,0.8vw,0.875rem)] !px-[clamp(1rem,1.8vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
+                  SPAR-BUNDLE HOLEN
+                </a>
+                <a href="#sorten" className="comic-btn !text-[clamp(0.75rem,1vw,1.125rem)] !py-[clamp(0.5rem,0.8vw,0.875rem)] !px-[clamp(1rem,1.8vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
+                  EINZELN KAUFEN
+                </a>
               </div>
             </div>
           </div>

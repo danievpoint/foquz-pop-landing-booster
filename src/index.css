@@ -117,26 +117,7 @@
   }
 
   .hero-product-img {
-    top: 18%;
-    left: 55%;
-    width: 32%;
-  }
-
-  /* Large monitors (≥ 1920px) */
-  @media (min-width: 1920px) {
-    .hero-product-img {
-      top: 14%;
-      left: 57%;
-      width: 32%;
-    }
-  }
-
-  /* Very large monitors like 42" (≥ 2560px) */
-  @media (min-width: 2560px) {
-    .hero-product-img {
-      top: 10%;
-      width: 35%;
-    }
+    /* no longer used – inline styles handle positioning */
   }
 }
 
