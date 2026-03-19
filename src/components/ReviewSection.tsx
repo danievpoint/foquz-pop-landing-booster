@@ -46,7 +46,7 @@ const ReviewSection = () => {
         @container (min-width: 1024px) {
           .review-headline { font-size: clamp(2.5rem, 3.8cqw, 3.75rem); line-height: 0.9; margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
           .review-subtitle { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
-          .review-grid { gap: clamp(1rem, 2cqw, 2rem); padding-bottom: clamp(0.5rem, 1cqw, 1rem); }
+          .review-grid { gap: clamp(1rem, 2cqw, 2rem); padding-bottom: clamp(0.5rem, 1cqw, 1rem); grid-template-columns: repeat(3, minmax(0, 1fr)); }
           .review-card { padding: clamp(0.875rem, 1.3cqw, 1.25rem); }
           .review-avatar { width: clamp(2.5rem, 3.5cqw, 3.5rem); height: clamp(2.5rem, 3.5cqw, 3.5rem); font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
           .review-star { width: clamp(0.875rem, 1.2cqw, 1.25rem); height: clamp(0.875rem, 1.2cqw, 1.25rem); }
