@@ -82,10 +82,10 @@ const HeroSection = () => {
           <style>{`
             @keyframes hero-breathe-soft {
               0%, 100% {
-                transform: translate3d(0, 0.5rem, 0) scale(0.987) rotate(-1deg);
+                transform: translate3d(0, 0.7rem, 0) scale(0.975) rotate(-1.2deg);
               }
               50% {
-                transform: translate3d(0, 0, 0) scale(1.013) rotate(1deg);
+                transform: translate3d(0, 0, 0) scale(1.025) rotate(1.2deg);
               }
             }
           `}</style>
