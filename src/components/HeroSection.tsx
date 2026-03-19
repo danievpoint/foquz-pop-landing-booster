@@ -106,7 +106,7 @@ const HeroSection = () => {
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p className="text-[clamp(0.9rem,1.6vw,1.35rem)] text-primary-foreground text-pop mb-6 whitespace-nowrap">
+                <p className="text-[clamp(1rem,1.8vw,1.5rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-6 whitespace-nowrap">
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
                 <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
