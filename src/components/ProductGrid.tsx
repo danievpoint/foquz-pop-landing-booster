@@ -201,18 +201,18 @@ const ProductGrid = () => {
         <div className="container mx-auto">
           <div className="hidden lg:block" style={{ containerType: 'inline-size' }}>
             <style>{`
-              .pg-headline { font-size: 3.8cqw; line-height: 0.9; margin-bottom: 0.8cqw; }
-              .pg-subtitle { font-size: 1.1cqw; }
-              .pg-grid { gap: 2cqw; margin-top: 2.5cqw; }
-              .pg-card-title { font-size: 1.2cqw; margin-bottom: 0.2cqw; }
-              .pg-card-desc { font-size: 0.85cqw; margin-bottom: 0.8cqw; }
-              .pg-card-price { font-size: 1.6cqw; }
-              .pg-card-tax { font-size: 0.7cqw; margin-bottom: 0.8cqw; }
-              .pg-card-btn { font-size: 0.85cqw !important; padding: 0.55cqw 1.5cqw !important; }
-              .pg-card-gap { gap: 0.8cqw; margin-bottom: 0.2cqw; }
-              .pg-card-actions { gap: 0.8cqw; }
-              .pg-card-img { margin-bottom: 1cqw; }
-              .pg-card-body { padding: 0.5cqw 0; }
+              .pg-headline { font-size: clamp(2.5rem, 3.8cqw, 3.75rem); line-height: 0.9; margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+              .pg-subtitle { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
+              .pg-grid { gap: clamp(1.25rem, 2cqw, 2rem); margin-top: clamp(1.5rem, 2.5cqw, 2.5rem); }
+              .pg-card-title { font-size: clamp(1rem, 1.2cqw, 1.25rem); margin-bottom: clamp(0.125rem, 0.2cqw, 0.25rem); }
+              .pg-card-desc { font-size: clamp(0.75rem, 0.85cqw, 0.875rem); margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+              .pg-card-price { font-size: clamp(1.25rem, 1.6cqw, 1.5rem); }
+              .pg-card-tax { font-size: clamp(0.625rem, 0.7cqw, 0.75rem); margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
+              .pg-card-btn { font-size: clamp(0.75rem, 0.85cqw, 0.875rem) !important; padding: clamp(0.4rem, 0.55cqw, 0.55rem) clamp(1rem, 1.5cqw, 1.5rem) !important; }
+              .pg-card-gap { gap: clamp(0.5rem, 0.8cqw, 0.875rem); margin-bottom: clamp(0.125rem, 0.2cqw, 0.25rem); }
+              .pg-card-actions { gap: clamp(0.5rem, 0.8cqw, 0.875rem); }
+              .pg-card-img { margin-bottom: clamp(0.625rem, 1cqw, 1rem); }
+              .pg-card-body { padding: clamp(0.3rem, 0.5cqw, 0.5rem) 0; }
             `}</style>
             <h2 className="pg-headline text-center">
               WÄHLE DEINEN VIBE

@@ -57,7 +57,7 @@ const HowToSection = () => {
       <div className="bg-foquz-thai section-padding" style={{ containerType: 'inline-size' }}>
         <style>{`
           @container (min-width: 1024px) {
-            .howto-banner { font-size: 2cqw; }
+            .howto-banner { font-size: clamp(1.25rem, 2cqw, 2rem); }
           }
         `}</style>
         <div className="container mx-auto text-center">
