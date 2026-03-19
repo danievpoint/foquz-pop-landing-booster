@@ -27,7 +27,7 @@ const HeroSection = () => {
   const ready = useHeroReady();
 
   return (
-    <section className="relative overflow-hidden" style={{ zIndex: 1 }}>
+    <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
       {!ready && <div className="w-full bg-background" style={{ minHeight: "max(700px, 75vh)" }} />}
 
       <div
@@ -82,45 +82,49 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        {/*
-          KEY FIX: The SVG viewBox is 1920×772. The ray burst center is at
-          approximately x=1331 y=331 in SVG coordinates, which equals
-          ~69.3% from left, ~42.9% from top.
-
-          Previously the product image was positioned inside a CSS-grid
-          right-column, but the SVG stretched across the full width.
-          This mismatch caused the jars to drift away from the rays
-          on different screen sizes.
-
-          FIX: Position the product image INSIDE the same container as
-          the SVG, using percentages that map to the SVG coordinate space.
-          Both elements share the same aspect-ratio-locked parent, so they
-          always scale together as one unit.
-        */}
         <div
-          className="hidden lg:block relative w-full overflow-hidden max-w-[1920px] mx-auto"
-          style={{ aspectRatio: "1920 / 772" }}
+          className="hidden lg:block relative w-full overflow-hidden mx-auto"
+          style={{
+            aspectRatio: "1920 / 772",
+            maxWidth: "1920px",
+            containerType: "inline-size",
+          }}
         >
           <style>{`
             @keyframes hero-float {
               0%, 100% { transform: translateY(-8px); }
               50% { transform: translateY(8px); }
             }
+            .hero-title {
+              font-size: 4.2cqw;
+              line-height: 1.1;
+              margin-bottom: 0.8cqw;
+            }
+            .hero-subtitle {
+              font-size: 1.3cqw;
+              margin-bottom: 1.2cqw;
+            }
+            .hero-btn {
+              font-size: 0.9cqw !important;
+              padding: 0.65cqw 1.5cqw !important;
+            }
+            .hero-btn-row {
+              gap: 1.2cqw;
+            }
           `}</style>
 
-          {/* Full-width SVG background */}
+          {/* SVG background */}
           <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
 
-          {/* Product image — 36% of container width, positioned top-right.
-              maxHeight prevents clipping on any screen. */}
+          {/* Product jars */}
           <img
             src={heroJars}
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
             className="absolute pointer-events-none"
             style={{
-              top: "3%",
-              right: "4%",
+              top: "6%",
+              right: "12%",
               width: "36%",
               height: "auto",
               maxHeight: "92%",
@@ -130,36 +134,27 @@ const HeroSection = () => {
             }}
           />
 
-          {/* Text overlay — all sizes use vw so they scale identically
-              with the viewport, just like the container does. */}
+          {/* Text + CTAs */}
           <div className="absolute inset-0 z-10">
             <div className="h-full flex items-center">
               <div style={{ paddingLeft: "4%" }}>
-                <h1
-                  style={{ fontSize: "4.2vw", lineHeight: 1.1, marginBottom: "0.8vw" }}
-                  className="text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight"
-                >
+                <h1 className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p
-                  style={{ fontSize: "1.3vw", marginBottom: "1.2vw" }}
-                  className="font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap"
-                >
+                <p className="hero-subtitle font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
-                <div className="flex flex-row" style={{ gap: "1.2vw" }}>
+                <div className="flex flex-row hero-btn-row">
                   <a
                     href="#bundle"
-                    className="comic-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
-                    style={{ fontSize: "0.9vw", padding: "0.65vw 1.5vw" }}
+                    className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
                   >
                     SPAR-BUNDLE HOLEN
                   </a>
                   <a
                     href="#sorten"
-                    className="comic-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
-                    style={{ fontSize: "0.9vw", padding: "0.65vw 1.5vw" }}
+                    className="comic-btn hero-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
                   >
                     EINZELN KAUFEN
                   </a>
