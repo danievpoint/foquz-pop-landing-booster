@@ -5,6 +5,7 @@ import { allProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
+import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ChevronLeft, X, ShoppingBag } from "lucide-react";
