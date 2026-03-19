@@ -5,6 +5,7 @@ import { X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import mascotWatermelon from "@/assets/mascot-watermelon.png";
 
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 
