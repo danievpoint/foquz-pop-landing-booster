@@ -74,7 +74,7 @@ const ReviewSection = () => {
         {/* Mobile: full-width cards, swipeable / Desktop: grid */}
         <div
           ref={scrollRef}
-          className="flex gap-0 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:overflow-visible lg:snap-none lg:pt-0 review-grid"
+          className="flex gap-0 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:overflow-visible lg:snap-none lg:pt-0 lg:pb-2 lg:pr-1 review-grid"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" as any, touchAction: "pan-x", overscrollBehaviorY: "none", overflowY: "hidden" }}
         >
           {reviews.map((r, i) => (
