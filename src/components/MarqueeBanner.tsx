@@ -18,7 +18,7 @@ const MarqueeBanner = () => {
         {repeated.map((text, i) => (
           <span
             key={i}
-            className="text-sm md:text-base font-extrabold text-secondary-foreground tracking-wider flex items-center gap-3"
+            className="text-xs md:text-sm font-extrabold text-secondary-foreground tracking-wider flex items-center gap-3"
           >
             {text}
             <span className="text-primary">★</span>
