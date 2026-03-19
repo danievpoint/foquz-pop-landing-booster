@@ -97,7 +97,10 @@ const HeroSection = () => {
           Both elements share the same aspect-ratio-locked parent, so they
           always scale together as one unit.
         */}
-        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
+        <div
+          className="hidden lg:block relative w-full overflow-hidden max-w-[1920px] mx-auto"
+          style={{ aspectRatio: "1920 / 772" }}
+        >
           <style>{`
             @keyframes hero-float {
               0%, 100% { transform: translateY(-8px); }
@@ -105,54 +108,58 @@ const HeroSection = () => {
             }
           `}</style>
 
-          {/* Full-width SVG background — fills the aspect-ratio container */}
+          {/* Full-width SVG background */}
           <img src={heroBg} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full" />
 
-          {/* Product image — positioned from top-right so we can guarantee
-              it never clips above the container. Both this image and the SVG
-              are absolute children of the same aspect-ratio-locked parent,
-              so percentage values map to SVG coordinate space. */}
+          {/* Product image — 36% of container width, positioned top-right.
+              maxHeight prevents clipping on any screen. */}
           <img
             src={heroJars}
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
             className="absolute pointer-events-none"
             style={{
-              /* top: 3% ensures a safe gap from the top edge even during animation.
-                 right: 5% places it in the right area near the ray burst.
-                 width: 40% matches the visual size from the reference design. */
               top: "3%",
-              right: "5%",
-              width: "40%",
+              right: "4%",
+              width: "36%",
               height: "auto",
-              maxHeight: "94%",
+              maxHeight: "92%",
               objectFit: "contain",
               animation: "hero-float 3.4s ease-in-out infinite",
               willChange: "transform",
             }}
           />
 
-          {/* Text overlay — positioned absolutely on the left side */}
+          {/* Text overlay — all sizes use vw so they scale identically
+              with the viewport, just like the container does. */}
           <div className="absolute inset-0 z-10">
             <div className="h-full flex items-center">
-              <div className="pl-[4%] py-12 max-w-[45%]">
-                <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
+              <div style={{ paddingLeft: "4%" }}>
+                <h1
+                  style={{ fontSize: "4.2vw", lineHeight: 1.1, marginBottom: "0.8vw" }}
+                  className="text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight"
+                >
                   <span className="block">KURZ RIECHEN.</span>
                   <span className="block text-secondary">AB AUF WOLKE 7.</span>
                 </h1>
-                <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
+                <p
+                  style={{ fontSize: "1.3vw", marginBottom: "1.2vw" }}
+                  className="font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap"
+                >
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
-                <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
+                <div className="flex flex-row" style={{ gap: "1.2vw" }}>
                   <a
                     href="#bundle"
-                    className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+                    className="comic-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+                    style={{ fontSize: "0.9vw", padding: "0.65vw 1.5vw" }}
                   >
                     SPAR-BUNDLE HOLEN
                   </a>
                   <a
                     href="#sorten"
-                    className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-card text-foreground w-fit whitespace-nowrap"
+                    className="comic-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
+                    style={{ fontSize: "0.9vw", padding: "0.65vw 1.5vw" }}
                   >
                     EINZELN KAUFEN
                   </a>
