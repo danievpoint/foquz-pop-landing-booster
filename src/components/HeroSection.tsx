@@ -123,24 +123,26 @@ const HeroSection = () => {
           {/* Layer 2: Product image in SVG overlay.
               viewBox matches background exactly → locked coordinates.
               Animation is SVG-native → no CSS overflow clipping.
-              y=66 with ±20 SVG-unit float = range 46–86, safely inside 0–772. */}
+              y=90 with ±12 float = range 78–102, safely inside 0–772.
+              Bottom edge: 90+650=740, safely inside 772.
+              Image slightly smaller (650 vs 691) to add breathing room. */}
           <svg
             viewBox="0 0 1920 772"
             className="absolute inset-0 w-full h-full"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ pointerEvents: "none" }}
+            style={{ pointerEvents: "none", overflow: "visible" }}
           >
             <g>
               <animateTransform
                 attributeName="transform"
                 type="translate"
-                values="0 -15; 0 15; 0 -15"
+                values="0 -12; 0 12; 0 -12"
                 dur="3.4s"
                 repeatCount="indefinite"
                 calcMode="spline"
                 keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
               />
-              <image href={heroJars} x="999" y="66" width="691" height="691" preserveAspectRatio="xMidYMid meet" />
+              <image href={heroJars} x="1020" y="90" width="650" height="650" preserveAspectRatio="xMidYMid meet" />
             </g>
           </svg>
 
