@@ -57,7 +57,7 @@ const BundleSection = () => {
               Eine Box. Voller Fokus.
             </p>
             <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg">
-              Alle 3 Sorten in einer Box. Spare ganze 28% und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
+              Alle 3 Sorten in einer Box. Spare ganze <span className="font-black text-white">28%</span> und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
             </p>
 
             {/* Checkpoints */}
