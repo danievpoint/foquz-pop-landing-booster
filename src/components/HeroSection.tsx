@@ -103,10 +103,10 @@ const HeroSection = () => {
           <div
             className="absolute z-20 flex items-end justify-center pointer-events-none"
             style={{
-              top: "clamp(6.5rem, 7.5vw, 10rem)",
-              left: "45%",
-              bottom: "clamp(0.25rem, 1vw, 1rem)",
-              width: "clamp(36rem, 46vw, 64rem)",
+              top: "clamp(6rem, 7vw, 9.5rem)",
+              left: "42%",
+              bottom: "0",
+              width: "clamp(40rem, 52vw, 72rem)",
             }}
           >
             <div
@@ -117,7 +117,7 @@ const HeroSection = () => {
                 src={heroJars}
                 alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
                 fetchPriority="high"
-                className="w-full max-h-[94%] h-auto object-contain origin-bottom"
+                className="w-full max-h-[98%] h-auto object-contain origin-bottom"
               />
             </div>
           </div>
