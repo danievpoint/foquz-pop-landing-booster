@@ -27,7 +27,7 @@ const HeroSection = () => {
   const ready = useHeroReady();
 
   return (
-    <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
+    <section className="relative overflow-hidden" style={{ zIndex: 1 }}>
       {!ready && (
         <div className="w-full bg-background" style={{ minHeight: 'max(700px, 75vh)' }} />
       )}
@@ -78,53 +78,22 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '2.5 / 1' }}>
+        <div className="hidden lg:block relative w-full overflow-hidden">
           <style>{`
-            @keyframes hero-breathe-soft {
+            @keyframes hero-float {
               0%, 100% {
-                transform: translate3d(0, 0.9rem, 0) scale(0.982) rotate(-1deg);
+                transform: translate(-50%, calc(-50% - 8px));
               }
               50% {
-                transform: translate3d(0, 0.35rem, 0) scale(1.02) rotate(1deg);
+                transform: translate(-50%, calc(-50% + 8px));
               }
             }
           `}</style>
 
-          {/* SVG background fills container */}
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-          />
-
-          {/* Products – fluid safe area for large desktop screens */}
-          <div
-            className="absolute z-20 flex items-end justify-center pointer-events-none"
-            style={{
-              top: "clamp(6.75rem, 7.5vw, 10rem)",
-              left: "42%",
-              bottom: "clamp(0.25rem, 0.6vw, 0.6rem)",
-              width: "clamp(40rem, 52vw, 72rem)",
-            }}
-          >
-            <div
-              className="flex h-full w-full items-end justify-center origin-bottom motion-reduce:transform-none"
-              style={{ animation: "hero-breathe-soft 3.4s ease-in-out infinite", transformOrigin: "center bottom", willChange: "transform" }}
-            >
-              <img
-                src={heroJars}
-                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                fetchPriority="high"
-                className="w-full max-h-[97%] h-auto object-contain origin-bottom"
-              />
-            </div>
-          </div>
-
-          {/* Text overlay – protected safe area below navbar */}
-          <div className="absolute inset-0 z-10 flex items-start">
-            <div className="pl-[6%] pt-[clamp(8.5rem,10vw,11.5rem)]">
+          {/* Grid container – capped width on ultra-wide */}
+          <div className="max-w-screen-2xl mx-auto grid grid-cols-2 items-center gap-8 pt-24 xl:pt-28">
+            {/* Left column – text & CTAs */}
+            <div className="relative z-10 pl-[6%] py-12">
               <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
                 <span className="block text-secondary">AB AUF WOLKE 7.</span>
@@ -141,7 +110,40 @@ const HeroSection = () => {
                 </a>
               </div>
             </div>
+
+            {/* Right column – visual wrapper (SVG + product locked together) */}
+            <div className="relative" style={{ aspectRatio: '1920 / 772' }}>
+              {/* SVG ray burst fills the wrapper */}
+              <img
+                src={heroBg}
+                alt=""
+                aria-hidden="true"
+                fetchPriority="high"
+                className="absolute inset-0 w-full h-full"
+              />
+              {/* Product image – centered on ray burst */}
+              <img
+                src={heroJars}
+                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                fetchPriority="high"
+                className="absolute w-[75%] h-auto pointer-events-none"
+                style={{
+                  top: '55%',
+                  left: '50%',
+                  animation: 'hero-float 3.4s ease-in-out infinite',
+                  willChange: 'transform',
+                }}
+              />
+            </div>
           </div>
+
+          {/* Full-width SVG background behind the grid */}
+          <img
+            src={heroBg}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-top -z-10"
+          />
         </div>
       </div>
     </section>
