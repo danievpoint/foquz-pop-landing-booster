@@ -45,6 +45,7 @@ const Index = () => {
         </Suspense>
       </div>
       <CookieBanner />
+      <NewsletterPopup />
     </>
   );
 };
