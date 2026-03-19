@@ -49,12 +49,13 @@ const HeroSection = () => {
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-3 sm:mb-5 md:mb-6 text-primary-foreground text-pop">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
-                  AB AUF
-                  <br />
-                  <span className="text-secondary text-3xl sm:text-4xl md:text-5xl">WOLKE 7.</span>
+                  AB AUF <span className="text-secondary">WOLKE 7.</span>
                 </h1>
+                <p className="text-sm sm:text-base md:text-lg text-primary-foreground/90 mb-3 sm:mb-5 md:mb-6 font-bold tracking-wide">
+                  Du entscheidest was Du riechst
+                </p>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                   <a href="#bundle" className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit">
                     SPAR-BUNDLE HOLEN
