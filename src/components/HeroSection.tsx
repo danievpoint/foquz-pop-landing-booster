@@ -88,15 +88,21 @@ const HeroSection = () => {
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
 
-          {/* Products – responsive safe area across desktop sizes */}
+          {/* Products – fluid safe area for large desktop screens */}
           <div
-            className="absolute z-20 flex items-center justify-center pointer-events-none top-[12%] left-[50%] bottom-[10%] w-[40%] xl:top-[14%] xl:left-[49%] xl:bottom-[12%] xl:w-[39%] 2xl:top-[16%] 2xl:left-[48%] 2xl:bottom-[14%] 2xl:w-[37%]"
+            className="absolute z-20 flex items-end justify-center pointer-events-none"
+            style={{
+              top: "clamp(6rem, 7vw, 9.5rem)",
+              left: "47%",
+              bottom: "clamp(0.75rem, 1.6vw, 1.75rem)",
+              width: "clamp(31rem, 40vw, 56rem)",
+            }}
           >
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
               fetchPriority="high"
-              className="w-full max-h-[90%] xl:max-h-[88%] 2xl:max-h-[84%] h-auto object-contain origin-center animate-[breathe_3s_ease-in-out_infinite]"
+              className="w-full max-h-full h-auto object-contain origin-bottom"
             />
           </div>
 
