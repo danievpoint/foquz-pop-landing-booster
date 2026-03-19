@@ -94,7 +94,7 @@ const HeroSection = () => {
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
             className="absolute z-20 animate-[breathe_3s_ease-in-out_infinite]"
-            style={{ top: '12%', left: '52%', width: '38%', height: 'auto' }}
+            style={{ top: '15%', left: '52%', width: '34%', height: 'auto' }}
           />
 
           {/* Text overlay – percentage-based positioning */}
