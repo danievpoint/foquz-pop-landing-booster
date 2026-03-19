@@ -34,7 +34,7 @@ const Index = () => {
           <BundleSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
-          <ReviewSection />
+          <CrewSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <NewsletterSection />
