@@ -102,12 +102,13 @@ const HeroSection = () => {
           <div className="absolute inset-0 z-10 w-full">
             <div className="w-full max-w-[1800px] mx-auto px-8" style={{ paddingTop: '8%' }}>
               <div className="w-[40%] xl:w-[36%]">
-                <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-6 text-primary-foreground text-pop">
+                <h1 className="text-[clamp(3rem,5vw,5rem)] leading-[0.95] mb-4 text-primary-foreground text-pop">
                   KURZ RIECHEN.<br />
-                  AB AUF
-                  <br />
-                  <span className="text-secondary text-[clamp(2.5rem,4vw,3.75rem)]">WOLKE 7.</span>
+                  AB AUF <span className="text-secondary">WOLKE 7.</span>
                 </h1>
+                <p className="text-[clamp(0.875rem,1.2vw,1.25rem)] text-primary-foreground/90 mb-6 font-bold tracking-wide">
+                  Du entscheidest was Du riechst
+                </p>
                 <div className="flex flex-row gap-[clamp(0.75rem,1.5vw,1.5rem)]">
                   <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1.1vw,1.125rem)] !py-[clamp(0.5rem,1vw,0.875rem)] !px-[clamp(1rem,2vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
                     SPAR-BUNDLE HOLEN
