@@ -27,7 +27,7 @@ const HeroSection = () => {
   const ready = useHeroReady();
 
   return (
-    <section className="relative overflow-hidden" style={{ marginTop: 0, paddingTop: 0 }}>
+    <section className="relative overflow-visible -mt-0 pt-0" style={{ marginTop: 0, paddingTop: 0 }}>
       {!ready && (
         <div className="w-full bg-background" style={{ minHeight: 'max(700px, 75vh)' }} />
       )}
@@ -78,41 +78,58 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div
-          className="hidden lg:block relative w-full overflow-hidden"
-          style={{
-            aspectRatio: '2.5 / 1',
-            maxWidth: '1920px',
-            marginInline: 'auto',
-            minHeight: '420px',
-            maxHeight: '768px',
-          }}
-        >
+        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '2.5 / 1' }}>
           <style>{`
-            @keyframes hero-float {
-              0%, 100% { transform: translateY(8px); }
-              50%      { transform: translateY(-8px); }
+            @keyframes hero-breathe-soft {
+              0%, 100% {
+                transform: translate3d(0, 0.9rem, 0) scale(0.982) rotate(-1deg);
+              }
+              50% {
+                transform: translate3d(0, 0.35rem, 0) scale(1.02) rotate(1deg);
+              }
             }
           `}</style>
 
-          {/* SVG background – absolute, fills container */}
+          {/* SVG background fills container */}
           <img
             src={heroBg}
             alt=""
             aria-hidden="true"
             fetchPriority="high"
-            className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none select-none"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
 
-          {/* Two-column flex layout inside the aspect-ratio box */}
-          <div className="absolute inset-0 z-10 flex">
-            {/* LEFT — text + buttons (normal flow, not absolute) */}
-            <div className="flex flex-col justify-center w-[45%] pl-[6%] pr-[2%]" style={{ paddingTop: 'clamp(7rem, 9%, 11rem)' }}>
-              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[1.5vw] text-primary-foreground text-pop whitespace-nowrap">
+          {/* Products – fluid safe area for large desktop screens */}
+          <div
+            className="absolute z-20 flex items-end justify-center pointer-events-none"
+            style={{
+              top: "clamp(6.75rem, 7.5vw, 10rem)",
+              left: "42%",
+              bottom: "clamp(0.25rem, 0.6vw, 0.6rem)",
+              width: "clamp(40rem, 52vw, 72rem)",
+            }}
+          >
+            <div
+              className="flex h-full w-full items-end justify-center origin-bottom motion-reduce:transform-none"
+              style={{ animation: "hero-breathe-soft 3.4s ease-in-out infinite", transformOrigin: "center bottom", willChange: "transform" }}
+            >
+              <img
+                src={heroJars}
+                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                fetchPriority="high"
+                className="w-full max-h-[97%] h-auto object-contain origin-bottom"
+              />
+            </div>
+          </div>
+
+          {/* Text overlay – protected safe area below navbar */}
+          <div className="absolute inset-0 z-10 flex items-start">
+            <div className="pl-[6%] pt-[clamp(8.5rem,10vw,11.5rem)]">
+              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
-                <span className="block mt-[0.3em] text-secondary">AB AUF WOLKE 7.</span>
+                <span className="block text-secondary">AB AUF WOLKE 7.</span>
               </h1>
-              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap mt-[0.8vw]">
+              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
                 DU ENTSCHEIDEST WAS DU RIECHST
               </p>
               <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
@@ -123,25 +140,6 @@ const HeroSection = () => {
                   EINZELN KAUFEN
                 </a>
               </div>
-            </div>
-
-            {/* RIGHT — product image positioning context */}
-            <div className="relative w-[55%]">
-              <img
-                src={heroJars}
-                alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                fetchPriority="high"
-                className="absolute pointer-events-none select-none object-contain"
-                style={{
-                  top: '12%',
-                  right: '5%',
-                  width: '85%',
-                  maxWidth: '56rem',
-                  maxHeight: '88%',
-                  animation: 'hero-float 3.4s ease-in-out infinite',
-                  willChange: 'transform',
-                }}
-              />
             </div>
           </div>
         </div>
