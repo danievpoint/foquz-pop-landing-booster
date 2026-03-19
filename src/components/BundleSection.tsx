@@ -53,7 +53,7 @@ const BundleSection = () => {
                   src={foquzBox}
                   alt="FOQUZ Starter Bundle Box"
                   loading="lazy"
-                  className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-105 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
+                  className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-110 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
                 />
               </Link>
           </motion.div>
