@@ -122,9 +122,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Text overlay – vertically centered in container */}
-          <div className="absolute inset-0 z-10 flex items-center">
-            <div className="pl-[6%]">
+          {/* Text overlay – equal spacing from side and top */}
+          <div className="absolute inset-0 z-10 flex items-start">
+            <div className="pl-[6%] pt-[6%]">
               <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.3] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
                 <span className="block text-secondary">AB AUF WOLKE 7.</span>
