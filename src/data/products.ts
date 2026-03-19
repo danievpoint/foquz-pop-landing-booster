@@ -50,7 +50,7 @@ export const products: Product[] = [
 ];
 
 export const bundleProduct: Product = {
-  name: "Starter Bundle",
+  name: "FOQUZ Power Bundle",
   handle: "starter-bundle",
   price: "14,99€",
   originalPrice: "23,97€",

@@ -60,10 +60,10 @@ const BundleBanner = () => {
               <X className="w-6 h-6" />
             </button>
             <Link to="/produkt/starter-bundle" onClick={() => setDismissed(true)}>
-              <img src={foquzBox} alt="Starter Bundle" className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
+              <img src={foquzBox} alt="FOQUZ Power Bundle" className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
             </Link>
             <h3 className="text-white font-extrabold text-xl md:text-2xl leading-tight">
-              STARTER BUNDLE – Alle 3 Sorten!
+              FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
               Spar 15% und teste alle Geschmacksrichtungen in einer Box.
@@ -74,7 +74,7 @@ const BundleBanner = () => {
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "Starter Bundle (3 Sorten)", price: 14.99, image: foquzBox });
+                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 14.99, image: foquzBox });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
@@ -116,7 +116,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
         onClick={() =>
           addToCart(1, {
             id: p.isBundle ? "starter-bundle" : p.name,
-            name: p.isBundle ? "Starter Bundle (3 Sorten)" : p.name,
+            name: p.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : p.name,
             price: p.numericPrice,
             image: p.image,
           })
@@ -202,7 +202,7 @@ const ProductDetail = () => {
               onClick={() =>
                 addToCart(1, {
                   id: product.isBundle ? "starter-bundle" : product.name,
-                  name: product.isBundle ? "Starter Bundle (3 Sorten)" : product.name,
+                  name: product.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : product.name,
                   price: product.numericPrice,
                   image: product.image,
                 })

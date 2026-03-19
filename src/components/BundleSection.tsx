@@ -51,7 +51,7 @@ const BundleSection = () => {
               <Link to="/produkt/starter-bundle">
                 <img
                   src={foquzBox}
-                  alt="FOQUZ Starter Bundle Box"
+                  alt="FOQUZ Power Bundle Box"
                   loading="lazy"
                   className="w-full lg:w-full max-w-md lg:max-w-2xl mx-auto hover:scale-110 transition-transform duration-300 drop-shadow-2xl md:scale-110 lg:scale-125"
                 />
@@ -92,7 +92,7 @@ const BundleSection = () => {
             <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
               <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
-              <StockBadge variant="light" available={isAvailable("Starter Bundle") ?? true} />
+              <StockBadge variant="light" available={isAvailable("FOQUZ Power Bundle") ?? true} />
             </div>
 
             {/* CTA */}
@@ -100,7 +100,7 @@ const BundleSection = () => {
               onClick={() =>
                 addToCart(1, {
                   id: "starter-bundle",
-                  name: "Starter Bundle (3 Sorten)",
+                  name: "FOQUZ Power Bundle (3 Sorten)",
                   price: 14.99,
                   image: foquzBox,
                 })
