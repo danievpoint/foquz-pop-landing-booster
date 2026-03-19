@@ -13,12 +13,12 @@ const MarqueeBanner = () => {
   const repeated = [...items, ...items];
 
   return (
-    <section className="bg-secondary py-3 md:py-4 overflow-hidden border-y-2 border-foreground">
+    <section className="fixed top-0 left-0 right-0 z-[10000] bg-secondary py-1.5 md:py-2 overflow-hidden border-b-2 border-foreground">
       <div className="marquee-track flex whitespace-nowrap gap-8 md:gap-12">
         {repeated.map((text, i) => (
           <span
             key={i}
-            className="text-sm md:text-base font-extrabold text-secondary-foreground tracking-wider flex items-center gap-3"
+            className="text-xs md:text-sm font-extrabold text-secondary-foreground tracking-wider flex items-center gap-3"
           >
             {text}
             <span className="text-primary">★</span>
