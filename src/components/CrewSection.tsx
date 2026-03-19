@@ -2,11 +2,14 @@ import crewBg from "@/assets/crew-bg.svg";
 
 const CrewSection = () => {
   return (
-    <section className="w-full overflow-hidden" style={{ maxHeight: "clamp(350px, 40vw, 700px)" }}>
+    <section
+      className="w-full overflow-hidden -mt-px -mb-px"
+      style={{ height: "clamp(320px, 34vw, 540px)" }}
+    >
       <img
         src={crewBg}
         alt="FOQUZ Crew"
-        className="w-full h-auto block object-cover object-bottom"
+        className="w-full h-full object-cover object-bottom block"
         loading="lazy"
       />
     </section>
