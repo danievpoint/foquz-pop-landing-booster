@@ -88,14 +88,18 @@ const HeroSection = () => {
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
 
-          {/* Products – percentage-based, scales with container */}
-          <img
-            src={heroJars}
-            alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-            fetchPriority="high"
-            className="absolute z-20 animate-[breathe_3s_ease-in-out_infinite]"
-            style={{ top: '8%', left: '52%', width: '32%', maxHeight: '85%', objectFit: 'contain' }}
-          />
+          {/* Products – anchored inside a safe area so animation never clips */}
+          <div
+            className="absolute z-20 flex items-center justify-center pointer-events-none"
+            style={{ top: '10%', right: '6%', bottom: '8%', width: '36%' }}
+          >
+            <img
+              src={heroJars}
+              alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+              fetchPriority="high"
+              className="w-[92%] max-w-full max-h-full h-auto object-contain origin-center animate-[breathe_3s_ease-in-out_infinite]"
+            />
+          </div>
 
           {/* Text overlay – vertically centered in container */}
           <div className="absolute inset-0 z-10 flex items-center">
