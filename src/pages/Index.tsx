@@ -34,10 +34,10 @@ const Index = () => {
           <BundleSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
-          <CrewSection />
+          <NewsletterSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
-          <NewsletterSection />
+          <CrewSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Footer />
