@@ -167,7 +167,7 @@ const HeroSection = () => {
 
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
-              <div className="h-full flex items-center" style={{ paddingBottom: "5%" }}>
+              <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
                   <h1 className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
