@@ -78,7 +78,7 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) === */}
-        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '16 / 7' }}>
+        <div className="hidden lg:block relative w-full overflow-hidden" style={{ aspectRatio: '2.5 / 1' }}>
           {/* SVG background fills container */}
           <img
             src={heroBg}
@@ -94,24 +94,24 @@ const HeroSection = () => {
             alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
             fetchPriority="high"
             className="absolute z-20 animate-[breathe_3s_ease-in-out_infinite]"
-            style={{ top: '15%', left: '52%', width: '34%', height: 'auto' }}
+            style={{ top: '8%', left: '52%', width: '32%', maxHeight: '85%', objectFit: 'contain' }}
           />
 
-          {/* Text overlay – percentage-based positioning */}
-          <div className="absolute inset-0 z-10">
-            <div className="absolute" style={{ top: '18%', left: '6%' }}>
-              <h1 className="text-[clamp(3rem,4.5vw,5rem)] leading-[0.95] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
+          {/* Text overlay – vertically centered in container */}
+          <div className="absolute inset-0 z-10 flex items-center">
+            <div className="pl-[6%]">
+              <h1 className="text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[0.95] mb-[0.8vw] text-primary-foreground text-pop whitespace-nowrap">
                 <span className="block">KURZ RIECHEN.</span>
                 <span className="block text-secondary">AB AUF WOLKE 7.</span>
               </h1>
-              <p className="text-[clamp(1rem,1.6vw,1.5rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
+              <p className="text-[clamp(0.9rem,1.4vw,1.4rem)] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-[1.2vw] whitespace-nowrap">
                 DU ENTSCHEIDEST WAS DU RIECHST
               </p>
               <div className="flex flex-row gap-[clamp(0.75rem,1.2vw,1.5rem)]">
-                <a href="#bundle" className="comic-btn !text-[clamp(0.75rem,1vw,1.125rem)] !py-[clamp(0.5rem,0.8vw,0.875rem)] !px-[clamp(1rem,1.8vw,2rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
+                <a href="#bundle" className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
                   SPAR-BUNDLE HOLEN
                 </a>
-                <a href="#sorten" className="comic-btn !text-[clamp(0.75rem,1vw,1.125rem)] !py-[clamp(0.5rem,0.8vw,0.875rem)] !px-[clamp(1rem,1.8vw,2rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
+                <a href="#sorten" className="comic-btn !text-[clamp(0.7rem,0.9vw,1rem)] !py-[clamp(0.4rem,0.7vw,0.75rem)] !px-[clamp(0.8rem,1.5vw,1.75rem)] font-black bg-card text-foreground w-fit whitespace-nowrap">
                   EINZELN KAUFEN
                 </a>
               </div>
