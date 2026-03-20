@@ -14,7 +14,7 @@ const CrewSection = () => {
         loading="lazy"
       />
       <style>{`
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
           .md\\:object-position-center { object-position: center 72% !important; }
         }
       `}</style>
