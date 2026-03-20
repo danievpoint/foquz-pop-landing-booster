@@ -60,7 +60,7 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed top-[24px] md:top-[28px] left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground ${scrolled ? "shadow-md" : ""}`}
+      className={`fixed top-[24px] md:top-[28px] left-0 right-0 z-[9999] transition-all duration-300 ${scrolled ? "shadow-md" : "border-b-[3px] border-foreground"}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 overflow-hidden">
