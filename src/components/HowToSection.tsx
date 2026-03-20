@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
+import howtoIcon01 from "@/assets/howto-icon-01.svg";
+import howtoIcon02 from "@/assets/howto-icon-02.svg";
+import howtoIcon03 from "@/assets/howto-icon-03.svg";
 
 const steps = [
-  { num: "1", title: "DOSE AUF" },
-  { num: "2", title: "NASE DRAUF" },
-  { num: "3", title: "DURCHATMEN" },
+  { num: "1", title: "DOSE AUF", icon: howtoIcon01 },
+  { num: "2", title: "NASE DRAUF", icon: howtoIcon02 },
+  { num: "3", title: "DURCHATMEN", icon: howtoIcon03 },
 ];
 
 const HowToSection = () => {
