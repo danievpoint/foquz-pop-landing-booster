@@ -48,7 +48,7 @@ const HowToSection = () => {
             <div className="space-y-4 howto-steps">
               {steps.map((s) => (
                 <div key={s.num} className="flex items-center gap-3">
-                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-16 h-16 md:w-20 md:h-20 shrink-0" />
+                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-24 h-24 md:w-28 md:h-28 shrink-0" />
                   <p className="text-base howto-step">
                     <span className="font-extrabold">{s.num}. {s.title}</span>
                   </p>
