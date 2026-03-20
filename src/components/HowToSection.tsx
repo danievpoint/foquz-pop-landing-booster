@@ -42,14 +42,14 @@ const HowToSection = () => {
             initial={{ opacity: 0, x: -40, rotate: -2 }}
             whileInView={{ opacity: 1, x: 0, rotate: -2 }}
             viewport={{ once: true }}
-            className="bg-card comic-card p-6 md:p-10 max-w-[340px] md:max-w-[520px] transform -rotate-2 howto-card"
+            className="bg-card comic-card p-6 md:p-10 w-full max-w-[90vw] md:max-w-[520px] transform -rotate-2 howto-card"
           >
             <h2 className="text-3xl md:text-4xl mb-6 howto-title">How to Foquz</h2>
             <div className="space-y-4 howto-steps">
               {steps.map((s) => (
-                <div key={s.num} className="flex items-center gap-3">
-                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-24 h-24 md:w-28 md:h-28 shrink-0" />
-                  <p className="text-base howto-step">
+                <div key={s.num} className="flex items-center gap-4">
+                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-20 h-20 md:w-28 md:h-28 shrink-0" />
+                  <p className="text-lg md:text-xl howto-step whitespace-nowrap">
                     <span className="font-extrabold">{s.num}. {s.title}</span>
                   </p>
                 </div>
