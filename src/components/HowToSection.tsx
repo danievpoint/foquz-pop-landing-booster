@@ -13,7 +13,7 @@ const steps = [
 
 const HowToSection = () => {
   return (
-    <section id="howto" className="relative overflow-hidden scroll-mt-20">
+    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px">
       {/* Full-width lifestyle image */}
       <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: 'inline-size' }}>
         <style>{`
