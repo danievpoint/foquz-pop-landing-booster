@@ -9,10 +9,15 @@ const CrewSection = () => {
       <img
         src={crewBg}
         alt="FOQUZ Crew"
-        className="w-full h-full object-cover block"
-        style={{ objectPosition: "center 72%" }}
+        className="w-full h-full object-cover block md:object-position-center"
+        style={{ objectPosition: "right 72%" }}
         loading="lazy"
       />
+      <style>{`
+        @media (min-width: 768px) {
+          .md\\:object-position-center { object-position: center 72% !important; }
+        }
+      `}</style>
     </section>
   );
 };
