@@ -10,7 +10,7 @@ const CrewSection = () => {
         src={crewBg}
         alt="FOQUZ Crew"
         className="w-full h-full object-cover block md:object-position-center"
-        style={{ objectPosition: "50% 72%" }}
+        style={{ objectPosition: "60% 72%" }}
         loading="lazy"
       />
       <style>{`
