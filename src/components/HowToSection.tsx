@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
+import howtoIcon01 from "@/assets/howto-icon-01.svg";
+import howtoIcon02 from "@/assets/howto-icon-02.svg";
+import howtoIcon03 from "@/assets/howto-icon-03.svg";
 
 const steps = [
-  { num: "1", title: "DOSE AUF" },
-  { num: "2", title: "NASE DRAUF" },
-  { num: "3", title: "DURCHATMEN" },
+  { num: "1", title: "DOSE AUF", icon: howtoIcon01 },
+  { num: "2", title: "NASE DRAUF", icon: howtoIcon02 },
+  { num: "3", title: "DURCHATMEN", icon: howtoIcon03 },
 ];
 
 const HowToSection = () => {
@@ -44,9 +47,12 @@ const HowToSection = () => {
             <h2 className="text-3xl md:text-4xl mb-6 howto-title">How to Foquz</h2>
             <div className="space-y-4 howto-steps">
               {steps.map((s) => (
-                <p key={s.num} className="text-base howto-step">
-                  <span className="font-extrabold">{s.num}. {s.title}</span>
-                </p>
+                <div key={s.num} className="flex items-center gap-3">
+                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-10 h-10 md:w-12 md:h-12 shrink-0" />
+                  <p className="text-base howto-step">
+                    <span className="font-extrabold">{s.num}. {s.title}</span>
+                  </p>
+                </div>
               ))}
             </div>
           </motion.div>
