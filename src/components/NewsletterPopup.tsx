@@ -44,11 +44,12 @@ const NewsletterPopup = () => {
       }).catch(() => {});
 
       if (dbError?.code === "23505") {
-        toast({ title: "Du bist bereits dabei! 💪", description: "Diese E-Mail ist schon angemeldet." });
-        dismiss();
+        setSuccess(true);
+        setAlreadySubscribed(true);
       } else {
         activateNewsletterDiscount();
         setSuccess(true);
+        setAlreadySubscribed(false);
         sessionStorage.setItem(STORAGE_KEY, "1");
       }
       setEmail("");
