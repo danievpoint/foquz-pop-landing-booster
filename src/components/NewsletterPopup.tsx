@@ -121,10 +121,13 @@ const NewsletterPopup = () => {
                 <>
                   <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-2">
-                    10% RABATT AKTIVIERT! 🎉
+                    {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-                    Dein Rabatt wird automatisch im Warenkorb angewendet. Viel Spaß beim Shoppen!
+                    {alreadySubscribed
+                      ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
+                      : "Dein Rabatt wird automatisch im Warenkorb angewendet. Viel Spaß beim Shoppen!"
+                    }
                   </p>
                   <button
                     onClick={dismiss}
