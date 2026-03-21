@@ -37,9 +37,10 @@ const NewsletterSection = () => {
       }
 
       if (dbError?.code === "23505") {
-        toast({ title: "Du bist bereits dabei! 💪", description: "Diese E-Mail ist schon angemeldet." });
+        setAlreadySubscribed(true);
+        setShowPopup(true);
       } else {
-        // Activate discount and show popup
+        setAlreadySubscribed(false);
         activateNewsletterDiscount();
         setShowPopup(true);
       }
