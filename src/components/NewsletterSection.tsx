@@ -11,6 +11,7 @@ const NewsletterSection = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const { activateNewsletterDiscount } = useCart();
 
   const handleSubmit = async (e: React.FormEvent) => {
