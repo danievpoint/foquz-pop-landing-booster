@@ -126,10 +126,13 @@ const NewsletterSection = () => {
                 </div>
 
                 <h3 className="text-2xl font-extrabold mb-2">
-                  10% RABATT AKTIVIERT! 🎉
+                  {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
                 </h3>
                 <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-                  Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!
+                  {alreadySubscribed
+                    ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
+                    : <>Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!</>
+                  }
                 </p>
 
                 <button
