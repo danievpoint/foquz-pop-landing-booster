@@ -14,6 +14,7 @@ const NewsletterPopup = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const { activateNewsletterDiscount } = useCart();
 
   useEffect(() => {
