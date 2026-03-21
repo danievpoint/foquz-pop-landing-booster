@@ -14,6 +14,7 @@ const NewsletterPopup = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const { activateNewsletterDiscount } = useCart();
 
   useEffect(() => {
@@ -44,11 +45,12 @@ const NewsletterPopup = () => {
       }).catch(() => {});
 
       if (dbError?.code === "23505") {
-        toast({ title: "Du bist bereits dabei! 💪", description: "Diese E-Mail ist schon angemeldet." });
-        dismiss();
+        setSuccess(true);
+        setAlreadySubscribed(true);
       } else {
         activateNewsletterDiscount();
         setSuccess(true);
+        setAlreadySubscribed(false);
         sessionStorage.setItem(STORAGE_KEY, "1");
       }
       setEmail("");
@@ -119,10 +121,13 @@ const NewsletterPopup = () => {
                 <>
                   <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-2">
-                    10% RABATT AKTIVIERT! 🎉
+                    {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-                    Dein Rabatt wird automatisch im Warenkorb angewendet. Viel Spaß beim Shoppen!
+                    {alreadySubscribed
+                      ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
+                      : "Dein Rabatt wird automatisch im Warenkorb angewendet. Viel Spaß beim Shoppen!"
+                    }
                   </p>
                   <button
                     onClick={dismiss}
