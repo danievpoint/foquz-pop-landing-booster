@@ -14,14 +14,14 @@ const steps = [
 const HowToSection = () => {
   return (
     <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px">
-      {/* Full-width lifestyle image */}
-      <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: 'inline-size' }}>
+      <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: "inline-size" }}>
         <style>{`
           @container (min-width: 1024px) {
             .howto-title { font-size: clamp(1.75rem, 2.8cqw, 2.75rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
             .howto-step { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
             .howto-steps { gap: clamp(0.5rem, 0.8cqw, 0.875rem); }
-            .howto-card { padding: clamp(1rem, 1.5cqw, 1.5rem) clamp(1.25rem, 2cqw, 2rem); max-width: clamp(12rem, 18cqw, 18rem); }
+            .howto-card { padding: clamp(1.5rem, 2.5cqw, 2.5rem) clamp(1.5rem, 2.5cqw, 2.5rem); max-width: clamp(20rem, 30cqw, 32rem); }
+            .howto-icon { width: clamp(4rem, 5.5cqw, 5.5rem); height: clamp(4rem, 5.5cqw, 5.5rem); }
             .howto-content { padding-top: clamp(3rem, 5cqw, 5rem); }
           }
         `}</style>
@@ -33,10 +33,8 @@ const HowToSection = () => {
           playsInline
           preload="none"
           className="w-full h-full object-cover absolute inset-0"
-          style={{ contentVisibility: 'auto' }}
+          style={{ contentVisibility: "auto" }}
         />
-
-        {/* Overlapping white text box */}
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
           <motion.div
             initial={{ opacity: 0, x: -40, rotate: -2 }}
@@ -48,9 +46,15 @@ const HowToSection = () => {
             <div className="space-y-4 howto-steps">
               {steps.map((s) => (
                 <div key={s.num} className="flex items-center gap-4">
-                  <img src={s.icon} alt={`Schritt ${s.num}`} className="w-20 h-20 md:w-28 md:h-28 shrink-0" />
+                  <img
+                    src={s.icon}
+                    alt={`Schritt ${s.num}`}
+                    className="w-20 h-20 md:w-28 md:h-28 shrink-0 howto-icon"
+                  />
                   <p className="text-lg md:text-xl howto-step whitespace-nowrap">
-                    <span className="font-extrabold">{s.num}. {s.title}</span>
+                    <span className="font-extrabold">
+                      {s.num}. {s.title}
+                    </span>
                   </p>
                 </div>
               ))}
@@ -58,9 +62,7 @@ const HowToSection = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* Mint colored section below */}
-      <div className="bg-foquz-thai section-padding" style={{ containerType: 'inline-size' }}>
+      <div className="bg-foquz-thai section-padding" style={{ containerType: "inline-size" }}>
         <style>{`
           @container (min-width: 1024px) {
             .howto-banner { font-size: clamp(1.25rem, 2cqw, 2rem); }
