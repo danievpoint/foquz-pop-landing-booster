@@ -55,7 +55,7 @@ const WhyFoquzSection = () => {
               <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8 why-points">
                 {points.map((p) => (
                   <div key={p.title} className="flex items-center gap-4">
-                    <img src={p.icon} alt={p.title} className="w-12 h-12 md:w-16 md:h-16 shrink-0" />
+                    <img src={p.icon} alt={p.title} className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 shrink-0" />
                     <div>
                       <h3 className="text-lg md:text-2xl font-extrabold text-foreground mb-0.5 why-point-title">
                         {p.title}
