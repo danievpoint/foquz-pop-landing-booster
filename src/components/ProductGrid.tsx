@@ -306,15 +306,30 @@ const ProductGrid = () => {
                   className="flex flex-col items-center w-full">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
-                      {products[activeIndex].handle === "thai-style" ? (
+                  {products[activeIndex].handle === "thai-style" ? (
                         <video
                           src="/videos/video_product_mint.mp4"
                           muted
-                          loop
                           playsInline
                           preload="auto"
                           className="w-full aspect-square object-cover"
-                          onTouchStart={(e) => e.currentTarget.play()}
+                          ref={(el) => {
+                            if (!el) return;
+                            // Auto-play via IntersectionObserver
+                            const observer = new IntersectionObserver(
+                              ([entry]) => {
+                                if (entry.isIntersecting) {
+                                  el.play();
+                                } else {
+                                  el.pause();
+                                }
+                              },
+                              { threshold: 0.5 }
+                            );
+                            observer.observe(el);
+                            // When video ends, go to next slide
+                            el.onended = () => goNext();
+                          }}
                         />
                       ) : (
                         <img
