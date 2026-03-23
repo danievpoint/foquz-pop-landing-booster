@@ -233,17 +233,14 @@ const ProductGrid = () => {
                   viewport={{ once: true }}
                   className="flex flex-col group">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
-                      <img src={p.image} alt={p.name} className={`w-full aspect-square object-cover hover:scale-105 transition-transform duration-300 ${hasVideo ? "group-hover:opacity-0" : ""}`} />
-                      {hasVideo && (
+                      {hasVideo ? (
                         <video
                           src="/videos/video_product_mint.mp4"
                           muted
                           loop
                           playsInline
-                          preload="metadata"
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          onMouseEnter={(e) => e.currentTarget.play()}
-                          onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                          preload="auto"
+                          className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
                             const parent = el.closest('.group');
@@ -252,6 +249,8 @@ const ProductGrid = () => {
                             parent.addEventListener('mouseleave', () => { el.pause(); el.currentTime = 0; });
                           }}
                         />
+                      ) : (
+                        <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                       )}
                     </Link>
                     <div className="pg-card-body">
