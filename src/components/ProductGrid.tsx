@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -221,39 +221,61 @@ const ProductGrid = () => {
               Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
             <div className="pg-grid grid grid-cols-3 mx-auto">
-              {products.map((p, i) =>
-              <motion.div
-                key={p.name}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="flex flex-col">
-                  <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block">
-                      <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
-                  </Link>
-                  <div className="pg-card-body">
-                    <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity">
-                      {p.name}
+              {products.map((p, i) => {
+                const hasVideo = p.handle === "thai-style";
+                return (
+                <motion.div
+                  key={p.name}
+                  custom={i}
+                  variants={cardVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="flex flex-col group">
+                    <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
+                      <img src={p.image} alt={p.name} className={`w-full aspect-square object-cover hover:scale-105 transition-transform duration-300 ${hasVideo ? "group-hover:opacity-0" : ""}`} />
+                      {hasVideo && (
+                        <video
+                          src="/videos/video_product_mint.mp4"
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          onMouseEnter={(e) => e.currentTarget.play()}
+                          onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                          ref={(el) => {
+                            if (!el) return;
+                            const parent = el.closest('.group');
+                            if (!parent) return;
+                            parent.addEventListener('mouseenter', () => el.play());
+                            parent.addEventListener('mouseleave', () => { el.pause(); el.currentTime = 0; });
+                          }}
+                        />
+                      )}
                     </Link>
-                    <p className="pg-card-desc text-muted-foreground whitespace-pre-line">{p.desc}</p>
-                    <div className="pg-card-gap flex items-center">
-                      <span className="pg-card-price font-black">{p.price}</span>
-                      <StockBadge available={isAvailable(p.name)} />
+                    <div className="pg-card-body">
+                      <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity">
+                        {p.name}
+                      </Link>
+                      <p className="pg-card-desc text-muted-foreground whitespace-pre-line">{p.desc}</p>
+                      <div className="pg-card-gap flex items-center">
+                        <span className="pg-card-price font-black">{p.price}</span>
+                        <StockBadge available={isAvailable(p.name)} />
+                      </div>
+                      <span className="pg-card-tax text-muted-foreground block">inkl. MwSt.</span>
+                      <div className="pg-card-actions flex items-center">
+                        <button
+                          onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
+                          className="comic-btn bg-card text-foreground pg-card-btn">
+                          FOKUS SICHERN
+                        </button>
+                        <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
+                      </div>
                     </div>
-                    <span className="pg-card-tax text-muted-foreground block">inkl. MwSt.</span>
-                    <div className="pg-card-actions flex items-center">
-                      <button
-                        onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                        className="comic-btn bg-card text-foreground pg-card-btn">
-                        FOKUS SICHERN
-                      </button>
-                      <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
