@@ -306,11 +306,22 @@ const ProductGrid = () => {
                   className="flex flex-col items-center w-full">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
+                      {products[activeIndex].handle === "thai-style" ? (
+                        <video
+                          src="/videos/video_product_mint.mp4"
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                          preload="auto"
+                          className="w-full aspect-square object-cover"
+                        />
+                      ) : (
                         <img
-                      src={products[activeIndex].image}
-                      alt={products[activeIndex].name}
-                      className="w-full aspect-square object-cover" />
-                    
+                          src={products[activeIndex].image}
+                          alt={products[activeIndex].name}
+                          className="w-full aspect-square object-cover" />
+                      )}
                     </Link>
                   <div className="py-1 text-center flex flex-col items-center">
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
