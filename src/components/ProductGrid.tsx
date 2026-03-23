@@ -328,7 +328,7 @@ const ProductGrid = () => {
                             );
                             observer.observe(el);
                             // When video ends, go to next slide
-                            el.onended = () => goNext();
+                            el.onended = () => setTimeout(() => goNext(), 500);
                           }}
                         />
                       ) : (
