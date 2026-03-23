@@ -239,6 +239,9 @@ const ProductGrid = () => {
                           muted
                           loop
                           playsInline
+                          disablePictureInPicture
+                          controlsList="nodownload nofullscreen noremoteplayback"
+                          onContextMenu={(e) => e.preventDefault()}
                           preload="auto"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
@@ -311,6 +314,9 @@ const ProductGrid = () => {
                           src="/videos/video_product_mint.mp4"
                           muted
                           playsInline
+                          disablePictureInPicture
+                          controlsList="nodownload nofullscreen noremoteplayback"
+                          onContextMenu={(e) => e.preventDefault()}
                           preload="auto"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
