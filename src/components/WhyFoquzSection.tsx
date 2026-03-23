@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import whyfoquzBg from "@/assets/whyfoquz-bg.png";
+import iconYourFocus from "@/assets/icon-your-focus.svg";
+import iconYourCloud from "@/assets/icon-your-cloud.svg";
+import iconYourNose from "@/assets/icon-your-nose.svg";
+import iconStayFresh from "@/assets/icon-stay-fresh.svg";
 
 const points = [
-  { title: "YOUR FOCUS:", text: "Einfach kurz durchatmen." },
-  { title: "YOUR CLOUD:", text: "Du entscheidest was du riechst." },
-  { title: "YOUR NOSE:", text: "Nasenspray war gestern." },
-  { title: "STAY FRESH:", text: "Energie die nicht lügt." },
+  { title: "YOUR FOCUS:", text: "Einfach kurz durchatmen.", icon: iconYourFocus },
+  { title: "YOUR CLOUD:", text: "Du entscheidest was du riechst.", icon: iconYourCloud },
+  { title: "YOUR NOSE:", text: "Nasenspray war gestern.", icon: iconYourNose },
+  { title: "STAY FRESH:", text: "Energie die nicht lügt.", icon: iconStayFresh },
 ];
 
 const SpeechBubble = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
