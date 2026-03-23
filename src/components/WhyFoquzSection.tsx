@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import whyfoquzBg from "@/assets/whyfoquz-bg.png";
+import iconYourFocus from "@/assets/icon-your-focus.svg";
+import iconYourCloud from "@/assets/icon-your-cloud.svg";
+import iconYourNose from "@/assets/icon-your-nose.svg";
+import iconStayFresh from "@/assets/icon-stay-fresh.svg";
 
 const points = [
-  { title: "YOUR FOCUS:", text: "Einfach kurz durchatmen." },
-  { title: "YOUR CLOUD:", text: "Du entscheidest was du riechst." },
-  { title: "YOUR NOSE:", text: "Nasenspray war gestern." },
-  { title: "STAY FRESH:", text: "Energie die nicht lügt." },
+  { title: "YOUR FOCUS:", text: "Einfach kurz durchatmen.", icon: iconYourFocus },
+  { title: "YOUR CLOUD:", text: "Du entscheidest was du riechst.", icon: iconYourCloud },
+  { title: "YOUR NOSE:", text: "Nasenspray war gestern.", icon: iconYourNose },
+  { title: "STAY FRESH:", text: "Energie die nicht lügt.", icon: iconStayFresh },
 ];
 
 const SpeechBubble = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -50,13 +54,16 @@ const WhyFoquzSection = () => {
 
               <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8 why-points">
                 {points.map((p) => (
-                  <div key={p.title}>
-                    <h3 className="text-lg md:text-2xl font-extrabold text-foreground mb-0.5 why-point-title">
-                      {p.title}
-                    </h3>
-                    <p className="text-foreground/80 text-sm md:text-base font-medium leading-relaxed why-point-text">
-                      {p.text}
-                    </p>
+                  <div key={p.title} className="flex items-center gap-4">
+                    <img src={p.icon} alt={p.title} className="w-12 h-12 md:w-16 md:h-16 shrink-0" />
+                    <div>
+                      <h3 className="text-lg md:text-2xl font-extrabold text-foreground mb-0.5 why-point-title">
+                        {p.title}
+                      </h3>
+                      <p className="text-foreground/80 text-sm md:text-base font-medium leading-relaxed why-point-text">
+                        {p.text}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
