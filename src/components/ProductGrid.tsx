@@ -312,9 +312,10 @@ const ProductGrid = () => {
                           muted
                           loop
                           playsInline
-                          autoPlay
                           preload="auto"
                           className="w-full aspect-square object-cover"
+                          onTouchStart={(e) => e.currentTarget.play()}
+                          onTouchEnd={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
                         />
                       ) : (
                         <img
