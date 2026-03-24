@@ -62,7 +62,7 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-screen w-full overflow-x-hidden flex flex-col items-start bg-[#c9e8fb] p-0 m-0">
+      <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-[#c9e8fb] p-0 m-0">
 
         {/* SVG Illustration */}
         <div className="w-full p-0 m-0">
@@ -75,14 +75,15 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Signup Card */}
+        <div className="flex-1 flex items-center justify-center md:items-start md:justify-center w-full -mt-8 md:-mt-12 lg:-mt-16">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative z-20 w-full px-4 md:px-0 md:max-w-lg lg:max-w-xl mx-auto -mt-8 md:-mt-12 lg:-mt-16 pb-8 md:pb-12"
+          className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto pb-8 md:pb-12"
         >
           <div
-            className="relative bg-white rounded-3xl p-6 md:p-8 lg:p-10 text-center"
+            className="relative bg-white rounded-3xl p-6 md:p-10 lg:p-12 text-center"
             style={{ border: "3.5px solid #1d1d1b", boxShadow: "6px 6px 0 #1d1d1b" }}
           >
 
@@ -98,7 +99,7 @@ const ComingSoonPage = () => {
 
             {/* Coming Soon Badge */}
             <div
-              className="inline-block text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-4"
+              className="inline-block text-xs md:text-sm lg:text-base font-black tracking-[0.2em] uppercase px-4 md:px-6 lg:px-8 py-1.5 lg:py-2 rounded-full mb-4"
               style={{
                 background: "#ffd618",
                 border: "2px solid #1d1d1b",
@@ -110,7 +111,7 @@ const ComingSoonPage = () => {
 
             {/* Headline */}
             <h1
-              className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-3"
+              className="text-2xl md:text-4xl lg:text-5xl font-black leading-tight mb-3"
               style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em", color: "#1d1d1b" }}
             >
               SOMETHING{" "}
@@ -119,7 +120,7 @@ const ComingSoonPage = () => {
             </h1>
 
             {/* Subline */}
-            <p className="text-sm md:text-base lg:text-lg leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
+            <p className="text-sm md:text-lg lg:text-xl leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
               Wir arbeiten an etwas Neuem. Werde Teil der{" "}
               <span className="font-bold" style={{ color: "#1d1d1b" }}>FOQUZ Cloud</span> und sei
               als Erste*r dabei, wenn's losgeht —{" "}
@@ -134,7 +135,7 @@ const ComingSoonPage = () => {
                 placeholder="Deine E-Mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 md:h-14 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
+                className="h-12 md:h-14 lg:h-16 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
                 style={{
                   background: "white",
                   border: "2.5px solid #1d1d1b",
@@ -145,7 +146,7 @@ const ComingSoonPage = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-12 md:h-14 font-black text-base rounded-full px-6 whitespace-nowrap transition-all"
+                className="h-12 md:h-14 lg:h-16 font-black text-base lg:text-xl rounded-full px-6 lg:px-10 whitespace-nowrap transition-all"
                 style={{
                   background: "#f07e26",
                   color: "white",
@@ -196,6 +197,7 @@ const ComingSoonPage = () => {
 
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* Success Popup */}
