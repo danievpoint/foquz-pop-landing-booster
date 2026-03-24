@@ -186,6 +186,7 @@ const ComingSoonPage = () => {
 
             </div>
           </motion.div>
+        </div>
       </div>
 
       {/* Success Popup */}
