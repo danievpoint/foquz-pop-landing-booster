@@ -111,7 +111,7 @@ const ComingSoonPage = () => {
 
             {/* Headline */}
             <h1
-              className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-3"
+              className="text-2xl md:text-4xl lg:text-5xl font-black leading-tight mb-3"
               style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em", color: "#1d1d1b" }}
             >
               SOMETHING{" "}
