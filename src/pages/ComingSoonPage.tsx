@@ -176,13 +176,13 @@ const ComingSoonPage = () => {
             </p>
 
             {/* Deko-Sterne */}
-            <div className="absolute -top-4 -right-6 w-8 h-8" style={{ animation: "spin 6s linear infinite" }}>
+            <div className="absolute -top-2 -right-2 md:-top-4 md:-right-6 w-6 h-6 md:w-8 md:h-8" style={{ animation: "spin 6s linear infinite" }}>
               <StarSVG />
             </div>
-            <div className="absolute -bottom-3 -left-5 w-6 h-6" style={{ animation: "spin 8s linear infinite reverse" }}>
+            <div className="absolute -bottom-1 -left-2 md:-bottom-3 md:-left-5 w-5 h-5 md:w-6 md:h-6" style={{ animation: "spin 8s linear infinite reverse" }}>
               <StarSVG />
             </div>
-            <div className="absolute -top-5 -left-4 w-5 h-5" style={{ animation: "spin 10s linear infinite" }}>
+            <div className="absolute -top-3 -left-1 md:-top-5 md:-left-4 w-4 h-4 md:w-5 md:h-5" style={{ animation: "spin 10s linear infinite" }}>
               <StarSVG />
             </div>
 
