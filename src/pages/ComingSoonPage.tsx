@@ -7,6 +7,12 @@ import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
 
+const StarSVG = () => (
+  <svg viewBox="0 0 24 24" fill="#ffd618" stroke="#1d1d1b" strokeWidth="1.5">
+    <polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9" />
+  </svg>
+);
+
 const ComingSoonPage = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,44 +60,66 @@ const ComingSoonPage = () => {
 
   return (
     <>
-      <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center" style={{ background: "#f07e26" }}>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-        {/* Background radial glow */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(255,214,24,0.35) 0%, transparent 70%)" }} />
+      <div className="relative min-h-screen w-full overflow-hidden flex flex-col items-center" style={{ background: "#c9e8fb" }}>
 
-        {/* SVG Illustration */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/coming_soon.svg" alt="" className="w-full h-full object-cover" />
+        {/* SVG Illustration — oben abgeschnitten */}
+        <div className="w-full overflow-hidden" style={{ marginTop: "-12vh" }}>
+          <img src="/coming_soon.svg" alt="" className="w-full h-auto object-cover" />
         </div>
 
-        {/* Signup Card */}
+        {/* Signup Card — überlappt SVG */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative z-10 w-[92vw] max-w-md mx-auto"
+          style={{ marginTop: "-8vh" }}
         >
-          <div className="relative bg-[#ffd618] border-[3px] border-foreground rounded-3xl shadow-[6px_6px_0_#1d1d1b] px-6 py-10 md:px-10 md:py-12 text-center">
+          <div
+            className="relative bg-white rounded-3xl px-6 py-10 md:px-10 md:py-12 text-center"
+            style={{ border: "3.5px solid #1d1d1b", boxShadow: "6px 6px 0 #1d1d1b" }}
+          >
 
             {/* Halftone dots decoration */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 opacity-20 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, #1d1d1b 1.5px, transparent 1.5px)", backgroundSize: "8px 8px" }} />
+            <div
+              className="absolute -top-6 -right-6 w-32 h-32 pointer-events-none"
+              style={{
+                backgroundImage: "radial-gradient(circle, #ffd618 2px, transparent 2px)",
+                backgroundSize: "10px 10px",
+                opacity: 0.18,
+              }}
+            />
 
             {/* Coming Soon Badge */}
-            <div className="inline-block bg-foreground text-[#ffd618] text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-4 shadow-[2px_2px_0_#f07e26]">
+            <div
+              className="inline-block text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-4"
+              style={{
+                background: "#ffd618",
+                border: "2px solid #1d1d1b",
+                color: "#1d1d1b",
+              }}
+            >
               COMING SOON
             </div>
 
             {/* Headline */}
-            <h1 className="text-3xl md:text-4xl font-black text-foreground leading-tight mb-3" style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em" }}>
-              SOMETHING BIG IS COMING
+            <h1
+              className="text-3xl md:text-4xl font-black leading-tight mb-3"
+              style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em", color: "#1d1d1b" }}
+            >
+              SOMETHING{" "}
+              <span style={{ color: "#f07e26" }}>BIG</span>{" "}
+              IS COMING
             </h1>
 
             {/* Subline */}
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-6">
+            <p className="text-sm md:text-base leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
               Wir arbeiten an etwas Neuem. Werde Teil der{" "}
-              <span className="font-bold text-foreground">FOQUZ Cloud</span> und sei
+              <span className="font-bold" style={{ color: "#1d1d1b" }}>FOQUZ Cloud</span> und sei
               als Erste*r dabei, wenn's losgeht —{" "}
-              <span className="font-bold text-foreground">sichere dir 10% Rabatt</span>{" "}
+              <span className="font-bold" style={{ color: "#1d1d1b" }}>sichere dir 10% Rabatt</span>{" "}
               auf deine erste Order.
             </p>
 
@@ -102,17 +130,65 @@ const ComingSoonPage = () => {
                 placeholder="Deine E-Mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 bg-white text-foreground border-[2.5px] border-foreground rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
+                className="h-12 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
+                style={{
+                  background: "white",
+                  border: "2.5px solid #1d1d1b",
+                  color: "#1d1d1b",
+                }}
                 required
               />
-              <Button type="submit" disabled={loading} className="h-12 bg-foreground text-[#ffd618] font-black text-base rounded-full px-6 border-[2.5px] border-foreground shadow-[3px_3px_0_#f07e26] hover:translate-y-[2px] hover:shadow-[1px_1px_0_#f07e26] transition-all whitespace-nowrap">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="h-12 font-black text-base rounded-full px-6 whitespace-nowrap transition-all"
+                style={{
+                  background: "#f07e26",
+                  color: "white",
+                  border: "2.5px solid #1d1d1b",
+                  boxShadow: "3px 3px 0 #1d1d1b",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget;
+                  el.style.background = "#d96a1a";
+                  el.style.boxShadow = "5px 5px 0 #1d1d1b";
+                  el.style.transform = "translate(-1px, -1px)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.background = "#f07e26";
+                  el.style.boxShadow = "3px 3px 0 #1d1d1b";
+                  el.style.transform = "translate(0, 0)";
+                }}
+                onMouseDown={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translate(2px, 2px)";
+                  el.style.boxShadow = "1px 1px 0 #1d1d1b";
+                }}
+                onMouseUp={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translate(-1px, -1px)";
+                  el.style.boxShadow = "5px 5px 0 #1d1d1b";
+                }}
+              >
                 {loading ? "..." : "JOIN THE CLOUD"}
               </Button>
             </form>
 
-            <p className="text-xs text-foreground/50 mt-4">
+            <p className="text-xs mt-4" style={{ color: "rgba(29,29,27,0.4)" }}>
               Kein Spam · Jederzeit kündbar
             </p>
+
+            {/* Deko-Sterne */}
+            <div className="absolute -top-4 -right-6 w-8 h-8" style={{ animation: "spin 6s linear infinite" }}>
+              <StarSVG />
+            </div>
+            <div className="absolute -bottom-3 -left-5 w-6 h-6" style={{ animation: "spin 8s linear infinite reverse" }}>
+              <StarSVG />
+            </div>
+            <div className="absolute -top-5 -left-4 w-5 h-5" style={{ animation: "spin 10s linear infinite" }}>
+              <StarSVG />
+            </div>
 
           </div>
         </motion.div>
