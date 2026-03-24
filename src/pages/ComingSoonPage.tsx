@@ -87,15 +87,6 @@ const ComingSoonPage = () => {
             style={{ border: "3.5px solid #1d1d1b", boxShadow: "6px 6px 0 #1d1d1b" }}
           >
 
-            {/* Halftone dots decoration */}
-            <div
-              className="absolute -top-6 -right-6 w-32 h-32 pointer-events-none"
-              style={{
-                backgroundImage: "radial-gradient(circle, #ffd618 2px, transparent 2px)",
-                backgroundSize: "10px 10px",
-                opacity: 0.18,
-              }}
-            />
 
             {/* Coming Soon Badge */}
             <div
