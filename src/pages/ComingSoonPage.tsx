@@ -75,7 +75,7 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Signup Card */}
-        <div className="flex-1 flex items-center justify-center md:items-start md:justify-center w-full -mt-8 md:-mt-12 lg:-mt-16">
+        <div className="flex-1 flex items-center justify-center w-full -mt-8 md:-mt-12 lg:-mt-16">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
