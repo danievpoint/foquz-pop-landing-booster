@@ -65,7 +65,7 @@ const ComingSoonPage = () => {
       <div className="h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
 
         {/* SVG Illustration — takes ~45% of viewport, crops sides on mobile to show logo bigger */}
-        <div className="relative w-full shrink-0 h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[48vh] overflow-hidden">
+        <div className="relative w-full shrink-0 h-[35vh] sm:h-[38vh] md:h-[42vh] lg:h-[45vh] overflow-hidden">
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
@@ -73,8 +73,8 @@ const ComingSoonPage = () => {
           />
         </div>
 
-        {/* Signup Card — fills remaining viewport space */}
-        <div className="flex-1 flex items-start justify-center px-4 sm:px-6 -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16">
+        {/* Signup Card — centers in remaining space */}
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
