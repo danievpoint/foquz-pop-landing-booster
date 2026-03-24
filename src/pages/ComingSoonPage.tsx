@@ -69,7 +69,7 @@ const ComingSoonPage = () => {
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
-            className="w-full h-auto block -mb-[12%] sm:-mb-[10%] md:-mb-[8%]"
+            className="w-full h-auto block -mb-[18%] sm:-mb-[16%] md:-mb-[14%] lg:-mb-[12%]"
           />
         </div>
 
