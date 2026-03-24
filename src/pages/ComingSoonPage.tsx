@@ -62,131 +62,132 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-[#c9e8fb] p-0 m-0">
+      <div className="h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
 
-        {/* SVG Illustration */}
-        <div className="w-full p-0 m-0">
+        {/* SVG Illustration — takes ~45% of viewport, crops sides on mobile to show logo bigger */}
+        <div className="relative w-full shrink-0 h-[28vh] sm:h-[32vh] md:h-[38vh] lg:h-[42vh] overflow-hidden">
           <img
             src="/coming_soon.svg"
-            alt=""
-            className="w-full h-auto block"
-            style={{ objectFit: "contain" }}
+            alt="FOQUZ Coming Soon"
+            className="absolute w-full h-auto left-0 bottom-0"
+            style={{ minWidth: '600px', left: '50%', transform: 'translateX(-50%)' }}
           />
         </div>
 
-        {/* Signup Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto -mt-8 md:-mt-12 lg:-mt-16 pb-8 md:pb-12"
-        >
-          <div
-            className="relative bg-white rounded-3xl p-6 md:p-10 lg:p-14 text-center"
-            style={{ border: "3.5px solid #1d1d1b", boxShadow: "6px 6px 0 #1d1d1b" }}
+        {/* Signup Card — centers in remaining space */}
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 -mt-8 sm:-mt-10 md:-mt-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative z-20 w-full md:max-w-xl lg:max-w-2xl"
           >
-
-
-            {/* Coming Soon Badge */}
             <div
-              className="inline-block text-xs md:text-sm lg:text-base font-black tracking-[0.2em] uppercase px-4 md:px-6 lg:px-8 py-1.5 lg:py-2 rounded-full mb-4"
-              style={{
-                background: "#ffd618",
-                border: "2px solid #1d1d1b",
-                color: "#1d1d1b",
-              }}
+              className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-center"
+              style={{ border: "3px solid #1d1d1b", boxShadow: "5px 5px 0 #1d1d1b" }}
             >
-              COMING SOON
-            </div>
 
-            {/* Headline */}
-            <h1
-              className="text-2xl md:text-4xl lg:text-5xl font-black leading-tight mb-3"
-              style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em", color: "#1d1d1b" }}
-            >
-              SOMETHING{" "}
-              <span style={{ color: "#f07e26" }}>BIG</span>{" "}
-              IS COMING
-            </h1>
-
-            {/* Subline */}
-            <p className="text-sm md:text-lg lg:text-xl leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
-              Wir arbeiten an etwas Neuem. Werde Teil der{" "}
-              <span className="font-bold" style={{ color: "#1d1d1b" }}>FOQUZ Cloud</span> und sei
-              als Erste*r dabei, wenn's losgeht —{" "}
-              <span className="font-bold" style={{ color: "#1d1d1b" }}>sichere dir 10% Rabatt</span>{" "}
-              auf deine erste Order.
-            </p>
-
-            {/* Newsletter Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-              <Input
-                type="email"
-                placeholder="Deine E-Mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12 md:h-14 lg:h-16 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
+              {/* Coming Soon Badge */}
+              <div
+                className="inline-block text-[10px] sm:text-xs md:text-sm font-black tracking-[0.18em] uppercase px-3 sm:px-4 md:px-5 py-1 sm:py-1.5 rounded-full mb-3 md:mb-4"
                 style={{
-                  background: "white",
-                  border: "2.5px solid #1d1d1b",
+                  background: "#ffd618",
+                  border: "2px solid #1d1d1b",
                   color: "#1d1d1b",
                 }}
-                required
-              />
-              <Button
-                type="submit"
-                disabled={loading}
-                className="h-12 md:h-14 lg:h-16 font-black text-base lg:text-xl rounded-full px-6 lg:px-10 whitespace-nowrap transition-all"
-                style={{
-                  background: "#f07e26",
-                  color: "white",
-                  border: "2.5px solid #1d1d1b",
-                  boxShadow: "3px 3px 0 #1d1d1b",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.background = "#d96a1a";
-                  el.style.boxShadow = "5px 5px 0 #1d1d1b";
-                  el.style.transform = "translate(-1px, -1px)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.background = "#f07e26";
-                  el.style.boxShadow = "3px 3px 0 #1d1d1b";
-                  el.style.transform = "translate(0, 0)";
-                }}
-                onMouseDown={(e) => {
-                  const el = e.currentTarget;
-                  el.style.transform = "translate(2px, 2px)";
-                  el.style.boxShadow = "1px 1px 0 #1d1d1b";
-                }}
-                onMouseUp={(e) => {
-                  const el = e.currentTarget;
-                  el.style.transform = "translate(-1px, -1px)";
-                  el.style.boxShadow = "5px 5px 0 #1d1d1b";
-                }}
               >
-                {loading ? "..." : "JOIN THE CLOUD"}
-              </Button>
-            </form>
+                COMING SOON
+              </div>
 
-            <p className="text-xs mt-4" style={{ color: "rgba(29,29,27,0.4)" }}>
-              Kein Spam · Jederzeit kündbar
-            </p>
+              {/* Headline */}
+              <h1
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-2 md:mb-3"
+                style={{ fontFamily: "'Bangers', cursive", letterSpacing: "0.04em", color: "#1d1d1b" }}
+              >
+                SOMETHING{" "}
+                <span style={{ color: "#f07e26" }}>BIG</span>{" "}
+                IS COMING
+              </h1>
 
-            {/* Deko-Sterne */}
-            <div className="absolute -top-4 -right-6 w-8 h-8" style={{ animation: "spin 6s linear infinite" }}>
-              <StarSVG />
-            </div>
-            <div className="absolute -bottom-3 -left-5 w-6 h-6" style={{ animation: "spin 8s linear infinite reverse" }}>
-              <StarSVG />
-            </div>
-            <div className="absolute -top-5 -left-4 w-5 h-5" style={{ animation: "spin 10s linear infinite" }}>
-              <StarSVG />
-            </div>
+              {/* Subline */}
+              <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed mb-4 md:mb-6 max-w-md mx-auto" style={{ color: "rgba(29,29,27,0.7)" }}>
+                Wir arbeiten an etwas Neuem. Werde Teil der{" "}
+                <span className="font-bold" style={{ color: "#1d1d1b" }}>FOQUZ Cloud</span> und sei
+                als Erste*r dabei —{" "}
+                <span className="font-bold" style={{ color: "#1d1d1b" }}>sichere dir 10% Rabatt</span>{" "}
+                auf deine erste Order.
+              </p>
 
-          </div>
-        </motion.div>
+              {/* Newsletter Form */}
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-lg mx-auto">
+                <Input
+                  type="email"
+                  placeholder="Deine E-Mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-11 sm:h-12 md:h-13 lg:h-14 rounded-full px-4 sm:px-5 text-sm sm:text-base focus:shadow-[3px_3px_0_#1d1d1b] flex-1"
+                  style={{
+                    background: "white",
+                    border: "2.5px solid #1d1d1b",
+                    color: "#1d1d1b",
+                  }}
+                  required
+                />
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="h-11 sm:h-12 md:h-13 lg:h-14 font-black text-sm sm:text-base rounded-full px-5 sm:px-6 lg:px-8 whitespace-nowrap transition-all"
+                  style={{
+                    background: "#f07e26",
+                    color: "white",
+                    border: "2.5px solid #1d1d1b",
+                    boxShadow: "3px 3px 0 #1d1d1b",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.background = "#d96a1a";
+                    el.style.boxShadow = "5px 5px 0 #1d1d1b";
+                    el.style.transform = "translate(-1px, -1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.background = "#f07e26";
+                    el.style.boxShadow = "3px 3px 0 #1d1d1b";
+                    el.style.transform = "translate(0, 0)";
+                  }}
+                  onMouseDown={(e) => {
+                    const el = e.currentTarget;
+                    el.style.transform = "translate(2px, 2px)";
+                    el.style.boxShadow = "1px 1px 0 #1d1d1b";
+                  }}
+                  onMouseUp={(e) => {
+                    const el = e.currentTarget;
+                    el.style.transform = "translate(-1px, -1px)";
+                    el.style.boxShadow = "5px 5px 0 #1d1d1b";
+                  }}
+                >
+                  {loading ? "..." : "JOIN THE CLOUD"}
+                </Button>
+              </form>
+
+              <p className="text-[10px] sm:text-xs mt-3 md:mt-4" style={{ color: "rgba(29,29,27,0.35)" }}>
+                Kein Spam · Jederzeit kündbar
+              </p>
+
+              {/* Deko-Sterne */}
+              <div className="absolute -top-3 -right-4 sm:-top-4 sm:-right-6 w-6 h-6 sm:w-8 sm:h-8" style={{ animation: "spin 6s linear infinite" }}>
+                <StarSVG />
+              </div>
+              <div className="absolute -bottom-2 -left-3 sm:-bottom-3 sm:-left-5 w-5 h-5 sm:w-6 sm:h-6" style={{ animation: "spin 8s linear infinite reverse" }}>
+                <StarSVG />
+              </div>
+              <div className="absolute -top-3 -left-3 sm:-top-5 sm:-left-4 w-4 h-4 sm:w-5 sm:h-5" style={{ animation: "spin 10s linear infinite" }}>
+                <StarSVG />
+              </div>
+
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Success Popup */}
