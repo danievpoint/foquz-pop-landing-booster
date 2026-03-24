@@ -83,7 +83,7 @@ const ComingSoonPage = () => {
           className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto pb-8 md:pb-12"
         >
           <div
-            className="relative bg-white rounded-3xl p-6 md:p-8 lg:p-10 text-center"
+            className="relative bg-white rounded-3xl p-6 md:p-10 lg:p-12 text-center"
             style={{ border: "3.5px solid #1d1d1b", boxShadow: "6px 6px 0 #1d1d1b" }}
           >
 
