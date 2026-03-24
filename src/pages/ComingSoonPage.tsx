@@ -75,12 +75,11 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Signup Card */}
-        <div className="flex-1 flex items-center justify-center w-full -mt-8 md:-mt-12 lg:-mt-16">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto pb-8 md:pb-12"
+          className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto -mt-8 md:-mt-12 lg:-mt-16 pb-8 md:pb-12"
         >
           <div
             className="relative bg-white rounded-3xl p-6 md:p-10 lg:p-14 text-center"
