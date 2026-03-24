@@ -42,7 +42,7 @@ const BundleSection = () => {
         <div className="grid md:grid-cols-2 gap-4 lg:gap-12 items-center bundle-grid">
           {/* Left: Bundle visual */}
           <motion.div
-            className="relative flex items-center justify-center overflow-hidden"
+            className="relative flex items-center justify-center"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -53,7 +53,7 @@ const BundleSection = () => {
                   src={foquzBox}
                   alt="FOQUZ Power Bundle Box"
                   loading="lazy"
-                  className="w-full max-w-[95vw] md:max-w-[75vw] lg:max-w-full mx-auto scale-125 md:scale-130 lg:scale-100 hover:scale-[1.3] md:hover:scale-[1.35] lg:hover:scale-105 transition-transform duration-300 drop-shadow-2xl"
+                  className="w-full max-w-[95vw] md:max-w-[75vw] lg:max-w-4xl mx-auto scale-125 md:scale-130 lg:scale-150 hover:scale-[1.3] md:hover:scale-[1.35] lg:hover:scale-[1.55] transition-transform duration-300 drop-shadow-2xl"
                 />
               </Link>
           </motion.div>
