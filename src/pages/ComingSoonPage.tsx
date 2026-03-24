@@ -62,24 +62,25 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
+      <div className="h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
 
-        {/* SVG Illustration — crop empty blue bottom via negative margin */}
-        <div className="w-full shrink-0">
+        {/* SVG Illustration — crops bottom blue space */}
+        <div className="w-full shrink-0 overflow-hidden">
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
-            className="w-full h-auto block -mb-[18%] sm:-mb-[16%] md:-mb-[14%] lg:-mb-[12%]"
+            className="w-full h-auto block -mb-[15%]"
           />
         </div>
 
-        {/* Signup Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto pb-6 md:pb-10"
-        >
+        {/* Signup Card — fills remaining viewport space */}
+        <div className="flex-1 flex items-start justify-center px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative z-20 w-full md:max-w-xl lg:max-w-2xl"
+          >
             <div
               className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-center"
               style={{ border: "3px solid #1d1d1b", boxShadow: "5px 5px 0 #1d1d1b" }}
