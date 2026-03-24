@@ -24,8 +24,9 @@ import ComingSoonPage from "@/pages/ComingSoonPage";
 
 const queryClient = new QueryClient();
 
-// Coming Soon Modus — auf false setzen wenn der Store live gehen soll
-const COMING_SOON = true;
+// Coming Soon Modus — mit ?key=fq2026x in der URL umgehen
+const params = new URLSearchParams(window.location.search);
+const COMING_SOON = params.get("key") !== "fq2026x";
 
 const App = () => {
   if (COMING_SOON) {
