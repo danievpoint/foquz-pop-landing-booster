@@ -20,10 +20,29 @@ import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
 import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+// Coming Soon Modus — auf false setzen wenn der Store live gehen soll
+const COMING_SOON = true;
+
+const App = () => {
+  if (COMING_SOON) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <ComingSoonPage />
+          </TooltipProvider>
+        </CartProvider>
+      </QueryClientProvider>
+    );
+  }
+
+  return (
   <QueryClientProvider client={queryClient}>
     <CartProvider>
       <TooltipProvider>
@@ -54,6 +73,7 @@ const App = () => (
       </TooltipProvider>
     </CartProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
