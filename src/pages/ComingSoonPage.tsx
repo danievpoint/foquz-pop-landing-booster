@@ -62,7 +62,7 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-screen w-full overflow-x-hidden flex flex-col items-start bg-[#c9e8fb] p-0 m-0">
+      <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-[#c9e8fb] p-0 m-0">
 
         {/* SVG Illustration */}
         <div className="w-full p-0 m-0">
