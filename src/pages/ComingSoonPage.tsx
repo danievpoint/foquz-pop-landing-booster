@@ -135,7 +135,7 @@ const ComingSoonPage = () => {
                 placeholder="Deine E-Mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 md:h-14 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
+                className="h-12 md:h-14 lg:h-16 rounded-full px-5 text-base focus:shadow-[3px_3px_0_#1d1d1b]"
                 style={{
                   background: "white",
                   border: "2.5px solid #1d1d1b",
