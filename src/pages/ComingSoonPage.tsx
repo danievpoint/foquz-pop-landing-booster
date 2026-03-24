@@ -62,10 +62,10 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="relative min-h-screen w-full overflow-x-hidden flex flex-col items-center justify-center bg-[#c9e8fb]">
+      <div className="min-h-screen w-full overflow-x-hidden flex flex-col items-start bg-[#c9e8fb] p-0 m-0">
 
         {/* SVG Illustration */}
-        <div className="w-full shrink-0">
+        <div className="w-full p-0 m-0">
           <img
             src="/coming_soon.svg"
             alt=""
@@ -79,7 +79,7 @@ const ComingSoonPage = () => {
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative z-10 w-full px-4 md:px-0 md:max-w-lg lg:max-w-xl mx-auto -mt-6 md:-mt-10 lg:-mt-14 pb-12 md:pb-16"
+          className="relative z-20 w-full px-4 md:px-0 md:max-w-lg lg:max-w-xl mx-auto -mt-8 md:-mt-12 lg:-mt-16 pb-8 md:pb-12"
         >
           <div
             className="relative bg-white rounded-3xl p-6 md:p-8 lg:p-10 text-center"
