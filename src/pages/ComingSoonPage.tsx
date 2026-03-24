@@ -62,15 +62,14 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-[100dvh] w-full overflow-x-hidden flex flex-col items-center bg-[#c9e8fb]">
+      <div className="min-h-[100dvh] w-full overflow-hidden flex flex-col justify-center bg-[#c9e8fb]">
 
-        {/* SVG Illustration — crop bottom empty space */}
-        <div className="relative w-full shrink-0 overflow-hidden" style={{ maxHeight: '50vh' }}>
+        {/* SVG Illustration — crop empty blue bottom via negative margin */}
+        <div className="w-full shrink-0">
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
-            className="w-full h-auto block"
-            style={{ marginBottom: '-8%' }}
+            className="w-full h-auto block -mb-[12%] sm:-mb-[10%] md:-mb-[8%]"
           />
         </div>
 
