@@ -73,6 +73,7 @@ const App = () => {
       </TooltipProvider>
     </CartProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
