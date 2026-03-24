@@ -74,7 +74,7 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Signup Card — fills remaining viewport space */}
-        <div className="flex-1 flex items-start justify-center px-4 sm:px-6 -mt-4 sm:-mt-6 md:-mt-8">
+        <div className="flex-1 flex items-start justify-center px-4 sm:px-6 -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
