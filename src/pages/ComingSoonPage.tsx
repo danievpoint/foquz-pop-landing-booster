@@ -6,7 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
-import foquzLogo from "@/assets/foquz-coming-soon-logo.svg";
 
 const StarSVG = () => (
   <svg viewBox="0 0 24 24" fill="#ffd618" stroke="#1d1d1b" strokeWidth="1.5">
@@ -63,24 +62,24 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-screen w-full overflow-x-hidden flex flex-col items-center justify-center bg-[#c9e8fb] p-0 m-0 px-4">
+      <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-[#c9e8fb] p-0 m-0">
 
-        {/* FOQUZ Logo */}
-        <motion.img
-          src={foquzLogo}
-          alt="FOQUZ"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-40 md:w-52 lg:w-64 mb-6 md:mb-8 lg:mb-10"
-        />
+        {/* SVG Illustration */}
+        <div className="w-full p-0 m-0">
+          <img
+            src="/coming_soon.svg"
+            alt=""
+            className="w-full h-auto block"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
 
         {/* Signup Card */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
-          className="relative z-20 w-full md:max-w-2xl lg:max-w-3xl mx-auto pb-8 md:pb-12"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative z-20 w-full px-4 md:px-0 md:max-w-2xl lg:max-w-3xl mx-auto -mt-8 md:-mt-12 lg:-mt-16 pb-8 md:pb-12"
         >
           <div
             className="relative bg-white rounded-3xl p-6 md:p-10 lg:p-14 text-center"
