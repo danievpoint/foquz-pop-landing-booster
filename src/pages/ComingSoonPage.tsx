@@ -146,7 +146,7 @@ const ComingSoonPage = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-12 md:h-14 font-black text-base rounded-full px-6 whitespace-nowrap transition-all"
+                className="h-12 md:h-14 lg:h-16 font-black text-base lg:text-xl rounded-full px-6 lg:px-10 whitespace-nowrap transition-all"
                 style={{
                   background: "#f07e26",
                   color: "white",
