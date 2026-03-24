@@ -120,7 +120,7 @@ const ComingSoonPage = () => {
             </h1>
 
             {/* Subline */}
-            <p className="text-sm md:text-base lg:text-lg leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
+            <p className="text-sm md:text-lg lg:text-xl leading-relaxed mb-6" style={{ color: "rgba(29,29,27,0.75)" }}>
               Wir arbeiten an etwas Neuem. Werde Teil der{" "}
               <span className="font-bold" style={{ color: "#1d1d1b" }}>FOQUZ Cloud</span> und sei
               als Erste*r dabei, wenn's losgeht —{" "}
