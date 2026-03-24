@@ -65,11 +65,12 @@ const ComingSoonPage = () => {
       <div className="h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
 
         {/* SVG Illustration — takes ~45% of viewport, crops sides on mobile to show logo bigger */}
-        <div className="relative w-full shrink-0 h-[35vh] sm:h-[38vh] md:h-[42vh] lg:h-[45vh] overflow-hidden">
+        <div className="relative w-full shrink-0 h-[28vh] sm:h-[32vh] md:h-[38vh] lg:h-[42vh] overflow-hidden">
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
-            className="absolute inset-0 w-full h-full object-cover object-bottom"
+            className="absolute w-full h-auto left-0 bottom-0"
+            style={{ minWidth: '600px', left: '50%', transform: 'translateX(-50%)' }}
           />
         </div>
 
