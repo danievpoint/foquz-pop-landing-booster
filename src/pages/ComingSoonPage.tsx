@@ -62,14 +62,15 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-[100dvh] w-full overflow-x-hidden flex flex-col bg-[#c9e8fb]">
+      <div className="min-h-[100dvh] w-full overflow-x-hidden flex flex-col items-center bg-[#c9e8fb]">
 
-        {/* SVG Illustration */}
-        <div className="relative w-full shrink-0">
+        {/* SVG Illustration — crop bottom empty space */}
+        <div className="relative w-full shrink-0 overflow-hidden" style={{ maxHeight: '50vh' }}>
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
             className="w-full h-auto block"
+            style={{ marginBottom: '-8%' }}
           />
         </div>
 
@@ -78,7 +79,7 @@ const ComingSoonPage = () => {
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto -mt-6 pb-6 md:pb-10"
+          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto pb-6 md:pb-10"
         >
             <div
               className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-center"
