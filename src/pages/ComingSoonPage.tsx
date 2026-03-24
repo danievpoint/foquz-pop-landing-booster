@@ -75,7 +75,7 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Signup Card — centers in remaining space */}
-        <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 -mt-8 sm:-mt-10 md:-mt-12">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
