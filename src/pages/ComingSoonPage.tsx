@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
+import foquzLogo from "@/assets/foquz-coming-soon-logo.svg";
 
 const StarSVG = () => (
   <svg viewBox="0 0 24 24" fill="#ffd618" stroke="#1d1d1b" strokeWidth="1.5">
