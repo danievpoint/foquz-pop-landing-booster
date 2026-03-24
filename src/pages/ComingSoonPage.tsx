@@ -73,14 +73,13 @@ const ComingSoonPage = () => {
           />
         </div>
 
-        {/* Signup Card — sits right under SVG, overlapping the clouds */}
-        <div className="flex-1 flex items-start justify-center w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16"
-          >
+        {/* Signup Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 pb-6 md:pb-10"
+        >
             <div
               className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-center"
               style={{ border: "3px solid #1d1d1b", boxShadow: "5px 5px 0 #1d1d1b" }}
