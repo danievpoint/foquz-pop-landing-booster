@@ -62,7 +62,7 @@ const ComingSoonPage = () => {
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div className="min-h-[100dvh] w-full overflow-hidden flex flex-col justify-center bg-[#c9e8fb]">
+      <div className="min-h-[100dvh] w-full overflow-hidden flex flex-col bg-[#c9e8fb]">
 
         {/* SVG Illustration — crop empty blue bottom via negative margin */}
         <div className="w-full shrink-0">
