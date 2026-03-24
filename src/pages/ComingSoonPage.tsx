@@ -99,7 +99,7 @@ const ComingSoonPage = () => {
 
             {/* Coming Soon Badge */}
             <div
-              className="inline-block text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-4"
+              className="inline-block text-xs md:text-sm lg:text-base font-black tracking-[0.2em] uppercase px-4 md:px-6 lg:px-8 py-1.5 lg:py-2 rounded-full mb-4"
               style={{
                 background: "#ffd618",
                 border: "2px solid #1d1d1b",
