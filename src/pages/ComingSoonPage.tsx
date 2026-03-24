@@ -64,12 +64,12 @@ const ComingSoonPage = () => {
 
       <div className="min-h-[100dvh] w-full overflow-x-hidden flex flex-col bg-[#c9e8fb]">
 
-        {/* SVG Illustration — fixed proportion of viewport */}
-        <div className="relative w-full shrink-0" style={{ height: '45dvh', minHeight: '200px' }}>
+        {/* SVG Illustration */}
+        <div className="relative w-full shrink-0">
           <img
             src="/coming_soon.svg"
             alt="FOQUZ Coming Soon"
-            className="absolute inset-0 w-full h-full object-cover object-bottom"
+            className="w-full h-auto block"
           />
         </div>
 
@@ -78,7 +78,7 @@ const ComingSoonPage = () => {
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 pb-6 md:pb-10"
+          className="relative z-20 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:max-w-xl lg:max-w-2xl mx-auto -mt-6 pb-6 md:pb-10"
         >
             <div
               className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-center"
