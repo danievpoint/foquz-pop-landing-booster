@@ -97,13 +97,13 @@ const HeroSection = () => {
         </div>
 
         {/* === DESKTOP (lg+) ===
-          Spacer pushes hero below the fixed navbar+marquee (~107px).
+          Spacer pushes hero below the fixed navbar+marquee (~124px).
           The nav has its own bg-[hsl(var(--foquz-lightblue))] background
           which matches the hero, so the visual transition is seamless.
           Now the ENTIRE hero is visible → SVG coordinates work universally. */}
         <div className="hidden lg:block">
-          {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
-          <div style={{ height: "100px" }} aria-hidden="true" />
+          {/* Spacer: MarqueeBanner(52px) + Navbar(~72px) */}
+          <div style={{ height: "124px" }} aria-hidden="true" />
 
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
