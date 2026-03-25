@@ -15,6 +15,7 @@ interface CartContextType {
   total: number;
   discountedTotal: number;
   hasNewsletterDiscount: boolean;
+  discountCode: string | null;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -30,6 +31,7 @@ const CartContext = createContext<CartContextType>({
   total: 0,
   discountedTotal: 0,
   hasNewsletterDiscount: false,
+  discountCode: null,
   isOpen: false,
   openCart: () => {},
   closeCart: () => {},
