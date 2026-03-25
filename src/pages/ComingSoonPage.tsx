@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useCart } from "@/contexts/CartContext";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
 
@@ -18,7 +18,7 @@ const ComingSoonPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
-  const { activateNewsletterDiscount } = useCart();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +47,6 @@ const ComingSoonPage = () => {
         setShowPopup(true);
       } else {
         setAlreadySubscribed(false);
-        activateNewsletterDiscount();
         setShowPopup(true);
       }
       setEmail("");
@@ -219,13 +218,13 @@ const ComingSoonPage = () => {
                 </div>
 
                 <h3 className="text-xl font-black text-foreground mb-2">
-                  {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
+                  {alreadySubscribed ? "Du bist bereits dabei! 💪" : "WILLKOMMEN IN DER CLOUD! 🎉"}
                 </h3>
 
                 <p className="text-sm text-muted-foreground mb-6">
                   {alreadySubscribed
                     ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
-                    : <>Dein Newsletter-Rabatt von <span className="font-bold">10%</span> wird automatisch angewendet, sobald wir live gehen. Wir melden uns bei dir!</>
+                    : <>Du erhältst deinen <span className="font-bold">10% Rabattcode</span> per E-Mail, sobald wir live gehen. Check dein Postfach! 📬</>
                   }
                 </p>
 
