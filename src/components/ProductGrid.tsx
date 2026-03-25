@@ -249,7 +249,7 @@ const ProductGrid = () => {
                             if (!parent) return;
                             parent.addEventListener('mouseenter', () => el.play());
                             parent.addEventListener('mouseleave', () => { el.pause(); el.currentTime = 0; });
-                          }
+                          }}
                         />
                       ) : (
                         <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
