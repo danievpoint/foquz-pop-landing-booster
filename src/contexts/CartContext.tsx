@@ -15,6 +15,7 @@ interface CartContextType {
   total: number;
   discountedTotal: number;
   hasNewsletterDiscount: boolean;
+  discountCode: string | null;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -30,6 +31,7 @@ const CartContext = createContext<CartContextType>({
   total: 0,
   discountedTotal: 0,
   hasNewsletterDiscount: false,
+  discountCode: null,
   isOpen: false,
   openCart: () => {},
   closeCart: () => {},
@@ -73,6 +75,7 @@ const getConfettiInstance = () => {
 };
 
 const DISCOUNT_KEY = "foquz_newsletter_discount";
+const NEWSLETTER_DISCOUNT_CODE = "CLOUD10";
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -134,10 +137,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
   const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
+  const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
 
   return (
     <CartContext.Provider value={{
-      items, count, total, discountedTotal, hasNewsletterDiscount,
+      items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
     }}>
       {children}
