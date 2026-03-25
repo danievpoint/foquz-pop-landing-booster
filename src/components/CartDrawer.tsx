@@ -3,7 +3,7 @@ import { X, Minus, Plus, Trash2, ShoppingBag, Tag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const CartDrawer = () => {
-  const { items, count, total, discountedTotal, hasNewsletterDiscount, isOpen, closeCart, removeFromCart, updateQty } = useCart();
+  const { items, count, total, discountedTotal, hasNewsletterDiscount, discountCode, isOpen, closeCart, removeFromCart, updateQty } = useCart();
 
   const discountAmount = total - discountedTotal;
 
@@ -109,7 +109,7 @@ const CartDrawer = () => {
                   <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5">
                     <Tag size={18} className="text-green-600 shrink-0" />
                     <div className="flex-1">
-                      <span className="text-green-800 font-bold text-sm">Newsletter-Rabatt: 10%</span>
+                      <span className="text-green-800 font-bold text-sm">Newsletter-Rabatt: 10% (Code: {discountCode})</span>
                     </div>
                     <span className="text-green-700 font-black text-sm">-€{discountAmount.toFixed(2)}</span>
                   </div>
