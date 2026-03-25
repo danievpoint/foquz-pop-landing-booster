@@ -75,6 +75,7 @@ const getConfettiInstance = () => {
 };
 
 const DISCOUNT_KEY = "foquz_newsletter_discount";
+const NEWSLETTER_DISCOUNT_CODE = "CLOUD10";
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
