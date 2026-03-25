@@ -136,10 +136,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
   const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
+  const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
 
   return (
     <CartContext.Provider value={{
-      items, count, total, discountedTotal, hasNewsletterDiscount,
+      items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
     }}>
       {children}
