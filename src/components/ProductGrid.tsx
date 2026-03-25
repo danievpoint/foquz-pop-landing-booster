@@ -241,7 +241,7 @@ const ProductGrid = () => {
                           disablePictureInPicture
                           controlsList="nodownload nofullscreen noremoteplayback"
                           onContextMenu={(e) => e.preventDefault()}
-                          preload="auto"
+                          preload="none"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
@@ -316,7 +316,7 @@ const ProductGrid = () => {
                           disablePictureInPicture
                           controlsList="nodownload nofullscreen noremoteplayback"
                           onContextMenu={(e) => e.preventDefault()}
-                          preload="auto"
+                          preload="none"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;

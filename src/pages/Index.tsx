@@ -21,7 +21,12 @@ const Index = () => {
 
   return (
     <>
-      <div className={`min-h-screen transition-opacity duration-300 ${heroReady ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`min-h-screen transition-opacity duration-500 ${heroReady ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          {!heroReady && (
+            <div className="fixed inset-0 z-[99999] bg-background flex items-center justify-center">
+              <div className="w-10 h-10 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+            </div>
+          )}
         <MarqueeBanner />
         <Navbar />
         <HeroSection />
