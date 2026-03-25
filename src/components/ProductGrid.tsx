@@ -222,7 +222,6 @@ const ProductGrid = () => {
             </p>
             <div className="pg-grid grid grid-cols-3 mx-auto">
               {products.map((p, i) => {
-                const hasVideo = p.handle === "thai-style";
                 return (
                 <motion.div
                   key={p.name}
@@ -233,9 +232,9 @@ const ProductGrid = () => {
                   viewport={{ once: true }}
                   className="flex flex-col group">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
-                      {hasVideo ? (
+                      {p.video ? (
                         <video
-                          src="/videos/video_product_mint.mp4"
+                          src={p.video}
                           muted
                           loop
                           playsInline
@@ -309,9 +308,9 @@ const ProductGrid = () => {
                   className="flex flex-col items-center w-full">
                   
                     <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
-                  {products[activeIndex].handle === "thai-style" ? (
+                  {products[activeIndex].video ? (
                         <video
-                          src="/videos/video_product_mint.mp4"
+                          src={products[activeIndex].video}
                           muted
                           playsInline
                           disablePictureInPicture
@@ -321,7 +320,6 @@ const ProductGrid = () => {
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
-                            // Auto-play via IntersectionObserver
                             const observer = new IntersectionObserver(
                               ([entry]) => {
                                 if (entry.isIntersecting) {
@@ -333,7 +331,6 @@ const ProductGrid = () => {
                               { threshold: 0.5 }
                             );
                             observer.observe(el);
-                            // When video ends, go to next slide
                             el.onended = () => setTimeout(() => goNext(), 500);
                           }}
                         />
