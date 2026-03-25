@@ -174,12 +174,27 @@ const ProductDetail = () => {
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
           {/* Image — sticky on desktop */}
           <div className="rounded-2xl overflow-hidden w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
-            <img
-              src={product.image}
-              alt={product.name}
-              fetchPriority="high"
-              className="w-full aspect-square object-cover"
-            />
+            {product.video ? (
+              <video
+                src={product.video}
+                muted
+                loop
+                autoPlay
+                playsInline
+                disablePictureInPicture
+                controlsList="nodownload nofullscreen noremoteplayback"
+                onContextMenu={(e) => e.preventDefault()}
+                preload="auto"
+                className="w-full aspect-square object-cover"
+              />
+            ) : (
+              <img
+                src={product.image}
+                alt={product.name}
+                fetchPriority="high"
+                className="w-full aspect-square object-cover"
+              />
+            )}
           </div>
 
           {/* Info + Entdecke auch on desktop */}
