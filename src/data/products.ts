@@ -11,6 +11,7 @@ export interface Product {
   originalPrice?: string;
   desc: string;
   image: string;
+  video?: string;
   color: string;
   ingredients: string[];
   isBundle?: boolean;
@@ -24,6 +25,7 @@ export const products: Product[] = [
     numericPrice: 7.99,
     desc: "Auch Mario wollte nur Peach.\nFruchtige Frische, einfach durchgespielt.",
     image: productWatermelon,
+    video: "/videos/video_product_peach.mp4",
     color: "#e88a3a",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Pfirsicharoma"],
   },
@@ -34,6 +36,7 @@ export const products: Product[] = [
     numericPrice: 7.99,
     desc: "Thailand für die Tasche.\nAbheben ohne Flugticket.",
     image: productThai,
+    video: "/videos/video_product_mint.mp4",
     color: "#85c8b5",
     ingredients: ["Menthol", "Borneol", "Kampferaroma"],
   },
@@ -44,6 +47,7 @@ export const products: Product[] = [
     numericPrice: 7.99,
     desc: "Nimm's Easy, bleib Breezy.\nHol dir einen Tag unter Zitronenbäumen.",
     image: productLemon,
+    video: "/videos/video_product_lemon.mp4",
     color: "#ffd618",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
   },
