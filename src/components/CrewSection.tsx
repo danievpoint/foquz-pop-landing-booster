@@ -4,7 +4,7 @@ const CrewSection = () => {
   return (
     <section className="w-full overflow-hidden -mt-px -mb-px">
       {/* Desktop: narrower by clipping top/bottom, still full width */}
-      <div className="hidden md:flex w-full max-h-[280px] lg:max-h-[340px] xl:max-h-[400px] overflow-hidden items-end">
+      <div className="hidden md:flex w-full max-h-[380px] lg:max-h-[440px] xl:max-h-[520px] overflow-hidden items-start">
         <img src={crewBg} alt="FOQUZ Crew" className="w-full h-auto" loading="lazy" />
       </div>
       {/* Mobile: unchanged */}
