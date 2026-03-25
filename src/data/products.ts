@@ -11,6 +11,7 @@ export interface Product {
   originalPrice?: string;
   desc: string;
   image: string;
+  video?: string;
   color: string;
   ingredients: string[];
   isBundle?: boolean;
