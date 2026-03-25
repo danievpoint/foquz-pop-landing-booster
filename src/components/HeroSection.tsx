@@ -102,8 +102,8 @@ const HeroSection = () => {
           which matches the hero, so the visual transition is seamless.
           Now the ENTIRE hero is visible → SVG coordinates work universally. */}
         <div className="hidden lg:block">
-          {/* Spacer: MarqueeBanner(52px) + Navbar(~72px) */}
-          <div style={{ height: "124px" }} aria-hidden="true" />
+          {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
+          <div style={{ height: "100px" }} aria-hidden="true" />
 
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
