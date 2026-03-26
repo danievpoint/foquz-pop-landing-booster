@@ -31,7 +31,7 @@ const HowToSection = () => {
           loop
           muted
           playsInline
-          preload="none"
+          preload="metadata"
           className="w-full h-full object-cover absolute inset-0"
           style={{ contentVisibility: "auto" }}
         />

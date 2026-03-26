@@ -177,6 +177,7 @@ const ProductDetail = () => {
             {product.video ? (
               <video
                 src={product.video}
+                poster={product.image}
                 muted
                 loop
                 autoPlay
