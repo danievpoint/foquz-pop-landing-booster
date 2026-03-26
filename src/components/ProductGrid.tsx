@@ -235,13 +235,14 @@ const ProductGrid = () => {
                       {p.video ? (
                         <video
                           src={p.video}
+                          poster={p.image}
                           muted
                           loop
                           playsInline
                           disablePictureInPicture
                           controlsList="nodownload nofullscreen noremoteplayback"
                           onContextMenu={(e) => e.preventDefault()}
-                          preload="none"
+                          preload="metadata"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
@@ -311,12 +312,13 @@ const ProductGrid = () => {
                   {products[activeIndex].video ? (
                         <video
                           src={products[activeIndex].video}
+                          poster={products[activeIndex].image}
                           muted
                           playsInline
                           disablePictureInPicture
                           controlsList="nodownload nofullscreen noremoteplayback"
                           onContextMenu={(e) => e.preventDefault()}
-                          preload="none"
+                          preload="metadata"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
