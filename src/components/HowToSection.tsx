@@ -40,18 +40,18 @@ const HowToSection = () => {
             initial={{ opacity: 0, x: -40, rotate: -2 }}
             whileInView={{ opacity: 1, x: 0, rotate: -2 }}
             viewport={{ once: true }}
-            className="bg-card comic-card p-6 md:p-10 w-full max-w-[90vw] md:max-w-[520px] transform -rotate-2 howto-card"
+            className="bg-card/85 comic-card p-4 md:p-6 lg:p-10 w-full max-w-[80vw] md:max-w-[400px] lg:max-w-[520px] transform -rotate-2 howto-card"
           >
-            <h2 className="text-3xl md:text-4xl mb-6 howto-title">How to Foquz</h2>
-            <div className="space-y-4 howto-steps">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl mb-3 md:mb-4 lg:mb-6 howto-title">How to Foquz</h2>
+            <div className="space-y-2 md:space-y-3 lg:space-y-4 howto-steps">
               {steps.map((s) => (
-                <div key={s.num} className="flex items-center gap-4">
+                <div key={s.num} className="flex items-center gap-3 md:gap-4">
                   <img
                     src={s.icon}
                     alt={`Schritt ${s.num}`}
-                    className="w-20 h-20 md:w-28 md:h-28 shrink-0 howto-icon"
+                    className="w-12 h-12 md:w-16 md:h-16 lg:w-28 lg:h-28 shrink-0 howto-icon"
                   />
-                  <p className="text-lg md:text-xl howto-step whitespace-nowrap">
+                  <p className="text-base md:text-lg lg:text-xl howto-step whitespace-nowrap">
                     <span className="font-extrabold">
                       {s.num}. {s.title}
                     </span>
