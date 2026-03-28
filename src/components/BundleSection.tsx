@@ -16,7 +16,7 @@ const BundleSection = () => {
 
   return (
     <section id="bundle"
-      className="section-padding py-6 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
+      className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
       style={{ backgroundColor: "#75559f", containerType: 'inline-size' }}
     >
       <style>{`
