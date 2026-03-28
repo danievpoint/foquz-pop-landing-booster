@@ -7,7 +7,7 @@ const CrewSection = () => {
       {/* Desktop: scale proportionally and keep the sign visible */}
       <div className="hidden md:block w-full aspect-[16/6] overflow-hidden">
         <img
-          src={crewBg}
+          src={crewBgDesktop}
           alt="FOQUZ Crew"
           className="w-full h-full object-cover [object-position:center_82%]"
           loading="lazy"
