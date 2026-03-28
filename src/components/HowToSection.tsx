@@ -32,7 +32,7 @@ const HowToSection = () => {
           muted
           playsInline
           preload="metadata"
-          className="w-full h-full object-cover absolute inset-0"
+          className="block w-full h-full object-cover absolute inset-0"
           style={{ contentVisibility: "auto" }}
         />
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
