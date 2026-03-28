@@ -88,17 +88,10 @@ const InfoOverlay = ({
   </motion.div>;
 
 
-const InfoButton = ({ onClick, color }: {onClick: () => void;color: string;}) =>
+const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 <button
   onClick={onClick}
-  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-barlow font-bold text-2xl leading-none transition-colors duration-200 hover:border-transparent shrink-0 ml-auto"
-  style={{ backgroundColor: color, color: "#000" }}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.opacity = "0.8";
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.opacity = "1";
-  }}>
+  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-barlow font-bold text-2xl leading-none transition-colors duration-200 hover:opacity-80 shrink-0 ml-auto bg-white text-black">
   
     +
   </button>;
@@ -269,10 +262,11 @@ const ProductGrid = () => {
                       <div className="pg-card-actions flex items-center">
                         <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                          className="comic-btn bg-card text-foreground pg-card-btn">
+                          className="comic-btn text-black pg-card-btn"
+                          style={{ backgroundColor: p.color }}>
                           FOKUS SICHERN
                         </button>
-                        <InfoButton onClick={() => setInfoProduct(p)} color={p.color} />
+                        <InfoButton onClick={() => setInfoProduct(p)} />
                       </div>
                     </div>
                   </motion.div>
@@ -356,10 +350,11 @@ const ProductGrid = () => {
                     <div className="flex items-center justify-center gap-3">
                       <button
                         onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
-                        className="comic-btn bg-card text-foreground text-xs py-2 px-5">
+                        className="comic-btn text-black text-xs py-2 px-5"
+                        style={{ backgroundColor: products[activeIndex].color }}>
                         FOKUS SICHERN
                       </button>
-                      <InfoButton onClick={() => setInfoProduct(products[activeIndex])} color={products[activeIndex].color} />
+                      <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
                     </div>
                   </div>
                 </motion.div>
