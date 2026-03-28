@@ -249,17 +249,17 @@ const ProductGrid = () => {
                         <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                       )}
                     </Link>
-                    <div className="pg-card-body">
+                    <div className="pg-card-body text-center">
                       <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity">
                         {p.name}
                       </Link>
                       <p className="pg-card-desc text-muted-foreground whitespace-pre-line">{p.desc}</p>
-                      <div className="pg-card-gap flex items-center">
+                      <div className="pg-card-gap flex items-center justify-center">
                         <span className="pg-card-price font-black">{p.price}</span>
                         <StockBadge available={isAvailable(p.name)} />
                       </div>
                       <span className="pg-card-tax text-muted-foreground block">inkl. MwSt.</span>
-                      <div className="pg-card-actions flex items-center">
+                      <div className="pg-card-actions flex items-center justify-center gap-3">
                         <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                           className="comic-btn text-black pg-card-btn"
