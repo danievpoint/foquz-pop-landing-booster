@@ -2,9 +2,7 @@ import { motion } from "framer-motion";
 import foquzBox from "@/assets/foquz-box.png";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
-import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
-import { useProductAvailability } from "@/hooks/useProductAvailability";
 
 const checks = [
   "Alle Sorten testen",
@@ -15,11 +13,10 @@ const checks = [
 
 const BundleSection = () => {
   const { addToCart } = useCart();
-  const { isAvailable } = useProductAvailability();
 
   return (
     <section id="bundle"
-      className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
+      className="section-padding py-6 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
       style={{ backgroundColor: "#75559f", containerType: 'inline-size' }}
     >
       <style>{`
@@ -39,7 +36,15 @@ const BundleSection = () => {
       `}</style>
       <img src={bundleBg} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
-        <div className="grid md:grid-cols-2 gap-4 lg:gap-12 items-center bundle-grid">
+        {/* Mobile: scarcity banner on top */}
+        <div className="md:hidden flex items-center justify-center gap-1.5 mb-3">
+          <span className="text-[#ffd618] text-sm">🔥</span>
+          <span className="text-[#ffd618] font-black text-xs tracking-wide uppercase">
+            Limitiert – Nur solange der Vorrat reicht!
+          </span>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-1 md:gap-4 lg:gap-12 items-center bundle-grid">
           {/* Left: Bundle visual */}
           <motion.div
             className="relative flex items-center justify-center"
@@ -53,7 +58,7 @@ const BundleSection = () => {
                   src={foquzBox}
                   alt="FOQUZ Power Bundle Box"
                   loading="lazy"
-                  className="w-full max-w-[95vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto scale-125 md:scale-130 lg:scale-100 hover:scale-[1.3] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
+                  className="w-full max-w-[65vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto md:scale-130 lg:scale-100 hover:scale-[1.05] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
                 />
               </Link>
           </motion.div>
@@ -65,33 +70,33 @@ const BundleSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-[50px] md:leading-[0.95] text-white mb-2 md:mb-4 bundle-headline">
+            <h2 className="text-2xl md:text-[50px] md:leading-[0.95] text-white mb-1 md:mb-4 bundle-headline">
               FOQUZ POWER BUNDLE
             </h2>
-            <p className="text-white font-black text-lg lg:text-xl mb-2 bundle-subtitle">
+            <p className="text-white font-black text-base lg:text-xl mb-1 md:mb-2 bundle-subtitle">
               Eine Box. Voller Fokus.
             </p>
-            <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg bundle-body">
+            <p className="text-white/80 text-sm lg:text-lg mb-2 lg:mb-8 max-w-lg bundle-body">
               Alle 3 Sorten in einer Box. Spare ganze <span className="font-black text-white">28%</span> und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
             </p>
 
-            {/* Checkpoints */}
-            <div className="flex flex-col gap-2 lg:gap-3 mb-4 lg:mb-8 bundle-checks">
+            {/* Checkpoints - 2 columns on mobile */}
+            <div className="grid grid-cols-2 md:flex md:flex-col gap-1 lg:gap-3 mb-2 lg:mb-8 bundle-checks">
               {checks.map((c) => (
-                <div key={c} className="flex items-center gap-2 lg:gap-3">
-                  <span className="w-5 h-5 lg:w-7 lg:h-7 rounded-full flex items-center justify-center text-xs lg:text-sm font-black shrink-0 bundle-check-icon"
+                <div key={c} className="flex items-center gap-1.5 lg:gap-3">
+                  <span className="w-4 h-4 lg:w-7 lg:h-7 rounded-full flex items-center justify-center text-[10px] lg:text-sm font-black shrink-0 bundle-check-icon"
                     style={{ backgroundColor: "#ffd618" }}>
                     ✓
                   </span>
-                  <span className="text-white font-semibold text-sm lg:text-base bundle-check-text">{c}</span>
+                  <span className="text-white font-semibold text-xs lg:text-base bundle-check-text">{c}</span>
                 </div>
               ))}
             </div>
 
             {/* Price */}
-            <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
-              <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
-              <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
+            <div className="flex items-center gap-2 lg:gap-4 mb-2 lg:mb-6 flex-wrap bundle-price-row">
+              <span className="text-xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
+              <span className="text-sm lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
             </div>
 
             {/* CTA */}
@@ -104,13 +109,13 @@ const BundleSection = () => {
                   image: foquzBox,
                 })
               }
-              className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black bundle-btn"
+              className="comic-btn text-xs md:text-lg py-2 px-6 md:py-3 md:px-10 font-black bundle-btn"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
               JETZT SPAR-BUNDLE SICHERN
             </button>
-            {/* Scarcity banner */}
-            <div className="mt-4 lg:mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
+            {/* Scarcity banner - desktop only */}
+            <div className="hidden md:inline-flex mt-4 lg:mt-6 items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
               <span className="text-[#ffd618] text-lg">🔥</span>
               <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
                 Limitiert – Nur solange der Vorrat reicht!
