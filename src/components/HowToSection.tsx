@@ -40,8 +40,7 @@ const HowToSection = () => {
             initial={{ opacity: 0, x: -40, rotate: -2 }}
             whileInView={{ opacity: 1, x: 0, rotate: -2 }}
             viewport={{ once: true }}
-            className="bg-card comic-card p-6 md:p-10 w-full max-w-[90vw] md:max-w-[520px] transform -rotate-2 howto-card"
-          >
+            className="bg-card/85 comic-card p-4 md:p-6 lg:p-10 w-full max-w-[80vw] md:max-w-[400px] lg:max-w-[520px] transform -rotate-2 howto-card"
           >
             <h2 className="text-2xl md:text-3xl lg:text-4xl mb-3 md:mb-4 lg:mb-6 howto-title">How to Foquz</h2>
             <div className="space-y-2 md:space-y-3 lg:space-y-4 howto-steps">
