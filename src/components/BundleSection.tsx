@@ -92,7 +92,6 @@ const BundleSection = () => {
             <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
               <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
-              <StockBadge variant="light" available={isAvailable("FOQUZ Power Bundle") ?? true} />
             </div>
 
             {/* CTA */}
@@ -110,9 +109,13 @@ const BundleSection = () => {
             >
               JETZT SPAR-BUNDLE SICHERN
             </button>
-            <p className="text-white/50 text-xs mt-2 font-semibold tracking-wide uppercase">
-              ⏳ Nur solange der Vorrat reicht
-            </p>
+            {/* Scarcity banner */}
+            <div className="mt-4 lg:mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
+              <span className="text-[#ffd618] text-lg">🔥</span>
+              <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
+                Limitiert – Nur solange der Vorrat reicht!
+              </span>
+            </div>
             
           </motion.div>
         </div>
