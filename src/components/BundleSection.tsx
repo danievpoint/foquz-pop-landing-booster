@@ -110,6 +110,9 @@ const BundleSection = () => {
             >
               JETZT SPAR-BUNDLE SICHERN
             </button>
+            <p className="text-white/50 text-xs mt-2 font-semibold tracking-wide uppercase">
+              ⏳ Nur solange der Vorrat reicht
+            </p>
             
           </motion.div>
         </div>
