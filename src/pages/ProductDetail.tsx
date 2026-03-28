@@ -8,7 +8,7 @@ import StockBadge from "@/components/StockBadge";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ChevronLeft, X, ShoppingBag } from "lucide-react";
+import { ChevronLeft, ChevronDown, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
 // Preload all product images on module load
@@ -229,37 +229,62 @@ const ProductDetail = () => {
               {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
             </button>
 
-            {/* Ingredients */}
+            {/* Ingredients – collapsible on mobile/tablet */}
             <div className="border-t-2 border-foreground/10 pt-3 lg:pt-6">
-              <h3 className="font-extrabold text-sm lg:text-lg mb-2 lg:mb-4">
+              {/* Mobile/Tablet: dropdown */}
+              <button
+                onClick={() => {
+                  const el = document.getElementById('ingredients-dropdown');
+                  if (el) el.classList.toggle('hidden');
+                  const arrow = document.getElementById('ingredients-arrow');
+                  if (arrow) arrow.classList.toggle('rotate-180');
+                }}
+                className="lg:hidden flex items-center justify-between w-full"
+              >
+                <h3 className="font-extrabold text-sm">
+                  {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
+                </h3>
+                <ChevronDown id="ingredients-arrow" className="w-5 h-5 transition-transform duration-200" />
+              </button>
+              {/* Desktop: always visible title */}
+              <h3 className="hidden lg:block font-extrabold text-lg mb-4">
                 {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
               </h3>
-              <div className="flex flex-wrap gap-1.5 lg:hidden">
-                {product.ingredients.map((ing) => (
-                  <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
-                    <span className="text-[8px]">✓</span>
-                    {ing}
-                  </span>
-                ))}
+              <div id="ingredients-dropdown" className="hidden lg:!block mt-2 lg:mt-0">
+                <div className="flex flex-wrap gap-1.5 lg:hidden">
+                  {product.ingredients.map((ing) => (
+                    <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
+                      <span className="text-[8px]">✓</span>
+                      {ing}
+                    </span>
+                  ))}
+                </div>
+                <ul className="hidden lg:block space-y-2">
+                  {product.ingredients.map((ing) => (
+                    <li key={ing} className="flex items-center gap-2 text-sm">
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0" style={{ backgroundColor: "#ffd618" }}>✓</span>
+                      {ing}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mt-2 lg:mt-4">
+                  {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
+                </p>
               </div>
-              <ul className="hidden lg:block space-y-2">
-                {product.ingredients.map((ing) => (
-                  <li key={ing} className="flex items-center gap-2 text-sm">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0" style={{ backgroundColor: "#ffd618" }}>✓</span>
-                    {ing}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mt-2 lg:mt-4">
-                {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
-              </p>
             </div>
 
             {/* Scroll hint – mobile/tablet only */}
-            <div className="lg:hidden flex justify-center mt-4 animate-bounce">
-              <svg width="24" height="14" viewBox="0 0 20 12" fill="none" className="text-muted-foreground">
-                <path d="M2 2L10 10L18 2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+            <div className="lg:hidden flex justify-center mt-4">
+              <button
+                onClick={() => {
+                  const section = document.getElementById('entdecke-mobile');
+                  if (section) section.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="comic-btn bg-card text-foreground text-xs py-2 px-6 flex items-center gap-2"
+              >
+                MEHR ENTDECKEN
+                <ChevronDown className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Entdecke auch – inline on desktop */}
@@ -276,7 +301,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Other products – mobile/tablet only */}
-      <section className="lg:hidden py-8" style={{ backgroundColor: "white" }}>
+      <section id="entdecke-mobile" className="lg:hidden py-8 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-xl font-extrabold text-center mb-4">ENTDECKE AUCH</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
