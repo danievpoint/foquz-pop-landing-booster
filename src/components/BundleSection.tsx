@@ -70,13 +70,13 @@ const BundleSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-2xl md:text-[50px] md:leading-[0.95] text-white mb-1 md:mb-4 bundle-headline">
+            <h2 className="text-3xl md:text-[50px] md:leading-[0.95] text-white mb-2 md:mb-4 bundle-headline">
               FOQUZ POWER BUNDLE
             </h2>
-            <p className="text-white font-black text-base lg:text-xl mb-1 md:mb-2 bundle-subtitle">
+            <p className="text-white font-black text-lg lg:text-xl mb-1 md:mb-2 bundle-subtitle">
               Eine Box. Voller Fokus.
             </p>
-            <p className="text-white/80 text-sm lg:text-lg mb-2 lg:mb-8 max-w-lg bundle-body">
+            <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg bundle-body">
               Alle 3 Sorten in einer Box. Spare ganze <span className="font-black text-white">28%</span> und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
             </p>
 
