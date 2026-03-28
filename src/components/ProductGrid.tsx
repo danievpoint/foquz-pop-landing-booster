@@ -330,7 +330,10 @@ const ProductGrid = () => {
                               { threshold: 0.5 }
                             );
                             observer.observe(el);
-                            el.onended = () => setTimeout(() => goNext(), 500);
+                            el.onended = () => setTimeout(() => {
+                              setDirection(1);
+                              setActiveIndex((prev) => (prev + 1) % products.length);
+                            }, 500);
                           }}
                         />
                       ) : (
