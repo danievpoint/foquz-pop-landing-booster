@@ -5,32 +5,19 @@ const ScrollToHash = () => {
   const { hash, pathname } = useLocation();
   const hasMounted = useRef(false);
 
+  // On first mount: set manual scroll restoration, but do NOT force scroll to top.
+  // This prevents the page from jumping back up if the user already scrolled.
   useLayoutEffect(() => {
-    const previousScrollRestoration = window.history.scrollRestoration;
-    window.history.scrollRestoration = "manual";
-
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    };
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
 
     if (hash) {
       window.history.replaceState(null, "", pathname || "/");
     }
-
-    scrollToTop();
-    requestAnimationFrame(() => {
-      scrollToTop();
-      requestAnimationFrame(scrollToTop);
-    });
-
-    window.addEventListener("load", scrollToTop);
-
-    return () => {
-      window.removeEventListener("load", scrollToTop);
-      window.history.scrollRestoration = previousScrollRestoration;
-    };
   }, []);
 
+  // On subsequent navigation changes, scroll to hash or top
   useEffect(() => {
     if (!hasMounted.current) {
       hasMounted.current = true;
