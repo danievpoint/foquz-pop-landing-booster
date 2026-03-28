@@ -58,7 +58,7 @@ const BundleSection = () => {
                   src={foquzBox}
                   alt="FOQUZ Power Bundle Box"
                   loading="lazy"
-                  className="w-full max-w-[65vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto md:scale-130 lg:scale-100 hover:scale-[1.05] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
+                  className="w-full max-w-[80vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto md:scale-130 lg:scale-100 hover:scale-[1.05] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
                 />
               </Link>
           </motion.div>
