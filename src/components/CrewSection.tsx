@@ -5,7 +5,7 @@ const CrewSection = () => {
   return (
     <section className="w-full overflow-hidden -mt-px -mb-px">
       {/* Desktop: scale proportionally and keep the sign visible */}
-      <div className="hidden md:block w-full aspect-[16/4.5] overflow-hidden">
+      <div className="hidden md:block w-full aspect-[16/6] overflow-hidden">
         <img
           src={crewBgDesktop}
           alt="FOQUZ Crew"
