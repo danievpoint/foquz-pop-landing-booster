@@ -293,78 +293,58 @@ const ProductGrid = () => {
             <div
               ref={carouselRef}
               className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y', willChange: 'transform', contain: 'layout style', position: 'relative' }}>
+              style={{ minHeight: 380, touchAction: 'pan-y' }}>
               
-              <AnimatePresence initial={false} mode="popLayout">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, position: 'absolute', top: 0, left: 0, right: 0 } as any}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  style={{ willChange: 'opacity' }}
-                  className="flex flex-col items-center w-full">
-                  
-                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block bg-black">
+              <div className="flex flex-col items-center w-full">
+                <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block" style={{ backgroundColor: products[activeIndex].color + '22' }}>
                   {products[activeIndex].video ? (
-                        <video
-                          src={products[activeIndex].video}
-                          poster={products[activeIndex].image}
-                          muted
-                          playsInline
-                          disablePictureInPicture
-                          controlsList="nodownload nofullscreen noremoteplayback"
-                          onContextMenu={(e) => e.preventDefault()}
-                          preload="metadata"
-                          className="w-full aspect-square object-cover"
-                          ref={(el) => {
-                            if (!el) return;
-                            const observer = new IntersectionObserver(
-                              ([entry]) => {
-                                if (entry.isIntersecting) {
-                                  el.play();
-                                } else {
-                                  el.pause();
-                                }
-                              },
-                              { threshold: 0.5 }
-                            );
-                            observer.observe(el);
-                            el.onended = () => setTimeout(() => {
-                              setDirection(1);
-                              setActiveIndex((prev) => (prev + 1) % products.length);
-                            }, 500);
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={products[activeIndex].image}
-                          alt={products[activeIndex].name}
-                          className="w-full aspect-square object-cover" />
-                      )}
-                    </Link>
-                  <div className="py-1 text-center flex flex-col items-center">
-                    <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                      {products[activeIndex].name}
-                    </Link>
-                    <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
-                    <div className="flex items-center justify-center gap-2 mb-0.5">
-                      <span className="text-xl font-black">{products[activeIndex].price}</span>
-                      <StockBadge available={isAvailable(products[activeIndex].name)} />
-                    </div>
-                    <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
-                    <div className="flex items-center justify-center gap-3">
-                      <button
-                        onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
-                        className="comic-btn text-black text-xs py-2 px-5"
-                        style={{ backgroundColor: products[activeIndex].color }}>
-                        FOKUS SICHERN
-                      </button>
-                      <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
-                    </div>
+                    <video
+                      key={`video-${activeIndex}`}
+                      src={products[activeIndex].video}
+                      poster={products[activeIndex].image}
+                      muted
+                      playsInline
+                      autoPlay
+                      disablePictureInPicture
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      onContextMenu={(e) => e.preventDefault()}
+                      preload="metadata"
+                      className="w-full aspect-square object-cover"
+                      onEnded={() => {
+                        setTimeout(() => {
+                          setDirection(1);
+                          setActiveIndex((prev) => (prev + 1) % products.length);
+                        }, 500);
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={products[activeIndex].image}
+                      alt={products[activeIndex].name}
+                      className="w-full aspect-square object-cover" />
+                  )}
+                </Link>
+                <div className="py-1 text-center flex flex-col items-center">
+                  <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                    {products[activeIndex].name}
+                  </Link>
+                  <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
+                  <div className="flex items-center justify-center gap-2 mb-0.5">
+                    <span className="text-xl font-black">{products[activeIndex].price}</span>
+                    <StockBadge available={isAvailable(products[activeIndex].name)} />
                   </div>
-                </motion.div>
-              </AnimatePresence>
+                  <span className="text-[10px] text-muted-foreground mb-1.5 block">inkl. MwSt.</span>
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
+                      className="comic-btn text-black text-xs py-2 px-5"
+                      style={{ backgroundColor: products[activeIndex].color }}>
+                      FOKUS SICHERN
+                    </button>
+                    <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Arrows + Dots */}
