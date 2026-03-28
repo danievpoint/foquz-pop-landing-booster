@@ -25,8 +25,13 @@ const Index = () => {
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
     } else {
+      // Preserve current scroll position when unlocking
+      const y = window.scrollY;
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+      });
     }
     return () => {
       document.documentElement.style.overflow = '';
