@@ -273,19 +273,6 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Scroll hint – mobile/tablet only */}
-            <div className="lg:hidden flex justify-center mt-4">
-              <button
-                onClick={() => {
-                  const section = document.getElementById('entdecke-mobile');
-                  if (section) section.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="comic-btn bg-card text-foreground text-xs py-2 px-6 flex items-center gap-2"
-              >
-                MEHR ENTDECKEN
-                <ChevronDown className="w-4 h-4" />
-              </button>
-            </div>
 
             {/* Entdecke auch – inline on desktop */}
             <div className="hidden lg:block border-t-2 border-foreground/10 pt-6 mt-8">
@@ -301,7 +288,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Other products – mobile/tablet only */}
-      <section id="entdecke-mobile" className="lg:hidden py-8 bg-background">
+      <section id="entdecke-mobile" className="lg:hidden py-4 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-xl font-extrabold text-center mb-4">ENTDECKE AUCH</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
