@@ -246,7 +246,11 @@ const ProductDetail = () => {
                 </h3>
                 <ChevronDown id="ingredients-arrow" className="w-5 h-5 transition-transform duration-200" />
               </button>
-              <div id="ingredients-dropdown" className="hidden lg:!block mt-2">
+              {/* Desktop: always visible title */}
+              <h3 className="hidden lg:block font-extrabold text-lg mb-4">
+                {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
+              </h3>
+              <div id="ingredients-dropdown" className="hidden lg:!block mt-2 lg:mt-0">
                 <div className="flex flex-wrap gap-1.5 lg:hidden">
                   {product.ingredients.map((ing) => (
                     <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
@@ -267,10 +271,6 @@ const ProductDetail = () => {
                   {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>
-              {/* Desktop: always visible title */}
-              <h3 className="hidden lg:block font-extrabold text-lg mb-4">
-                {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
-              </h3>
             </div>
 
             {/* Scroll hint – mobile/tablet only */}
