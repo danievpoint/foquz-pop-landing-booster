@@ -91,7 +91,7 @@ const InfoOverlay = ({
 const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 <button
   onClick={onClick}
-  className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center font-barlow font-bold text-2xl leading-none transition-colors duration-200 hover:opacity-80 shrink-0 ml-auto bg-white text-black">
+  className="w-8 h-8 rounded-full comic-btn bg-white text-black flex items-center justify-center font-barlow font-bold text-lg leading-none hover:opacity-80 shrink-0 ml-auto !p-0">
   
     +
   </button>;
