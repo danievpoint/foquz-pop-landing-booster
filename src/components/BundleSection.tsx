@@ -44,7 +44,7 @@ const BundleSection = () => {
           </span>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-1 md:gap-4 lg:gap-12 items-center bundle-grid">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-4 lg:gap-12 items-center bundle-grid">
           {/* Left: Bundle visual */}
           <motion.div
             className="relative flex items-center justify-center"
