@@ -1,4 +1,5 @@
 import crewBg from "@/assets/crew-bg.svg";
+import crewBgDesktop from "@/assets/crew-bg-desktop.svg";
 
 const CrewSection = () => {
   return (
