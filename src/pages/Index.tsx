@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection, { useHeroReady } from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
@@ -18,6 +18,21 @@ const SectionFallback = () => <div className="min-h-[200px]" />;
 
 const Index = () => {
   const heroReady = useHeroReady();
+
+  // Lock scroll until hero is ready to prevent desync
+  useEffect(() => {
+    if (!heroReady) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [heroReady]);
 
   return (
     <>
