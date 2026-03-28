@@ -13,8 +13,8 @@ const steps = [
 
 const HowToSection = () => {
   return (
-    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px bg-black">
-      <div className="relative min-h-[600px] md:min-h-[600px] bg-black" style={{ containerType: "inline-size" }}>
+    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px" style={{ backgroundColor: "#75559f" }}>
+      <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: "inline-size" }}>
         <style>{`
           @container (min-width: 1024px) {
             .howto-title { font-size: clamp(1.75rem, 2.8cqw, 2.75rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
