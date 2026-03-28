@@ -107,14 +107,17 @@ const ProductGrid = () => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
+  // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
     if (!autoPlay) return;
-    const timer = setInterval(() => {
+    const currentProduct = products[activeIndex];
+    if (currentProduct.video) return; // video drives its own advancement
+    const timer = setTimeout(() => {
       setDirection(1);
       setActiveIndex((prev) => (prev + 1) % products.length);
     }, 4000);
-    return () => clearInterval(timer);
-  }, [autoPlay]);
+    return () => clearTimeout(timer);
+  }, [autoPlay, activeIndex]);
 
   const goTo = useCallback((index: number) => {
     setDirection(index > activeIndex ? 1 : -1);
