@@ -259,7 +259,7 @@ const ProductGrid = () => {
                         <StockBadge available={isAvailable(p.name)} />
                       </div>
                       <span className="pg-card-tax text-muted-foreground block">inkl. MwSt.</span>
-                      <div className="pg-card-actions flex items-center">
+                      <div className="pg-card-actions flex items-center justify-center gap-3">
                         <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                           className="comic-btn text-black pg-card-btn"
