@@ -305,7 +305,7 @@ const ProductGrid = () => {
                   style={{ willChange: 'opacity' }}
                   className="flex flex-col items-center w-full">
                   
-                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block">
+                    <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block bg-black">
                   {products[activeIndex].video ? (
                         <video
                           src={products[activeIndex].video}
