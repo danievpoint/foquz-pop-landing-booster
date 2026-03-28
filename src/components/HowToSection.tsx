@@ -13,8 +13,11 @@ const steps = [
 
 const HowToSection = () => {
   return (
-    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px" style={{ backgroundColor: "#75559f" }}>
-      <div className="relative min-h-[600px] md:min-h-[600px]" style={{ containerType: "inline-size" }}>
+    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px" style={{ backgroundColor: "hsl(271 30% 48%)" }}>
+      <div
+        className="relative min-h-[600px] md:min-h-[600px]"
+        style={{ containerType: "inline-size", backgroundColor: "hsl(271 30% 48%)" }}
+      >
         <style>{`
           @container (min-width: 1024px) {
             .howto-title { font-size: clamp(1.75rem, 2.8cqw, 2.75rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
@@ -32,8 +35,8 @@ const HowToSection = () => {
           muted
           playsInline
           preload="metadata"
-          className="block w-full h-full object-cover absolute inset-0"
-          style={{ contentVisibility: "auto" }}
+          className="absolute inset-0 block h-full w-full object-cover"
+          style={{ contentVisibility: "auto", backgroundColor: "hsl(271 30% 48%)" }}
         />
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
           <motion.div
