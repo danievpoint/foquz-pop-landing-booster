@@ -109,7 +109,7 @@ const BundleSection = () => {
                   image: foquzBox,
                 })
               }
-              className="comic-btn text-xs md:text-lg py-2 px-6 md:py-3 md:px-10 font-black bundle-btn"
+              className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black bundle-btn"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
               JETZT SPAR-BUNDLE SICHERN
