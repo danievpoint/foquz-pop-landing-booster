@@ -94,9 +94,9 @@ const BundleSection = () => {
             </div>
 
             {/* Price */}
-            <div className="flex items-center gap-2 lg:gap-4 mb-2 lg:mb-6 flex-wrap bundle-price-row">
-              <span className="text-xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
-              <span className="text-sm lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
+            <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
+              <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
+              <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
             </div>
 
             {/* CTA */}
