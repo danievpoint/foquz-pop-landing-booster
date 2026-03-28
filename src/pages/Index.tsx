@@ -32,13 +32,13 @@ const Index = () => {
         <HeroSection />
         <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
+          <BundleSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
           <HowToSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <WhyFoquzSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <BundleSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <NewsletterSection />
