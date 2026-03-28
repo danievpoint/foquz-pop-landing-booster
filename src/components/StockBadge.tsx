@@ -41,7 +41,7 @@ const StockBadge = ({ variant = "dark", available = null }: StockBadgeProps) => 
           isLight ? "text-white/70" : "text-muted-foreground"
         }`}
       >
-        {available ? "Auf Lager" : "Ausverkauft"}
+        {available ? "Verfügbar ⚡" : "Ausverkauft"}
       </span>
     </div>
   );
