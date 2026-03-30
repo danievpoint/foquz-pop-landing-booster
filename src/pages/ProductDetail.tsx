@@ -304,6 +304,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+      </div>{/* end purple wrapper */}
 
       <Footer />
 
