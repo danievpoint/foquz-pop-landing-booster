@@ -153,8 +153,10 @@ const ProductDetail = () => {
     );
   }
 
+  const isBundlePage = !!product?.isBundle;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={isBundlePage ? "min-h-screen" : "min-h-screen bg-background"} style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
       <MarqueeBanner />
       <Navbar />
 
@@ -162,7 +164,7 @@ const ProductDetail = () => {
       <div className="container mx-auto px-4 pt-20 md:pt-28">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors mb-3 md:mb-6"
+          className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors mb-3 md:mb-6 ${isBundlePage ? "text-white/60 hover:text-white" : "text-muted-foreground hover:text-foreground"}`}
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
@@ -201,18 +203,18 @@ const ProductDetail = () => {
           {/* Info + Entdecke auch on desktop */}
           <div className="py-0 lg:py-4">
             <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
-            <p className="text-muted-foreground text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug">
+            <p className={`text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
               {product.desc}
             </p>
 
             <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
               <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
               {product.originalPrice && (
-                <span className="text-base lg:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+                <span className={`text-base lg:text-lg line-through ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>{product.originalPrice}</span>
               )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
-            <span className="text-[10px] lg:text-xs text-muted-foreground mb-3 lg:mb-6 block">inkl. MwSt.</span>
+            <span className={`text-[10px] lg:text-xs mb-3 lg:mb-6 block ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>inkl. MwSt.</span>
 
             <button
               onClick={() =>
@@ -267,7 +269,7 @@ const ProductDetail = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mt-2 lg:mt-4">
+                <p className={`text-[10px] lg:text-xs font-bold mt-2 lg:mt-4 ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>
                   {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>
@@ -288,7 +290,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Other products – mobile/tablet only */}
-      <section id="entdecke-mobile" className="lg:hidden py-4 md:pb-16 bg-background">
+      <section id="entdecke-mobile" className="lg:hidden py-4 md:pb-16" style={isBundlePage ? { backgroundColor: "#75559f" } : undefined}>
         <div className="container mx-auto px-4">
           <h2 className="text-xl font-extrabold text-center mb-4">ENTDECKE AUCH</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
