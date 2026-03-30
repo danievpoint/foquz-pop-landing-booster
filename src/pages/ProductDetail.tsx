@@ -156,7 +156,7 @@ const ProductDetail = () => {
   const isBundlePage = !!product?.isBundle;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: isBundlePage ? "#75559f" : undefined }} className={isBundlePage ? "min-h-screen" : "min-h-screen bg-background"}>
+    <div className="min-h-screen" style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
       <MarqueeBanner />
       <Navbar />
 
