@@ -66,7 +66,7 @@ const BundleBanner = () => {
               FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              Spar 15% und teste alle Geschmacksrichtungen in einer Box.
+              Spar <span className="font-black">15%</span> und teste alle Geschmacksrichtungen in einer Box.
             </p>
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
