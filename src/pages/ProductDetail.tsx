@@ -210,7 +210,7 @@ const ProductDetail = () => {
             <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
               <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
               {product.originalPrice && (
-                <span className="text-base lg:text-lg text-muted-foreground line-through">{product.originalPrice}</span>
+                <span className={`text-base lg:text-lg line-through ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>{product.originalPrice}</span>
               )}
               <StockBadge available={isAvailable(product.name)} />
             </div>
