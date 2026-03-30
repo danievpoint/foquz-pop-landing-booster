@@ -231,14 +231,13 @@ const ProductGrid = () => {
                       {p.video ? (
                         <video
                           src={p.video}
-                          poster={p.image}
                           muted
                           loop
                           playsInline
                           disablePictureInPicture
                           controlsList="nodownload nofullscreen noremoteplayback"
                           onContextMenu={(e) => e.preventDefault()}
-                          preload="metadata"
+                          preload="auto"
                           className="w-full aspect-square object-cover"
                           ref={(el) => {
                             if (!el) return;
