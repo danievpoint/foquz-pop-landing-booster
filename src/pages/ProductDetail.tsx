@@ -203,7 +203,7 @@ const ProductDetail = () => {
           {/* Info + Entdecke auch on desktop */}
           <div className="py-0 lg:py-4">
             <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
-            <p className="text-muted-foreground text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug">
+            <p className={`text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
               {product.desc}
             </p>
 
