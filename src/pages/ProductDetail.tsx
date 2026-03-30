@@ -156,10 +156,12 @@ const ProductDetail = () => {
   const isBundlePage = !!product?.isBundle;
 
   return (
-    <div className={isBundlePage ? "min-h-screen" : "min-h-screen bg-background"} style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
+    <div className="min-h-screen bg-background">
       <MarqueeBanner />
       <Navbar />
 
+      {/* Purple wrapper for bundle page */}
+      <div style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
       {/* Back link */}
       <div className="container mx-auto px-4 pt-20 md:pt-28">
         <Link
@@ -302,6 +304,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+      </div>{/* end purple wrapper */}
 
       <Footer />
 
