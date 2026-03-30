@@ -153,8 +153,10 @@ const ProductDetail = () => {
     );
   }
 
+  const isBundlePage = !!product?.isBundle;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: isBundlePage ? "#75559f" : undefined }} className={isBundlePage ? "min-h-screen" : "min-h-screen bg-background"}>
       <MarqueeBanner />
       <Navbar />
 
@@ -162,7 +164,7 @@ const ProductDetail = () => {
       <div className="container mx-auto px-4 pt-20 md:pt-28">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors mb-3 md:mb-6"
+          className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors mb-3 md:mb-6 ${isBundlePage ? "text-white/60 hover:text-white" : "text-muted-foreground hover:text-foreground"}`}
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
