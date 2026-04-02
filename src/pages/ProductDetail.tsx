@@ -94,7 +94,7 @@ const BundleBanner = () => {
 const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts[0]; addToCart: any; isAvailable: (name: string) => boolean | null }) => (
   <div
     className={`group rounded-xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300`}
-    style={p.isBundle ? { backgroundColor: "#75559f" } : { backgroundColor: "#fff" }}
+    style={p.isBundle ? { backgroundColor: "#75559f" } : { backgroundColor: "#fff", color: "#000" }}
   >
     <Link to={`/produkt/${p.handle}`}>
       <div className="overflow-hidden">
