@@ -1,12 +1,42 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const SHOPIFY_STORE_DOMAIN = "foquz-pop-landing-booster-xb8ca.myshopify.com";
 const SHOPIFY_API_VERSION = "2025-07";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+async function getShopifyAccessToken(): Promise<string> {
+  const clientId = Deno.env.get("SHOPIFY_CLIENT_ID");
+  const clientSecret = Deno.env.get("SHOPIFY_CLIENT_SECRET");
+  const shop = Deno.env.get("SHOPIFY_SHOP");
+
+  if (!clientId || !clientSecret || !shop) {
+    throw new Error("Missing SHOPIFY_CLIENT_ID, SHOPIFY_CLIENT_SECRET, or SHOPIFY_SHOP");
+  }
+
+  const tokenUrl = `https://${shop}.myshopify.com/admin/oauth/access_token`;
+  const body = new URLSearchParams({
+    grant_type: "client_credentials",
+    client_id: clientId,
+    client_secret: clientSecret,
+  });
+
+  const res = await fetch(tokenUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to get access token: ${res.status} ${text}`);
+  }
+
+  const data = await res.json();
+  return data.access_token;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -32,22 +62,22 @@ serve(async (req) => {
       });
     }
 
-    const accessToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
-    if (!accessToken) {
-      throw new Error("SHOPIFY_ACCESS_TOKEN not configured");
-    }
+    const shop = Deno.env.get("SHOPIFY_SHOP");
+    if (!shop) throw new Error("SHOPIFY_SHOP not configured");
+
+    const storeDomain = `${shop}.myshopify.com`;
+    const accessToken = await getShopifyAccessToken();
 
     // Search for existing customer
-    const searchUrl = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/customers/search.json?query=email:${encodeURIComponent(trimmedEmail)}`;
+    const searchUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers/search.json?query=email:${encodeURIComponent(trimmedEmail)}`;
     const searchRes = await fetch(searchUrl, {
       headers: { "X-Shopify-Access-Token": accessToken },
     });
     const searchData = await searchRes.json();
 
     if (searchData.customers && searchData.customers.length > 0) {
-      // Customer exists — update marketing consent
       const customerId = searchData.customers[0].id;
-      const updateUrl = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/customers/${customerId}.json`;
+      const updateUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers/${customerId}.json`;
       await fetch(updateUrl, {
         method: "PUT",
         headers: {
@@ -70,8 +100,8 @@ serve(async (req) => {
       });
     }
 
-    // Create new customer with marketing consent
-    const createUrl = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/customers.json`;
+    // Create new customer
+    const createUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers.json`;
     const createRes = await fetch(createUrl, {
       method: "POST",
       headers: {
