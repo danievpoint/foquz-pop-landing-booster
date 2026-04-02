@@ -164,7 +164,7 @@ const HeroSection = () => {
                   calcMode="spline"
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
-                <image href={heroJars} x="1010" y="75" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
+                <image href={heroJars} x="1010" y="62" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
               </g>
             </svg>
 
