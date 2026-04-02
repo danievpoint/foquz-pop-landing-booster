@@ -234,7 +234,7 @@ const ProductDetail = () => {
             </button>
 
             {/* Ingredients – collapsible on mobile/tablet */}
-            <div className="border-t-2 border-foreground/10 pt-3 lg:pt-6">
+            <div className={`border-t-2 pt-3 lg:pt-6 ${isBundlePage ? "border-white/20" : "border-foreground/10"}`}>
               {/* Mobile/Tablet: dropdown */}
               <button
                 onClick={() => {
@@ -279,7 +279,7 @@ const ProductDetail = () => {
 
 
             {/* Entdecke auch – inline on desktop */}
-            <div className="hidden lg:block border-t-2 border-foreground/10 pt-6 mt-8">
+            <div className={`hidden lg:block border-t-2 pt-6 mt-8 ${isBundlePage ? "border-white/20" : "border-foreground/10"}`}>
               <h3 className="font-extrabold text-lg mb-4">ENTDECKE AUCH</h3>
               <div className="grid grid-cols-3 gap-4">
                 {otherProducts.map((p) => (
