@@ -99,27 +99,29 @@ const BundleSection = () => {
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
             </div>
 
-            {/* CTA */}
-            <button
-              onClick={() =>
-                addToCart(1, {
-                  id: "starter-bundle",
-                  name: "FOQUZ Power Bundle (3 Sorten)",
-                  price: 14.99,
-                  image: foquzBox,
-                })
-              }
-              className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black bundle-btn"
-              style={{ backgroundColor: "#ffd618", color: "#000" }}
-            >
-              JETZT SPAR-BUNDLE SICHERN
-            </button>
-            {/* Scarcity banner - desktop only */}
-            <div className="hidden md:inline-flex mt-4 lg:mt-6 items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
-              <span className="text-[#ffd618] text-lg">🔥</span>
-              <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
-                Limitiert – Nur solange der Vorrat reicht!
-              </span>
+            {/* CTA + Scarcity banner */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+              <button
+                onClick={() =>
+                  addToCart(1, {
+                    id: "starter-bundle",
+                    name: "FOQUZ Power Bundle (3 Sorten)",
+                    price: 14.99,
+                    image: foquzBox,
+                  })
+                }
+                className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black bundle-btn shrink-0"
+                style={{ backgroundColor: "#ffd618", color: "#000" }}
+              >
+                JETZT SPAR-BUNDLE SICHERN
+              </button>
+              {/* Scarcity banner - desktop only */}
+              <div className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
+                <span className="text-[#ffd618] text-lg">🔥</span>
+                <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
+                  Limitiert – Nur solange der Vorrat reicht!
+                </span>
+              </div>
             </div>
             
           </motion.div>
