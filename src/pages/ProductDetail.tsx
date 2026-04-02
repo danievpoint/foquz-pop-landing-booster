@@ -271,8 +271,10 @@ const ProductDetail = () => {
                     </li>
                   ))}
                 </ul>
-                <p className={`text-[10px] lg:text-xs font-bold mt-2 lg:mt-4 ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>
-                  {product.isBundle ? "Spar 15% gegenüber Einzelkauf." : "100% Natur. Ohne Chemie. Ohne Bullshit."}
+                <p className={`text-[10px] lg:text-xs mt-2 lg:mt-4 ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
+                  {product.isBundle ? (
+                    <>Spar <span className="font-black text-xs lg:text-sm" style={{ color: "#ffd618" }}>15%</span> gegenüber Einzelkauf.</>
+                  ) : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>
             </div>
