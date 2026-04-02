@@ -234,7 +234,7 @@ const ProductDetail = () => {
             </button>
 
             {/* Ingredients – collapsible on mobile/tablet */}
-            <div className="border-t-2 border-foreground/10 pt-3 lg:pt-6">
+            <div className={`border-t-2 pt-3 lg:pt-6 ${isBundlePage ? "border-white/20" : "border-foreground/10"}`}>
               {/* Mobile/Tablet: dropdown */}
               <button
                 onClick={() => {
