@@ -171,7 +171,9 @@ const ComingSoonPage = () => {
             </form>
 
             <p className="text-xs mt-4" style={{ color: "rgba(29,29,27,0.4)" }}>
-              Kein Spam · Jederzeit kündbar
+              Mit der Anmeldung erklärst du dich mit unserer{" "}
+              <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>{" "}
+              einverstanden. Kein Spam · Jederzeit kündbar.
             </p>
 
             {/* Deko-Sterne */}

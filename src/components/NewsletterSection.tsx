@@ -90,7 +90,9 @@ const NewsletterSection = () => {
             </Button>
           </form>
           <p className="text-xs text-primary-foreground/60 nl-fine">
-            Kein Spam · Jederzeit kündbar
+            Mit der Anmeldung erklärst du dich mit unserer{" "}
+            <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>{" "}
+            einverstanden. Kein Spam · Jederzeit kündbar.
           </p>
         </div>
       </section>
