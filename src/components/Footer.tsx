@@ -100,7 +100,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        </div>
 
         <div className="border-t border-foreground/20 pt-4 md:pt-6 text-center text-[10px] md:text-xs opacity-60 ft-copy">
           © 2026 FOQUZ. Alle Rechte vorbehalten.
