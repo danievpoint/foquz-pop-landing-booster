@@ -158,13 +158,13 @@ const HeroSection = () => {
                 <animateTransform
                   attributeName="transform"
                   type="translate"
-                  values="0 -12; 0 12; 0 -12"
+                  values="0 -6; 0 6; 0 -6"
                   dur="3.4s"
                   repeatCount="indefinite"
                   calcMode="spline"
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
-                <image href={heroJars} x="1010" y="55" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
+                <image href={heroJars} x="1010" y="75" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
               </g>
             </svg>
 
