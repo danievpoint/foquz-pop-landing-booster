@@ -82,9 +82,6 @@ const Footer = () => {
               <li>
                 <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
               </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versandbedingungen</Link>
-              </li>
             </ul>
           </div>
 
@@ -93,9 +90,6 @@ const Footer = () => {
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
               <li>
                 <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
-              </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
               </li>
             </ul>
           </div>
