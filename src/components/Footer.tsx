@@ -82,9 +82,6 @@ const Footer = () => {
               <li>
                 <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
               </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versandbedingungen</Link>
-              </li>
             </ul>
           </div>
 
