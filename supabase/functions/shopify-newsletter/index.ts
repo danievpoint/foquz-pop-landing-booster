@@ -12,11 +12,14 @@ async function getShopifyAccessToken(): Promise<string> {
   const clientSecret = Deno.env.get("SHOPIFY_CLIENT_SECRET");
   const shop = Deno.env.get("SHOPIFY_SHOP");
 
+  console.log("ENV check:", { clientId: !!clientId, clientSecret: !!clientSecret, shop });
+
   if (!clientId || !clientSecret || !shop) {
     throw new Error("Missing SHOPIFY_CLIENT_ID, SHOPIFY_CLIENT_SECRET, or SHOPIFY_SHOP");
   }
 
   const tokenUrl = `https://${shop}.myshopify.com/admin/oauth/access_token`;
+  console.log("Token URL:", tokenUrl);
   const body = new URLSearchParams({
     grant_type: "client_credentials",
     client_id: clientId,
