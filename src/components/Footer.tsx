@@ -91,9 +91,6 @@ const Footer = () => {
               <li>
                 <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
               </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
-              </li>
             </ul>
           </div>
         </div>
