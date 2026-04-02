@@ -26,23 +26,15 @@ const ComingSoonPage = () => {
 
     setLoading(true);
     try {
-      const { error: dbError } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: email.trim().toLowerCase() });
-
-      if (dbError && dbError.code !== "23505") {
-        throw dbError;
-      }
-
-      const { error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
         body: { email: email.trim().toLowerCase() },
       });
 
       if (fnError) {
-        console.error("Shopify newsletter error:", fnError);
+        throw fnError;
       }
 
-      if (dbError?.code === "23505") {
+      if (data?.already_subscribed) {
         setAlreadySubscribed(true);
         setShowPopup(true);
       } else {

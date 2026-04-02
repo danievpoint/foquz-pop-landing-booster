@@ -34,17 +34,13 @@ const NewsletterPopup = () => {
 
     setLoading(true);
     try {
-      const { error: dbError } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: email.trim().toLowerCase() });
-
-      if (dbError && dbError.code !== "23505") throw dbError;
-
-      await supabase.functions.invoke("shopify-newsletter", {
+      const { data, error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
         body: { email: email.trim().toLowerCase() },
-      }).catch(() => {});
+      });
 
-      if (dbError?.code === "23505") {
+      if (fnError) throw fnError;
+
+      if (data?.already_subscribed) {
         setSuccess(true);
         setAlreadySubscribed(true);
       } else {
