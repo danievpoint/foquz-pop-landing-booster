@@ -113,7 +113,7 @@ const NewsletterPopup = () => {
                       {loading ? "..." : "RABATT AKTIVIEREN"}
                     </button>
                   </form>
-                  <p className="text-[10px] text-muted-foreground mt-3">
+                  <p className="text-[10px] text-muted-foreground mt-3 leading-relaxed">
                     Mit der Anmeldung erklärst du dich mit unserer{" "}
                     <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>{" "}
                     einverstanden. Kein Spam · Jederzeit kündbar.
