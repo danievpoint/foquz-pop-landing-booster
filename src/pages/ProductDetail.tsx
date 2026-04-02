@@ -256,11 +256,11 @@ const ProductDetail = () => {
               </h3>
               <div id="ingredients-dropdown" className="hidden lg:!block mt-2 lg:mt-0">
                 <div className="flex flex-wrap gap-1.5 lg:hidden">
-                  {product.ingredients.map((ing) => (
-                    <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
-                      <span className="text-[8px]">✓</span>
-                      {ing}
-                    </span>
+                   {product.ingredients.map((ing) => (
+                     <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
+                       <span className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black shrink-0" style={{ backgroundColor: "#ffd618", color: "#000" }}>✓</span>
+                       {ing}
+                     </span>
                   ))}
                 </div>
                 <ul className="hidden lg:block space-y-2">
