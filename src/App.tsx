@@ -36,7 +36,13 @@ const App = () => {
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <ComingSoonPage />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/datenschutz" element={<Datenschutz />} />
+                <Route path="/impressum" element={<Impressum />} />
+                <Route path="*" element={<ComingSoonPage />} />
+              </Routes>
+            </BrowserRouter>
           </TooltipProvider>
         </CartProvider>
       </QueryClientProvider>
