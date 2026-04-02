@@ -19,7 +19,7 @@ const Footer = () => {
         }
       `}</style>
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-[3fr_1fr_1fr_1fr_1fr] gap-4 md:gap-6 mb-6 md:mb-10 ft-grid">
+        <div className="grid grid-cols-2 md:grid-cols-[3fr_1fr_1fr_1fr] gap-4 md:gap-6 mb-6 md:mb-10 ft-grid">
           <div className="col-span-2 md:col-span-1">
             <img src={foquzLogo} alt="FOQUZ" className="h-14 md:h-20 mb-2 md:mb-3 -ml-2 ft-logo" />
             <p className="text-sm md:text-lg opacity-80 mb-0.5 md:mb-1 font-bold ft-claim">
@@ -32,10 +32,7 @@ const Footer = () => {
               <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="Facebook">
                 <svg width="30" height="30" viewBox="0 0 48 48" className="md:w-9 md:h-9">
                   <circle cx="24" cy="24" r="24" fill="currentColor" />
-                  <path
-                    d="M29 25h-3.5v10h-4.5V25H18v-4h3v-2.5c0-3.1 1.9-4.5 4.4-4.5 1.3 0 2.6.2 2.6.2v3h-1.5c-1.4 0-1.9.9-1.9 1.8V21h3.4l-.5 4z"
-                    fill="white"
-                  />
+                  <path d="M29 25h-3.5v10h-4.5V25H18v-4h3v-2.5c0-3.1 1.9-4.5 4.4-4.5 1.3 0 2.6.2 2.6.2v3h-1.5c-1.4 0-1.9.9-1.9 1.8V21h3.4l-.5 4z" fill="white" />
                 </svg>
               </a>
               <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="Instagram">
@@ -49,63 +46,23 @@ const Footer = () => {
               <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="TikTok">
                 <svg width="30" height="30" viewBox="0 0 48 48" className="md:w-9 md:h-9">
                   <circle cx="24" cy="24" r="24" fill="currentColor" />
-                  <path
-                    d="M30 16.5a5.5 5.5 0 003.5 2v3.5a9 9 0 01-3.5-.7v7.7a7 7 0 11-7-7v3.5a3.5 3.5 0 103.5 3.5V14h3.5v2.5z"
-                    fill="white"
-                  />
+                  <path d="M30 16.5a5.5 5.5 0 003.5 2v3.5a9 9 0 01-3.5-.7v7.7a7 7 0 11-7-7v3.5a3.5 3.5 0 103.5 3.5V14h3.5v2.5z" fill="white" />
                 </svg>
               </a>
             </div>
           </div>
 
           <div>
-            <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">SHOP</h4>
-            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
-              <li>
-                <Link to="/#sorten" className="hover:opacity-100 transition-opacity ft-link">
-                  Produkte
-                </Link>
-              </li>
-              <li>
-                <Link to="/#bundle" className="hover:opacity-100 transition-opacity ft-link">
-                  Bundle
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="hover:opacity-100 transition-opacity ft-link">
-                  Gutschein
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">INFO</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
               <li>
-                <Link to="/ueber-uns" className="hover:opacity-100 transition-opacity ft-link">
-                  Über uns
-                </Link>
+                <Link to="/ueber-uns" className="hover:opacity-100 transition-opacity ft-link">Über uns</Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">
-                  FAQ
-                </Link>
+                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
               </li>
               <li>
-                <Link to="/das-ist-drin" className="hover:opacity-100 transition-opacity ft-link">
-                  Das ist drin
-                </Link>
-              </li>
-              <li>
-                <Link to="/anleitung" className="hover:opacity-100 transition-opacity ft-link">
-                  Anleitung
-                </Link>
-              </li>
-              <li>
-                <Link to="/b2b-anfragen" className="hover:opacity-100 transition-opacity ft-link">
-                  B2B Anfragen
-                </Link>
+                <Link to="/b2b-anfragen" className="hover:opacity-100 transition-opacity ft-link">B2B Anfragen</Link>
               </li>
             </ul>
           </div>
@@ -114,62 +71,33 @@ const Footer = () => {
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">LEGAL</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
               <li>
-                <Link to="/impressum" className="hover:opacity-100 transition-opacity ft-link">
-                  Impressum
-                </Link>
+                <Link to="/impressum" className="hover:opacity-100 transition-opacity ft-link">Impressum</Link>
               </li>
               <li>
-                <Link to="/datenschutz" className="hover:opacity-100 transition-opacity ft-link">
-                  Datenschutz
-                </Link>
+                <Link to="/datenschutz" className="hover:opacity-100 transition-opacity ft-link">Datenschutz</Link>
               </li>
               <li>
-                <Link to="/agb" className="hover:opacity-100 transition-opacity ft-link">
-                  AGB
-                </Link>
+                <Link to="/agb" className="hover:opacity-100 transition-opacity ft-link">AGB</Link>
               </li>
               <li>
-                <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">
-                  Widerrufsbelehrung
-                </Link>
+                <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
               </li>
               <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">
-                  Versandbedingungen
-                </Link>
+                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versandbedingungen</Link>
               </li>
             </ul>
           </div>
 
-          <div className="flex flex-col">
+          <div>
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">HILFE</h4>
-            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 mb-3 md:mb-4 ft-links">
+            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
               <li>
-                <Link to="/hilfe" className="hover:opacity-100 transition-opacity ft-link">
-                  Help Center
-                </Link>
+                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">
-                  Versand
-                </Link>
+                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
               </li>
             </ul>
-            <div className="flex gap-1.5 md:gap-2 mt-auto pt-3 md:pt-4 flex-wrap">
-              {["PayPal", "Klarna", "VISA"].map((method) => (
-                <div
-                  key={method}
-                  className="bg-foreground/10 border border-foreground/20 rounded-md px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-bold select-none ft-payment"
-                >
-                  {method}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
