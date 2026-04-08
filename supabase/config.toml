@@ -1,1 +1,4 @@
 project_id = "fdwaufhnkrqbbxmdmxjf"
+
+[functions.get-orders-by-promo]
+verify_jwt = false
