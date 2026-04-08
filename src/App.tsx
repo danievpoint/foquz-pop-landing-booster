@@ -42,6 +42,8 @@ const App = () => {
               <Routes>
                 <Route path="/datenschutz" element={<Datenschutz />} />
                 <Route path="/impressum" element={<Impressum />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<ComingSoonPage />} />
               </Routes>
             </BrowserRouter>
