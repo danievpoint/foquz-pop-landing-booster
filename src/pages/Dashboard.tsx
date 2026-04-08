@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { LogOut, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { toast } from "sonner";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { LogOut, TrendingUp, ShoppingCart, DollarSign } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Order {
   order_id: string;
@@ -18,53 +30,128 @@ interface DashboardData {
   orders: Order[];
 }
 
+interface OrdersApiResponse {
+  ok: boolean;
+  data?: DashboardData;
+  error?: string;
+}
+
+const emptyData: DashboardData = {
+  total_sales: 0,
+  total_revenue: 0,
+  orders: [],
+};
+
 const Dashboard = () => {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [promoCode, setPromoCode] = useState("");
-  const navigate = useNavigate();
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [savingPromoCode, setSavingPromoCode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<DashboardData>(emptyData);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    const initializeDashboard = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (!session) {
         navigate("/auth");
         return;
       }
+
+      setUserId(session.user.id);
       setUserEmail(session.user.email || "");
 
-      // Get promo code
       const { data: profile } = await supabase
         .from("profiles")
         .select("promo_code")
         .eq("id", session.user.id)
         .single();
-      setPromoCode(profile?.promo_code || "");
 
-      fetchOrders();
+      const currentPromoCode = profile?.promo_code || "";
+      setPromoCode(currentPromoCode);
+      setPromoCodeInput(currentPromoCode || String(session.user.user_metadata?.promo_code || ""));
+
+      await fetchOrders(session.access_token);
     };
-    checkAuth();
+
+    void initializeDashboard();
   }, [navigate]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (accessToken?: string) => {
     setLoading(true);
     setError(null);
+
     try {
-      const { data: result, error: fnError } = await supabase.functions.invoke(
-        "get-orders-by-promo"
-      );
-      if (fnError) throw fnError;
-      if (result?.error && result.error !== "No promo code configured") {
-        throw new Error(result.error);
+      let token = accessToken;
+      if (!token) {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        token = session?.access_token;
       }
-      setData(result || { total_sales: 0, total_revenue: 0, orders: [] });
-    } catch (err: any) {
-      setError(err.message || "Failed to load data");
-      toast.error("Failed to load dashboard data");
+
+      if (!token) {
+        throw new Error("Bitte melde dich erneut an.");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-orders-by-promo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify({}),
+        },
+      );
+
+      const result: OrdersApiResponse = await response.json();
+
+      if (!result.ok) {
+        throw new Error(result.error || "Dashboard-Daten konnten nicht geladen werden.");
+      }
+
+      setData(result.data || emptyData);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Dashboard-Daten konnten nicht geladen werden.";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const savePromoCode = async () => {
+    const trimmedPromoCode = promoCodeInput.trim();
+    if (!trimmedPromoCode || !userId) {
+      toast.error("Bitte gib einen Promo-Code ein.");
+      return;
+    }
+
+    setSavingPromoCode(true);
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ promo_code: trimmedPromoCode })
+        .eq("id", userId);
+
+      if (error) throw error;
+
+      setPromoCode(trimmedPromoCode);
+      toast.success("Promo-Code gespeichert.");
+      await fetchOrders();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Promo-Code konnte nicht gespeichert werden.");
+    } finally {
+      setSavingPromoCode(false);
     }
   };
 
@@ -73,193 +160,186 @@ const Dashboard = () => {
     navigate("/auth");
   };
 
-  // Prepare chart data - group by day
-  const chartData = data?.orders
-    ? Object.entries(
-        data.orders.reduce((acc: Record<string, number>, order) => {
-          const day = new Date(order.date).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          });
-          acc[day] = (acc[day] || 0) + order.revenue;
-          return acc;
-        }, {})
-      )
-        .map(([date, revenue]) => ({ date, revenue: Math.round(revenue * 100) / 100 }))
-        .reverse()
-    : [];
+  const chartData = Object.entries(
+    data.orders.reduce<Record<string, number>>((acc, order) => {
+      const key = new Date(order.date).toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+      });
+      acc[key] = (acc[key] || 0) + order.revenue;
+      return acc;
+    }, {}),
+  ).map(([date, revenue]) => ({ date, revenue }));
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-muted/30">
+      <header className="border-b border-border bg-background">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900">Dashboard</h1>
-            <p className="text-xs text-slate-500">{userEmail}</p>
+            <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
+            <p className="text-sm text-muted-foreground">{userEmail}</p>
           </div>
+
           <div className="flex items-center gap-3">
             {promoCode && (
-              <span className="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
                 Code: {promoCode}
               </span>
             )}
-            <button
-              onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <LogOut size={18} />
-            </button>
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
+        {!promoCode && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Promo-Code hinterlegen</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3 sm:flex-row">
+              <Input
+                value={promoCodeInput}
+                onChange={(e) => setPromoCodeInput(e.target.value)}
+                placeholder="DEINCODE"
+              />
+              <Button onClick={savePromoCode} disabled={savingPromoCode}>
+                {savingPromoCode ? "Speichert..." : "Speichern"}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {loading ? (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 animate-pulse">
-                  <div className="h-4 bg-slate-100 rounded w-24 mb-3" />
-                  <div className="h-8 bg-slate-100 rounded w-16" />
-                </div>
-              ))}
-            </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-6 h-64 animate-pulse" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {[0, 1, 2].map((item) => (
+              <Card key={item}>
+                <CardContent className="space-y-3 pt-6">
+                  <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+                  <div className="h-8 w-20 animate-pulse rounded bg-muted" />
+                </CardContent>
+              </Card>
+            ))}
           </div>
         ) : error ? (
-          <div className="bg-white rounded-xl border border-red-200 p-8 text-center">
-            <p className="text-red-600 text-sm mb-3">{error}</p>
-            <button
-              onClick={fetchOrders}
-              className="text-sm text-slate-900 font-medium hover:underline"
-            >
-              Retry
-            </button>
-          </div>
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <p className="mb-4 text-sm text-destructive">{error}</p>
+              <Button variant="outline" onClick={() => void fetchOrders()}>
+                Retry
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
-          <div className="space-y-6">
-            {/* KPIs */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <div className="flex items-center gap-2 mb-1">
-                  <ShoppingCart size={14} className="text-slate-400" />
-                  <span className="text-sm text-slate-500">Total Sales</span>
-                </div>
-                <p className="text-2xl font-semibold text-slate-900">
-                  {data?.total_sales || 0}
-                </p>
-              </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <div className="flex items-center gap-2 mb-1">
-                  <DollarSign size={14} className="text-slate-400" />
-                  <span className="text-sm text-slate-500">Total Revenue</span>
-                </div>
-                <p className="text-2xl font-semibold text-slate-900">
-                  €{(data?.total_revenue || 0).toFixed(2)}
-                </p>
-              </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp size={14} className="text-slate-400" />
-                  <span className="text-sm text-slate-500">Avg. Order Value</span>
-                </div>
-                <p className="text-2xl font-semibold text-slate-900">
-                  €{data && data.total_sales > 0
-                    ? (data.total_revenue / data.total_sales).toFixed(2)
-                    : "0.00"}
-                </p>
-              </div>
+          <>
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <ShoppingCart className="h-4 w-4" />
+                    Total Sales
+                  </div>
+                  <p className="text-3xl font-semibold text-foreground">{data.total_sales}</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <DollarSign className="h-4 w-4" />
+                    Total Revenue
+                  </div>
+                  <p className="text-3xl font-semibold text-foreground">€{data.total_revenue.toFixed(2)}</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <TrendingUp className="h-4 w-4" />
+                    Avg. Order Value
+                  </div>
+                  <p className="text-3xl font-semibold text-foreground">
+                    €{data.total_sales ? (data.total_revenue / data.total_sales).toFixed(2) : "0.00"}
+                  </p>
+                </CardContent>
+              </Card>
             </div>
 
-            {/* Chart */}
-            {chartData.length > 0 && (
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h2 className="text-sm font-medium text-slate-900 mb-4">Revenue Over Time</h2>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis dataKey="date" tick={{ fontSize: 12 }} stroke="#94a3b8" />
-                      <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#fff",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                        }}
-                        formatter={(value: number) => [`€${value.toFixed(2)}`, "Revenue"]}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="revenue"
-                        stroke="#0f172a"
-                        strokeWidth={2}
-                        dot={{ r: 3 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Revenue over time</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {chartData.length > 0 ? (
+                  <div className="h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                        <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "hsl(var(--background))",
+                            borderColor: "hsl(var(--border))",
+                            borderRadius: "12px",
+                          }}
+                          formatter={(value: number) => [`€${value.toFixed(2)}`, "Revenue"]}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="revenue"
+                          stroke="hsl(var(--foreground))"
+                          strokeWidth={2}
+                          dot={{ r: 3, fill: "hsl(var(--foreground))" }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Noch keine Umsatzdaten vorhanden.</p>
+                )}
+              </CardContent>
+            </Card>
 
-            {/* Orders Table */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100">
-                <h2 className="text-sm font-medium text-slate-900">Recent Orders</h2>
-              </div>
-              {data?.orders && data.orders.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-slate-100">
-                        <th className="text-left px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                          Order ID
-                        </th>
-                        <th className="text-left px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="text-right px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                          Revenue
-                        </th>
-                        <th className="text-left px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                          Discount Code
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.orders.map((order, i) => (
-                        <tr
-                          key={order.order_id + i}
-                          className="border-b border-slate-50 hover:bg-slate-25"
-                        >
-                          <td className="px-6 py-3 font-medium text-slate-900">
-                            {order.order_id}
-                          </td>
-                          <td className="px-6 py-3 text-slate-500">
-                            {new Date(order.date).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-3 text-right text-slate-900">
-                            €{order.revenue.toFixed(2)}
-                          </td>
-                          <td className="px-6 py-3">
-                            <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-xs font-medium">
-                              {order.discount_code}
-                            </span>
-                          </td>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Recent orders</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {data.orders.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[640px] text-sm">
+                      <thead>
+                        <tr className="border-b border-border text-left text-muted-foreground">
+                          <th className="pb-3 font-medium">Order ID</th>
+                          <th className="pb-3 font-medium">Date</th>
+                          <th className="pb-3 font-medium text-right">Revenue</th>
+                          <th className="pb-3 font-medium">Discount Code</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="px-6 py-12 text-center text-slate-400 text-sm">
-                  No orders found for your promo code yet.
-                </div>
-              )}
-            </div>
-          </div>
+                      </thead>
+                      <tbody>
+                        {data.orders.map((order) => (
+                          <tr key={`${order.order_id}-${order.date}`} className="border-b border-border/60">
+                            <td className="py-3 font-medium text-foreground">{order.order_id}</td>
+                            <td className="py-3 text-muted-foreground">
+                              {new Date(order.date).toLocaleDateString("de-DE")}
+                            </td>
+                            <td className="py-3 text-right text-foreground">€{order.revenue.toFixed(2)}</td>
+                            <td className="py-3 text-muted-foreground">{order.discount_code}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Noch keine Bestellungen für deinen Promo-Code.</p>
+                )}
+              </CardContent>
+            </Card>
+          </>
         )}
       </main>
     </div>
