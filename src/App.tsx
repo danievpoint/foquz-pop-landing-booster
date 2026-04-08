@@ -21,6 +21,8 @@ import HelpCenter from "./pages/HelpCenter";
 import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
 import ComingSoonPage from "@/pages/ComingSoonPage";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
