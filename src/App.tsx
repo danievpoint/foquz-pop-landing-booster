@@ -21,6 +21,8 @@ import HelpCenter from "./pages/HelpCenter";
 import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
 import ComingSoonPage from "@/pages/ComingSoonPage";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => {
               <Routes>
                 <Route path="/datenschutz" element={<Datenschutz />} />
                 <Route path="/impressum" element={<Impressum />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<ComingSoonPage />} />
               </Routes>
             </BrowserRouter>
@@ -60,6 +64,8 @@ const App = () => {
           <ScrollToHash />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/faq" element={<FAQ />} />
