@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -96,6 +96,45 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
     +
   </button>;
 
+
+const DesktopHoverVideo = ({ video }: { video: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current?.closest('.group');
+    const el = videoRef.current;
+    if (!container || !el) return;
+
+    const handleEnter = () => { el.play().catch(() => {}); };
+    const handleLeave = () => { el.pause(); el.currentTime = 0; };
+
+    container.addEventListener('mouseenter', handleEnter);
+    container.addEventListener('mouseleave', handleLeave);
+
+    return () => {
+      container.removeEventListener('mouseenter', handleEnter);
+      container.removeEventListener('mouseleave', handleLeave);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef}>
+      <video
+        ref={videoRef}
+        src={video}
+        muted
+        loop
+        playsInline
+        disablePictureInPicture
+        controlsList="nodownload nofullscreen noremoteplayback"
+        onContextMenu={(e) => e.preventDefault()}
+        preload="auto"
+        className="w-full aspect-square object-cover"
+      />
+    </div>
+  );
+};
 
 const ProductGrid = () => {
   const { addToCart } = useCart();
@@ -229,24 +268,7 @@ const ProductGrid = () => {
                   className="flex flex-col group">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
-                        <video
-                          src={p.video}
-                          muted
-                          loop
-                          playsInline
-                          disablePictureInPicture
-                          controlsList="nodownload nofullscreen noremoteplayback"
-                          onContextMenu={(e) => e.preventDefault()}
-                          preload="auto"
-                          className="w-full aspect-square object-cover"
-                          ref={(el) => {
-                            if (!el) return;
-                            const parent = el.closest('.group');
-                            if (!parent) return;
-                            parent.addEventListener('mouseenter', () => el.play());
-                            parent.addEventListener('mouseleave', () => { el.pause(); el.currentTime = 0; });
-                          }}
-                        />
+                        <DesktopHoverVideo video={p.video} />
                       ) : (
                         <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                       )}
