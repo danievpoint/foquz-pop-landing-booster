@@ -5,6 +5,7 @@ import ProductGrid from "@/components/ProductGrid";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import CookieBanner from "@/components/CookieBanner";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import BundlePopup from "@/components/BundlePopup";
 
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
