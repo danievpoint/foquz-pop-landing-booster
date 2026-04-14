@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -22,17 +21,6 @@ const cardVariants = {
   })
 };
 
-const slideVariantsInstant = {
-  enter: () => ({ opacity: 0 }),
-  center: { opacity: 1 },
-  exit: () => ({ opacity: 0 })
-};
-
-const slideVariantsSmooth = {
-  enter: () => ({ opacity: 0 }),
-  center: { opacity: 1 },
-  exit: () => ({ opacity: 0 })
-};
 
 const InfoOverlay = ({
   product,
@@ -99,33 +87,28 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 const DesktopHoverVideo = ({ video }: { video: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const container = containerRef.current?.closest('.group');
+  const handleEnter = useCallback(() => {
+    videoRef.current?.play().catch(() => {});
+  }, []);
+
+  const handleLeave = useCallback(() => {
     const el = videoRef.current;
-    if (!container || !el) return;
-
-    const handleEnter = () => { el.play().catch(() => {}); };
-    const handleLeave = () => { el.pause(); el.currentTime = 0; };
-
-    container.addEventListener('mouseenter', handleEnter);
-    container.addEventListener('mouseleave', handleLeave);
-
-    return () => {
-      container.removeEventListener('mouseenter', handleEnter);
-      container.removeEventListener('mouseleave', handleLeave);
-    };
+    if (el) {
+      el.pause();
+      el.currentTime = 0;
+    }
   }, []);
 
   return (
-    <div ref={containerRef}>
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       <video
         ref={videoRef}
         src={video}
         muted
         loop
         playsInline
+        controls={false}
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
@@ -326,6 +309,7 @@ const ProductGrid = () => {
                       muted
                       playsInline
                       autoPlay
+                      controls={false}
                       disablePictureInPicture
                       controlsList="nodownload nofullscreen noremoteplayback"
                       onContextMenu={(e) => e.preventDefault()}
