@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import foquzLogo from "@/assets/foquz-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -229,24 +229,7 @@ const ProductGrid = () => {
                   className="flex flex-col group">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
-                        <video
-                          src={p.video}
-                          muted
-                          loop
-                          playsInline
-                          disablePictureInPicture
-                          controlsList="nodownload nofullscreen noremoteplayback"
-                          onContextMenu={(e) => e.preventDefault()}
-                          preload="auto"
-                          className="w-full aspect-square object-cover"
-                          ref={(el) => {
-                            if (!el) return;
-                            const parent = el.closest('.group');
-                            if (!parent) return;
-                            parent.addEventListener('mouseenter', () => el.play());
-                            parent.addEventListener('mouseleave', () => { el.pause(); el.currentTime = 0; });
-                          }}
-                        />
+                        <DesktopHoverVideo video={p.video} />
                       ) : (
                         <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                       )}
