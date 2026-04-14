@@ -87,33 +87,28 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 const DesktopHoverVideo = ({ video }: { video: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const container = containerRef.current?.closest('.group');
+  const handleEnter = useCallback(() => {
+    videoRef.current?.play().catch(() => {});
+  }, []);
+
+  const handleLeave = useCallback(() => {
     const el = videoRef.current;
-    if (!container || !el) return;
-
-    const handleEnter = () => { el.play().catch(() => {}); };
-    const handleLeave = () => { el.pause(); el.currentTime = 0; };
-
-    container.addEventListener('mouseenter', handleEnter);
-    container.addEventListener('mouseleave', handleLeave);
-
-    return () => {
-      container.removeEventListener('mouseenter', handleEnter);
-      container.removeEventListener('mouseleave', handleLeave);
-    };
+    if (el) {
+      el.pause();
+      el.currentTime = 0;
+    }
   }, []);
 
   return (
-    <div ref={containerRef}>
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       <video
         ref={videoRef}
         src={video}
         muted
         loop
         playsInline
+        controls={false}
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
