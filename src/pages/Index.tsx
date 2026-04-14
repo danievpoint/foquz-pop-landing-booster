@@ -73,6 +73,7 @@ const Index = () => {
       </div>
       <CookieBanner />
       <NewsletterPopup />
+      <BundlePopup />
     </>
   );
 };
