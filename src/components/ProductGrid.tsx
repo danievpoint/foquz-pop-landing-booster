@@ -309,6 +309,7 @@ const ProductGrid = () => {
                       muted
                       playsInline
                       autoPlay
+                      controls={false}
                       disablePictureInPicture
                       controlsList="nodownload nofullscreen noremoteplayback"
                       onContextMenu={(e) => e.preventDefault()}
