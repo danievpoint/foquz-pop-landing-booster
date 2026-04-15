@@ -15,6 +15,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const { count, openCart } = useCart();
   const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
