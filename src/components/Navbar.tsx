@@ -61,10 +61,10 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed ${isHome ? "top-[24px] md:top-[28px] z-[9999]" : "top-0 z-[10001]"} left-0 right-0 transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled && isHome ? "shadow-md" : ""}`}
+      className={`fixed ${isHome ? "top-[24px] md:top-[28px] z-[9999]" : "top-0 z-[10001]"} left-0 right-0 overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled && isHome ? "shadow-md" : ""}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
         <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
         {/* Mobile: PNG background */}
@@ -72,7 +72,7 @@ const Navbar = () => {
         {/* Desktop: SVG background, overflows downward */}
         <img src={navbarHeaderBgSvg} alt="" className="absolute top-[-86%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-[0.4]" />
       </div>
-      <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative">
+      <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative z-10">
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
           {/* Left pill */}
