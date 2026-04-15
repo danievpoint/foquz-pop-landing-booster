@@ -61,7 +61,7 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed ${isHome ? "top-[24px] md:top-[28px]" : "top-0"} left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled && isHome ? "shadow-md" : ""}`}
+      className={`fixed ${isHome ? "top-[24px] md:top-[28px] z-[9999]" : "top-0 z-[10001]"} left-0 right-0 transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled && isHome ? "shadow-md" : ""}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 overflow-hidden">
