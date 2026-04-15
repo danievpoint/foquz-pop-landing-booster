@@ -165,7 +165,9 @@ const HeroSection = () => {
                   calcMode="spline"
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
-                <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
+                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as any}>
+                  <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" style={{ cursor: "pointer" }} />
+                </a>
               </g>
             </svg>
 
