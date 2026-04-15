@@ -23,6 +23,10 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   activateNewsletterDiscount: () => void;
+  popupOpen: boolean;
+  setPopupOpen: (v: boolean) => void;
+  lastAddedProductId: string | null;
+  addToCartTimestamp: number;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -39,6 +43,10 @@ const CartContext = createContext<CartContextType>({
   removeFromCart: () => {},
   updateQty: () => {},
   activateNewsletterDiscount: () => {},
+  popupOpen: false,
+  setPopupOpen: () => {},
+  lastAddedProductId: null,
+  addToCartTimestamp: 0,
 });
 
 export const useCart = () => useContext(CartContext);
@@ -83,6 +91,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [hasNewsletterDiscount, setHasNewsletterDiscount] = useState(() => {
     return localStorage.getItem(DISCOUNT_KEY) === "true";
   });
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
+  const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
@@ -101,6 +112,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { ...p, qty }];
     });
+
+    setLastAddedProductId(p.id);
+    setAddToCartTimestamp(Date.now());
 
     const myConfetti = getConfettiInstance();
     void myConfetti({
@@ -143,6 +157,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
+      popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
     }}>
       {children}
     </CartContext.Provider>
