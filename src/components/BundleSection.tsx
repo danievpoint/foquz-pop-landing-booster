@@ -100,7 +100,7 @@ const BundleSection = () => {
             </div>
 
             {/* CTA + Scarcity banner */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+            <div className="flex flex-col items-start gap-3 md:gap-4">
               <button
                 onClick={() =>
                   addToCart(1, {
@@ -116,7 +116,7 @@ const BundleSection = () => {
                 JETZT SPAR-BUNDLE SICHERN
               </button>
               {/* Scarcity banner - desktop only */}
-              <div className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
+              <div className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60 whitespace-nowrap" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
                 <span className="text-[#ffd618] text-lg">🔥</span>
                 <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
                   Limitiert – Nur solange der Vorrat reicht!
