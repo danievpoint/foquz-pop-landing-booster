@@ -163,7 +163,7 @@ const ProductDetail = () => {
       {/* Purple wrapper for bundle page */}
       <div style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
       {/* Back link */}
-      <div className="container mx-auto px-4 pt-20 md:pt-28">
+      <div className="container mx-auto px-4 pt-24 md:pt-28">
         <Link
           to="/#sorten"
           className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors mb-3 md:mb-6 ${isBundlePage ? "text-white/60 hover:text-white" : "text-muted-foreground hover:text-foreground"}`}
