@@ -1,10 +1,12 @@
 import Navbar from "@/components/Navbar";
+import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
 
 const Datenschutz = () => (
   <div className="min-h-screen">
+    <MarqueeBanner />
     <Navbar />
-    <div className="container mx-auto px-4 pt-8 pb-16 max-w-3xl">
+    <div className="container mx-auto px-4 pt-24 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Datenschutzerklärung</h1>
       <div className="prose prose-lg max-w-none opacity-80 space-y-6 leading-relaxed [&_p]:leading-[1.45] [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_ul]:list-disc [&_ul]:pl-6">
 
