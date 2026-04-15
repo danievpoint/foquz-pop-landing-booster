@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { Link } from "react-router-dom";
@@ -40,6 +40,7 @@ const BundlePopup = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[10005] bg-black/50 backdrop-blur-sm"
             onClick={dismiss}
           />
@@ -50,10 +51,13 @@ const BundlePopup = () => {
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
             className="fixed inset-0 z-[10006] flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="relative w-full max-w-sm rounded-3xl p-8 shadow-2xl border-2 border-foreground/10 bg-card text-center pointer-events-auto">
+            <div
+              className="relative w-full max-w-sm md:max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-foreground/10 flex flex-col items-center text-center gap-4 pointer-events-auto"
+              style={{ backgroundColor: "#75559f" }}
+            >
               <button
                 onClick={dismiss}
-                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
+                className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -61,34 +65,31 @@ const BundlePopup = () => {
               <Link to="/produkt/starter-bundle" onClick={dismiss}>
                 <img
                   src={foquzBox}
-                  alt="FOQUZ Power Bundle Box"
-                  className="w-40 h-40 mx-auto mb-3 drop-shadow-lg object-contain hover:scale-105 transition-transform"
+                  alt="FOQUZ Power Bundle"
+                  className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl"
                 />
               </Link>
 
-              <h3 className="text-2xl font-extrabold mb-1">
-                FOQUZ POWER BUNDLE 🔥
+              <h3 className="text-white font-extrabold text-xl md:text-2xl leading-tight">
+                FOQUZ POWER BUNDLE – Alle 3 Sorten!
               </h3>
-              <p className="text-muted-foreground text-sm mb-2 leading-relaxed">
-                Alle 3 Sorten in einer Box – spare ganze <strong className="text-foreground">28%</strong>!
+              <p className="text-white/70 text-sm md:text-base">
+                Spar <span className="font-black">15%</span> und teste alle Geschmacksrichtungen in einer Box.
               </p>
 
-              <div className="flex items-center justify-center gap-3 mb-5">
-                <span className="text-2xl font-black text-foreground">14,99€</span>
-                <span className="text-base text-muted-foreground line-through">23,97€</span>
+              <div className="flex items-center gap-3">
+                <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
+                <span className="text-white/50 line-through text-base md:text-lg">23,97€</span>
               </div>
 
               <button
                 onClick={handleAddToCart}
-                className="comic-btn text-sm py-3 px-8 font-black w-full"
+                className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
                 style={{ backgroundColor: "#ffd618", color: "#000" }}
               >
-                JETZT BUNDLE SICHERN
+                <ShoppingBag className="w-5 h-5" />
+                BUNDLE SICHERN
               </button>
-
-              <p className="text-[11px] text-muted-foreground mt-3">
-                Limitiert – Nur solange der Vorrat reicht!
-              </p>
             </div>
           </motion.div>
         </>
