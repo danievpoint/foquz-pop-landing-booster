@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
 
@@ -84,14 +85,14 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <div className="md:flex md:justify-center">
-                <img
-                  src={heroJars}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                  fetchPriority="high"
-                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite]"
-                />
-              </div>
+                <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
+                  <img
+                    src={heroJars}
+                    alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                    fetchPriority="high"
+                    className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                  />
+                </Link>
             </div>
           </div>
         </div>
@@ -164,7 +165,9 @@ const HeroSection = () => {
                   calcMode="spline"
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
-                <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" />
+                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as any}>
+                  <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" style={{ cursor: "pointer" }} />
+                </a>
               </g>
             </svg>
 
