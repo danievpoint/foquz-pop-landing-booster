@@ -15,6 +15,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const { count, openCart } = useCart();
   const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -60,7 +61,7 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed top-[24px] md:top-[28px] left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
+      className={`fixed ${isHome ? "top-[24px] md:top-[28px]" : "top-0"} left-0 right-0 z-[9999] transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled && isHome ? "shadow-md" : ""}`}
       style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 overflow-hidden">
