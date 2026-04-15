@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
@@ -6,19 +6,34 @@ import foquzBox from "@/assets/foquz-box.png";
 import { Link } from "react-router-dom";
 
 const STORAGE_KEY = "foquz_bundle_popup_dismissed";
+const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
 const BundlePopup = () => {
   const [visible, setVisible] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp } = useCart();
+  const shownRef = useRef(false);
 
   useEffect(() => {
+    if (addToCartTimestamp === 0) return;
+    if (shownRef.current) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
-    const timer = setTimeout(() => setVisible(true), 60000);
+    if (popupOpen) return;
+    if (lastAddedProductId === "starter-bundle") return;
+
+    const timer = setTimeout(() => {
+      if (popupOpen || shownRef.current || sessionStorage.getItem(STORAGE_KEY)) return;
+      shownRef.current = true;
+      setVisible(true);
+      setPopupOpen(true);
+      sessionStorage.setItem(BUNDLE_SHOWN_KEY, String(Date.now()));
+    }, 1500);
+
     return () => clearTimeout(timer);
-  }, []);
+  }, [addToCartTimestamp]);
 
   const dismiss = () => {
     setVisible(false);
+    setPopupOpen(false);
     sessionStorage.setItem(STORAGE_KEY, "1");
   };
 

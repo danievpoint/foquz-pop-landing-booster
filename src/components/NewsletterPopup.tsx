@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import mascotWatermelon from "@/assets/mascot-watermelon.png";
 
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
+const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
 const NewsletterPopup = () => {
   const [visible, setVisible] = useState(false);
@@ -15,16 +17,64 @@ const NewsletterPopup = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
-  const { activateNewsletterDiscount } = useCart();
+  const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
+  const isMobile = useIsMobile();
+  const triggered = useRef(false);
 
+  const canShow = () => {
+    if (sessionStorage.getItem(STORAGE_KEY)) return false;
+    if (items.length > 0) return false;
+    if (popupOpen) return false;
+    // Don't show right after bundle popup
+    const bundleShownAt = sessionStorage.getItem(BUNDLE_SHOWN_KEY);
+    if (bundleShownAt && Date.now() - Number(bundleShownAt) < 10000) return false;
+    return true;
+  };
+
+  const trigger = () => {
+    if (triggered.current) return;
+    if (!canShow()) return;
+    triggered.current = true;
+    setVisible(true);
+    setPopupOpen(true);
+  };
+
+  // Desktop: Exit Intent
   useEffect(() => {
+    if (isMobile) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
-    const timer = setTimeout(() => setVisible(true), 6000);
-    return () => clearTimeout(timer);
-  }, []);
+
+    const handler = (e: MouseEvent) => {
+      if (e.clientY < 0) trigger();
+    };
+    document.documentElement.addEventListener("mouseleave", handler);
+    return () => document.documentElement.removeEventListener("mouseleave", handler);
+  }, [isMobile, items.length, popupOpen]);
+
+  // Mobile: 25s timer OR 55% scroll
+  useEffect(() => {
+    if (!isMobile) return;
+    if (sessionStorage.getItem(STORAGE_KEY)) return;
+
+    const timer = setTimeout(() => trigger(), 25000);
+
+    const scrollHandler = () => {
+      const docHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const scrolled = window.scrollY / (docHeight - viewportHeight);
+      if (scrolled >= 0.55) trigger();
+    };
+    window.addEventListener("scroll", scrollHandler, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, [isMobile, items.length, popupOpen]);
 
   const dismiss = () => {
     setVisible(false);
+    setPopupOpen(false);
     sessionStorage.setItem(STORAGE_KEY, "1");
   };
 
