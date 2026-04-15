@@ -94,13 +94,13 @@ const BundleSection = () => {
             </div>
 
             {/* Price */}
-            <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
+            <div className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
               <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">23,97€</span>
             </div>
 
             {/* CTA + Scarcity banner */}
-            <div className="flex flex-col items-start gap-3 md:gap-4">
+            <div className="flex flex-col items-center md:items-start gap-3 md:gap-4">
               <button
                 onClick={() =>
                   addToCart(1, {
