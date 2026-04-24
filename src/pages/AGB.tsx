@@ -61,7 +61,7 @@ const AGB = () => (
 
         <h2>§9 Datenschutz</h2>
         <p>(1) Der Anbieter verarbeitet personenbezogene Daten der Kunden zur Vertragsabwicklung und für Marketingzwecke. Die Datenverarbeitung erfolgt ausschließlich im Rahmen der geltenden Datenschutzgesetze, insbesondere der Datenschutz-Grundverordnung (DSGVO).</p>
-        <p>(2) Weitere Informationen zur Verarbeitung personenbezogener Daten sind in der Datenschutzerklärung auf der Website des Anbieters verfügbar.</p>
+        <p>(2) Weitere Informationen zur Verarbeitung personenbezogener Daten sind in der Datenschutzerklärung auf der Website des Anbieters unter folgendem Link verfügbar: <Link to="/datenschutz" className="underline hover:opacity-100">Datenschutzerklärung</Link></p>
 
         <h2>§10 Änderung der AGB</h2>
         <p>(1) Der Anbieter behält sich das Recht vor, diese AGB jederzeit zu ändern, soweit dies erforderlich ist, um sie an geänderte gesetzliche oder wirtschaftliche Rahmenbedingungen anzupassen.</p>
