@@ -10,7 +10,7 @@ import { products } from "@/data/products";
 // Preload all product images immediately
 products.forEach((p) => {
   const img = new Image();
-  img.src = p.image;
+  img.src = p.videoPoster ?? p.image;
 });
 
 const cardVariants = {
@@ -85,7 +85,7 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
   </button>;
 
 
-const DesktopHoverVideo = ({ video }: { video: string }) => {
+const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleEnter = useCallback(() => {
@@ -105,6 +105,7 @@ const DesktopHoverVideo = ({ video }: { video: string }) => {
       <video
         ref={videoRef}
         src={video}
+        poster={poster}
         muted
         loop
         playsInline
@@ -251,7 +252,7 @@ const ProductGrid = () => {
                   className="flex flex-col group">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
-                        <DesktopHoverVideo video={p.video} />
+                        <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
                       ) : (
                         <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
                       )}
@@ -305,7 +306,7 @@ const ProductGrid = () => {
                     <video
                       key={`video-${activeIndex}`}
                       src={products[activeIndex].video}
-                      poster={products[activeIndex].image}
+                      poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
                       muted
                       playsInline
                       autoPlay

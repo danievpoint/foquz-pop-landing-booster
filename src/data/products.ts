@@ -1,6 +1,9 @@
 import productWatermelon from "@/assets/product-watermelon-new.png";
 import productThai from "@/assets/product-thai-new.png";
 import productLemon from "@/assets/product-lemon-new.png";
+import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
+import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
+import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
 import foquzBox from "@/assets/foquz-box.png";
 
 export interface Product {
@@ -12,6 +15,7 @@ export interface Product {
   desc: string;
   image: string;
   video?: string;
+  videoPoster?: string;
   color: string;
   ingredients: string[];
   isBundle?: boolean;
@@ -26,6 +30,7 @@ export const products: Product[] = [
     desc: "Auch Mario wollte nur Peach.\nFruchtige Frische, einfach durchgespielt.",
     image: productWatermelon,
     video: "/videos/video_product_peach.mp4",
+    videoPoster: productPeachVideoPoster,
     color: "#e88a3a",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Pfirsicharoma"],
   },
@@ -37,6 +42,7 @@ export const products: Product[] = [
     desc: "Thailand für die Tasche.\nAbheben ohne Flugticket.",
     image: productThai,
     video: "/videos/video_product_mint.mp4",
+    videoPoster: productThaiVideoPoster,
     color: "#85c8b5",
     ingredients: ["Menthol", "Borneol", "Kampferaroma"],
   },
@@ -48,6 +54,7 @@ export const products: Product[] = [
     desc: "Nimm's Easy, bleib Breezy.\nHol dir einen Tag unter Zitronenbäumen.",
     image: productLemon,
     video: "/videos/video_product_lemon.mp4",
+    videoPoster: productLemonVideoPoster,
     color: "#ffd618",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
   },

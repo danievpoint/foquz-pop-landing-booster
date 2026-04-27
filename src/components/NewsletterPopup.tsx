@@ -11,6 +11,23 @@ import mascotWatermelon from "@/assets/mascot-watermelon.png";
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
+const preloadImage = (src: string) =>
+  new Promise<void>((resolve) => {
+    if (typeof Image === "undefined") {
+      resolve();
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+
+    if (img.complete) resolve();
+  });
+
+const mascotReady = preloadImage(mascotWatermelon);
+
 const NewsletterPopup = () => {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -20,6 +37,15 @@ const NewsletterPopup = () => {
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
+  const loadingPopup = useRef(false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const canShow = useCallback(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) return false;
@@ -31,9 +57,19 @@ const NewsletterPopup = () => {
     return true;
   }, [items.length, popupOpen]);
 
-  const trigger = useCallback(() => {
+  const trigger = useCallback(async () => {
+    if (triggered.current) return;
+    if (loadingPopup.current) return;
+    if (!canShow()) return;
+
+    loadingPopup.current = true;
+    await mascotReady;
+    loadingPopup.current = false;
+
+    if (!mounted.current) return;
     if (triggered.current) return;
     if (!canShow()) return;
+
     triggered.current = true;
     setVisible(true);
     setPopupOpen(true);
