@@ -6,7 +6,7 @@ const FAQ = () => (
   <div className="min-h-screen">
     <MarqueeBanner />
     <Navbar />
-    <div className="container mx-auto px-4 pt-32 md:pt-40 pb-16 max-w-3xl">
+    <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Häufig gestellte Fragen</h1>
       <div className="space-y-6 opacity-80 leading-relaxed [&_p]:leading-[1.45]">
         <div>
