@@ -18,6 +18,8 @@ interface DashboardData {
   orders: Order[];
 }
 
+const getErrorMessage = (err: unknown) => (err instanceof Error ? err.message : "Failed to load data");
+
 const Dashboard = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,8 +62,8 @@ const Dashboard = () => {
         throw new Error(result.error);
       }
       setData(result || { total_sales: 0, total_revenue: 0, orders: [] });
-    } catch (err: any) {
-      setError(err.message || "Failed to load data");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
       toast.error("Failed to load dashboard data");
     } finally {
       setLoading(false);

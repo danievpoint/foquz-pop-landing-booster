@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
@@ -22,6 +23,14 @@ const reviews = [
     color: "bg-foquz-lemon-light",
   },
 ];
+
+const reviewScrollerStyle: CSSProperties = {
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
+  touchAction: "pan-x",
+  overscrollBehaviorY: "none",
+  overflowY: "hidden",
+};
 
 const ReviewSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -75,7 +84,7 @@ const ReviewSection = () => {
         <div
           ref={scrollRef}
           className="flex gap-0 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:overflow-visible lg:snap-none lg:pt-0 lg:pb-2 lg:pr-1 review-grid"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" as any, touchAction: "pan-x", overscrollBehaviorY: "none", overflowY: "hidden" }}
+          style={reviewScrollerStyle}
         >
           {reviews.map((r, i) => (
             <motion.div

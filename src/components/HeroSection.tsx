@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import heroJars from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
@@ -56,7 +57,7 @@ const HeroSection = () => {
             src={heroBg}
             alt=""
             aria-hidden="true"
-            fetchPriority="high"
+            loading="eager"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
@@ -89,7 +90,8 @@ const HeroSection = () => {
                   <img
                     src={heroJars}
                     alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
                     className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
                   />
                 </Link>
@@ -140,7 +142,8 @@ const HeroSection = () => {
               src={heroBg}
               alt=""
               aria-hidden="true"
-              fetchPriority="high"
+              loading="eager"
+              decoding="async"
               className="absolute inset-0 w-full h-full"
             />
 
@@ -165,7 +168,7 @@ const HeroSection = () => {
                   calcMode="spline"
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
-                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as any}>
+                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
                   <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" style={{ cursor: "pointer" }} />
                 </a>
               </g>

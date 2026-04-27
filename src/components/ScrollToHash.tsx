@@ -4,10 +4,14 @@ import { useLocation } from "react-router-dom";
 const ScrollToHash = () => {
   const { hash, pathname } = useLocation();
   const hasMounted = useRef(false);
+  const hasInitialized = useRef(false);
 
   // On first mount: set manual scroll restoration, but do NOT force scroll to top.
   // This prevents the page from jumping back up if the user already scrolled.
   useLayoutEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
@@ -15,7 +19,7 @@ const ScrollToHash = () => {
     if (hash) {
       window.history.replaceState(null, "", pathname || "/");
     }
-  }, []);
+  }, [hash, pathname]);
 
   // On subsequent navigation changes, scroll to hash or top
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
@@ -21,7 +21,7 @@ const NewsletterPopup = () => {
   const isMobile = useIsMobile();
   const triggered = useRef(false);
 
-  const canShow = () => {
+  const canShow = useCallback(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) return false;
     if (items.length > 0) return false;
     if (popupOpen) return false;
@@ -29,15 +29,15 @@ const NewsletterPopup = () => {
     const bundleShownAt = sessionStorage.getItem(BUNDLE_SHOWN_KEY);
     if (bundleShownAt && Date.now() - Number(bundleShownAt) < 10000) return false;
     return true;
-  };
+  }, [items.length, popupOpen]);
 
-  const trigger = () => {
+  const trigger = useCallback(() => {
     if (triggered.current) return;
     if (!canShow()) return;
     triggered.current = true;
     setVisible(true);
     setPopupOpen(true);
-  };
+  }, [canShow, setPopupOpen]);
 
   // Desktop: Exit Intent
   useEffect(() => {
@@ -49,7 +49,7 @@ const NewsletterPopup = () => {
     };
     document.documentElement.addEventListener("mouseleave", handler);
     return () => document.documentElement.removeEventListener("mouseleave", handler);
-  }, [isMobile, items.length, popupOpen]);
+  }, [isMobile, items.length, popupOpen, trigger]);
 
   // Mobile: 25s timer OR 55% scroll
   useEffect(() => {
@@ -70,7 +70,7 @@ const NewsletterPopup = () => {
       clearTimeout(timer);
       window.removeEventListener("scroll", scrollHandler);
     };
-  }, [isMobile, items.length, popupOpen]);
+  }, [isMobile, items.length, popupOpen, trigger]);
 
   const dismiss = () => {
     setVisible(false);

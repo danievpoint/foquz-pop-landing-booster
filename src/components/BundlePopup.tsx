@@ -29,7 +29,7 @@ const BundlePopup = () => {
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [addToCartTimestamp]);
+  }, [addToCartTimestamp, lastAddedProductId, popupOpen, setPopupOpen]);
 
   const dismiss = () => {
     setVisible(false);

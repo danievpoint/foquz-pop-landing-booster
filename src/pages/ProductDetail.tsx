@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { allProducts } from "@/data/products";
+import type { CartItem } from "@/contexts/CartContext";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
@@ -91,7 +92,9 @@ const BundleBanner = () => {
   );
 };
 
-const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts[0]; addToCart: any; isAvailable: (name: string) => boolean | null }) => (
+type AddToCart = (qty?: number, product?: Omit<CartItem, "qty">) => void;
+
+const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts[0]; addToCart: AddToCart; isAvailable: (name: string) => boolean | null }) => (
   <div
     className={`group rounded-xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300`}
     style={p.isBundle ? { backgroundColor: "#75559f" } : { backgroundColor: "#fff", color: "#000" }}
@@ -196,7 +199,8 @@ const ProductDetail = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="w-full aspect-square object-cover"
               />
             )}
