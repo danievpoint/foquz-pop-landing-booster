@@ -116,9 +116,9 @@ const BundleSection = () => {
                 JETZT SPAR-BUNDLE SICHERN
               </button>
               {/* Scarcity banner - desktop only */}
-              <div className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60 whitespace-nowrap" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
-                <span className="text-[#ffd618] text-lg">🔥</span>
-                <span className="text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase">
+              <div className="hidden md:flex w-full max-w-full lg:w-fit items-center justify-center lg:justify-start gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
+                <span className="text-[#ffd618] text-lg shrink-0">🔥</span>
+                <span className="min-w-0 text-center lg:text-left text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase leading-tight break-words">
                   Limitiert – Nur solange der Vorrat reicht!
                 </span>
               </div>
