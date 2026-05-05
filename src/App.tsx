@@ -26,12 +26,18 @@ import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
-// Coming Soon Modus — mit ?key=fq2026x in der URL umgehen
+// Coming Soon Modus — mit ?key=fq2026x in der URL umgehen (wird in sessionStorage gespeichert)
 // Legal-Seiten sind auch ohne Key erreichbar
 const params = new URLSearchParams(window.location.search);
+if (params.get("key") === "fq2026x") {
+  try { sessionStorage.setItem("foquz_access", "fq2026x"); } catch {}
+}
+const hasAccess = (() => {
+  try { return sessionStorage.getItem("foquz_access") === "fq2026x"; } catch { return false; }
+})();
 const ALLOWED_PATHS = ["/datenschutz", "/impressum", "/agb", "/widerrufsbelehrung", "/versandbedingungen", "/auth", "/dashboard"];
 const isAllowedPath = ALLOWED_PATHS.includes(window.location.pathname);
-const COMING_SOON = params.get("key") !== "fq2026x" && !isAllowedPath;
+const COMING_SOON = !hasAccess && !isAllowedPath;
 
 const App = () => {
   if (COMING_SOON) {
