@@ -29,13 +29,7 @@ const Footer = () => {
               100% aromatisch, 100% legal, 100% Wolke 7!
             </p>
             <div className="flex items-center gap-3 md:gap-4 ft-social">
-              <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="Facebook">
-                <svg width="30" height="30" viewBox="0 0 48 48" className="md:w-9 md:h-9">
-                  <circle cx="24" cy="24" r="24" fill="currentColor" />
-                  <path d="M29 25h-3.5v10h-4.5V25H18v-4h3v-2.5c0-3.1 1.9-4.5 4.4-4.5 1.3 0 2.6.2 2.6.2v3h-1.5c-1.4 0-1.9.9-1.9 1.8V21h3.4l-.5 4z" fill="white" />
-                </svg>
-              </a>
-              <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="Instagram">
+              <a href="https://www.instagram.com/foquz.official" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="Instagram">
                 <svg width="30" height="30" viewBox="0 0 48 48" className="md:w-9 md:h-9">
                   <circle cx="24" cy="24" r="24" fill="currentColor" />
                   <rect x="14" y="14" width="20" height="20" rx="6" fill="none" stroke="white" strokeWidth="2.5" />
@@ -43,7 +37,7 @@ const Footer = () => {
                   <circle cx="30.5" cy="17.5" r="1.5" fill="white" />
                 </svg>
               </a>
-              <a href="#" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="TikTok">
+              <a href="https://www.tiktok.com/@foquz.official" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 transition-opacity" aria-label="TikTok">
                 <svg width="30" height="30" viewBox="0 0 48 48" className="md:w-9 md:h-9">
                   <circle cx="24" cy="24" r="24" fill="currentColor" />
                   <path d="M30 16.5a5.5 5.5 0 003.5 2v3.5a9 9 0 01-3.5-.7v7.7a7 7 0 11-7-7v3.5a3.5 3.5 0 103.5 3.5V14h3.5v2.5z" fill="white" />
