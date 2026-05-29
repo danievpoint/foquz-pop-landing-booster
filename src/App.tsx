@@ -29,9 +29,7 @@ const queryClient = new QueryClient();
 // Coming Soon Modus — mit ?key=fq2026x in der URL umgehen
 // Legal-Seiten sind auch ohne Key erreichbar
 const params = new URLSearchParams(window.location.search);
-const ALLOWED_PATHS = ["/datenschutz", "/impressum", "/agb", "/widerrufsbelehrung", "/versandbedingungen", "/auth", "/dashboard"];
-const isAllowedPath = ALLOWED_PATHS.includes(window.location.pathname);
-const COMING_SOON = params.get("key") !== "fq2026x" && !isAllowedPath;
+const COMING_SOON = params.get("key") !== "fq2026x";
 
 const App = () => {
   if (COMING_SOON) {
