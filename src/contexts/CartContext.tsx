@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
 import confetti from "canvas-confetti";
+import { toast } from "sonner";
+import { createShopifyCheckout, VARIANT_GID_BY_ID } from "@/lib/shopify";
 
 export interface CartItem {
   id: string;
@@ -27,6 +29,8 @@ interface CartContextType {
   setPopupOpen: (v: boolean) => void;
   lastAddedProductId: string | null;
   addToCartTimestamp: number;
+  checkout: () => Promise<void>;
+  isCheckingOut: boolean;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -47,6 +51,8 @@ const CartContext = createContext<CartContextType>({
   setPopupOpen: () => {},
   lastAddedProductId: null,
   addToCartTimestamp: 0,
+  checkout: async () => {},
+  isCheckingOut: false,
 });
 
 export const useCart = () => useContext(CartContext);
@@ -94,6 +100,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
@@ -153,12 +160,52 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
   const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
 
+  const checkout = useCallback(async () => {
+    if (items.length === 0 || isCheckingOut) return;
+
+    const lines = items
+      .map((i) => {
+        const variantId = VARIANT_GID_BY_ID[i.id];
+        if (!variantId) {
+          console.warn(`No Shopify variant mapped for cart item id "${i.id}"`);
+          return null;
+        }
+        return { variantId, quantity: i.qty };
+      })
+      .filter((l): l is { variantId: string; quantity: number } => l !== null);
+
+    if (lines.length === 0) {
+      toast.error("Checkout nicht möglich: Produkte sind nicht mit dem Shop verknüpft.");
+      return;
+    }
+
+    setIsCheckingOut(true);
+    try {
+      const checkoutUrl = await createShopifyCheckout(
+        lines,
+        discountCode ? [discountCode] : undefined,
+      );
+      if (!checkoutUrl) {
+        toast.error("Checkout konnte nicht erstellt werden. Bitte später erneut versuchen.");
+        return;
+      }
+      window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+    } catch (e) {
+      console.error("Checkout error:", e);
+      toast.error("Fehler beim Checkout. Bitte erneut versuchen.");
+    } finally {
+      setIsCheckingOut(false);
+    }
+  }, [items, isCheckingOut, discountCode]);
+
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
+      checkout, isCheckingOut,
     }}>
+
       {children}
     </CartContext.Provider>
   );

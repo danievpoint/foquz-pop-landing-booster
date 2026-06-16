@@ -3,7 +3,7 @@ import { X, Minus, Plus, Trash2, ShoppingBag, Tag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const CartDrawer = () => {
-  const { items, count, total, discountedTotal, hasNewsletterDiscount, discountCode, isOpen, closeCart, removeFromCart, updateQty } = useCart();
+  const { items, count, total, discountedTotal, hasNewsletterDiscount, discountCode, isOpen, closeCart, removeFromCart, updateQty, checkout, isCheckingOut } = useCart();
 
   const discountAmount = total - discountedTotal;
 
@@ -124,8 +124,12 @@ const CartDrawer = () => {
                     <span className="text-2xl font-black">€{discountedTotal.toFixed(2)}</span>
                   </div>
                 </div>
-                <button className="comic-btn bg-primary text-primary-foreground w-full text-lg">
-                  ZUR KASSE
+                <button
+                  onClick={checkout}
+                  disabled={isCheckingOut}
+                  className="comic-btn bg-primary text-primary-foreground w-full text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {isCheckingOut ? "LÄDT..." : "ZUR KASSE"}
                 </button>
               </div>
             )}
