@@ -51,6 +51,8 @@ const CartContext = createContext<CartContextType>({
   setPopupOpen: () => {},
   lastAddedProductId: null,
   addToCartTimestamp: 0,
+  checkout: async () => {},
+  isCheckingOut: false,
 });
 
 export const useCart = () => useContext(CartContext);
@@ -98,6 +100,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
