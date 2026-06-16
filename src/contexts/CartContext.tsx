@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
 import confetti from "canvas-confetti";
+import { toast } from "sonner";
+import { createShopifyCheckout, VARIANT_GID_BY_ID } from "@/lib/shopify";
 
 export interface CartItem {
   id: string;
@@ -27,6 +29,8 @@ interface CartContextType {
   setPopupOpen: (v: boolean) => void;
   lastAddedProductId: string | null;
   addToCartTimestamp: number;
+  checkout: () => Promise<void>;
+  isCheckingOut: boolean;
 }
 
 const CartContext = createContext<CartContextType>({
