@@ -65,3 +65,57 @@ export async function fetchProductsAvailability(): Promise<ProductAvailability[]
     return [];
   }
 }
+
+// Map local cart item IDs to Shopify ProductVariant GIDs
+export const VARIANT_GID_BY_ID: Record<string, string> = {
+  // Product names (used in ProductGrid/ProductDetail)
+  "PEACH PARTY": "gid://shopify/ProductVariant/52867405513046",
+  "THAI STYLE": "gid://shopify/ProductVariant/52867410788694",
+  "LEMON BREEZY": "gid://shopify/ProductVariant/52867411738966",
+  // Bundle IDs (used in CartContext default and ProductDetail)
+  "bundle": "gid://shopify/ProductVariant/52867411837270",
+  "starter-bundle": "gid://shopify/ProductVariant/52867411837270",
+};
+
+const CART_CREATE_MUTATION = `
+  mutation cartCreate($input: CartInput!) {
+    cartCreate(input: $input) {
+      cart { id checkoutUrl }
+      userErrors { field message }
+    }
+  }
+`;
+
+export interface CheckoutLine {
+  variantId: string;
+  quantity: number;
+}
+
+export async function createShopifyCheckout(
+  lines: CheckoutLine[],
+  discountCodes?: string[]
+): Promise<string | null> {
+  const input: Record<string, unknown> = {
+    lines: lines.map((l) => ({ quantity: l.quantity, merchandiseId: l.variantId })),
+  };
+  if (discountCodes && discountCodes.length > 0) {
+    input.discountCodes = discountCodes;
+  }
+
+  const data = await storefrontApiRequest(CART_CREATE_MUTATION, { input });
+  const userErrors = data?.data?.cartCreate?.userErrors ?? [];
+  if (userErrors.length > 0) {
+    console.error('Shopify cartCreate errors:', userErrors);
+    return null;
+  }
+  const checkoutUrl: string | undefined = data?.data?.cartCreate?.cart?.checkoutUrl;
+  if (!checkoutUrl) return null;
+
+  try {
+    const url = new URL(checkoutUrl);
+    url.searchParams.set('channel', 'online_store');
+    return url.toString();
+  } catch {
+    return checkoutUrl;
+  }
+}
