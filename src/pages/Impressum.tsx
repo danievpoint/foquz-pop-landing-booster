@@ -14,11 +14,15 @@ const Impressum = () => (
         <p>Handelsregister: HRB 311769<br />Registergericht: Amtsgericht München</p>
         <p>Vertreten durch die Geschäftsführer:<br />Matthias Kurpiers<br />Kevin Zaremba</p>
         <h2 className="text-xl font-bold">Kontakt:</h2>
-        <p>E-Mail: info@foquz.de<br />Telefon: 01702420257</p>
+        <p>E-Mail: info@foquz.de<br />Telefon: +49 170 2420257</p>
         <h2 className="text-xl font-bold">Berufsbezeichnung:</h2>
         <p>Onlinehändler</p>
         <h2 className="text-xl font-bold">Verbraucherstreitbeilegung / Universalschlichtungsstelle:</h2>
         <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+        <h2 className="text-xl font-bold">Online-Streitbeilegung (OS-Plattform):</h2>
+        <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die Sie unter folgender Adresse finden: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="underline">https://ec.europa.eu/consumers/odr</a>. Unsere E-Mail-Adresse lautet: info@foquz.de.</p>
+        <h2 className="text-xl font-bold">Haftung für Inhalte und Links:</h2>
+        <p>Als Diensteanbieter sind wir gemäß §7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Für Inhalte externer Links sind ausschließlich deren Betreiber verantwortlich.</p>
       </div>
     </div>
     <Footer />
