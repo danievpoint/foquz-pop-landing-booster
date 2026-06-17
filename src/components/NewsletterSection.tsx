@@ -12,11 +12,16 @@ const NewsletterSection = () => {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
+  const [consent, setConsent] = useState(false);
   const { activateNewsletterDiscount } = useCart();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || loading) return;
+    if (!consent) {
+      toast({ title: "Einwilligung erforderlich", description: "Bitte bestätige die Verarbeitung deiner E-Mail-Adresse.", variant: "destructive" });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -37,6 +42,7 @@ const NewsletterSection = () => {
         setShowPopup(true);
       }
       setEmail("");
+      setConsent(false);
     } catch {
       toast({ title: "Fehler", description: "Bitte versuche es später erneut.", variant: "destructive" });
     } finally {
@@ -81,11 +87,18 @@ const NewsletterSection = () => {
               {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
-          <p className="text-xs text-primary-foreground/60 nl-fine">
-            Mit der Anmeldung erklärst du dich mit unserer{" "}
-            <a href="https://www.foquz.de/datenschutz" className="underline text-white">Datenschutzerklärung</a>{" "}
-            einverstanden. Kein Spam · Jederzeit kündbar.
-          </p>
+          <label className="flex items-start gap-2 text-xs text-primary-foreground/80 max-w-md mx-auto text-left nl-fine cursor-pointer">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-0.5 shrink-0 w-4 h-4 accent-secondary cursor-pointer"
+              required
+            />
+            <span>
+              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Details: <a href="/datenschutz" className="underline text-white">Datenschutzerklärung</a>.
+            </span>
+          </label>
         </div>
       </section>
 
