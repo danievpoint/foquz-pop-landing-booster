@@ -27,7 +27,8 @@ async function fetchShopifyOrders(promoCode: string): Promise<ShopifyOrder[]> {
 
     if (!res.ok) {
       const text = await res.text();
-      throw new Error(`Shopify API error ${res.status}: ${text}`);
+      console.error(`Shopify API error ${res.status}: ${text}`);
+      throw new Error("Failed to fetch orders from upstream provider");
     }
 
     const data = await res.json();
