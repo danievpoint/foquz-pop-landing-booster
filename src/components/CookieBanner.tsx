@@ -48,7 +48,7 @@ const CookieBanner = () => {
             <div>
               <h3 className="font-black text-lg mb-1">Cookies & so</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                Wir nutzen Cookies, damit alles smooth läuft. Kein Spam, versprochen!
+                Wir nutzen ausschließlich <strong>technisch notwendige Cookies</strong>, damit Shop und Warenkorb funktionieren. Keine Tracker, kein Marketing-Pixel. Details in unserer <a href="/datenschutz" className="underline font-semibold">Datenschutzerklärung</a>.
               </p>
               <div className="flex gap-3">
                 <button
@@ -56,12 +56,6 @@ const CookieBanner = () => {
                   className="comic-btn bg-[#ffd618] text-foreground text-sm py-2 px-5"
                 >
                   ALLES KLAR!
-                </button>
-                <button
-                  onClick={decline}
-                  className="comic-btn bg-muted text-foreground text-sm py-2 px-5"
-                >
-                  NEIN DANKE
                 </button>
               </div>
             </div>

@@ -54,7 +54,7 @@ const AGB = () => (
         <p>(1) Für Verbraucher gelten die gesetzlichen Gewährleistungsrechte gemäß §§ 437 ff. BGB. Für Unternehmer gelten abweichend die Regelungen gemäß § 377 HGB.</p>
         <p>(2) Die gesetzliche Gewährleistung beträgt zwei Jahre für Verbraucher und ein Jahr für Unternehmer, sofern nicht anders vereinbart.</p>
         <p>(3) Der Kunde ist verpflichtet, offensichtliche Mängel innerhalb von 30 Tagen nach Erhalt der Ware oder Leistungserbringung schriftlich anzuzeigen.</p>
-        <p>(4) Der Anbieter haftet nur für Vorsatz und grobe Fahrlässigkeit. Die Haftung für einfache Fahrlässigkeit ist ausgeschlossen, soweit keine wesentlichen Vertragspflichten verletzt werden.</p>
+        <p>(4) Der Anbieter haftet unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie nach den Vorschriften des Produkthaftungsgesetzes. Für leicht fahrlässig verursachte Schäden haftet der Anbieter nur bei der Verletzung wesentlicher Vertragspflichten (Kardinalpflichten), deren Erfüllung die ordnungsgemäße Durchführung des Vertrages erst ermöglicht und auf deren Einhaltung der Kunde regelmäßig vertrauen darf. In diesem Fall ist die Haftung auf den vertragstypischen, vorhersehbaren Schaden begrenzt. Die Haftung für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit sowie aus der Übernahme einer Garantie bleibt hiervon unberührt.</p>
 
         <h2>§8 Vertragslaufzeit und Kündigung</h2>
         <p>(1) Bei einmaligen Leistungen oder Produktkäufen besteht keine laufende Vertragsbindung. Das Vertragsverhältnis endet automatisch mit der vollständigen Erfüllung. Eine Kündigung ist nicht erforderlich.</p>
@@ -64,11 +64,9 @@ const AGB = () => (
         <p>(2) Weitere Informationen zur Verarbeitung personenbezogener Daten sind in der Datenschutzerklärung auf der Website des Anbieters unter folgendem Link verfügbar: <Link to="/datenschutz" className="underline hover:opacity-100">Datenschutzerklärung</Link></p>
 
         <h2>§10 Änderung der AGB</h2>
-        <p>(1) Der Anbieter behält sich das Recht vor, diese AGB jederzeit zu ändern, soweit dies erforderlich ist, um sie an geänderte gesetzliche oder wirtschaftliche Rahmenbedingungen anzupassen.</p>
+        <p>(1) Der Anbieter behält sich das Recht vor, diese AGB für künftige Vertragsabschlüsse zu ändern, soweit dies erforderlich ist, um sie an geänderte gesetzliche oder wirtschaftliche Rahmenbedingungen anzupassen.</p>
         <p>(2) Änderungen der AGB werden auf der Website des Anbieters bekannt gegeben.</p>
-        <p>(3) Die geänderten AGB treten sofort mit Veröffentlichung in Kraft.</p>
-        <p>(4) Die Änderungen der AGB gelten ausschließlich für zukünftige Vertragsabschlüsse, nicht für bestehende Verträge.</p>
-        <p>(5) Ein Widerspruchsrecht gegen Änderungen dieser AGB besteht nicht. Der Kunde ist jedoch berechtigt, im Falle ihn betreffender Änderungen von seinem Sonderkündigungsrecht Gebrauch zu machen.</p>
+        <p>(3) Die geänderten AGB gelten ausschließlich für nach ihrer Veröffentlichung geschlossene Verträge. Bereits abgeschlossene Verträge bleiben von Änderungen der AGB unberührt.</p>
 
         <h2>§11 Gerichtsstand und anwendbares Recht</h2>
         <p>(1) Es gilt das materielle Recht der Bundesrepublik Deutschland unter Ausschluss des Übereinkommens der Vereinten Nationen über Verträge über den internationalen Warenkauf (UN-Kaufrecht).</p>

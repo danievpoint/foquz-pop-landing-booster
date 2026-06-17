@@ -124,6 +124,9 @@ const CartDrawer = () => {
                     <span className="text-2xl font-black">€{discountedTotal.toFixed(2)}</span>
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground text-right -mt-2">
+                  inkl. MwSt., zzgl. <a href="/versandbedingungen" className="underline" target="_blank" rel="noopener noreferrer">Versand</a>
+                </p>
                 <button
                   onClick={checkout}
                   disabled={isCheckingOut}
