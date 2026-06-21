@@ -181,15 +181,27 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     setIsCheckingOut(true);
     try {
+      const checkoutWindow = window.open("about:blank", "_blank");
+      if (checkoutWindow) {
+        checkoutWindow.document.title = "FOQUZ Checkout";
+        checkoutWindow.document.body.innerHTML = '<p style="font-family: sans-serif; padding: 24px;">Checkout wird geöffnet...</p>';
+      }
+
       const checkoutUrl = await createShopifyCheckout(
         lines,
         discountCode ? [discountCode] : undefined,
       );
       if (!checkoutUrl) {
+        checkoutWindow?.close();
         toast.error("Checkout konnte nicht erstellt werden. Bitte später erneut versuchen.");
         return;
       }
-      window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+      if (checkoutWindow) {
+        checkoutWindow.opener = null;
+        checkoutWindow.location.href = checkoutUrl;
+      } else {
+        toast.error("Popup blockiert. Bitte Popups erlauben und erneut versuchen.");
+      }
     } catch (e) {
       console.error("Checkout error:", e);
       toast.error("Fehler beim Checkout. Bitte erneut versuchen.");
