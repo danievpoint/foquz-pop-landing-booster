@@ -100,7 +100,7 @@ const Footer = () => {
         </div>
 
         <div className="mb-4 md:mb-6 flex justify-center">
-          <Button asChild size="sm" className="font-extrabold uppercase tracking-wide text-xs md:text-sm">
+          <Button asChild variant="ghost" size="sm" className="text-xs md:text-sm opacity-70 hover:opacity-100 font-medium normal-case tracking-normal">
             <Link to="/widerrufsbelehrung#widerrufsformular">
               Widerrufsformular
             </Link>
