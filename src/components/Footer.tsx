@@ -99,6 +99,14 @@ const Footer = () => {
           </div>
         </div>
 
+        <div className="mb-4 md:mb-6 flex justify-center">
+          <Button asChild size="sm" className="font-extrabold uppercase tracking-wide text-xs md:text-sm">
+            <Link to="/widerrufsbelehrung#widerrufsformular">
+              Widerrufsformular
+            </Link>
+          </Button>
+        </div>
+
         <div className="border-t border-foreground/20 pt-4 md:pt-6 text-center text-[10px] md:text-xs opacity-60 ft-copy">
           © 2026 FOQUZ. Alle Rechte vorbehalten.
         </div>
