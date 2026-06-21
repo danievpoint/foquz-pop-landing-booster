@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import foquzLogo from "@/assets/foquz-logo.png";
 
 const Footer = () => {
@@ -96,6 +97,14 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+        </div>
+
+        <div className="mb-4 md:mb-6 flex justify-center">
+          <Button asChild size="sm" className="font-extrabold uppercase tracking-wide text-xs md:text-sm">
+            <Link to="/widerrufsbelehrung#widerrufsformular">
+              Widerrufsformular
+            </Link>
+          </Button>
         </div>
 
         <div className="border-t border-foreground/20 pt-4 md:pt-6 text-center text-[10px] md:text-xs opacity-60 ft-copy">
