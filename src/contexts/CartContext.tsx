@@ -31,6 +31,7 @@ interface CartContextType {
   addToCartTimestamp: number;
   checkout: () => Promise<void>;
   isCheckingOut: boolean;
+  checkoutUrl: string | null;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -53,6 +54,7 @@ const CartContext = createContext<CartContextType>({
   addToCartTimestamp: 0,
   checkout: async () => {},
   isCheckingOut: false,
+  checkoutUrl: null,
 });
 
 export const useCart = () => useContext(CartContext);
@@ -101,6 +103,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
@@ -160,10 +163,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
   const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
 
-  const checkout = useCallback(async () => {
-    if (items.length === 0 || isCheckingOut) return;
-
-    const lines = items
+  const getCheckoutLines = useCallback(() => {
+    return items
       .map((i) => {
         const variantId = VARIANT_GID_BY_ID[i.id];
         if (!variantId) {
@@ -173,37 +174,77 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return { variantId, quantity: i.qty };
       })
       .filter((l): l is { variantId: string; quantity: number } => l !== null);
+  }, [items]);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      setCheckoutUrl(null);
+      setIsCheckingOut(false);
+      return;
+    }
+
+    const lines = getCheckoutLines();
+    if (lines.length === 0) {
+      setCheckoutUrl(null);
+      setIsCheckingOut(false);
+      return;
+    }
+
+    let cancelled = false;
+    setIsCheckingOut(true);
+    setCheckoutUrl(null);
+
+    createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
+      .then((url) => {
+        if (!cancelled) setCheckoutUrl(url);
+      })
+      .catch((e) => {
+        console.error("Checkout preparation error:", e);
+        if (!cancelled) setCheckoutUrl(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsCheckingOut(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [items, discountCode, getCheckoutLines]);
+
+  const checkout = useCallback(async () => {
+    if (items.length === 0 || isCheckingOut) return;
+
+    const lines = getCheckoutLines();
 
     if (lines.length === 0) {
       toast.error("Checkout nicht möglich: Produkte sind nicht mit dem Shop verknüpft.");
       return;
     }
 
-    setIsCheckingOut(true);
-    try {
-      const checkoutUrl = await createShopifyCheckout(
-        lines,
-        discountCode ? [discountCode] : undefined,
-      );
-      if (!checkoutUrl) {
-        toast.error("Checkout konnte nicht erstellt werden. Bitte später erneut versuchen.");
-        return;
-      }
-      window.location.assign(checkoutUrl);
-    } catch (e) {
-      console.error("Checkout error:", e);
-      toast.error("Fehler beim Checkout. Bitte erneut versuchen.");
-    } finally {
-      setIsCheckingOut(false);
+    if (!checkoutUrl) {
+      toast.error("Checkout wird noch vorbereitet. Bitte kurz erneut klicken.");
+      return;
     }
-  }, [items, isCheckingOut, discountCode]);
+
+    const opened = window.open(checkoutUrl, "_blank");
+    if (opened) {
+      opened.opener = null;
+      return;
+    }
+
+    try {
+      window.top?.location.assign(checkoutUrl);
+    } catch {
+      window.location.assign(checkoutUrl);
+    }
+  }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
-      checkout, isCheckingOut,
+      checkout, isCheckingOut, checkoutUrl,
     }}>
 
       {children}
