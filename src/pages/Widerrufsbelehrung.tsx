@@ -2,6 +2,9 @@ import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
 
+const SHOPIFY_FORM_ID = "1041999";
+const SHOPIFY_SHOP_DOMAIN = "foquz-pop-landing-booster-xb8ca.myshopify.com";
+
 const Widerrufsbelehrung = () => (
   <div className="min-h-screen">
     <MarqueeBanner />
@@ -41,7 +44,68 @@ const Widerrufsbelehrung = () => (
 
         <div className="border-t border-foreground/20 my-10" />
 
-        <h2>Muster-Widerrufsformular</h2>
+        <h2 id="widerrufsformular">Online-Widerrufsformular</h2>
+        <p>Sie können Ihren Widerruf bequem online über das folgende Formular an uns übermitteln. Sie erhalten unverzüglich eine Bestätigung per E-Mail.</p>
+
+        <form
+          action={`https://${SHOPIFY_SHOP_DOMAIN}/contact#contact_form`}
+          method="post"
+          acceptCharset="UTF-8"
+          className="not-prose mt-6 space-y-4 bg-foreground/[0.03] border border-foreground/10 rounded-2xl p-5 md:p-6"
+        >
+          <input type="hidden" name="form_type" value="contact" />
+          <input type="hidden" name="utf8" value="✓" />
+          <input type="hidden" name="contact[form_id]" value={SHOPIFY_FORM_ID} />
+          <input type="hidden" name="contact[subject]" value="Widerrufserklärung" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label className="block text-sm">
+              <span className="block mb-1 font-semibold">Name *</span>
+              <input required type="text" name="contact[name]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+            </label>
+            <label className="block text-sm">
+              <span className="block mb-1 font-semibold">E-Mail *</span>
+              <input required type="email" name="contact[email]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+            </label>
+            <label className="block text-sm md:col-span-2">
+              <span className="block mb-1 font-semibold">Anschrift *</span>
+              <input required type="text" name="contact[anschrift]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+            </label>
+            <label className="block text-sm">
+              <span className="block mb-1 font-semibold">Bestellnummer</span>
+              <input type="text" name="contact[bestellnummer]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+            </label>
+            <label className="block text-sm">
+              <span className="block mb-1 font-semibold">Bestellt am *</span>
+              <input required type="date" name="contact[bestellt_am]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+            </label>
+          </div>
+
+          <label className="block text-sm">
+            <span className="block mb-1 font-semibold">Widerrufene Waren *</span>
+            <textarea
+              required
+              name="contact[body]"
+              rows={4}
+              defaultValue="Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über den Kauf der folgenden Waren: "
+              className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="inline-flex items-center justify-center rounded-full bg-foreground text-background font-bold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+          >
+            Widerruf absenden
+          </button>
+          <p className="text-xs opacity-60">
+            Mit dem Absenden willigen Sie ein, dass Ihre Angaben zur Bearbeitung des Widerrufs verarbeitet werden. Details siehe Datenschutzerklärung.
+          </p>
+        </form>
+
+        <div className="border-t border-foreground/20 my-10" />
+
+        <h2>Muster-Widerrufsformular (zum Ausdrucken)</h2>
         <p className="italic text-sm">(Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es zurück.)</p>
         <p>An: FOQUZ GmbH, Gewerbering am Brand 8, 82549 Königsdorf, E-Mail: info@foquz.de</p>
         <p>Hiermit widerrufe(n) ich/wir den von mir/uns abgeschlossenen Vertrag über den Kauf der folgenden Waren:</p>
