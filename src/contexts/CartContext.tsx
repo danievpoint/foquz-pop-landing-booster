@@ -163,6 +163,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const checkout = useCallback(async () => {
     if (items.length === 0 || isCheckingOut) return;
 
+    const checkoutWindow = window.open("", "_blank");
+    if (checkoutWindow) {
+      checkoutWindow.document.write(`<!doctype html><html><head><title>Checkout</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#111}main{text-align:center;padding:24px}strong{display:block;font-size:18px;margin-bottom:8px}span{color:#555}</style></head><body><main><strong>Checkout wird geöffnet</strong><span>Bitte kurz warten …</span></main></body></html>`);
+      checkoutWindow.document.close();
+    }
+
     const lines = items
       .map((i) => {
         const variantId = VARIANT_GID_BY_ID[i.id];
@@ -175,6 +181,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       .filter((l): l is { variantId: string; quantity: number } => l !== null);
 
     if (lines.length === 0) {
+      checkoutWindow?.close();
       toast.error("Checkout nicht möglich: Produkte sind nicht mit dem Shop verknüpft.");
       return;
     }
@@ -186,15 +193,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         discountCode ? [discountCode] : undefined,
       );
       if (!checkoutUrl) {
+        checkoutWindow?.close();
         toast.error("Checkout konnte nicht erstellt werden. Bitte später erneut versuchen.");
         return;
       }
-      const opened = window.open(checkoutUrl, "_blank", "noopener,noreferrer");
-      if (!opened) {
+      if (checkoutWindow) {
+        checkoutWindow.opener = null;
+        checkoutWindow.location.replace(checkoutUrl);
+      } else {
         // Fallback falls Popup blockiert wird: im selben Tab navigieren
         window.location.href = checkoutUrl;
       }
     } catch (e) {
+      checkoutWindow?.close();
       console.error("Checkout error:", e);
       toast.error("Fehler beim Checkout. Bitte erneut versuchen.");
     } finally {
