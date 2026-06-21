@@ -127,13 +127,24 @@ const CartDrawer = () => {
                 <p className="text-xs text-muted-foreground text-right -mt-2">
                   inkl. MwSt. Versandkosten werden im Checkout berechnet.
                 </p>
-                <button
-                  onClick={checkout}
-                  disabled={isCheckingOut || !checkoutUrl}
-                  className="comic-btn bg-primary text-primary-foreground w-full text-lg disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {isCheckingOut || !checkoutUrl ? "LÄDT..." : "ZUR KASSE"}
-                </button>
+                {checkoutUrl ? (
+                  <a
+                    href={checkoutUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="comic-btn bg-primary text-primary-foreground w-full text-lg block text-center"
+                  >
+                    ZUR KASSE
+                  </a>
+                ) : (
+                  <button
+                    onClick={checkout}
+                    disabled={isCheckingOut}
+                    className="comic-btn bg-primary text-primary-foreground w-full text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    LÄDT...
+                  </button>
+                )}
               </div>
             )}
           </motion.div>

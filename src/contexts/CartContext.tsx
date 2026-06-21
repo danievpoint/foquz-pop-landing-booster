@@ -226,17 +226,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    const opened = window.open(checkoutUrl, "_blank");
-    if (opened) {
-      opened.opener = null;
-      return;
-    }
-
-    try {
-      window.top?.location.assign(checkoutUrl);
-    } catch {
-      window.location.assign(checkoutUrl);
-    }
+    window.open(checkoutUrl, "_blank", "noopener,noreferrer");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 
   return (
