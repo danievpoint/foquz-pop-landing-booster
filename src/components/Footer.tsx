@@ -77,6 +77,9 @@ const Footer = () => {
                 <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
               </li>
               <li>
+                <Link to="/widerrufsbelehrung#widerrufsformular" className="hover:opacity-100 transition-opacity ft-link">Widerrufsformular</Link>
+              </li>
+              <li>
                 <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
               </li>
               <li>
