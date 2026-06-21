@@ -62,7 +62,7 @@ export const useCart = () => useContext(CartContext);
 const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
   id: "bundle",
   name: "FOQUZ Bundle",
-  price: 14.99,
+  price: 19.99,
   image: "",
 };
 
