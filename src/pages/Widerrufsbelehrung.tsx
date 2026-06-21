@@ -1,11 +1,44 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const SHOPIFY_FORM_ID = "1041999";
-const SHOPIFY_SHOP_DOMAIN = "foquz-pop-landing-booster-xb8ca.myshopify.com";
 
-const Widerrufsbelehrung = () => (
+const Widerrufsbelehrung = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-widerruf", {
+        body: {
+          name: String(fd.get("name") ?? "").trim(),
+          email: String(fd.get("email") ?? "").trim(),
+          address: String(fd.get("address") ?? "").trim(),
+          orderNumber: String(fd.get("orderNumber") ?? "").trim(),
+          orderDate: String(fd.get("orderDate") ?? ""),
+          body: String(fd.get("body") ?? "").trim(),
+        },
+      });
+      if (error || (data as { error?: string })?.error) {
+        throw new Error((data as { error?: string })?.error ?? error?.message ?? "Fehler");
+      }
+      setDone(true);
+      toast.success("Widerruf gesendet. Sie erhalten eine Bestätigung per E-Mail.");
+    } catch (err) {
+      toast.error("Senden fehlgeschlagen. Bitte versuchen Sie es erneut oder schreiben Sie an info@foquz.de.");
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
   <div className="min-h-screen">
     <MarqueeBanner />
     <Navbar />
@@ -47,37 +80,36 @@ const Widerrufsbelehrung = () => (
         <h2 id="widerrufsformular">Online-Widerrufsformular</h2>
         <p>Sie können Ihren Widerruf bequem online über das folgende Formular an uns übermitteln. Sie erhalten unverzüglich eine Bestätigung per E-Mail.</p>
 
+        {done ? (
+          <div className="not-prose mt-6 rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-6 text-sm">
+            <p className="font-semibold mb-2">Vielen Dank – Ihr Widerruf wurde übermittelt.</p>
+            <p className="opacity-80">Eine Bestätigung haben wir Ihnen per E-Mail gesendet. Bei Rückfragen erreichen Sie uns unter info@foquz.de.</p>
+          </div>
+        ) : (
         <form
-          action={`https://${SHOPIFY_SHOP_DOMAIN}/contact#contact_form`}
-          method="post"
-          acceptCharset="UTF-8"
+          onSubmit={onSubmit}
           className="not-prose mt-6 space-y-4 bg-foreground/[0.03] border border-foreground/10 rounded-2xl p-5 md:p-6"
         >
-          <input type="hidden" name="form_type" value="contact" />
-          <input type="hidden" name="utf8" value="✓" />
-          <input type="hidden" name="contact[form_id]" value={SHOPIFY_FORM_ID} />
-          <input type="hidden" name="contact[subject]" value="Widerrufserklärung" />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="block text-sm">
               <span className="block mb-1 font-semibold">Name *</span>
-              <input required type="text" name="contact[name]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+              <input required type="text" name="name" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm">
               <span className="block mb-1 font-semibold">E-Mail *</span>
-              <input required type="email" name="contact[email]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+              <input required type="email" name="email" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm md:col-span-2">
               <span className="block mb-1 font-semibold">Anschrift *</span>
-              <input required type="text" name="contact[anschrift]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+              <input required type="text" name="address" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm">
               <span className="block mb-1 font-semibold">Bestellnummer</span>
-              <input type="text" name="contact[bestellnummer]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+              <input type="text" name="orderNumber" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm">
               <span className="block mb-1 font-semibold">Bestellt am *</span>
-              <input required type="date" name="contact[bestellt_am]" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
+              <input required type="date" name="orderDate" className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm" />
             </label>
           </div>
 
@@ -85,7 +117,7 @@ const Widerrufsbelehrung = () => (
             <span className="block mb-1 font-semibold">Widerrufene Waren *</span>
             <textarea
               required
-              name="contact[body]"
+              name="body"
               rows={4}
               defaultValue="Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über den Kauf der folgenden Waren: "
               className="w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm"
@@ -94,14 +126,16 @@ const Widerrufsbelehrung = () => (
 
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded-full bg-foreground text-background font-bold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+            disabled={submitting}
+            className="inline-flex items-center justify-center rounded-full bg-foreground text-background font-bold px-6 py-3 text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Widerruf absenden
+            {submitting ? "Wird gesendet…" : "Widerruf absenden"}
           </button>
           <p className="text-xs opacity-60">
             Mit dem Absenden willigen Sie ein, dass Ihre Angaben zur Bearbeitung des Widerrufs verarbeitet werden. Details siehe Datenschutzerklärung.
           </p>
         </form>
+        )}
 
         <div className="border-t border-foreground/20 my-10" />
 
@@ -119,6 +153,7 @@ const Widerrufsbelehrung = () => (
     </div>
     <Footer />
   </div>
-);
+  );
+};
 
 export default Widerrufsbelehrung;
