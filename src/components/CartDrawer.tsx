@@ -125,7 +125,7 @@ const CartDrawer = () => {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground text-right -mt-2">
-                  inkl. MwSt., zzgl. <a href="/versandbedingungen" className="underline" target="_blank" rel="noopener noreferrer">Versand</a>
+                  inkl. MwSt. Versandkosten werden im Checkout berechnet.
                 </p>
                 <button
                   onClick={checkout}
