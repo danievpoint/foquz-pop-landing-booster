@@ -266,7 +266,7 @@ const ProductGrid = () => {
                         <span className="pg-card-price font-black">{p.price}</span>
                         <StockBadge available={isAvailable(p.name)} />
                       </div>
-                      <span className="pg-card-tax text-muted-foreground block text-center">inkl. MwSt., zzgl. <a href="/versandbedingungen" className="underline">Versand</a> · Grundpreis: €{(p.numericPrice * 20).toFixed(2)} / 100 g</span>
+                      <span className="pg-card-tax text-muted-foreground block text-center">inkl. MwSt.</span>
                       <div className="pg-card-actions flex items-center justify-center gap-3">
                         <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
@@ -339,7 +339,7 @@ const ProductGrid = () => {
                     <span className="text-xl font-black">{products[activeIndex].price}</span>
                     <StockBadge available={isAvailable(products[activeIndex].name)} />
                   </div>
-                  <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt., zzgl. <a href="/versandbedingungen" className="underline">Versand</a> · Grundpreis: €{(products[activeIndex].numericPrice * 20).toFixed(2)} / 100 g</span>
+                  <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
                   <div className="flex items-center justify-center gap-3">
                     <button
                       onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
