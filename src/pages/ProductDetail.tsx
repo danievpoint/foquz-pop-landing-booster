@@ -67,15 +67,15 @@ const BundleBanner = () => {
               FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              Spar <span className="font-black">15%</span> und teste alle Geschmacksrichtungen in einer Box.
+              Spar <span className="font-black">11%</span> und teste alle Geschmacksrichtungen in einer Box.
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
-              <span className="text-white/50 line-through text-base md:text-lg">23,97€</span>
+              <span className="text-white font-black text-2xl md:text-3xl">19,99€</span>
+              <span className="text-white/50 line-through text-base md:text-lg">22,47€</span>
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 14.99, image: foquzBox });
+                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 19.99, image: foquzBox });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
@@ -277,7 +277,7 @@ const ProductDetail = () => {
                 </ul>
                 <p className={`text-[10px] lg:text-xs mt-2 lg:mt-4 ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
                   {product.isBundle ? (
-                    <>Spar <span className="font-black text-xs lg:text-sm" style={{ color: "#ffd618" }}>15%</span> gegenüber Einzelkauf.</>
+                    <>Spar <span className="font-black text-xs lg:text-sm" style={{ color: "#ffd618" }}>11%</span> gegenüber Einzelkauf.</>
                   ) : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>
