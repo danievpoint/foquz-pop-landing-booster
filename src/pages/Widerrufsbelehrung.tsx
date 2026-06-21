@@ -1,6 +1,10 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
+
+const SHOPIFY_FORM_ID = "1041999";
+const SHOPIFY_SHOP_DOMAIN = "foquz-pop-landing-booster-xb8ca.myshopify.com";
 
 const Widerrufsbelehrung = () => (
   <div className="min-h-screen">
