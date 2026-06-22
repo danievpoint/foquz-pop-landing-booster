@@ -14,7 +14,7 @@ const Versandbedingungen = () => (
         <p>Diese Versandbedingungen gelten für alle Bestellungen, die über die Website www.foquz.de getätigt werden. Verkäufer ist die FOQUZ GmbH, Gewerbering am Brand 8, 82549 Königsdorf.</p>
 
         <h2>2. Liefergebiet</h2>
-        <p>Wir liefern innerhalb von <strong>Deutschland</strong> sowie in alle Mitgliedstaaten der <strong>Europäischen Union (EU)</strong>. Lieferungen in andere Länder sind derzeit nicht möglich.</p>
+        <p>Wir liefern innerhalb von <strong>Deutschland, Österreich und der Schweiz</strong>. Lieferungen in andere Länder sind grundsätzlich nicht möglich. Wenn du aus einem anderen Land bestellen möchtest, melde dich bitte vorab unter <a href="mailto:info@foquz.de" className="underline">info@foquz.de</a>.</p>
 
         <h2>3. Versanddienstleister</h2>
         <p>Der Versand erfolgt über die <strong>Deutsche Post / DHL</strong> als Paket- oder Warenpost-Sendung.</p>
