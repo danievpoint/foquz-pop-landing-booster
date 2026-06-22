@@ -14,7 +14,7 @@ const Versandbedingungen = () => (
         <p>Diese Versandbedingungen gelten für alle Bestellungen, die über die Website www.foquz.de getätigt werden. Verkäufer ist die FOQUZ GmbH, Gewerbering am Brand 8, 82549 Königsdorf.</p>
 
         <h2>2. Liefergebiet</h2>
-        <p>Wir liefern innerhalb von <strong>Deutschland</strong> sowie in alle Mitgliedstaaten der <strong>Europäischen Union (EU)</strong>. Lieferungen in andere Länder sind derzeit nicht möglich.</p>
+        <p>Wir liefern innerhalb von <strong>Deutschland, Österreich und der Schweiz</strong>. Lieferungen in andere Länder sind grundsätzlich nicht möglich. Wenn du aus einem anderen Land bestellen möchtest, melde dich bitte vorab unter <a href="mailto:info@foquz.de" className="underline">info@foquz.de</a>.</p>
 
         <h2>3. Versanddienstleister</h2>
         <p>Der Versand erfolgt über die <strong>Deutsche Post / DHL</strong> als Paket- oder Warenpost-Sendung.</p>
@@ -25,8 +25,7 @@ const Versandbedingungen = () => (
         <h2>5. Lieferzeit</h2>
         <p>Die nachfolgenden Angaben sind <strong>unverbindliche Richtwerte</strong>, da die tatsächliche Zustellung durch den Versanddienstleister DHL erfolgt und von uns nicht garantiert werden kann:</p>
         <ul>
-          <li>Deutschland: in der Regel <strong>2 – 5 Werktage</strong></li>
-          <li>EU-Ausland: in der Regel <strong>5 – 14 Werktage</strong></li>
+          <li>Deutschland, Österreich und Schweiz: in der Regel <strong>2 – 5 Werktage</strong></li>
         </ul>
         <p>Die Lieferzeit beginnt am Tag nach Vertragsschluss und Zahlungseingang. Verzögerungen durch DHL, Zoll oder höhere Gewalt liegen außerhalb unseres Einflussbereichs. Ein konkreter Liefertermin wird nicht zugesichert.</p>
 
