@@ -76,18 +76,22 @@ const Navbar = () => {
         {/* Desktop: left pill | centered logo | right pill */}
         <div className="hidden lg:flex items-center w-full justify-between">
           {/* Left pill */}
-          <div className="flex items-center gap-4 rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
-            {leftLinks.map((l) => (
-              <Link
-                key={l.label}
-                to={l.to}
-                onClick={(e) => {
-                  if (handleNavClick(l.to)) e.preventDefault();
-                }}
-                className="font-bold text-sm text-secondary-foreground hover:opacity-80 transition-colors"
-              >
-                {l.label}
-              </Link>
+          <div className="flex items-center rounded-full px-5 py-2.5 bg-card border-2 border-foreground shadow-lg">
+            {leftLinks.map((l, i) => (
+              <div key={l.label} className="flex items-center">
+                <Link
+                  to={l.to}
+                  onClick={(e) => {
+                    if (handleNavClick(l.to)) e.preventDefault();
+                  }}
+                  className="font-bold text-sm text-secondary-foreground hover:opacity-80 transition-colors px-3"
+                >
+                  {l.label}
+                </Link>
+                {i < leftLinks.length - 1 && (
+                  <span className="text-secondary-foreground/30 select-none px-1">|</span>
+                )}
+              </div>
             ))}
           </div>
 
