@@ -272,7 +272,7 @@ const ProductGrid = () => {
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                           className="comic-btn text-black pg-card-btn"
                           style={{ backgroundColor: p.color }}>
-                          FOKUS SICHERN
+                          IN DEN WARENKORB
                         </button>
                         <InfoButton onClick={() => setInfoProduct(p)} />
                       </div>
