@@ -31,7 +31,7 @@ const Navbar = () => {
   const leftLinks = [
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
     { label: "BUNDLE", to: "/#bundle", icon: Layers },
-    { label: "WAS IST FOQUZ", to: "/#das-ist-foquz", icon: HelpCircle },
+    { label: "WAS IST FOQUZ ?", to: "/#das-ist-foquz", icon: HelpCircle },
   ];
 
   const rightLinks = [
