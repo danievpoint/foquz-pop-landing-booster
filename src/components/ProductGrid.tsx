@@ -345,7 +345,7 @@ const ProductGrid = () => {
                       onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
                       className="comic-btn text-black text-xs py-2 px-5"
                       style={{ backgroundColor: products[activeIndex].color }}>
-                      FOKUS SICHERN
+                      IN DEN WARENKORB
                     </button>
                     <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
                   </div>

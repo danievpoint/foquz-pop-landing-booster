@@ -127,7 +127,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
         className="comic-btn w-full text-[9px] !py-1 !px-2 font-black"
         style={{ backgroundColor: p.isBundle ? "#ffd618" : p.color, color: "#000" }}
       >
-        FOKUS SICHERN
+        IN DEN WARENKORB
       </button>
     </div>
   </div>
@@ -234,7 +234,7 @@ const ProductDetail = () => {
               className="comic-btn text-xs lg:text-base py-2.5 px-8 lg:py-3 lg:px-10 font-black mb-5 lg:mb-8"
               style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
             >
-              {product.isBundle ? "BUNDLE SICHERN" : "FOKUS SICHERN"}
+              {product.isBundle ? "BUNDLE SICHERN" : "IN DEN WARENKORB"}
             </button>
 
             {/* Ingredients – collapsible on mobile/tablet */}
