@@ -41,7 +41,7 @@ const BundlePopup = () => {
     addToCart(1, {
       id: "starter-bundle",
       name: "FOQUZ Power Bundle (3 Sorten)",
-      price: 19.99,
+      price: 14.99,
       image: foquzBox,
     });
     dismiss();
@@ -89,12 +89,12 @@ const BundlePopup = () => {
                 FOQUZ POWER BUNDLE – Alle 3 Sorten!
               </h3>
               <p className="text-white/70 text-sm md:text-base">
-                Spar <span className="font-black">11%</span> und teste alle Geschmacksrichtungen in einer Box.
+                Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
               </p>
 
               <div className="flex items-center gap-3">
-                <span className="text-white font-black text-2xl md:text-3xl">19,99€</span>
-                <span className="text-white/50 line-through text-base md:text-lg">22,47€</span>
+                <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
+                <span className="text-white/50 line-through text-base md:text-lg">19,99€</span>
               </div>
 
               <button

@@ -7,7 +7,7 @@ import bundleBg from "@/assets/bundle-bg.png";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  "11% Sparen",
+  "25% Sparen",
   "Nasen Stripes und Sticker for free",
 ];
 
@@ -77,7 +77,7 @@ const BundleSection = () => {
               Eine Box. Voller Fokus.
             </p>
             <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg bundle-body">
-              Alle 3 Sorten in einer Box. Spare ganze <span className="font-black text-white">11%</span> und finde heraus, welcher FOQUZ dich am meisten auf Wolke 7 bringt.
+              Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
             </p>
 
             {/* Checkpoints - 2 columns on mobile */}
@@ -95,8 +95,8 @@ const BundleSection = () => {
 
             {/* Price */}
             <div className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
-              <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 19,99€</span>
-              <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">22,47€</span>
+              <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
+              <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">19,99€</span>
             </div>
 
             {/* CTA + Scarcity banner */}
@@ -106,7 +106,7 @@ const BundleSection = () => {
                   addToCart(1, {
                     id: "starter-bundle",
                     name: "FOQUZ Power Bundle (3 Sorten)",
-                    price: 19.99,
+                    price: 14.99,
                     image: foquzBox,
                   })
                 }
