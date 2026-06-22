@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, ShoppingBag, Layers, BookOpen, Star } from "lucide-react";
+import { Menu, X, ShoppingCart, ShoppingBag, Layers, BookOpen, Star, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
 import navbarHeaderBgPng from "@/assets/navbar-header-bg.png";
@@ -31,6 +31,7 @@ const Navbar = () => {
   const leftLinks = [
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
     { label: "BUNDLE", to: "/#bundle", icon: Layers },
+    { label: "WAS IST FOQUZ", to: "/#das-ist-foquz", icon: HelpCircle },
   ];
 
   const rightLinks = [
