@@ -29,7 +29,6 @@ const Navbar = () => {
   }, [location.pathname]);
 
   const leftLinks = [
-    { label: "START", to: "/", icon: ShoppingBag },
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
     { label: "BUNDLE", to: "/#bundle", icon: Layers },
   ];
