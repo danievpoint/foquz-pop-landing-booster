@@ -238,6 +238,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setItems([]);
         setIsOpen(false);
         setCheckoutUrl(null);
+        localStorage.removeItem(DISCOUNT_KEY);
+        setHasNewsletterDiscount(false);
       }
     };
     document.addEventListener("visibilitychange", handleVisibility);
