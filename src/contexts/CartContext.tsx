@@ -227,7 +227,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+    sessionStorage.setItem("foquz_checkout_pending", "1");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
+
+  // Clear cart when user returns to the tab after starting checkout
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible" && sessionStorage.getItem("foquz_checkout_pending") === "1") {
+        sessionStorage.removeItem("foquz_checkout_pending");
+        setItems([]);
+        setIsOpen(false);
+        setCheckoutUrl(null);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleVisibility);
+    };
+  }, []);
 
   return (
     <CartContext.Provider value={{

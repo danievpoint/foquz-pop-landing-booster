@@ -132,6 +132,7 @@ const CartDrawer = () => {
                     href={checkoutUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
                     className="comic-btn bg-primary text-primary-foreground w-full text-lg block text-center"
                   >
                     ZUR KASSE
