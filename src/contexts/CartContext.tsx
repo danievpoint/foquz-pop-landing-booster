@@ -196,8 +196,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCheckoutUrl(null);
 
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
-      .then((url) => {
-        if (!cancelled) setCheckoutUrl(url);
+      .then((result) => {
+        if (cancelled) return;
+        if (result) {
+          shopifyCartIdRef.current = result.cartId;
+          setCheckoutUrl(result.url);
+        } else {
+          setCheckoutUrl(null);
+        }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
