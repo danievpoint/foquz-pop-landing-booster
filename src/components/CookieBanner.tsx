@@ -85,7 +85,7 @@ const CookieBanner = () => {
         className={
           view === "settings"
             ? "fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/40"
-            : "fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[10000]"
+            : "fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-lg z-[10000]"
         }
       >
         <div
