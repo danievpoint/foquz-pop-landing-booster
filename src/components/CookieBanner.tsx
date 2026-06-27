@@ -113,7 +113,7 @@ const CookieBanner = () => {
                   Wir nutzen technisch notwendige Cookies, damit Shop, Warenkorb und Checkout funktionieren. Mit Ihrer Einwilligung verwenden wir zusätzlich Analyse- und Marketing-Dienste, um unser Angebot zu verbessern. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen" im Footer ändern. Details in der{" "}
                   <a href="/datenschutz" className="underline font-semibold">Datenschutzerklärung</a>.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex flex-wrap gap-2 items-center">
                   <button onClick={acceptAll} className="comic-btn bg-[#ffd618] text-foreground text-sm py-2 px-4">
                     ALLE AKZEPTIEREN
                   </button>
