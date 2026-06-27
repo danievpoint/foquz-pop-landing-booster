@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { openCookieSettings } from "@/lib/consent";
 import foquzLogo from "@/assets/foquz-logo.png";
+
 
 const Footer = () => {
   return (
