@@ -354,20 +354,22 @@ const ProductGrid = () => {
 
             {/* Arrows + Dots */}
             <div className="flex items-center justify-center gap-3 mt-3">
-              <button onClick={goPrev} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
+              <button aria-label="Vorheriges Produkt" onClick={goPrev} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
                 <ChevronLeft className="w-3 h-3" />
               </button>
               <div className="flex gap-2">
                 {products.map((_, i) =>
                 <button
                   key={i}
+                  aria-label={`Gehe zu Produkt ${i + 1}`}
+                  aria-current={i === activeIndex ? "true" : undefined}
                   onClick={() => goTo(i)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
                   } />
                 )}
               </div>
-              <button onClick={goNext} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
+              <button aria-label="Nächstes Produkt" onClick={goNext} className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center hover:bg-foreground/10 transition-colors">
                 <ChevronRight className="w-3 h-3" />
               </button>
             </div>
