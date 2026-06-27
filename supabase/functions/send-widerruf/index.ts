@@ -127,7 +127,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error('send-widerruf error', e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
