@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
-import { createShopifyCheckout, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 
 export interface CartItem {
   id: string;
@@ -104,6 +104,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const shopifyCartIdRef = useRef<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
@@ -195,8 +196,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCheckoutUrl(null);
 
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
-      .then((url) => {
-        if (!cancelled) setCheckoutUrl(url);
+      .then((result) => {
+        if (cancelled) return;
+        if (result) {
+          shopifyCartIdRef.current = result.cartId;
+          setCheckoutUrl(result.url);
+        } else {
+          setCheckoutUrl(null);
+        }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
@@ -230,16 +237,30 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.setItem("foquz_checkout_pending", "1");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 
-  // Clear cart when user returns to the tab after starting checkout
+  // Only clear the cart once the Shopify checkout was actually completed
+  // (i.e. the Shopify cart no longer exists or has 0 items). If the user
+  // returns without paying, the cart stays intact.
   useEffect(() => {
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible" && sessionStorage.getItem("foquz_checkout_pending") === "1") {
-        sessionStorage.removeItem("foquz_checkout_pending");
-        setItems([]);
-        setIsOpen(false);
-        setCheckoutUrl(null);
-        localStorage.removeItem(DISCOUNT_KEY);
-        setHasNewsletterDiscount(false);
+    let checking = false;
+    const handleVisibility = async () => {
+      if (document.visibilityState !== "visible") return;
+      if (sessionStorage.getItem("foquz_checkout_pending") !== "1") return;
+      const cartId = shopifyCartIdRef.current;
+      if (!cartId || checking) return;
+      checking = true;
+      try {
+        const completed = await isShopifyCartCompleted(cartId);
+        if (completed) {
+          sessionStorage.removeItem("foquz_checkout_pending");
+          shopifyCartIdRef.current = null;
+          setItems([]);
+          setIsOpen(false);
+          setCheckoutUrl(null);
+          localStorage.removeItem(DISCOUNT_KEY);
+          setHasNewsletterDiscount(false);
+        }
+      } finally {
+        checking = false;
       }
     };
     document.addEventListener("visibilitychange", handleVisibility);
