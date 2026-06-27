@@ -86,15 +86,26 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
+const CART_QUERY = `
+  query cart($id: ID!) {
+    cart(id: $id) { id totalQuantity }
+  }
+`;
+
 export interface CheckoutLine {
   variantId: string;
   quantity: number;
 }
 
+export interface ShopifyCheckout {
+  url: string;
+  cartId: string;
+}
+
 export async function createShopifyCheckout(
   lines: CheckoutLine[],
   discountCodes?: string[]
-): Promise<string | null> {
+): Promise<ShopifyCheckout | null> {
   const input: Record<string, unknown> = {
     lines: lines.map((l) => ({ quantity: l.quantity, merchandiseId: l.variantId })),
   };
@@ -108,14 +119,34 @@ export async function createShopifyCheckout(
     console.error('Shopify cartCreate errors:', userErrors);
     return null;
   }
-  const checkoutUrl: string | undefined = data?.data?.cartCreate?.cart?.checkoutUrl;
-  if (!checkoutUrl) return null;
+  const cart = data?.data?.cartCreate?.cart;
+  const checkoutUrl: string | undefined = cart?.checkoutUrl;
+  const cartId: string | undefined = cart?.id;
+  if (!checkoutUrl || !cartId) return null;
 
+  let finalUrl = checkoutUrl;
   try {
     const url = new URL(checkoutUrl);
     url.searchParams.set('channel', 'online_store');
-    return url.toString();
+    finalUrl = url.toString();
   } catch {
-    return checkoutUrl;
+    // ignore
+  }
+  return { url: finalUrl, cartId };
+}
+
+/**
+ * Returns true when the Shopify cart no longer exists or has 0 items,
+ * which indicates the checkout was completed (or expired).
+ */
+export async function isShopifyCartCompleted(cartId: string): Promise<boolean> {
+  try {
+    const data = await storefrontApiRequest(CART_QUERY, { id: cartId });
+    const cart = data?.data?.cart;
+    if (!cart) return true;
+    return (cart.totalQuantity ?? 0) === 0;
+  } catch (e) {
+    console.error('Failed to check Shopify cart status:', e);
+    return false;
   }
 }
