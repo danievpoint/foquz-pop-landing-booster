@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.foquz.de/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.foquz.de/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.foquz.de/ueber-uns</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.foquz.de/das-ist-drin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.foquz.de/anleitung</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.foquz.de/hilfe</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.foquz.de/b2b-anfragen</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.foquz.de/produkt/peach-party</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.foquz.de/produkt/thai-style</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.foquz.de/produkt/lemon-breezy</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.foquz.de/produkt/starter-bundle</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.foquz.de/impressum</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.foquz.de/datenschutz</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.foquz.de/agb</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.foquz.de/widerrufsbelehrung</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.foquz.de/versandbedingungen</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>

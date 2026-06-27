@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
+import SeoHead from "@/components/SeoHead";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -40,7 +41,8 @@ const Widerrufsbelehrung = () => {
 
   return (
   <div className="min-h-screen">
-    <MarqueeBanner />
+    <SeoHead title={"Widerrufsbelehrung – FOQUZ"} description={"14 Tage Widerrufsrecht und Muster-Widerrufsformular für FOQUZ Bestellungen."} path={"/widerrufsbelehrung"} />
+      <MarqueeBanner />
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Widerrufsbelehrung</h1>

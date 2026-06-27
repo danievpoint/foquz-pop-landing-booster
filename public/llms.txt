@@ -1,0 +1,30 @@
+# FOQUZ
+
+> FOQUZ – die Original Riechdose aus Deutschland. 100% natürliche ätherische Öle für maximalen Fokus in 2 Sekunden. Ohne Zucker, ohne Chemie, ohne Crash.
+
+FOQUZ ist eine moderne Interpretation der traditionellen asiatischen Kräuterdose. Hochwertige Inhaltsstoffe, klares Design, hergestellt in Deutschland von der FOQUZ GmbH.
+
+## Pages
+
+- [Startseite](/): Produktübersicht, Brand-Story und Newsletter-Anmeldung.
+- [Über uns](/ueber-uns): Brand-Story und Gründer-Hintergrund.
+- [Das ist drin](/das-ist-drin): Inhaltsstoffe und Wirkungsweise.
+- [Anleitung](/anleitung): So benutzt du FOQUZ richtig.
+- [FAQ](/faq): Häufig gestellte Fragen zu Produkt, Versand und Verwendung.
+- [Hilfecenter](/hilfe): Support und Kontaktmöglichkeiten.
+- [B2B Anfragen](/b2b-anfragen): Partner- und Großhandelsanfragen.
+
+## Produkte
+
+- [PEACH PARTY](/produkt/peach-party): Fruchtige Frische mit Pfirsicharoma.
+- [THAI STYLE](/produkt/thai-style): Klassische asiatische Kräuter-Power.
+- [LEMON BREEZY](/produkt/lemon-breezy): Frische Zitrusnoten.
+- [Power Bundle](/produkt/starter-bundle): Alle drei Sorten im Set.
+
+## Optional
+
+- [Versandbedingungen](/versandbedingungen): DE/AT/CH Versand via DHL.
+- [Widerrufsbelehrung](/widerrufsbelehrung): 14 Tage Widerrufsrecht.
+- [AGB](/agb): Allgemeine Geschäftsbedingungen.
+- [Datenschutz](/datenschutz): Datenschutzerklärung.
+- [Impressum](/impressum): Anbieterkennzeichnung.

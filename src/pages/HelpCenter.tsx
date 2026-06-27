@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SeoHead from "@/components/SeoHead";
 import { Link } from "react-router-dom";
 import { Search, HelpCircle, Truck, Package, FileText, Users, BookOpen } from "lucide-react";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const HelpCenter = () => {
 
   return (
     <div className="min-h-screen">
+      <SeoHead title={"Hilfecenter – FOQUZ Support"} description={"Antworten, Hilfeartikel und Kontakt zum FOQUZ Support."} path={"/hilfe"} />
       <Navbar />
       <div className="pt-40 pb-16">
         <div className="text-center mb-12 px-4">
