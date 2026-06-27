@@ -88,6 +88,10 @@ const Footer = () => {
               <li>
                 <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity ft-link">EU-Streitschlichtung</a>
               </li>
+              <li>
+                <button onClick={openCookieSettings} className="hover:opacity-100 transition-opacity ft-link text-left">Cookie-Einstellungen</button>
+              </li>
+
             </ul>
           </div>
 
