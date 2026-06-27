@@ -104,6 +104,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const shopifyCartIdRef = useRef<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
