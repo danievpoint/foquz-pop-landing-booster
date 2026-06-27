@@ -1,10 +1,12 @@
 import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
+import SeoHead from "@/components/SeoHead";
 
 const B2BAnfragen = () => (
   <div className="min-h-screen">
-    <MarqueeBanner />
+    <SeoHead title={"B2B Anfragen – FOQUZ Partner werden"} description={"Werde FOQUZ-Partner. Kontakt für Großhandel, Distribution und Kooperationen."} path={"/b2b-anfragen"} />
+      <MarqueeBanner />
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">B2B Anfragen</h1>

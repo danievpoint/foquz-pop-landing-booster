@@ -1,10 +1,12 @@
 import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
+import SeoHead from "@/components/SeoHead";
 
 const DasIstDrin = () => (
   <div className="min-h-screen">
-    <MarqueeBanner />
+    <SeoHead title={"Das ist drin – FOQUZ Inhaltsstoffe"} description={"100% natürliche ätherische Öle und Kräuter in jeder FOQUZ Dose. Erfahre, was FOQUZ so wirkungsvoll macht."} path={"/das-ist-drin"} />
+      <MarqueeBanner />
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Das ist drin</h1>
