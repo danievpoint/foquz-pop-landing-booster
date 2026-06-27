@@ -237,16 +237,30 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.setItem("foquz_checkout_pending", "1");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 
-  // Clear cart when user returns to the tab after starting checkout
+  // Only clear the cart once the Shopify checkout was actually completed
+  // (i.e. the Shopify cart no longer exists or has 0 items). If the user
+  // returns without paying, the cart stays intact.
   useEffect(() => {
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible" && sessionStorage.getItem("foquz_checkout_pending") === "1") {
-        sessionStorage.removeItem("foquz_checkout_pending");
-        setItems([]);
-        setIsOpen(false);
-        setCheckoutUrl(null);
-        localStorage.removeItem(DISCOUNT_KEY);
-        setHasNewsletterDiscount(false);
+    let checking = false;
+    const handleVisibility = async () => {
+      if (document.visibilityState !== "visible") return;
+      if (sessionStorage.getItem("foquz_checkout_pending") !== "1") return;
+      const cartId = shopifyCartIdRef.current;
+      if (!cartId || checking) return;
+      checking = true;
+      try {
+        const completed = await isShopifyCartCompleted(cartId);
+        if (completed) {
+          sessionStorage.removeItem("foquz_checkout_pending");
+          shopifyCartIdRef.current = null;
+          setItems([]);
+          setIsOpen(false);
+          setCheckoutUrl(null);
+          localStorage.removeItem(DISCOUNT_KEY);
+          setHasNewsletterDiscount(false);
+        }
+      } finally {
+        checking = false;
       }
     };
     document.addEventListener("visibilitychange", handleVisibility);
