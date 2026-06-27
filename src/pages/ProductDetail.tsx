@@ -9,6 +9,7 @@ import StockBadge from "@/components/StockBadge";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SeoHead from "@/components/SeoHead";
 import { ChevronLeft, ChevronDown, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
@@ -158,8 +159,31 @@ const ProductDetail = () => {
 
   const isBundlePage = !!product?.isBundle;
 
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.desc.replace(/\n/g, " "),
+    sku: product.handle,
+    brand: { "@type": "Brand", name: "FOQUZ" },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      price: product.numericPrice.toFixed(2),
+      availability: "https://schema.org/InStock",
+      url: `https://www.foquz.de/produkt/${product.handle}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SeoHead
+        title={`${product.name} – FOQUZ`}
+        description={product.desc.replace(/\n/g, " ").slice(0, 155)}
+        path={`/produkt/${product.handle}`}
+        type="product"
+        jsonLd={productLd}
+      />
       <MarqueeBanner />
       <Navbar />
 
