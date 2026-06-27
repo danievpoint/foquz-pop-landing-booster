@@ -7,7 +7,7 @@ FOQUZ ist eine moderne Interpretation der traditionellen asiatischen Kräuterdos
 ## Pages
 
 - [Startseite](/): Produktübersicht, Brand-Story und Newsletter-Anmeldung.
-- [Was ist FOQUZ – Über uns](/ueber-uns): Brand-Story und Gründer-Hintergrund.
+- [Über uns](/ueber-uns): Brand-Story und Gründer-Hintergrund.
 - [Das ist drin](/das-ist-drin): Inhaltsstoffe und Wirkungsweise.
 - [Anleitung](/anleitung): So benutzt du FOQUZ richtig.
 - [FAQ](/faq): Häufig gestellte Fragen zu Produkt, Versand und Verwendung.
@@ -16,10 +16,10 @@ FOQUZ ist eine moderne Interpretation der traditionellen asiatischen Kräuterdos
 
 ## Produkte
 
-- [FOQUZ Original](/produkt/foquz-original): Klassische Sorte für täglichen Fokus.
-- [FOQUZ Fresh](/produkt/foquz-fresh): Erfrischende Variante.
-- [FOQUZ Power](/produkt/foquz-power): Intensiv für maximale Wachheit.
-- [FOQUZ Bundle](/produkt/foquz-bundle): Alle drei Sorten im Set.
+- [PEACH PARTY](/produkt/peach-party): Fruchtige Frische mit Pfirsicharoma.
+- [THAI STYLE](/produkt/thai-style): Klassische asiatische Kräuter-Power.
+- [LEMON BREEZY](/produkt/lemon-breezy): Frische Zitrusnoten.
+- [Power Bundle](/produkt/starter-bundle): Alle drei Sorten im Set.
 
 ## Optional
 
