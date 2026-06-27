@@ -85,7 +85,7 @@ const CookieBanner = () => {
         className={
           view === "settings"
             ? "fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/40"
-            : "fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[10000]"
+            : "fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-lg z-[10000]"
         }
       >
         <div
@@ -113,7 +113,7 @@ const CookieBanner = () => {
                   Wir nutzen technisch notwendige Cookies, damit Shop, Warenkorb und Checkout funktionieren. Mit Ihrer Einwilligung verwenden wir zusätzlich Analyse- und Marketing-Dienste, um unser Angebot zu verbessern. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen" im Footer ändern. Details in der{" "}
                   <a href="/datenschutz" className="underline font-semibold">Datenschutzerklärung</a>.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex flex-wrap gap-2 items-center">
                   <button onClick={acceptAll} className="comic-btn bg-[#ffd618] text-foreground text-sm py-2 px-4">
                     ALLE AKZEPTIEREN
                   </button>
