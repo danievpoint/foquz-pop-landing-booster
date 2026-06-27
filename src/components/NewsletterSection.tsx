@@ -122,6 +122,8 @@ const NewsletterSection = () => {
             >
               <div className="relative w-full max-w-sm rounded-3xl p-8 shadow-2xl border-2 border-foreground/10 bg-card text-center pointer-events-auto">
                 <button
+                  type="button"
+                  aria-label="Popup schließen"
                   onClick={() => setShowPopup(false)}
                   className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
                 >

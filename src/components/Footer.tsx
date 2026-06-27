@@ -24,7 +24,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-[3fr_1fr_1fr_1fr] gap-4 md:gap-6 mb-6 md:mb-10 ft-grid">
           <div className="col-span-2 md:col-span-1">
-            <img src={foquzLogo} alt="FOQUZ" className="h-14 md:h-20 mb-2 md:mb-3 -ml-2 ft-logo" />
+            <img src={foquzLogo} alt="FOQUZ Logo" className="h-14 md:h-20 mb-2 md:mb-3 -ml-2 ft-logo" />
             <p className="text-sm md:text-lg opacity-80 mb-0.5 md:mb-1 font-bold ft-claim">
               Die Original Foquz Riechdose aus Deutschland.
             </p>

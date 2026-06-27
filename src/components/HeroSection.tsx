@@ -178,10 +178,10 @@ const HeroSection = () => {
             <div className="absolute inset-0 z-10">
               <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
-                  <h1 className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
+                  <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
                     <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                  </h1>
+                  </div>
                   <p className="hero-subtitle font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
                     DU ENTSCHEIDEST WAS DU RIECHST
                   </p>
