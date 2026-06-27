@@ -169,8 +169,8 @@ serve(async (req) => {
       }
     }
 
-    // Return consistent response without revealing whether email existed
-    return new Response(JSON.stringify({ success: true, already_subscribed: isAlreadySubscribed }), {
+    // Return a uniform response to prevent subscriber enumeration
+    return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
