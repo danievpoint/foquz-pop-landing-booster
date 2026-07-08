@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
 import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBg from "@/assets/hero-bg.svg";
+import heroClouds from "@/assets/hero-clouds.svg";
 
 const heroJars = heroGuyAsset.url;
 const heroProducts = heroOriginalProducts;
@@ -178,6 +179,18 @@ const HeroSection = () => {
                 </a>
               </g>
             </svg>
+
+            {/* Layer 2b: Clouds overlay — same SVG clouds redrawn on top so
+                the hero-guy sits BEHIND the blue cloud shapes. */}
+            <img
+              src={heroClouds}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
 
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
