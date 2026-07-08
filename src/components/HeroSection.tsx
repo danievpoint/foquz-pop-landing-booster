@@ -111,7 +111,7 @@ const HeroSection = () => {
           <div style={{ height: "100px" }} aria-hidden="true" />
 
           <div
-            className="relative w-full overflow-hidden -mt-[2px]"
+            className="relative w-full overflow-hidden -mt-[2px] bg-[#85c8b5]"
             style={{
               aspectRatio: "1920 / 772",
               containerType: "inline-size",
@@ -139,42 +139,28 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background SVG */}
-            <img
-              src={heroBg}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 w-full h-full"
-            />
-
-            {/* Layer 2: Product image in SVG overlay.
-                Same viewBox as background = locked coordinates.
-                Now that the hero starts below the nav, y=55 is truly
-                55 SVG units from the TOP OF THE VISIBLE AREA on every screen.
-                Float ±12: range 43–67 at top, 703–727 at bottom. All inside 0–772. */}
+            {/* Layer 1: Product image (behind clouds) */}
             <svg
               viewBox="0 0 1920 772"
               className="absolute inset-0 w-full h-full"
               xmlns="http://www.w3.org/2000/svg"
               style={{ pointerEvents: "none" }}
             >
-              <g>
-                <animateTransform
-                  attributeName="transform"
-                  type="translate"
-                  values="0 -6; 0 6; 0 -6"
-                  dur="3.4s"
-                  repeatCount="indefinite"
-                  calcMode="spline"
-                  keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                />
-                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
-                  <image href={heroJars} x="0" y="0" width="1920" height="772" preserveAspectRatio="xMidYMid slice" style={{ cursor: "pointer" }} />
-                </a>
-              </g>
+              <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
+                <image href={heroJars} x="0" y="0" width="1920" height="772" preserveAspectRatio="xMidYMid slice" style={{ cursor: "pointer" }} />
+              </a>
             </svg>
+
+            {/* Layer 2: Background SVG with clouds (on top of image) */}
+            <img
+              src={heroBg}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
 
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
