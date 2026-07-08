@@ -180,6 +180,18 @@ const HeroSection = () => {
               </g>
             </svg>
 
+            {/* Layer 2b: Clouds overlay — same SVG clouds redrawn on top so
+                the hero-guy sits BEHIND the blue cloud shapes. */}
+            <img
+              src={heroClouds}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
+
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
               <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
