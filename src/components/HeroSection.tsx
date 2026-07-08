@@ -139,17 +139,7 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background SVG */}
-            <img
-              src={heroBg}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            />
-
-            {/* Layer 2: Product image (one layer in front of the background) */}
+            {/* Layer 1: Product image (behind clouds) */}
             <svg
               viewBox="0 0 1920 772"
               className="absolute inset-0 w-full h-full"
@@ -160,6 +150,17 @@ const HeroSection = () => {
                 <image href={heroJars} x="0" y="0" width="1920" height="772" preserveAspectRatio="xMidYMid slice" style={{ cursor: "pointer" }} />
               </a>
             </svg>
+
+            {/* Layer 2: Background SVG with clouds (on top of image) */}
+            <img
+              src={heroBg}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
 
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
