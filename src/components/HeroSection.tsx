@@ -54,7 +54,7 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
+        <div className="lg:hidden relative w-full bg-[#85c8b5]" style={{ minHeight: "max(700px, 75vh)" }}>
           <img
             src={heroBg}
             alt=""
