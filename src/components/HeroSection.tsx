@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import heroJars from "@/assets/hero-products.png";
+import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
 import heroBg from "@/assets/hero-bg.svg";
+
+const heroJars = heroGuyAsset.url;
 
 const heroImagePromise = Promise.all(
   [heroBg, heroJars].map(
