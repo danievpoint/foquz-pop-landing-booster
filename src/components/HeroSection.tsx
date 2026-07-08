@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import heroJars from "@/assets/hero-products.png";
+import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
 import heroBg from "@/assets/hero-bg.svg";
+
+const heroJars = heroGuyAsset.url;
 
 const heroImagePromise = Promise.all(
   [heroBg, heroJars].map(
@@ -169,7 +171,7 @@ const HeroSection = () => {
                   keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
                 />
                 <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
-                  <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" style={{ cursor: "pointer" }} />
+                  <image href={heroJars} x="0" y="0" width="1920" height="772" preserveAspectRatio="xMidYMid slice" style={{ cursor: "pointer" }} />
                 </a>
               </g>
             </svg>
