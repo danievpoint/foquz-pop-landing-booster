@@ -54,7 +54,7 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
+        <div className="lg:hidden relative w-full overflow-hidden" style={{ minHeight: "max(700px, 75vh)" }}>
           <img
             src={heroBg}
             alt=""
@@ -63,7 +63,21 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
+          {/* Hero jars image – bleeds to the right edge and up to the navbar */}
+          <Link
+            to="/produkt/starter-bundle"
+            aria-label="Starter Bundle ansehen"
+            className="absolute inset-x-0 top-0 bottom-0 block z-0"
+          >
+            <img
+              src={heroJars}
+              alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-right-bottom animate-[breathe_3s_ease-in-out_infinite]"
+            />
+          </Link>
+          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0 pointer-events-none">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -73,7 +87,7 @@ const HeroSection = () => {
                 <p className="text-lg sm:text-xl md:text-2xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-3 sm:mb-5 md:mb-6 whitespace-nowrap">
                   DU ENTSCHEIDEST WAS DU RIECHST
                 </p>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pointer-events-auto">
                   <a
                     href="#bundle"
                     className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
@@ -88,15 +102,6 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-                <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
-                  <img
-                    src={heroJars}
-                    alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                    loading="eager"
-                    decoding="async"
-                    className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
-                  />
-                </Link>
             </div>
           </div>
         </div>
