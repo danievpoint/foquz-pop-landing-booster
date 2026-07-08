@@ -9,7 +9,7 @@ const heroJars = heroGuyAsset.url;
 const heroProducts = heroOriginalProducts;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroJars].map(
+  [heroBg, heroJars, heroProducts].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
