@@ -58,7 +58,7 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
           <img
-            src={heroMobile}
+            src="/hero-mobile.png"
             alt=""
             aria-hidden="true"
             loading="eager"
