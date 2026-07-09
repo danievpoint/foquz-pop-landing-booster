@@ -7,9 +7,9 @@ import iconLegal from "@/assets/icon-trust-legal.png";
 
 const trustItems = [
   { icon: iconLeaf, label: "100% ÄTHERISCHE ÖLE" },
-  { icon: iconBolt, label: "INSTANT-WIRKUNG IN 2 SEK" },
+  { icon: iconBolt, label: "INSTANT-FRISCHE IN 2 SEK" },
   { icon: iconNoCoffee, label: "KEIN KOFFEIN, KEIN CRASH" },
-  { icon: iconShipping, label: "VERSAND IN 24H" },
+  { icon: iconShipping, label: "VERSAND IN 24H · MADE IN GERMANY 🇩🇪" },
   { icon: iconLegal, label: "100% LEGAL & VEGAN" },
 ];
 
