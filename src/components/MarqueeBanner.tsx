@@ -21,6 +21,7 @@ const MarqueeBanner = () => {
             key={i}
             className="text-[10px] md:text-xs font-bold text-secondary-foreground/70 tracking-wider flex items-center gap-2"
           >
+            <span className="text-primary/50">★</span>
             {text}
             <span className="text-primary/50">★</span>
           </span>
