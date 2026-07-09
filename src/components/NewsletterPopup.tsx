@@ -120,9 +120,10 @@ const NewsletterPopup = () => {
     e.preventDefault();
     if (!email || loading) return;
     if (!consent) {
-      toast({ title: "Einwilligung erforderlich", description: "Bitte bestätige die Verarbeitung deiner E-Mail-Adresse.", variant: "destructive" });
+      setConsentError(true);
       return;
     }
+    setConsentError(false);
 
     setLoading(true);
     try {
