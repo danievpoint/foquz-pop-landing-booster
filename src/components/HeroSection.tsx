@@ -41,7 +41,7 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) — original 3-jar product composition === */}
         <div
           className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue"
-          style={{ minHeight: "max(720px, 78vh)" }}
+          style={{ minHeight: "max(760px, 82vh)" }}
         >
           {/* Clouds overlay at bottom */}
           <img
