@@ -36,6 +36,7 @@ const NewsletterPopup = () => {
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  const [shake, setShake] = useState(0);
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
