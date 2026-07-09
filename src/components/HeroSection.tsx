@@ -49,7 +49,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
-      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(560px, 68vh)" }} />}
+      {!ready && <div className="w-full bg-background" style={{ aspectRatio: "1920 / 772" }} />}
 
       <div
         className="transition-opacity duration-500"
