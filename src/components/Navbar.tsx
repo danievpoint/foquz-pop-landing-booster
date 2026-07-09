@@ -67,8 +67,10 @@ const Navbar = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
         <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
-        {/* PNG background for all viewports */}
-        <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+        {/* Mobile: PNG background */}
+        <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
+        {/* Desktop: SVG background, full-width cover */}
+        <img src={navbarHeaderBgSvg} alt="" className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none hidden lg:block" />
       </div>
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative z-10">
         {/* Desktop: left pill | centered logo | right pill */}
