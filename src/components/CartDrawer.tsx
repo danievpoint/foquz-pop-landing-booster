@@ -192,27 +192,37 @@ const CartDrawer = () => {
                   </div>
                 )}
 
-                {/* Versand-Hinweis früher sichtbar */}
+                {/* Versand-Hinweis + Progressbar zum Gratis-Versand */}
                 {(() => {
-                  const freeShipping = discountedTotal >= 29.99;
-                  const missing = Math.max(0, 29.99 - discountedTotal);
+                  const THRESHOLD = 29.99;
+                  const freeShipping = discountedTotal >= THRESHOLD;
+                  const missing = Math.max(0, THRESHOLD - discountedTotal);
+                  const pct = Math.min(100, (discountedTotal / THRESHOLD) * 100);
                   return (
-                    <div className="text-xs font-bold text-foreground/80 space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        🚚 Versand in 24h
-                      </div>
-                      {freeShipping ? (
-                        <div className="text-green-700">
-                          ✓ Kostenloser Versand (ab €29,99)
-                        </div>
-                      ) : (
-                        <div className="text-foreground/70">
-                          Versand: DE €2,90 · AT/CH €3,00 · gratis ab €29,99
-                          <span className="block text-foreground/60">
-                            Nur noch €{missing.toFixed(2).replace(".", ",")} bis zum Gratis-Versand
+                    <div className="rounded-xl border-2 border-foreground bg-muted/40 p-3 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-black uppercase">
+                        <span className="flex items-center gap-1.5">🚚 Gratis-Versand</span>
+                        {freeShipping ? (
+                          <span className="text-green-700">Freigeschaltet ✓</span>
+                        ) : (
+                          <span className="text-foreground/70">
+                            Noch €{missing.toFixed(2).replace(".", ",")}
                           </span>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                      <div className="h-2 w-full rounded-full bg-foreground/10 overflow-hidden border border-foreground/20">
+                        <motion.div
+                          className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
+                          initial={false}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                        />
+                      </div>
+                      <div className="text-[11px] font-bold text-foreground/70">
+                        {freeShipping
+                          ? "Dein Versand geht aufs Haus 🎉"
+                          : `Versand: DE €2,90 · AT/CH €3,00 · gratis ab €${THRESHOLD.toFixed(2).replace(".", ",")}`}
+                      </div>
                     </div>
                   );
                 })()}
