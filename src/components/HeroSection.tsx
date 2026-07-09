@@ -121,10 +121,6 @@ const HeroSection = () => {
             }}
           >
             <style>{`
-              @keyframes hero-float {
-                0%, 100% { transform: translateY(-6px); }
-                50% { transform: translateY(6px); }
-              }
               .hero-title {
                 display: flex;
                 flex-direction: column;
