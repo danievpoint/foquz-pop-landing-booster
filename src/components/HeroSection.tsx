@@ -56,7 +56,16 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) — portrait hero using mobile PNG === */}
-        <div className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue" style={{ aspectRatio: "850 / 1500" }}>
+        <div
+          className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue"
+          style={{ aspectRatio: "850 / 1500", containerType: "inline-size" }}
+        >
+          <style>{`
+            .hero-m-title { font-size: 10cqw; line-height: 1.02; }
+            .hero-m-sub   { font-size: 3.6cqw; }
+            .hero-m-btn   { font-size: 3.2cqw !important; padding: 2.2cqw 5cqw !important; }
+          `}</style>
+
           {/* Layer 0: SVG scene visible through transparent PNG regions */}
           <img
             src={heroScene}
@@ -64,18 +73,18 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-x-0 bottom-0 w-full object-cover object-bottom"
-            style={{ height: "72%" }}
+            className="absolute inset-x-0 w-full object-cover object-top"
+            style={{ top: "28%", height: "82%" }}
           />
-          {/* Layer 1: Mobile PNG (contains cans + character) positioned at bottom */}
+          {/* Layer 1: Mobile PNG — top aligned so 3 cans + face visible, arm cropped at bottom */}
           <img
             src={heroMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-x-0 bottom-0 w-full object-cover object-bottom"
-            style={{ height: "72%" }}
+            className="absolute inset-x-0 w-full object-cover object-top"
+            style={{ top: "28%", height: "82%" }}
           />
           {/* Layer 2: Clouds overlay at bottom */}
           <img
@@ -86,33 +95,27 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-x-0 bottom-0 w-full pointer-events-none"
           />
-          <div className="relative z-10 w-full mx-auto px-4 sm:px-6" style={{ paddingTop: "12%" }}>
 
-
-            <div className="flex flex-col">
-              <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] text-4xl sm:text-5xl leading-[1.05] mb-2 sm:mb-4 text-primary-foreground text-pop whitespace-nowrap">
-                <span className="block">KURZ RIECHEN.</span>
-                <span className="block text-secondary">AB AUF WOLKE 7.</span>
-              </h1>
-              <p className="text-base sm:text-xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-4 sm:mb-6 whitespace-nowrap">
-                DU ENTSCHEIDEST WAS DU RIECHST
-              </p>
-              <div className="flex flex-col gap-2 sm:gap-3">
-                <a
-                  href="#bundle"
-                  className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 font-black bg-secondary text-secondary-foreground w-fit"
-                >
-                  SPAR-BUNDLE HOLEN
-                </a>
-                <a
-                  href="#sorten"
-                  className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 font-black bg-card text-foreground w-fit"
-                >
-                  EINZELN KAUFEN
-                </a>
-              </div>
+          {/* Text + CTAs sit in the top blue band */}
+          <div className="absolute inset-x-0 top-0 z-10 px-[5%]" style={{ paddingTop: "8%" }}>
+            <h1 className="hero-m-title flex flex-col gap-[0.12em] text-primary-foreground text-pop whitespace-nowrap font-black uppercase">
+              <span className="block">KURZ RIECHEN.</span>
+              <span className="block text-secondary">AB AUF WOLKE 7.</span>
+            </h1>
+            <p className="hero-m-sub font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap" style={{ marginTop: "2cqw", marginBottom: "3cqw" }}>
+              DU ENTSCHEIDEST WAS DU RIECHST
+            </p>
+            <div className="flex flex-col" style={{ gap: "1.8cqw" }}>
+              <a href="#bundle" className="comic-btn hero-m-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
+                SPAR-BUNDLE HOLEN
+              </a>
+              <a href="#sorten" className="comic-btn hero-m-btn font-black bg-card text-foreground w-fit whitespace-nowrap">
+                EINZELN KAUFEN
+              </a>
             </div>
           </div>
+        </div>
+
         </div>
 
         {/* === DESKTOP (lg+) ===
