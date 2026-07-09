@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
-import FAQ from "./pages/FAQ";
+
 import UeberUns from "./pages/UeberUns";
 import DasIstDrin from "./pages/DasIstDrin";
 import AGB from "./pages/AGB";
@@ -72,7 +72,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
             <Route path="/impressum" element={<Impressum />} />
-            <Route path="/faq" element={<FAQ />} />
+            
             <Route path="/ueber-uns" element={<UeberUns />} />
             <Route path="/das-ist-drin" element={<DasIstDrin />} />
             <Route path="/agb" element={<AGB />} />
