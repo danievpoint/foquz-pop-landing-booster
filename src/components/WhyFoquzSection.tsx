@@ -30,7 +30,7 @@ const WhyFoquzSection = () => {
   return (
     <section
       id="das-ist-foquz"
-      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden"
+      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden scroll-mt-[140px] md:scroll-mt-[124px]"
       style={{ containerType: 'inline-size' }}
     >
       <style>{`
