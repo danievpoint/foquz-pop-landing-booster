@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
+import heroScene from "@/assets/hero-bg.svg";
 
 const heroBg = heroBgAsset.url;
 const heroProducts = heroOriginalProducts;
@@ -58,6 +59,14 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) ===
             Original three-jar composition: full image below the text. */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
+          <img
+            src={heroScene}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
           <img
             src={heroBg}
             alt=""
@@ -142,7 +151,17 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background PNG */}
+            {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
+            <img
+              src={heroScene}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
+
+            {/* Layer 1: Foreground PNG (has transparent regions) */}
             <img
               src={heroBg}
               alt=""
