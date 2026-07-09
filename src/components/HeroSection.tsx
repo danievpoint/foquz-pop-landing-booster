@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
-import heroMobileAsset from "@/assets/hero-mobile.png.asset.json";
+import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
 const heroBg = heroBgAsset.url;
-const heroMobile = heroMobileAsset.url;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroMobile].map(
+  [heroBg, heroProducts, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -28,22 +27,6 @@ export const useHeroReady = () => {
   return ready;
 };
 
-/*
-  WHY PREVIOUS APPROACHES FAILED:
-
-  The nav is ~107px tall in FIXED PIXELS. The hero scales with screen width.
-  At 1440px wide → hero is 579px tall → nav covers 18.5% = 143 SVG units
-  At 1920px wide → hero is 772px tall → nav covers 13.9% = 107 SVG units
-  At 2560px wide → hero is 1029px tall → nav covers 10.4% = 80 SVG units
-
-  No single SVG y-coordinate can compensate for all three because the nav
-  eats a DIFFERENT percentage on each screen. This is mathematically unsolvable
-  with a fixed y-value.
-
-  THE FIX: Push the hero below the nav with a spacer. Now the nav covers 0%
-  on every screen, and y=55 means y=55 everywhere — truly universal.
-*/
-
 const HeroSection = () => {
   const ready = useHeroReady();
 
@@ -55,67 +38,57 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) — portrait hero using mobile PNG === */}
+        {/* === MOBILE / TABLET (< lg) — original 3-jar product composition === */}
         <div
           className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue"
-          style={{ aspectRatio: "850 / 1500", containerType: "inline-size" }}
+          style={{ minHeight: "max(720px, 78vh)" }}
         >
-          <style>{`
-            .hero-m-title { font-size: 10cqw; line-height: 1.02; }
-            .hero-m-sub   { font-size: 3.6cqw; }
-            .hero-m-btn   { font-size: 3.2cqw !important; padding: 2.2cqw 5cqw !important; }
-          `}</style>
-
-          {/* Layer 0: SVG scene visible through transparent PNG regions */}
-          <img
-            src={heroScene}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-x-0 w-full object-cover object-top"
-            style={{ top: "28%", height: "82%" }}
-          />
-          {/* Layer 1: Mobile PNG — top aligned so 3 cans + face visible, arm cropped at bottom */}
-          <img
-            src={heroMobile}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-x-0 w-full object-cover object-top"
-            style={{ top: "28%", height: "82%" }}
-          />
-          {/* Layer 2: Clouds overlay at bottom */}
+          {/* Clouds overlay at bottom */}
           <img
             src={heroClouds}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-x-0 bottom-0 w-full pointer-events-none"
+            className="absolute inset-x-0 bottom-0 w-full pointer-events-none z-20"
           />
 
-          {/* Text + CTAs sit in the top blue band */}
-          <div className="absolute inset-x-0 top-0 z-10 px-[5%]" style={{ paddingTop: "8%" }}>
-            <h1 className="hero-m-title flex flex-col gap-[0.12em] text-primary-foreground text-pop whitespace-nowrap font-black uppercase">
+          {/* Text + CTAs + product image */}
+          <div className="relative z-10 flex flex-col px-5 sm:px-6 pt-24 sm:pt-28 pb-8">
+            <h1 className="text-[11vw] sm:text-[9vw] md:text-[7vw] leading-[0.92] font-black uppercase text-primary-foreground text-pop whitespace-nowrap">
               <span className="block">KURZ RIECHEN.</span>
               <span className="block text-secondary">AB AUF WOLKE 7.</span>
             </h1>
-            <p className="hero-m-sub font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap" style={{ marginTop: "2cqw", marginBottom: "3cqw" }}>
+            <p className="mt-2 sm:mt-3 text-[4vw] sm:text-[3.2vw] md:text-[2.4vw] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
               DU ENTSCHEIDEST WAS DU RIECHST
             </p>
-            <div className="flex flex-col" style={{ gap: "1.8cqw" }}>
-              <a href="#bundle" className="comic-btn hero-m-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap">
+            <div className="flex flex-col gap-2 sm:gap-3 mt-4 sm:mt-5">
+              <a
+                href="#bundle"
+                className="comic-btn text-[3.8vw] sm:text-[3vw] md:text-[2.2vw] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+              >
                 SPAR-BUNDLE HOLEN
               </a>
-              <a href="#sorten" className="comic-btn hero-m-btn font-black bg-card text-foreground w-fit whitespace-nowrap">
+              <a
+                href="#sorten"
+                className="comic-btn text-[3.8vw] sm:text-[3vw] md:text-[2.2vw] font-black bg-card text-foreground w-fit whitespace-nowrap"
+              >
                 EINZELN KAUFEN
               </a>
             </div>
+
+            {/* 3-jar product image */}
+            <div className="mt-6 sm:mt-8 -mb-8 sm:-mb-10 w-full flex justify-center">
+              <img
+                src={heroProducts}
+                alt="FOQUZ Dosen"
+                loading="eager"
+                decoding="async"
+                className="w-[108%] sm:w-[100%] md:w-[85%] max-w-[620px] object-contain"
+              />
+            </div>
           </div>
         </div>
-
 
         {/* === DESKTOP (lg+) ===
           Spacer pushes hero below the fixed navbar+marquee (~124px).
@@ -179,7 +152,6 @@ const HeroSection = () => {
               className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
             />
 
-
             {/* Layer 2: Clouds overlay */}
             <img
               src={heroClouds}
@@ -189,7 +161,6 @@ const HeroSection = () => {
               decoding="async"
               className="absolute inset-0 w-full h-full pointer-events-none"
             />
-
 
             {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
             <div className="absolute inset-0 z-10">
