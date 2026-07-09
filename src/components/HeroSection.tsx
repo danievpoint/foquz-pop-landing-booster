@@ -152,9 +152,7 @@ const HeroSection = () => {
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-
-            {/* Layer 2b: Clouds overlay — same SVG clouds redrawn on top so
-                the hero-guy sits BEHIND the blue cloud shapes. */}
+            {/* Layer 2: Clouds overlay */}
             <img
               src={heroClouds}
               alt=""
