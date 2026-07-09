@@ -49,14 +49,14 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
-      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(560px, 68vh)" }} />}
+      {!ready && <div className="w-full bg-background" style={{ aspectRatio: "1920 / 772" }} />}
 
       <div
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) — same layered structure as desktop === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
+        <div className="lg:hidden relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
           {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
           <img
             src={heroScene}
@@ -64,7 +64,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-right-top"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
           {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
           <img
@@ -73,7 +73,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-right-top animate-[hero-float_3.4s_ease-in-out_infinite]"
+            className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
           />
           {/* Layer 2: Clouds overlay */}
           <img
@@ -82,7 +82,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-right-top pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
           />
           <style>{`
             @keyframes hero-float {
