@@ -193,9 +193,29 @@ const CartDrawer = () => {
                 )}
 
                 {/* Versand-Hinweis früher sichtbar */}
-                <div className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
-                  🚚 Versand in 24h · zzgl. Versandkosten
-                </div>
+                {(() => {
+                  const freeShipping = discountedTotal >= 29.99;
+                  const missing = Math.max(0, 29.99 - discountedTotal);
+                  return (
+                    <div className="text-xs font-bold text-foreground/80 space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        🚚 Versand in 24h
+                      </div>
+                      {freeShipping ? (
+                        <div className="text-green-700">
+                          ✓ Kostenloser Versand (ab €29,99)
+                        </div>
+                      ) : (
+                        <div className="text-foreground/70">
+                          Versand: DE €2,90 · AT/CH €3,00 · gratis ab €29,99
+                          <span className="block text-foreground/60">
+                            Nur noch €{missing.toFixed(2).replace(".", ",")} bis zum Gratis-Versand
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-lg">Gesamt</span>
@@ -207,7 +227,7 @@ const CartDrawer = () => {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground text-right -mt-2">
-                  inkl. MwSt., zzgl. Versand.
+                  inkl. MwSt., zzgl. Versand (gratis ab €29,99).
                 </p>
                 {checkoutUrl ? (
                   <a
