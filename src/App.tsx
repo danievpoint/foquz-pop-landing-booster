@@ -23,7 +23,6 @@ import ScrollToHash from "./components/ScrollToHash";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
-import NewsletterBestaetigen from "./pages/NewsletterBestaetigen";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +48,6 @@ const App = () => {
                 <Route path="/versandbedingungen" element={<Versandbedingungen />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/newsletter/bestaetigen" element={<NewsletterBestaetigen />} />
                 <Route path="*" element={<ComingSoonPage />} />
               </Routes>
             </BrowserRouter>
@@ -84,7 +82,6 @@ const App = () => {
             <Route path="/anleitung" element={<Anleitung />} />
             <Route path="/hilfe" element={<HelpCenter />} />
             <Route path="/produkt/:handle" element={<ProductDetail />} />
-            <Route path="/newsletter/bestaetigen" element={<NewsletterBestaetigen />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
