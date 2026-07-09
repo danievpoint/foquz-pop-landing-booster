@@ -97,7 +97,7 @@ const Footer = () => {
             <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">HILFE</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
               <li>
-                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
+                <Link to="/hilfe" className="hover:opacity-100 transition-opacity ft-link">Help Center</Link>
               </li>
             </ul>
           </div>
