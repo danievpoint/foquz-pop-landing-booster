@@ -6,7 +6,7 @@ import { Search, HelpCircle, Truck, Package, FileText, Users, BookOpen } from "l
 import { useState } from "react";
 
 const categories = [
-  { title: "FAQ", description: "Häufig gestellte Fragen", icon: HelpCircle, link: "/faq", articles: 3 },
+  { title: "FAQ", description: "Häufig gestellte Fragen", icon: HelpCircle, link: "/#faq", articles: 3 },
   { title: "Versand & Lieferung", description: "Versandbedingungen & Lieferzeiten", icon: Truck, link: "/versandbedingungen", articles: 1 },
   { title: "Widerrufsbelehrung", description: "Rückgabe & Widerruf", icon: Package, link: "/widerrufsbelehrung", articles: 1 },
   { title: "AGB", description: "Allgemeine Geschäftsbedingungen", icon: FileText, link: "/agb", articles: 1 },
