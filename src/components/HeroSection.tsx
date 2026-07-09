@@ -55,16 +55,41 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) === */}
+        {/* === MOBILE / TABLET (< lg) — same layered structure as desktop === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
+          {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
           <img
-            src={heroMobile}
+            src={heroScene}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
+          {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
+          <img
+            src={heroBg}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-center animate-[hero-float_3.4s_ease-in-out_infinite]"
+          />
+          {/* Layer 2: Clouds overlay */}
+          <img
+            src={heroClouds}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+          />
+          <style>{`
+            @keyframes hero-float {
+              0%, 100% { transform: translateY(-6px); }
+              50% { transform: translateY(6px); }
+            }
+          `}</style>
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
