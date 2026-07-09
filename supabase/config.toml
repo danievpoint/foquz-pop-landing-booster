@@ -2,3 +2,6 @@ project_id = "fdwaufhnkrqbbxmdmxjf"
 
 [functions.get-orders-by-promo]
 verify_jwt = false
+
+[functions.process-email-queue]
+verify_jwt = true
