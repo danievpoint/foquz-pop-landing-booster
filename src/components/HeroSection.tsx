@@ -116,7 +116,6 @@ const HeroSection = () => {
           </div>
         </div>
 
-        </div>
 
         {/* === DESKTOP (lg+) ===
           Spacer pushes hero below the fixed navbar+marquee (~124px).
