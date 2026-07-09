@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
-import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
+import heroMobileAsset from "@/assets/hero-mobile.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
 const heroBg = heroBgAsset.url;
-const heroProducts = heroOriginalProducts;
+const heroMobile = heroMobileAsset.url;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroProducts].map(
+  [heroBg, heroMobile].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -56,24 +55,15 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) ===
-            Original three-jar composition: full image below the text. */}
+        {/* === MOBILE / TABLET (< lg) === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
           <img
-            src={heroScene}
+            src={heroMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-          />
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
             <div className="flex flex-col">
@@ -100,15 +90,6 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
-                <img
-                  src={heroProducts}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                  loading="eager"
-                  decoding="async"
-                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
-                />
-              </Link>
             </div>
           </div>
         </div>
