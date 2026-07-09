@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
+
 import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
