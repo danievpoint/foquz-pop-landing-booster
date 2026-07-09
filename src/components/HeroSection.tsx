@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import heroJars from "@/assets/hero-products.png";
-import heroBg from "@/assets/hero-bg.svg";
+
+import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
+import heroProducts from "@/assets/hero-products.png";
+import heroClouds from "@/assets/hero-clouds.svg";
+import heroScene from "@/assets/hero-bg.svg";
+
+// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
+const heroBgDesktop = heroBgAsset.url;
+const heroBgMobile = heroScene; // hero-bg.svg
+const heroJars = heroProducts; // hero-products.png (3 cans)
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroJars].map(
+  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -24,22 +32,6 @@ export const useHeroReady = () => {
   return ready;
 };
 
-/*
-  WHY PREVIOUS APPROACHES FAILED:
-
-  The nav is ~107px tall in FIXED PIXELS. The hero scales with screen width.
-  At 1440px wide → hero is 579px tall → nav covers 18.5% = 143 SVG units
-  At 1920px wide → hero is 772px tall → nav covers 13.9% = 107 SVG units
-  At 2560px wide → hero is 1029px tall → nav covers 10.4% = 80 SVG units
-
-  No single SVG y-coordinate can compensate for all three because the nav
-  eats a DIFFERENT percentage on each screen. This is mathematically unsolvable
-  with a fixed y-value.
-
-  THE FIX: Push the hero below the nav with a spacer. Now the nav covers 0%
-  on every screen, and y=55 means y=55 everywhere — truly universal.
-*/
-
 const HeroSection = () => {
   const ready = useHeroReady();
 
@@ -51,10 +43,10 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) === */}
+        {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <img
-            src={heroBg}
+            src={heroBgMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
@@ -86,24 +78,20 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-                <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
-                  <img
-                    src={heroJars}
-                    alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                    loading="eager"
-                    decoding="async"
-                    className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
-                  />
-                </Link>
+              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
+                <img
+                  src={heroJars}
+                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  loading="eager"
+                  decoding="async"
+                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                />
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* === DESKTOP (lg+) ===
-          Spacer pushes hero below the fixed navbar+marquee (~124px).
-          The nav has its own bg-[hsl(var(--foquz-lightblue))] background
-          which matches the hero, so the visual transition is seamless.
-          Now the ENTIRE hero is visible → SVG coordinates work universally. */}
+        {/* === DESKTOP (lg+) — unchanged from today's version === */}
         <div className="hidden lg:block">
           {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
           <div style={{ height: "100px" }} aria-hidden="true" />
@@ -116,6 +104,10 @@ const HeroSection = () => {
             }}
           >
             <style>{`
+              @keyframes hero-float {
+                0%, 100% { transform: translateY(-6px); }
+                50% { transform: translateY(6px); }
+              }
               .hero-title {
                 display: flex;
                 flex-direction: column;
@@ -137,44 +129,37 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background SVG */}
+            {/* Layer 0: Original SVG scene */}
             <img
-              src={heroBg}
+              src={heroScene}
               alt=""
               aria-hidden="true"
               loading="eager"
               decoding="async"
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-            {/* Layer 2: Product image in SVG overlay.
-                Same viewBox as background = locked coordinates.
-                Now that the hero starts below the nav, y=55 is truly
-                55 SVG units from the TOP OF THE VISIBLE AREA on every screen.
-                Float ±12: range 43–67 at top, 703–727 at bottom. All inside 0–772. */}
-            <svg
-              viewBox="0 0 1920 772"
-              className="absolute inset-0 w-full h-full"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ pointerEvents: "none" }}
-            >
-              <g>
-                <animateTransform
-                  attributeName="transform"
-                  type="translate"
-                  values="0 -6; 0 6; 0 -6"
-                  dur="3.4s"
-                  repeatCount="indefinite"
-                  calcMode="spline"
-                  keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                />
-                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
-                  <image href={heroJars} x="1010" y="50" width="660" height="660" preserveAspectRatio="xMidYMid meet" style={{ cursor: "pointer" }} />
-                </a>
-              </g>
-            </svg>
+            {/* Layer 1: Foreground PNG (floats gently) */}
+            <img
+              src={heroBgDesktop}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
+            />
 
-            {/* Layer 3: Text + CTAs — pb pushes the vertical center upward */}
+            {/* Layer 2: Clouds overlay */}
+            <img
+              src={heroClouds}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
+            {/* Layer 3: Text + CTAs */}
             <div className="absolute inset-0 z-10">
               <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
