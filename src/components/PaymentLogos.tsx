@@ -6,7 +6,6 @@ import {
   SiGooglepay,
   SiAmericanexpress,
   SiKlarna,
-  SiSofort,
 } from "react-icons/si";
 
 const methods = [
@@ -17,7 +16,6 @@ const methods = [
   { Icon: SiApplepay, label: "Apple Pay" },
   { Icon: SiGooglepay, label: "Google Pay" },
   { Icon: SiKlarna, label: "Klarna" },
-  { Icon: SiSofort, label: "Sofort" },
 ];
 
 const PaymentLogos = ({ compact = false }: { compact?: boolean }) => {
