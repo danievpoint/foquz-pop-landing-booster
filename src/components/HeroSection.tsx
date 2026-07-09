@@ -55,65 +55,48 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) — same layered structure as desktop === */}
-        <div className="lg:hidden relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
-          {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
+        {/* === MOBILE / TABLET (< lg) — portrait hero using mobile PNG === */}
+        <div className="lg:hidden relative w-full overflow-hidden" style={{ aspectRatio: "850 / 1500" }}>
+          {/* Layer 1: Mobile PNG (contains cans + character) */}
           <img
-            src={heroScene}
+            src={heroMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
-          />
-          {/* Layer 2: Clouds overlay */}
+          {/* Layer 2: Clouds overlay at bottom */}
           <img
             src={heroClouds}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
+            className="absolute inset-x-0 bottom-0 w-full pointer-events-none"
           />
-          <style>{`
-            @keyframes hero-float {
-              0%, 100% { transform: translateY(-6px); }
-              50% { transform: translateY(6px); }
-            }
-          `}</style>
-          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
+          <div className="relative z-10 w-full mx-auto px-4 sm:px-6 pt-20 sm:pt-24">
             <div className="flex flex-col">
-              <div className="pb-4 sm:pb-8">
-                <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
-                  <span className="block">KURZ RIECHEN.</span>
-                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                </h1>
-                <p className="text-lg sm:text-xl md:text-2xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-3 sm:mb-5 md:mb-6 whitespace-nowrap">
-                  DU ENTSCHEIDEST WAS DU RIECHST
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                  <a
-                    href="#bundle"
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
-                  >
-                    SPAR-BUNDLE HOLEN
-                  </a>
-                  <a
-                    href="#sorten"
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
-                  >
-                    EINZELN KAUFEN
-                  </a>
-                </div>
+              <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] text-4xl sm:text-5xl leading-[1.05] mb-2 sm:mb-4 text-primary-foreground text-pop whitespace-nowrap">
+                <span className="block">KURZ RIECHEN.</span>
+                <span className="block text-secondary">AB AUF WOLKE 7.</span>
+              </h1>
+              <p className="text-base sm:text-xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-4 sm:mb-6 whitespace-nowrap">
+                DU ENTSCHEIDEST WAS DU RIECHST
+              </p>
+              <div className="flex flex-col gap-2 sm:gap-3">
+                <a
+                  href="#bundle"
+                  className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 font-black bg-secondary text-secondary-foreground w-fit"
+                >
+                  SPAR-BUNDLE HOLEN
+                </a>
+                <a
+                  href="#sorten"
+                  className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 font-black bg-card text-foreground w-fit"
+                >
+                  EINZELN KAUFEN
+                </a>
               </div>
             </div>
           </div>
