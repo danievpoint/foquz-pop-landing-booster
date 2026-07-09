@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
-import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
+
 import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
 
 const heroBg = heroBgAsset.url;
-const heroJars = heroGuyAsset.url;
 const heroProducts = heroOriginalProducts;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroJars, heroProducts].map(
+  [heroBg, heroProducts].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -144,45 +142,17 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background SVG */}
+            {/* Layer 1: Background PNG */}
             <img
               src={heroBg}
               alt=""
               aria-hidden="true"
               loading="eager"
               decoding="async"
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-            {/* Layer 2: Product image in SVG overlay.
-                Same viewBox as background = locked coordinates.
-                Now that the hero starts below the nav, y=55 is truly
-                55 SVG units from the TOP OF THE VISIBLE AREA on every screen.
-                Float ±12: range 43–67 at top, 703–727 at bottom. All inside 0–772. */}
-            <svg
-              viewBox="0 0 1920 772"
-              className="absolute inset-0 w-full h-full"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ pointerEvents: "none" }}
-            >
-              <g>
-                <animateTransform
-                  attributeName="transform"
-                  type="translate"
-                  values="0 -6; 0 6; 0 -6"
-                  dur="3.4s"
-                  repeatCount="indefinite"
-                  calcMode="spline"
-                  keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-                />
-                <a href="/produkt/starter-bundle" style={{ pointerEvents: "auto" } as CSSProperties}>
-                  <image href={heroJars} x="0" y="0" width="1920" height="772" preserveAspectRatio="xMidYMid slice" style={{ cursor: "pointer" }} />
-                </a>
-              </g>
-            </svg>
-
-            {/* Layer 2b: Clouds overlay — same SVG clouds redrawn on top so
-                the hero-guy sits BEHIND the blue cloud shapes. */}
+            {/* Layer 2: Clouds overlay */}
             <img
               src={heroClouds}
               alt=""
