@@ -56,19 +56,10 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) ===
-            Original three-jar composition: full image below the text. */}
+        {/* === MOBILE / TABLET (< lg) === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
           <img
-            src={heroScene}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-          />
-          <img
-            src={heroBg}
+            src={heroMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
@@ -100,15 +91,6 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
-                <img
-                  src={heroProducts}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                  loading="eager"
-                  decoding="async"
-                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
-                />
-              </Link>
             </div>
           </div>
         </div>
