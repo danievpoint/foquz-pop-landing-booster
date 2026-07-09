@@ -5,7 +5,7 @@ const items = [
   "100% LEGAL",
   "VERSAND IN 24H",
   "100% VEGAN",
-  "🇩🇪 MADE IN GERMANY",
+  "MADE IN GERMANY",
   "WOLKE 7 FEELING",
   "MADE WITH LOVE",
 ];
@@ -21,6 +21,7 @@ const MarqueeBanner = () => {
             key={i}
             className="text-[10px] md:text-xs font-bold text-secondary-foreground/70 tracking-wider flex items-center gap-2"
           >
+            <span className="text-primary/50">★</span>
             {text}
             <span className="text-primary/50">★</span>
           </span>
