@@ -56,7 +56,7 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) — same layered structure as desktop === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
+        <div className="lg:hidden relative w-full overflow-hidden" style={{ aspectRatio: "1920 / 772" }}>
           {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
           <img
             src={heroScene}
@@ -64,7 +64,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-right-top"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
           {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
           <img
