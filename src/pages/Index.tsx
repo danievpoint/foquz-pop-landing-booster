@@ -10,6 +10,7 @@ const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
 const CrewSection = lazy(() => import("@/components/CrewSection"));
+const FaqSection = lazy(() => import("@/components/FaqSection"));
 
 const NewsletterSection = lazy(() => import("@/components/NewsletterSection"));
 const Footer = lazy(() => import("@/components/Footer"));
