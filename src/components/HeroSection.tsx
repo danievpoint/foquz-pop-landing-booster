@@ -151,7 +151,17 @@ const HeroSection = () => {
               }
             `}</style>
 
-            {/* Layer 1: Background PNG */}
+            {/* Layer 0: Original SVG scene (visible through transparent areas of PNG) */}
+            <img
+              src={heroScene}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
+
+            {/* Layer 1: Foreground PNG (has transparent regions) */}
             <img
               src={heroBg}
               alt=""
