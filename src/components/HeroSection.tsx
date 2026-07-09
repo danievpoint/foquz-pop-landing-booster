@@ -156,16 +156,6 @@ const HeroSection = () => {
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-            {/* Layer 2: Hero guy overlay */}
-            <Link to="/produkt/starter-bundle">
-              <img
-                src={heroJars}
-                alt="FOQUZ Produkte"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover animate-[hero-float_3.4s_ease-in-out_infinite]"
-              />
-            </Link>
 
             {/* Layer 2b: Clouds overlay — same SVG clouds redrawn on top so
                 the hero-guy sits BEHIND the blue cloud shapes. */}
