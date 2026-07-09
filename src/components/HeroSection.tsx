@@ -64,7 +64,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-right-top"
           />
           {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
           <img
