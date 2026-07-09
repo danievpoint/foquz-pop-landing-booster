@@ -149,7 +149,7 @@ const Navbar = () => {
             <button onClick={() => setMobileOpen(false)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
               <X size={24} className="text-foreground" />
             </button>
-            <img src={foquzLogo} alt="FOQUZ" className="h-10" />
+            <img src={foquzLogo} alt="FOQUZ" width={120} height={40} className="h-10 w-auto" />
             <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={() => { setMobileOpen(false); openCart(); }}>
               <ShoppingCart size={20} className="text-foreground" />
               {count > 0 && (
