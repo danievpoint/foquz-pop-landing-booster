@@ -6,11 +6,10 @@ import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
 
 const heroBg = heroBgAsset.url;
-const heroJars = heroGuyAsset.url;
 const heroProducts = heroOriginalProducts;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroJars, heroProducts].map(
+  [heroBg, heroProducts].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
