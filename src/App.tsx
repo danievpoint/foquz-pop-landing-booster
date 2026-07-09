@@ -23,6 +23,7 @@ import ScrollToHash from "./components/ScrollToHash";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import NewsletterBestaetigen from "./pages/NewsletterBestaetigen";
 
 const queryClient = new QueryClient();
 
