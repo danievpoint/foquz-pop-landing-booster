@@ -118,6 +118,10 @@ const NewsletterPopup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || loading) return;
+    if (!consent) {
+      toast({ title: "Einwilligung erforderlich", description: "Bitte bestätige die Verarbeitung deiner E-Mail-Adresse.", variant: "destructive" });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -137,6 +141,7 @@ const NewsletterPopup = () => {
         sessionStorage.setItem(STORAGE_KEY, "1");
       }
       setEmail("");
+      setConsent(false);
     } catch {
       toast({ title: "Fehler", description: "Bitte versuche es später erneut.", variant: "destructive" });
     } finally {
