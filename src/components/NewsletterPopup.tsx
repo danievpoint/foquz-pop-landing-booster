@@ -35,6 +35,8 @@ const NewsletterPopup = () => {
   const [success, setSuccess] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
+  const [shake, setShake] = useState(0);
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
@@ -119,9 +121,11 @@ const NewsletterPopup = () => {
     e.preventDefault();
     if (!email || loading) return;
     if (!consent) {
-      toast({ title: "Einwilligung erforderlich", description: "Bitte bestätige die Verarbeitung deiner E-Mail-Adresse.", variant: "destructive" });
+      setConsentError(true);
+      setShake((s) => s + 1);
       return;
     }
+    setConsentError(false);
 
     setLoading(true);
     try {
@@ -184,20 +188,28 @@ const NewsletterPopup = () => {
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
                     Melde dich für unseren Newsletter an und erhalte <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung.
                   </p>
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                    <Input
-                      type="email"
-                      placeholder="Deine E-Mail-Adresse"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 bg-muted text-foreground border-none rounded-full px-5 text-base"
-                      required
-                    />
-                    <label className="flex items-start gap-2 text-[11px] text-muted-foreground text-left leading-snug cursor-pointer">
+                  <motion.div
+                    key={shake}
+                    animate={{ x: shake > 0 ? [0, -10, 10, -7, 7, -4, 4, 0] : 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                      <Input
+                        type="email"
+                        placeholder="Deine E-Mail-Adresse"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="h-12 bg-muted text-foreground border-none rounded-full px-5 text-base"
+                        required
+                      />
+                    <label className={`flex items-start gap-2 text-[11px] text-muted-foreground text-left leading-snug cursor-pointer rounded-xl p-2 transition-colors ${consentError ? "bg-destructive/10 border border-destructive/30" : ""}`}>
                       <input
                         type="checkbox"
                         checked={consent}
-                        onChange={(e) => setConsent(e.target.checked)}
+                        onChange={(e) => {
+                          setConsent(e.target.checked);
+                          if (e.target.checked) setConsentError(false);
+                        }}
                         className="mt-0.5 shrink-0 w-4 h-4 accent-primary cursor-pointer"
                         required
                       />
@@ -206,6 +218,15 @@ const NewsletterPopup = () => {
                         <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutz</a>.
                       </span>
                     </label>
+                    {consentError && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-[11px] text-destructive font-medium text-left -mt-1"
+                      >
+                        Bitte setze den Haken, damit wir dir den Rabattcode zuschicken können.
+                      </motion.p>
+                    )}
                     <button
                       type="submit"
                       disabled={loading}
@@ -214,9 +235,7 @@ const NewsletterPopup = () => {
                       {loading ? "..." : "RABATT AKTIVIEREN"}
                     </button>
                   </form>
-                  <p className="text-[10px] text-muted-foreground mt-3 leading-relaxed">
-                    Kein Spam · Jederzeit kündbar.
-                  </p>
+                  </motion.div>
                 </>
               ) : (
                 <>
