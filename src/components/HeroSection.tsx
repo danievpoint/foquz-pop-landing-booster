@@ -60,6 +60,14 @@ const HeroSection = () => {
             Original three-jar composition: full image below the text. */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
           <img
+            src={heroScene}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
+          <img
             src={heroBg}
             alt=""
             aria-hidden="true"
