@@ -62,6 +62,9 @@ const Index = () => {
           <WhyFoquzSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
+          <FaqSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
           <NewsletterSection />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
