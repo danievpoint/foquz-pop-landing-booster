@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import heroGuyAsset from "@/assets/hero-guy.png.asset.json";
 import heroOriginalProducts from "@/assets/hero-products.png";
