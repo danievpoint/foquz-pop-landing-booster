@@ -49,6 +49,7 @@ const App = () => {
                 <Route path="/versandbedingungen" element={<Versandbedingungen />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/newsletter/bestaetigen" element={<NewsletterBestaetigen />} />
                 <Route path="*" element={<ComingSoonPage />} />
               </Routes>
             </BrowserRouter>
