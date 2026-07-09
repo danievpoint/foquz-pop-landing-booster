@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { openCookieSettings } from "@/lib/consent";
 import foquzLogo from "@/assets/foquz-logo.png";
+import PaymentLogos from "@/components/PaymentLogos";
 
 
 const Footer = () => {
@@ -111,6 +112,10 @@ const Footer = () => {
               Widerrufsformular
             </Link>
           </Button>
+        </div>
+
+        <div className="mb-4 md:mb-6">
+          <PaymentLogos compact />
         </div>
 
         <div className="border-t border-foreground/20 pt-4 md:pt-6 text-center text-[10px] md:text-xs opacity-60 ft-copy">
