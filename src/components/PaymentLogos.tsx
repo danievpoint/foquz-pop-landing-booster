@@ -6,46 +6,62 @@ import {
   SiAmericanexpress,
 } from "react-icons/si";
 
-const ShopPayIcon = ({ className, size }: { className?: string; size?: number }) => (
+const ShopPayIcon = ({ size = 22 }: { size?: number }) => (
   <svg
-    viewBox="0 0 24 24"
-    width={size}
+    viewBox="0 0 60 24"
     height={size}
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    width={size * (60 / 24)}
     aria-hidden="true"
   >
-    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-    <path d="M3 6h18" />
-    <path d="M16 10a4 4 0 0 1-8 0" />
+    <rect width="60" height="24" rx="4" fill="#5A31F4" />
+    <text
+      x="30"
+      y="16"
+      textAnchor="middle"
+      fontFamily="Helvetica, Arial, sans-serif"
+      fontWeight="700"
+      fontSize="11"
+      fill="#ffffff"
+      letterSpacing="0.5"
+    >
+      shop
+    </text>
+    <text
+      x="47"
+      y="16"
+      textAnchor="middle"
+      fontFamily="Helvetica, Arial, sans-serif"
+      fontWeight="700"
+      fontSize="11"
+      fill="#ffffff"
+      letterSpacing="0.5"
+    >
+      Pay
+    </text>
   </svg>
 );
 
-const methods = [
-  { Icon: SiVisa, label: "Visa" },
-  { Icon: SiMastercard, label: "Mastercard" },
-  { Icon: SiAmericanexpress, label: "American Express" },
-  { Icon: SiPaypal, label: "PayPal" },
-  { Icon: SiGooglepay, label: "Google Pay" },
-  { Icon: ShopPayIcon, label: "Shop Pay" },
+const methods: { label: string; render: (size: number) => JSX.Element }[] = [
+  { label: "Visa", render: (s) => <SiVisa size={s} color="#1A1F71" /> },
+  { label: "Mastercard", render: (s) => <SiMastercard size={s} color="#EB001B" /> },
+  { label: "American Express", render: (s) => <SiAmericanexpress size={s} color="#2E77BC" /> },
+  { label: "PayPal", render: (s) => <SiPaypal size={s} color="#003087" /> },
+  { label: "Google Pay", render: (s) => <SiGooglepay size={s} color="#5F6368" /> },
+  { label: "Shop Pay", render: () => <ShopPayIcon size={22} /> },
 ];
 
 const PaymentLogos = ({ compact = false }: { compact?: boolean }) => {
   if (compact) {
     return (
       <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
-        {methods.map(({ Icon, label }) => (
+        {methods.map(({ render, label }) => (
           <div
             key={label}
             aria-label={label}
             title={label}
             className="bg-white border-2 border-foreground rounded-md px-2.5 py-1 flex items-center justify-center h-8 shadow-sm"
           >
-            <Icon className="text-foreground" size={22} />
+            {render(22)}
           </div>
         ))}
       </div>
