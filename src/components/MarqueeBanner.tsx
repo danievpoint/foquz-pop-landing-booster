@@ -1,6 +1,6 @@
 const items = [
   "100% ÄTHERISCHE ÖLE",
-  "⚡ INSTANT-FRISCHE",
+  "INSTANT-FRISCHE",
   "KEIN KOFFEIN",
   "100% LEGAL",
   "VERSAND IN 24H",
