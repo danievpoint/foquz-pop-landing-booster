@@ -82,7 +82,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-right-top pointer-events-none"
           />
           <style>{`
             @keyframes hero-float {
