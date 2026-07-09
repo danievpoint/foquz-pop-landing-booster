@@ -38,67 +38,105 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) — original 3-jar product composition === */}
-        <div
-          className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue"
-          style={{ minHeight: "max(760px, 82vh)" }}
-        >
-          {/* Layer 0: SVG scene visible through transparent PNG regions */}
-          <img
-            src={heroScene}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-          />
+        {/* === MOBILE / TABLET (< lg) — same animated composition as desktop === */}
+        <div className="lg:hidden">
+          {/* Spacer: MarqueeBanner + Navbar */}
+          <div style={{ height: "100px" }} aria-hidden="true" />
 
-          {/* Layer 1: Clouds overlay at bottom */}
-          <img
-            src={heroClouds}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-x-0 bottom-0 w-full pointer-events-none z-20"
-          />
+          <div
+            className="relative w-full overflow-hidden -mt-[2px]"
+            style={{
+              aspectRatio: "1920 / 772",
+              containerType: "inline-size",
+            }}
+          >
+            <style>{`
+              @keyframes hero-float-m {
+                0%, 100% { transform: translateY(-6px); }
+                50% { transform: translateY(6px); }
+              }
+              .hero-title-m {
+                display: flex;
+                flex-direction: column;
+                gap: 0.22em;
+                font-size: 4.2cqw;
+                line-height: 1.08;
+                margin-bottom: 1cqw;
+              }
+              .hero-subtitle-m {
+                font-size: 1.3cqw;
+                margin-bottom: 1.2cqw;
+              }
+              .hero-btn-m {
+                font-size: 0.9cqw !important;
+                padding: 0.65cqw 1.5cqw !important;
+              }
+              .hero-btn-row-m {
+                gap: 1.2cqw;
+              }
+            `}</style>
 
-          {/* Layer 2: Text + CTAs + product image */}
-          <div className="relative z-10 flex flex-col px-5 sm:px-6 pt-24 sm:pt-28 pb-8">
-            <h1 className="text-[11vw] sm:text-[9vw] md:text-[7vw] leading-[0.92] font-black uppercase text-primary-foreground text-pop whitespace-nowrap">
-              <span className="block">KURZ RIECHEN.</span>
-              <span className="block text-secondary">AB AUF WOLKE 7.</span>
-            </h1>
-            <p className="mt-2 sm:mt-3 text-[4vw] sm:text-[3.2vw] md:text-[2.4vw] font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
-              DU ENTSCHEIDEST WAS DU RIECHST
-            </p>
-            <div className="flex flex-col gap-2 sm:gap-3 mt-4 sm:mt-5">
-              <a
-                href="#bundle"
-                className="comic-btn text-[3.8vw] sm:text-[3vw] md:text-[2.2vw] font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
-              >
-                SPAR-BUNDLE HOLEN
-              </a>
-              <a
-                href="#sorten"
-                className="comic-btn text-[3.8vw] sm:text-[3vw] md:text-[2.2vw] font-black bg-card text-foreground w-fit whitespace-nowrap"
-              >
-                EINZELN KAUFEN
-              </a>
-            </div>
+            {/* Layer 0: Original SVG scene */}
+            <img
+              src={heroScene}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
 
-            {/* Layer 3: 3-jar product image */}
-            <div className="mt-6 sm:mt-8 -mb-12 sm:-mb-16 w-full flex justify-center">
-              <img
-                src={heroProducts}
-                alt="FOQUZ Dosen"
-                loading="eager"
-                decoding="async"
-                className="w-[100%] sm:w-[95%] md:w-[85%] max-w-[580px] object-contain"
-              />
+            {/* Layer 1: Foreground PNG (floats gently) */}
+            <img
+              src={heroBg}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float-m_3.4s_ease-in-out_infinite]"
+            />
+
+            {/* Layer 2: Clouds overlay */}
+            <img
+              src={heroClouds}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+
+            {/* Layer 3: Text + CTAs */}
+            <div className="absolute inset-0 z-10">
+              <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
+                <div style={{ paddingLeft: "4%" }}>
+                  <div aria-hidden="true" className="hero-title-m text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
+                    <span className="block">KURZ RIECHEN.</span>
+                    <span className="block text-secondary">AB AUF WOLKE 7.</span>
+                  </div>
+                  <p className="hero-subtitle-m font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
+                    DU ENTSCHEIDEST WAS DU RIECHST
+                  </p>
+                  <div className="flex flex-row hero-btn-row-m">
+                    <a
+                      href="#bundle"
+                      className="comic-btn hero-btn-m font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
+                    >
+                      SPAR-BUNDLE HOLEN
+                    </a>
+                    <a
+                      href="#sorten"
+                      className="comic-btn hero-btn-m font-black bg-card text-foreground w-fit whitespace-nowrap"
+                    >
+                      EINZELN KAUFEN
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
 
         {/* === DESKTOP (lg+) ===
           Spacer pushes hero below the fixed navbar+marquee (~124px).
