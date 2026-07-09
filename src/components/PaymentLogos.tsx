@@ -1,22 +1,47 @@
-const paymentMethods = [
-  "Amex", "Apple Pay", "Bancontact", "eps", "Google Pay",
-  "iDEAL", "Mastercard", "PayPal", "TWINT", "UnionPay", "VISA",
+import {
+  SiVisa,
+  SiMastercard,
+  SiPaypal,
+  SiApplepay,
+  SiGooglepay,
+  SiAmericanexpress,
+  SiKlarna,
+  SiSofort,
+} from "react-icons/si";
+
+const methods = [
+  { Icon: SiVisa, label: "Visa" },
+  { Icon: SiMastercard, label: "Mastercard" },
+  { Icon: SiAmericanexpress, label: "American Express" },
+  { Icon: SiPaypal, label: "PayPal" },
+  { Icon: SiApplepay, label: "Apple Pay" },
+  { Icon: SiGooglepay, label: "Google Pay" },
+  { Icon: SiKlarna, label: "Klarna" },
+  { Icon: SiSofort, label: "Sofort" },
 ];
 
-const PaymentLogos = () => {
+const PaymentLogos = ({ compact = false }: { compact?: boolean }) => {
+  if (compact) {
+    return (
+      <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+        {methods.map(({ Icon, label }) => (
+          <div
+            key={label}
+            aria-label={label}
+            title={label}
+            className="bg-white border-2 border-foreground rounded-md px-2.5 py-1 flex items-center justify-center h-8 shadow-sm"
+          >
+            <Icon className="text-foreground" size={22} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <section className="bg-card py-8 border-t-2 border-foreground">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-          {paymentMethods.map((method) => (
-            <div
-              key={method}
-              className="bg-background comic-outline rounded-md px-4 py-2 text-xs font-bold text-muted-foreground select-none"
-            >
-              {method}
-            </div>
-          ))}
-        </div>
+        <PaymentLogos compact />
       </div>
     </section>
   );
