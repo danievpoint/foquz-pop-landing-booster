@@ -78,13 +78,13 @@ const HeroSection = () => {
             </div>
 
             {/* 3-jar product image */}
-            <div className="mt-6 sm:mt-8 -mb-8 sm:-mb-10 w-full flex justify-center">
+            <div className="mt-6 sm:mt-8 -mb-12 sm:-mb-16 w-full flex justify-center">
               <img
                 src={heroProducts}
                 alt="FOQUZ Dosen"
                 loading="eager"
                 decoding="async"
-                className="w-[108%] sm:w-[100%] md:w-[85%] max-w-[620px] object-contain"
+                className="w-[100%] sm:w-[95%] md:w-[85%] max-w-[580px] object-contain"
               />
             </div>
           </div>
