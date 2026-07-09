@@ -130,6 +130,10 @@ const HeroSection = () => {
             }}
           >
             <style>{`
+              @keyframes hero-float {
+                0%, 100% { transform: translateY(-6px); }
+                50% { transform: translateY(6px); }
+              }
               .hero-title {
                 display: flex;
                 flex-direction: column;
@@ -161,15 +165,16 @@ const HeroSection = () => {
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-            {/* Layer 1: Foreground PNG (has transparent regions) */}
+            {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
             <img
               src={heroBg}
               alt=""
               aria-hidden="true"
               loading="eager"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-top"
+              className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
             />
+
 
             {/* Layer 2: Clouds overlay */}
             <img
