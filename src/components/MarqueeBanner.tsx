@@ -5,7 +5,7 @@ const items = [
   "100% LEGAL",
   "VERSAND IN 24H",
   "100% VEGAN",
-  "🇩🇪 MADE IN GERMANY",
+  "MADE IN GERMANY",
   "WOLKE 7 FEELING",
   "MADE WITH LOVE",
 ];
