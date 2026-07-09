@@ -122,6 +122,7 @@ const NewsletterPopup = () => {
     if (!email || loading) return;
     if (!consent) {
       setConsentError(true);
+      setShake((s) => s + 1);
       return;
     }
     setConsentError(false);
