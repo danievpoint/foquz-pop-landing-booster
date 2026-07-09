@@ -56,7 +56,7 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) — portrait hero using mobile PNG === */}
-        <div className="lg:hidden relative w-full overflow-hidden" style={{ aspectRatio: "850 / 1500" }}>
+        <div className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue" style={{ aspectRatio: "850 / 1500" }}>
           {/* Layer 0: SVG scene visible through transparent PNG regions */}
           <img
             src={heroScene}
@@ -64,16 +64,18 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-x-0 bottom-0 w-full object-cover object-bottom"
+            style={{ height: "72%" }}
           />
-          {/* Layer 1: Mobile PNG (contains cans + character) */}
+          {/* Layer 1: Mobile PNG (contains cans + character) positioned at bottom */}
           <img
             src={heroMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-x-0 bottom-0 w-full object-cover object-bottom"
+            style={{ height: "72%" }}
           />
           {/* Layer 2: Clouds overlay at bottom */}
           <img
@@ -84,7 +86,8 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-x-0 bottom-0 w-full pointer-events-none"
           />
-          <div className="relative z-10 w-full mx-auto px-4 sm:px-6 pt-32 sm:pt-40">
+          <div className="relative z-10 w-full mx-auto px-4 sm:px-6" style={{ paddingTop: "12%" }}>
+
 
             <div className="flex flex-col">
               <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] text-4xl sm:text-5xl leading-[1.05] mb-2 sm:mb-4 text-primary-foreground text-pop whitespace-nowrap">
