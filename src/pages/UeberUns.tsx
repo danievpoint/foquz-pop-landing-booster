@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
+import foundersAsset from "@/assets/foquz-founders.png.asset.json";
 
 const UeberUns = () => (
   <div className="min-h-screen">
@@ -10,9 +11,22 @@ const UeberUns = () => (
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Unsere Geschichte</h1>
+      <figure className="mb-10 comic-border rounded-2xl overflow-hidden bg-card shadow-[6px_6px_0_hsl(var(--foreground))]">
+        <img
+          src={foundersAsset.url}
+          alt="Kevin Zaremba und Matthias Kurpiers – die Gründer von FOQUZ"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-auto object-cover"
+        />
+        <figcaption className="px-4 py-3 text-sm font-bold uppercase tracking-tight opacity-80 border-t-2 border-foreground/10">
+          Kevin Zaremba & Matthias Kurpiers — Gründer von FOQUZ
+        </figcaption>
+      </figure>
       <div className="prose prose-lg max-w-none opacity-80 space-y-6 leading-relaxed [&_p]:leading-[1.45]">
         <p>Manchmal reicht eine einzige Entdeckung, um eine neue Idee entstehen zu lassen.</p>
         <p>Wir sind Kevin Zaremba und Matthias Kurpiers – Produzenten und Songwriter. Seit über zehn Jahren verbringen wir den Großteil unseres Lebens im Studio. Gemeinsam durften wir zahlreiche Gold- und Platin-Auszeichnungen feiern und an Songs mitwirken, die weltweit Milliarden Streams erreicht haben.</p>
+
         <p>Unser Alltag besteht aus langen Arbeitstagen, kreativen Nächten und ständigem Fokus.</p>
         <p>Während unserer Weltreise durch Thailand und viele weitere Länder Asiens sind wir auf ein Produkt gestoßen, das dort fast jeder kennt: eine traditionelle Kräuterdose. Anfangs war sie nur ein Souvenir. Wenige Tage später war sie aus unserem Alltag nicht mehr wegzudenken – im Studio, auf Reisen oder einfach immer dann, wenn wir einen kleinen Frischekick brauchten.</p>
         <p>Zurück in Deutschland hat uns genau dieses Gefühl gefehlt.</p>
