@@ -43,7 +43,17 @@ const HeroSection = () => {
           className="lg:hidden relative w-full overflow-hidden bg-foquz-lightblue"
           style={{ minHeight: "max(760px, 82vh)" }}
         >
-          {/* Clouds overlay at bottom */}
+          {/* Layer 0: SVG scene visible through transparent PNG regions */}
+          <img
+            src={heroScene}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
+
+          {/* Layer 1: Clouds overlay at bottom */}
           <img
             src={heroClouds}
             alt=""
@@ -53,7 +63,7 @@ const HeroSection = () => {
             className="absolute inset-x-0 bottom-0 w-full pointer-events-none z-20"
           />
 
-          {/* Text + CTAs + product image */}
+          {/* Layer 2: Text + CTAs + product image */}
           <div className="relative z-10 flex flex-col px-5 sm:px-6 pt-24 sm:pt-28 pb-8">
             <h1 className="text-[11vw] sm:text-[9vw] md:text-[7vw] leading-[0.92] font-black uppercase text-primary-foreground text-pop whitespace-nowrap">
               <span className="block">KURZ RIECHEN.</span>
@@ -77,7 +87,7 @@ const HeroSection = () => {
               </a>
             </div>
 
-            {/* 3-jar product image */}
+            {/* Layer 3: 3-jar product image */}
             <div className="mt-6 sm:mt-8 -mb-12 sm:-mb-16 w-full flex justify-center">
               <img
                 src={heroProducts}
