@@ -316,7 +316,9 @@ const ProductGrid = () => {
                       preload="metadata"
                       className="w-full aspect-square object-cover"
                       onEnded={() => {
+                        if (!autoPlay) return;
                         setTimeout(() => {
+                          if (!autoPlay) return;
                           setDirection(1);
                           setActiveIndex((prev) => (prev + 1) % products.length);
                         }, 500);
