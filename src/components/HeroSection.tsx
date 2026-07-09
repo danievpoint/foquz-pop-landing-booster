@@ -64,7 +64,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-right-top"
           />
           {/* Layer 1: Foreground PNG (has transparent regions) — floats gently */}
           <img
@@ -73,7 +73,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-center animate-[hero-float_3.4s_ease-in-out_infinite]"
+            className="absolute inset-0 w-full h-full object-cover object-right-top animate-[hero-float_3.4s_ease-in-out_infinite]"
           />
           {/* Layer 2: Clouds overlay */}
           <img
@@ -82,7 +82,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-right-top pointer-events-none"
           />
           <style>{`
             @keyframes hero-float {
