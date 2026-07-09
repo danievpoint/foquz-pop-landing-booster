@@ -112,7 +112,7 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
-        preload="auto"
+        preload="metadata"
         className="w-full aspect-square object-cover"
       />
     </div>
