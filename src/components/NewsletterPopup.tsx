@@ -34,6 +34,7 @@ const NewsletterPopup = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
+  const [consent, setConsent] = useState(false);
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
@@ -117,6 +118,10 @@ const NewsletterPopup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || loading) return;
+    if (!consent) {
+      toast({ title: "Einwilligung erforderlich", description: "Bitte bestätige die Verarbeitung deiner E-Mail-Adresse.", variant: "destructive" });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -136,6 +141,7 @@ const NewsletterPopup = () => {
         sessionStorage.setItem(STORAGE_KEY, "1");
       }
       setEmail("");
+      setConsent(false);
     } catch {
       toast({ title: "Fehler", description: "Bitte versuche es später erneut.", variant: "destructive" });
     } finally {
@@ -187,6 +193,19 @@ const NewsletterPopup = () => {
                       className="h-12 bg-muted text-foreground border-none rounded-full px-5 text-base"
                       required
                     />
+                    <label className="flex items-start gap-2 text-[11px] text-muted-foreground text-left leading-snug cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="mt-0.5 shrink-0 w-4 h-4 accent-primary cursor-pointer"
+                        required
+                      />
+                      <span>
+                        Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Widerruf jederzeit möglich (Abmeldelink in jeder E-Mail).{" "}
+                        <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutz</a>.
+                      </span>
+                    </label>
                     <button
                       type="submit"
                       disabled={loading}
@@ -196,9 +215,7 @@ const NewsletterPopup = () => {
                     </button>
                   </form>
                   <p className="text-[10px] text-muted-foreground mt-3 leading-relaxed">
-                    Mit der Anmeldung erklärst du dich mit unserer{" "}
-                    <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>{" "}
-                    einverstanden. Kein Spam · Jederzeit kündbar.
+                    Kein Spam · Jederzeit kündbar.
                   </p>
                 </>
               ) : (

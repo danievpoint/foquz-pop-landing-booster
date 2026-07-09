@@ -112,7 +112,7 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
-        preload="auto"
+        preload="metadata"
         className="w-full aspect-square object-cover"
       />
     </div>
@@ -316,7 +316,9 @@ const ProductGrid = () => {
                       preload="metadata"
                       className="w-full aspect-square object-cover"
                       onEnded={() => {
+                        if (!autoPlay) return;
                         setTimeout(() => {
+                          if (!autoPlay) return;
                           setDirection(1);
                           setActiveIndex((prev) => (prev + 1) % products.length);
                         }, 500);
@@ -341,7 +343,11 @@ const ProductGrid = () => {
                   <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
                   <div className="flex items-center justify-center gap-3">
                     <button
-                      onClick={() => addToCart(1, { id: products[activeIndex].name, name: products[activeIndex].name, price: products[activeIndex].numericPrice, image: products[activeIndex].image })}
+                      onClick={() => {
+                        setAutoPlay(false);
+                        const p = products[activeIndex];
+                        addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
+                      }}
                       className="comic-btn text-black text-xs py-2 px-5"
                       style={{ backgroundColor: products[activeIndex].color }}>
                       IN DEN WARENKORB

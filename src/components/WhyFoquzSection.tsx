@@ -30,7 +30,7 @@ const WhyFoquzSection = () => {
   return (
     <section
       id="das-ist-foquz"
-      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden"
+      className="section-padding py-12 md:py-32 min-h-fit md:h-auto flex items-center relative overflow-hidden scroll-mt-[140px] md:scroll-mt-[124px]"
       style={{ containerType: 'inline-size' }}
     >
       <style>{`
@@ -71,7 +71,7 @@ const WhyFoquzSection = () => {
 
               <div className="border-t-2 border-foreground/20 pt-4 lg:pt-6">
                 <p className="text-foreground/90 text-xs md:text-sm lg:text-base font-medium leading-relaxed why-point-text">
-                  <span className="font-extrabold">FOQUZ</span> ist der erste Fokus-Boost für die Nase — entwickelt für alle, die einen klaren Kopf brauchen, genau dann wenn es drauf ankommt. Mit echten Kräutern und ätherischen Ölen sorgt er für sofortige Frische. Ob in der Tasche, am Schreibtisch, beim Lernen, Zocken oder im Auto — <span className="font-extrabold">FOQUZ</span> ist immer dabei, wenn du ihn brauchst.
+                  <span className="font-extrabold">FOQUZ</span> ist die Frische-Dose für die Nase — entwickelt für alle, die zwischendurch einen intensiven, natürlichen Duft-Kick suchen. Mit echten Kräutern und ätherischen Ölen sorgt er für sofortige Frische. Ob in der Tasche, am Schreibtisch, beim Lernen, Zocken oder im Auto — <span className="font-extrabold">FOQUZ</span> ist immer dabei, wenn du eine Duft-Auszeit brauchst.
                 </p>
                 <p className="text-foreground font-extrabold text-sm md:text-base lg:text-lg mt-3">
                   Kleine Dose, große Wirkung. Stay FOQUZD.

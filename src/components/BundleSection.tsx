@@ -58,6 +58,8 @@ const BundleSection = () => {
                   src={foquzBox}
                   alt="FOQUZ Power Bundle Box"
                   loading="lazy"
+                  width={800}
+                  height={800}
                   className="w-full max-w-[80vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto md:scale-130 lg:scale-100 hover:scale-[1.05] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
                 />
               </Link>
@@ -93,11 +95,14 @@ const BundleSection = () => {
               ))}
             </div>
 
-            {/* Price */}
-            <div className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
+            {/* Price - klarer Vergleich */}
+            <div className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-2 flex-wrap bundle-price-row">
               <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">19,99€</span>
             </div>
+            <p className="text-white/90 font-bold text-sm md:text-base mb-4 lg:mb-6 text-center md:text-left">
+              3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="text-[#ffd618]">14,99€</span> · <span className="text-[#ffd618]">Du sparst 7,48€</span>
+            </p>
 
             {/* CTA + Scarcity banner */}
             <div className="flex flex-col items-center md:items-start gap-3 md:gap-4">

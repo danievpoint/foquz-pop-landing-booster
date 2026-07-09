@@ -50,7 +50,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
-      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(700px, 75vh)" }} />}
+      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(560px, 68vh)" }} />}
 
       <div
         className="transition-opacity duration-500"
@@ -58,7 +58,7 @@ const HeroSection = () => {
       >
         {/* === MOBILE / TABLET (< lg) ===
             Original three-jar composition: full image below the text. */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
+        <div className="lg:hidden relative w-full" style={{ minHeight: "max(560px, 68vh)" }}>
           <img
             src={heroBg}
             alt=""
