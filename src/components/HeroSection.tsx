@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
+import heroScene from "@/assets/hero-bg.svg";
 
 const heroBg = heroBgAsset.url;
 const heroProducts = heroOriginalProducts;
