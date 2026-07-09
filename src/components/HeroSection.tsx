@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import heroOriginalProducts from "@/assets/hero-products.png";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
+import heroMobileAsset from "@/assets/hero-mobile.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
 const heroBg = heroBgAsset.url;
-const heroProducts = heroOriginalProducts;
+const heroMobile = heroMobileAsset.url;
 
 const heroImagePromise = Promise.all(
-  [heroBg, heroProducts].map(
+  [heroBg, heroMobile].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
