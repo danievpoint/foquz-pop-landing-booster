@@ -515,7 +515,7 @@ const CartDrawer = () => {
             {items.length > 0 && (
               <div className="px-6 py-4 border-t-2 border-foreground space-y-2 bg-card">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground/80">Versandkosten Deutschland:</span>
+                  <span className="text-foreground/80">Versandkosten (DE/AT/CH):</span>
                   <span className="font-black">
                     {freeShipping ? (
                       <span className="text-primary font-black uppercase">Gratis</span>
