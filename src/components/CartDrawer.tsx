@@ -17,6 +17,10 @@ const CartDrawer = () => {
     discountedTotal,
     hasNewsletterDiscount,
     discountCode,
+    activeDiscountPercent,
+    manualDiscountCode,
+    applyManualDiscountCode,
+    clearManualDiscountCode,
     isOpen,
     closeCart,
     removeFromCart,
@@ -26,6 +30,15 @@ const CartDrawer = () => {
     checkoutUrl,
     addToCart,
   } = useCart();
+
+  const [codeInput, setCodeInput] = useState("");
+
+  const handleApplyCode = () => {
+    const c = codeInput.trim();
+    if (!c) return;
+    applyManualDiscountCode(c);
+    setCodeInput("");
+  };
 
   const discountAmount = total - discountedTotal;
 
