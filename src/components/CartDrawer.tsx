@@ -379,8 +379,8 @@ const CartDrawer = () => {
 
                   {/* Entdecke unsere Proben (Carousel) */}
                   {suggestions.length > 0 && (
-                    <div className="pt-2 border-t border-foreground/10">
-                      <h3 className="font-black text-lg mt-4 mb-3">Entdecke unsere Proben</h3>
+                    <div className="pt-2 border-t-2 border-foreground/80">
+                      <h3 className="font-black text-lg uppercase mt-4 mb-3">Entdecke unsere Proben</h3>
                       <div className="relative">
                         <div
                           ref={carouselRef}
