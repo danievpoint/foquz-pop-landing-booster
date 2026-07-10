@@ -17,6 +17,21 @@ import {
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten } from "@/data/products";
+import payPaypal from "@/assets/payment/paypal.svg";
+import payKlarna from "@/assets/payment/klarna.svg";
+import payVisa from "@/assets/payment/visa.svg";
+import payMastercard from "@/assets/payment/mastercard.svg";
+import payAmex from "@/assets/payment/amex.svg";
+import payApplePay from "@/assets/payment/apple-pay.svg";
+
+const PAYMENT_METHODS = [
+  { label: "PayPal", src: payPaypal },
+  { label: "Klarna", src: payKlarna },
+  { label: "Visa", src: payVisa },
+  { label: "Mastercard", src: payMastercard },
+  { label: "American Express", src: payAmex },
+  { label: "Apple Pay", src: payApplePay },
+];
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
