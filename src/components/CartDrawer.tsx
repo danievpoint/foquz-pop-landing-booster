@@ -495,7 +495,7 @@ const CartDrawer = () => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="px-6 py-4 border-t border-foreground/10 space-y-2 bg-card">
+              <div className="px-6 py-4 border-t-2 border-foreground space-y-2 bg-card">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-foreground/80">Versandkosten Deutschland:</span>
                   <span className="font-black">
