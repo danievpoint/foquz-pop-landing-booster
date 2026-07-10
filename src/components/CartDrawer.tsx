@@ -500,7 +500,7 @@ const CartDrawer = () => {
                   <span className="text-foreground/80">Versandkosten Deutschland:</span>
                   <span className="font-black">
                     {freeShipping ? (
-                      <span className="text-green-600">Gratis</span>
+                      <span className="text-primary font-black uppercase">Gratis</span>
                     ) : (
                       <>€{shippingCost.toFixed(2).replace(".", ",")}</>
                     )}
