@@ -22,7 +22,7 @@ allProducts.forEach((p) => {
 const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, isOpen: cartOpen } = useCart();
 
   useEffect(() => {
     if (dismissed) return;
@@ -30,7 +30,13 @@ const BundleBanner = () => {
     return () => clearTimeout(timer);
   }, [dismissed]);
 
+  // Hide when cart drawer is open (checkout flow)
+  useEffect(() => {
+    if (cartOpen && visible) setVisible(false);
+  }, [cartOpen, visible]);
+
   if (dismissed) return null;
+  if (cartOpen) return null;
 
   return (
     <AnimatePresence>
