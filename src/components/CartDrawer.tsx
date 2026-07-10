@@ -158,7 +158,7 @@ const CartDrawer = () => {
                         </h3>
                         <p className="text-xs text-muted-foreground mt-1">
                           3× einzeln <span className="line-through">€{singlesPriceLabel}</span>{" "}
-                          → Bundle <span className="font-black text-foreground">€{BUNDLE_PRICE.toFixed(2)}</span>{" "}
+                          → Bundle <span className="line-through">€{BUNDLE_LIST_PRICE.toFixed(2)}</span> mit Code <span className="font-black text-foreground">LAUNCH25</span> nur <span className="font-black text-foreground">€{BUNDLE_EFFECTIVE_PRICE.toFixed(2)}</span>{" "}
                           <span className="font-bold text-green-700">(spare €{bundleSavings})</span>
                         </p>
                         <button
@@ -166,7 +166,7 @@ const CartDrawer = () => {
                             addToCart(1, {
                               id: BUNDLE_ID,
                               name: "FOQUZ Power Bundle (3 Sorten)",
-                              price: BUNDLE_PRICE,
+                              price: BUNDLE_LIST_PRICE,
                               image: foquzBox,
                             })
                           }
