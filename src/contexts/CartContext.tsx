@@ -18,6 +18,10 @@ interface CartContextType {
   discountedTotal: number;
   hasNewsletterDiscount: boolean;
   discountCode: string | null;
+  activeDiscountPercent: number;
+  manualDiscountCode: string | null;
+  applyManualDiscountCode: (code: string) => void;
+  clearManualDiscountCode: () => void;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
