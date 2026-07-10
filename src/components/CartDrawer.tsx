@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag, Tag, Sparkles, Check } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, Tag, Sparkles, Check, Plus as PlusIcon } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
+import { products as allSorten } from "@/data/products";
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
