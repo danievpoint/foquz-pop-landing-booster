@@ -318,6 +318,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setCheckoutUrl(null);
           localStorage.removeItem(DISCOUNT_KEY);
           setHasNewsletterDiscount(false);
+          localStorage.removeItem(MANUAL_CODE_KEY);
+          setManualDiscountCode(null);
         }
       } finally {
         checking = false;
