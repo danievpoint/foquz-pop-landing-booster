@@ -149,6 +149,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setManualDiscountCode(null);
   }, []);
 
+  const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
