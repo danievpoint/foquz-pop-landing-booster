@@ -24,10 +24,26 @@ const heroImagePromise = Promise.all(
   ),
 );
 
+// Wait for web fonts (Barlow / Bangers) so we never flash a fallback font (FOUT).
+const heroFontsPromise: Promise<unknown> =
+  typeof document !== "undefined" && "fonts" in document
+    ? Promise.all([
+        (document as any).fonts.load("400 1em Barlow"),
+        (document as any).fonts.load("600 1em Barlow"),
+        (document as any).fonts.load("700 1em Barlow"),
+        (document as any).fonts.load("800 1em Barlow"),
+        (document as any).fonts.load("900 1em Barlow"),
+        (document as any).fonts.load("400 1em Bangers"),
+        (document as any).fonts.ready,
+      ]).catch(() => undefined)
+    : Promise.resolve();
+
+const heroReadyPromise = Promise.all([heroImagePromise, heroFontsPromise]);
+
 export const useHeroReady = () => {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    heroImagePromise.then(() => setReady(true));
+    heroReadyPromise.then(() => setReady(true));
   }, []);
   return ready;
 };
