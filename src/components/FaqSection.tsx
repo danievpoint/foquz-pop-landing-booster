@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronDown,
   Sparkles,
   Package,
   Wind,
@@ -11,13 +10,14 @@ import {
   HelpCircle,
   Plus,
   Minus,
+  type LucideIcon,
 } from "lucide-react";
 
 type Faq = {
   q: string;
   a: string;
   category: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
 };
 
 const faqs: Faq[] = [
