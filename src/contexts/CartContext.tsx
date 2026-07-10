@@ -79,6 +79,7 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Unknown (e.g. influencer) codes still get passed to Shopify.
 const KNOWN_DISCOUNTS: Record<string, number> = {
   LAUNCH25: 25,
+  ICEBLOCK25: 25,
   CLOUD10: 10,
 };
 
