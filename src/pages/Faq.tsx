@@ -33,7 +33,7 @@ const Faq = () => {
       <SeoHead
         title="FAQ – Häufige Fragen zu FOQUZ | Alle 31 Antworten"
         description="Alle Antworten rund um FOQUZ: Anwendung, Inhaltsstoffe, Sorten, Sicherheit, Bestellung & Versand. Kurz, ehrlich und ohne Umwege erklärt."
-        canonical="/faq"
+        path="/faq"
       />
       <script
         type="application/ld+json"
