@@ -236,7 +236,7 @@ const FaqSection = () => {
           <div className="inline-flex items-center gap-2 comic-outline comic-shadow bg-secondary px-4 py-1.5 rounded-full mb-4">
             <HelpCircle size={16} />
             <span className="text-xs md:text-sm font-extrabold uppercase tracking-wider">
-              Support & Antworten
+              Fragen & Antworten
             </span>
           </div>
           <h2 className="text-4xl md:text-6xl font-black mb-3">
