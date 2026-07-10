@@ -102,6 +102,56 @@ const CartDrawer = () => {
                 </div>
               ) : (
                 <>
+                  {/* Rabattcode-Reiter oben */}
+                  <div className="rounded-xl border-2 border-foreground bg-muted/30 p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Tag size={16} className="text-foreground" />
+                      <span className="text-xs font-black uppercase tracking-wide">Rabattcode</span>
+                    </div>
+                    {discountCode ? (
+                      <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-lg px-3 py-2">
+                        <Check size={16} className="text-green-700 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-green-800 font-black text-sm truncate">{discountCode}</div>
+                          <div className="text-green-700 text-[11px] font-bold">
+                            {activeDiscountPercent > 0
+                              ? `${activeDiscountPercent}% Rabatt aktiv – wird an der Kasse angewendet`
+                              : "Code wird an der Kasse geprüft"}
+                          </div>
+                        </div>
+                        {manualDiscountCode && (
+                          <button
+                            onClick={clearManualDiscountCode}
+                            className="text-green-800/70 hover:text-green-900 text-xs font-bold underline shrink-0"
+                            aria-label="Rabattcode entfernen"
+                          >
+                            Entfernen
+                          </button>
+                        )}
+                      </div>
+                    ) : null}
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        value={codeInput}
+                        onChange={(e) => setCodeInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
+                        placeholder="z. B. INFLUENCER10"
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 py-2 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <button
+                        onClick={handleApplyCode}
+                        disabled={!codeInput.trim()}
+                        className="comic-btn bg-foreground text-background text-xs py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                      >
+                        ANWENDEN
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1.5 leading-tight">
+                      Nur ein Code gleichzeitig – der mit dem höheren Rabatt gewinnt.
+                    </p>
+                  </div>
+
                   {items.map((item) => (
                     <motion.div
                       key={item.id}
