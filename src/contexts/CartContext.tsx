@@ -111,6 +111,27 @@ const getConfettiInstance = () => {
   return confettiInstance;
 };
 
+const fireCelebrationConfetti = () => {
+  const myConfetti = getConfettiInstance();
+  void myConfetti({
+    particleCount: 120, spread: 160, origin: { x: 0.5, y: 0.1 },
+    gravity: 1.4, ticks: 140, startVelocity: 28, decay: 0.93, scalar: 1.1, colors: CONFETTI_COLORS,
+  });
+  const origins = [
+    { x: 0.1, y: 0.03 }, { x: 0.3, y: 0.02 }, { x: 0.5, y: 0.03 },
+    { x: 0.7, y: 0.02 }, { x: 0.9, y: 0.03 },
+  ];
+  void Promise.all(
+    origins.map((origin, i) =>
+      myConfetti({
+        particleCount: 60, spread: 90, origin, gravity: 1.3, ticks: 150,
+        startVelocity: 30, decay: 0.93, scalar: 1.0, colors: CONFETTI_COLORS, drift: (i - 2) * 0.15,
+      })
+    )
+  );
+};
+
+
 const DISCOUNT_KEY = "foquz_newsletter_discount";
 const NEWSLETTER_DISCOUNT_CODE = "CLOUD10";
 
