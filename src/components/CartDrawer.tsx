@@ -170,10 +170,10 @@ const CartDrawer = () => {
                   )}
                 </div>
               ) : (
-                <div className="px-6 pt-6 pb-4 space-y-5">
+                <div className="px-6 pt-3 md:pt-6 pb-4 space-y-3 md:space-y-5">
                   {/* Rabattcode-Eingabe */}
                   <div>
-                    <div className="text-xs font-black uppercase tracking-wide mb-2">Code einfügen</div>
+                    <div className="text-xs font-black uppercase tracking-wide mb-1.5 md:mb-2">Code einfügen</div>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -181,12 +181,12 @@ const CartDrawer = () => {
                         onChange={(e) => setCodeInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
                         placeholder="Code"
-                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-4 py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1.5 md:py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim()}
-                        className="comic-btn bg-primary text-primary-foreground text-xs py-2 px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
+                        className="comic-btn bg-primary text-primary-foreground text-xs py-1.5 md:py-2 px-4 md:px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
                         ANWENDEN
                       </button>
@@ -217,7 +217,7 @@ const CartDrawer = () => {
 
                   {/* Free-shipping progress bar with truck */}
                   <div>
-                    <div className="relative pt-2 pb-12 pr-2">
+                    <div className="relative pt-1 md:pt-2 pb-8 md:pb-12 pr-2">
                       <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
                         <motion.div
                           className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
@@ -228,20 +228,21 @@ const CartDrawer = () => {
                       </div>
                       <div className="absolute right-0 top-0 flex flex-col items-center">
                         <div
-                          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center bg-background ${
+                          className={`w-7 h-7 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center bg-background ${
                             freeShipping ? "border-green-500 text-green-600" : "border-foreground text-foreground"
                           }`}
                         >
-                          <Truck size={16} />
+                          <Truck size={14} className="md:hidden" />
+                          <Truck size={16} className="hidden md:block" />
                         </div>
-                        <span className="text-[10px] font-black mt-1 whitespace-nowrap">
+                        <span className="text-[10px] font-black mt-0.5 md:mt-1 whitespace-nowrap">
                           {FREE_SHIPPING_THRESHOLD.toFixed(0)}€
                         </span>
                       </div>
                     </div>
 
                     <div
-                      className={`rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
+                      className={`rounded-xl border-2 border-foreground px-3 py-1.5 md:py-2.5 text-xs md:text-sm font-bold ${
                         freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
