@@ -70,9 +70,20 @@ export const useCart = () => useContext(CartContext);
 const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
   id: "bundle",
   name: "FOQUZ Bundle",
-  price: 14.99,
+  price: 19.99,
   image: "",
 };
+
+// Known discount codes and their percentage values.
+// Used so we can locally pick the highest-value code and preview the total.
+// Unknown (e.g. influencer) codes still get passed to Shopify.
+const KNOWN_DISCOUNTS: Record<string, number> = {
+  LAUNCH25: 25,
+  CLOUD10: 10,
+};
+
+const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
+const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 
 const CONFETTI_COLORS = [
   "#ffd618", "#ff4d8d", "#00d4aa", "#ff6b6b", "#75559f",
