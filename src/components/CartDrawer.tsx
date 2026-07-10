@@ -36,7 +36,7 @@ const CartDrawer = () => {
   const showBundleUpsell = !hasBundle && singlesCount > 0;
 
   // Ersparnis pro Bundle vs. 3× einzeln
-  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_PRICE).toFixed(2).replace(".", ",");
+  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_EFFECTIVE_PRICE).toFixed(2).replace(".", ",");
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
   return (
