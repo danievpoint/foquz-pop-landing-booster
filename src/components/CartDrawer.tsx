@@ -38,7 +38,7 @@ const BUNDLE_LIST_PRICE = 19.99;
 const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
 const FREE_SHIPPING_THRESHOLD = 29.99;
-const SHIPPING_COST_DE = 4.9;
+const SHIPPING_COST_DE = 4.49;
 
 const CartDrawer = () => {
   const {
@@ -515,7 +515,7 @@ const CartDrawer = () => {
             {items.length > 0 && (
               <div className="px-6 py-4 border-t-2 border-foreground space-y-2 bg-card">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground/80">Versandkosten Deutschland:</span>
+                  <span className="text-foreground/80">Versandkosten (DE/AT/CH):</span>
                   <span className="font-black">
                     {freeShipping ? (
                       <span className="text-primary font-black uppercase">Gratis</span>
