@@ -18,6 +18,10 @@ interface CartContextType {
   discountedTotal: number;
   hasNewsletterDiscount: boolean;
   discountCode: string | null;
+  activeDiscountPercent: number;
+  manualDiscountCode: string | null;
+  applyManualDiscountCode: (code: string) => void;
+  clearManualDiscountCode: () => void;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -41,6 +45,10 @@ const CartContext = createContext<CartContextType>({
   discountedTotal: 0,
   hasNewsletterDiscount: false,
   discountCode: null,
+  activeDiscountPercent: 0,
+  manualDiscountCode: null,
+  applyManualDiscountCode: () => {},
+  clearManualDiscountCode: () => {},
   isOpen: false,
   openCart: () => {},
   closeCart: () => {},
@@ -62,9 +70,20 @@ export const useCart = () => useContext(CartContext);
 const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
   id: "bundle",
   name: "FOQUZ Bundle",
-  price: 14.99,
+  price: 19.99,
   image: "",
 };
+
+// Known discount codes and their percentage values.
+// Used so we can locally pick the highest-value code and preview the total.
+// Unknown (e.g. influencer) codes still get passed to Shopify.
+const KNOWN_DISCOUNTS: Record<string, number> = {
+  LAUNCH25: 25,
+  CLOUD10: 10,
+};
+
+const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
+const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 
 const CONFETTI_COLORS = [
   "#ffd618", "#ff4d8d", "#00d4aa", "#ff6b6b", "#75559f",
@@ -114,6 +133,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setHasNewsletterDiscount(true);
   }, []);
 
+  const [manualDiscountCode, setManualDiscountCode] = useState<string | null>(() => {
+    return localStorage.getItem(MANUAL_CODE_KEY);
+  });
+
+  const applyManualDiscountCode = useCallback((code: string) => {
+    const normalized = code.trim().toUpperCase();
+    if (!normalized) return;
+    localStorage.setItem(MANUAL_CODE_KEY, normalized);
+    setManualDiscountCode(normalized);
+  }, []);
+
+  const clearManualDiscountCode = useCallback(() => {
+    localStorage.removeItem(MANUAL_CODE_KEY);
+    setManualDiscountCode(null);
+  }, []);
+
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
     setItems((prev) => {
@@ -161,8 +196,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
-  const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
+
+  // Auto-applied codes based on cart state:
+  //  - LAUNCH25 (25%) whenever the Power Bundle is in the cart
+  //  - CLOUD10  (10%) when the newsletter discount is unlocked
+  // Only ONE code applies. If the user entered a manual code, that wins.
+  // Otherwise the highest-percentage auto code wins (no stacking).
+  const hasBundleInCart = items.some((i) => BUNDLE_IDS.has(i.id));
+
+  let discountCode: string | null = null;
+  let activeDiscountPercent = 0;
+
+  if (manualDiscountCode) {
+    discountCode = manualDiscountCode;
+    activeDiscountPercent = KNOWN_DISCOUNTS[manualDiscountCode] ?? 0;
+  } else {
+    const candidates: { code: string; pct: number }[] = [];
+    if (hasBundleInCart) candidates.push({ code: "LAUNCH25", pct: 25 });
+    if (hasNewsletterDiscount) candidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
+    const best = candidates.sort((a, b) => b.pct - a.pct)[0];
+    if (best) {
+      discountCode = best.code;
+      activeDiscountPercent = best.pct;
+    }
+  }
+
+  const discountedTotal = total * (1 - activeDiscountPercent / 100);
+
 
   const getCheckoutLines = useCallback(() => {
     return items
@@ -258,6 +318,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setCheckoutUrl(null);
           localStorage.removeItem(DISCOUNT_KEY);
           setHasNewsletterDiscount(false);
+          localStorage.removeItem(MANUAL_CODE_KEY);
+          setManualDiscountCode(null);
         }
       } finally {
         checking = false;
@@ -274,6 +336,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
+      activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
