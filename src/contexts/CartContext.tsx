@@ -245,6 +245,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       .filter((l): l is { variantId: string; quantity: number } => l !== null);
   }, [items]);
 
+  // Fire celebration confetti when free-shipping threshold is unlocked.
+  const freeShippingUnlocked = items.length > 0 && discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const prevFreeShippingRef = useRef(freeShippingUnlocked);
+  useEffect(() => {
+    if (freeShippingUnlocked && !prevFreeShippingRef.current) {
+      fireCelebrationConfetti();
+    }
+    prevFreeShippingRef.current = freeShippingUnlocked;
+  }, [freeShippingUnlocked]);
+
+
+
   useEffect(() => {
     if (items.length === 0) {
       setCheckoutUrl(null);
