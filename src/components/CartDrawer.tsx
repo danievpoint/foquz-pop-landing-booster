@@ -38,7 +38,7 @@ const BUNDLE_LIST_PRICE = 19.99;
 const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
 const FREE_SHIPPING_THRESHOLD = 29.99;
-const SHIPPING_COST_DE = 4.9;
+const SHIPPING_COST_DE = 4.49;
 
 const CartDrawer = () => {
   const {
