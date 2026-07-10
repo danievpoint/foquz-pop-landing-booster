@@ -14,8 +14,8 @@ const MarqueeBanner = () => {
   const repeated = [...items, ...items, ...items, ...items];
 
   return (
-    <section className="fixed top-0 left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-[24px] md:h-[28px]" data-banner style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'translateZ(0)' } as React.CSSProperties}>
-      <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
+    <section className="fixed top-0 left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-[24px] md:h-[28px]" data-banner style={{ WebkitTransform: 'translate3d(0,0,0)' } as React.CSSProperties}>
+      <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center" style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' } as React.CSSProperties}>
         {repeated.map((text, i) => (
           <span
             key={i}
