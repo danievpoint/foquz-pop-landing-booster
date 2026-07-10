@@ -297,7 +297,7 @@ const CartDrawer = () => {
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-lg">Gesamt</span>
                   <div className="text-right">
-                    {hasNewsletterDiscount && (
+                    {activeDiscountPercent > 0 && (
                       <span className="text-sm text-muted-foreground line-through block">€{total.toFixed(2)}</span>
                     )}
                     <span className="text-2xl font-black">€{discountedTotal.toFixed(2)}</span>
