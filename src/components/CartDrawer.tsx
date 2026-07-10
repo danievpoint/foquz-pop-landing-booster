@@ -1,6 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag, Tag, Sparkles, Check, Plus as PlusIcon } from "lucide-react";
+import {
+  X,
+  Minus,
+  Plus,
+  Trash2,
+  ShoppingBag,
+  Tag,
+  Sparkles,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Truck,
+  Plus as PlusIcon,
+} from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten } from "@/data/products";
@@ -9,6 +22,8 @@ const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
 const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
+const FREE_SHIPPING_THRESHOLD = 29.99;
+const SHIPPING_COST_DE = 4.9;
 
 const CartDrawer = () => {
   const {
@@ -33,6 +48,8 @@ const CartDrawer = () => {
   } = useCart();
 
   const [codeInput, setCodeInput] = useState("");
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const handleApplyCode = () => {
     const c = codeInput.trim();
@@ -43,15 +60,52 @@ const CartDrawer = () => {
 
   const discountAmount = total - discountedTotal;
 
-  // Show bundle upsell if cart has singles but no bundle yet.
+  // Bundle upsell
   const hasBundle = items.some((i) => i.id === BUNDLE_ID);
   const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
   const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
   const showBundleUpsell = !hasBundle && singlesCount > 0;
-
-  // Ersparnis pro Bundle vs. 3× einzeln
   const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_EFFECTIVE_PRICE).toFixed(2).replace(".", ",");
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
+
+  // Shipping/savings
+  const freeShipping = discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const missingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
+  const shipProgress = Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const shippingCost = freeShipping ? 0 : SHIPPING_COST_DE;
+  const totalSavings = discountAmount + (freeShipping ? SHIPPING_COST_DE : 0);
+
+  // Suggestions carousel
+  const inCartIds = new Set(items.map((i) => i.id));
+  const suggestions = allSorten.filter((p) => !inCartIds.has(p.name));
+
+  const scrollCarousel = (dir: 1 | -1) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cards = el.querySelectorAll<HTMLElement>("[data-carousel-card]");
+    if (cards.length === 0) return;
+    const next = Math.max(0, Math.min(cards.length - 1, carouselIndex + dir));
+    setCarouselIndex(next);
+    cards[next]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  };
+
+  const onCarouselScroll = () => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cards = el.querySelectorAll<HTMLElement>("[data-carousel-card]");
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    cards.forEach((c, i) => {
+      const cCenter = c.offsetLeft + c.clientWidth / 2;
+      const d = Math.abs(cCenter - center);
+      if (d < closestDist) {
+        closestDist = d;
+        closestIdx = i;
+      }
+    });
+    if (closestIdx !== carouselIndex) setCarouselIndex(closestIdx);
+  };
 
   return (
     <AnimatePresence>
@@ -87,10 +141,9 @@ const CartDrawer = () => {
               </button>
             </div>
 
-            {/* Items */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto">
               {items.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-6">
                   <ShoppingBag size={64} strokeWidth={1} />
                   <p className="mt-4 text-lg font-bold">Dein Warenkorb ist leer</p>
                   <p className="text-sm mt-1">Füge Produkte hinzu, um loszulegen!</p>
@@ -102,113 +155,185 @@ const CartDrawer = () => {
                   )}
                 </div>
               ) : (
-                <>
-                  {/* Rabattcode-Reiter oben */}
-                  <div className="rounded-xl border-2 border-foreground bg-muted/30 p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Tag size={16} className="text-foreground" />
-                      <span className="text-xs font-black uppercase tracking-wide">Rabattcode</span>
-                    </div>
-                    {discountCode ? (
-                      <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-lg px-3 py-2">
-                        <Check size={16} className="text-green-700 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="text-green-800 font-black text-sm truncate">{discountCode}</div>
-                          <div className="text-green-700 text-[11px] font-bold">
-                            {activeDiscountPercent > 0
-                              ? `${activeDiscountPercent}% Rabatt aktiv – wird an der Kasse angewendet`
-                              : "Code wird an der Kasse geprüft"}
-                          </div>
-                        </div>
-                        {manualDiscountCode && (
-                          <button
-                            onClick={clearManualDiscountCode}
-                            className="text-green-800/70 hover:text-green-900 text-xs font-bold underline shrink-0"
-                            aria-label="Rabattcode entfernen"
-                          >
-                            Entfernen
-                          </button>
-                        )}
-                      </div>
-                    ) : null}
-                    <div className="flex gap-2 mt-2">
+                <div className="px-6 pt-6 pb-4 space-y-5">
+                  {/* Rabattcode-Eingabe */}
+                  <div>
+                    <div className="text-sm font-black mb-2">Code einfügen</div>
+                    <div className="flex gap-2">
                       <input
                         type="text"
                         value={codeInput}
                         onChange={(e) => setCodeInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
-                        placeholder="z. B. INFLUENCER10"
-                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 py-2 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Code"
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-4 py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim()}
-                        className="comic-btn bg-primary text-primary-foreground text-xs py-2 px-4 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
+                        className="rounded-full border-2 border-foreground bg-background text-foreground text-sm font-black px-6 py-2.5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0 hover:bg-muted transition-colors"
                       >
-                        ANWENDEN
+                        Anwenden
                       </button>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-1.5 leading-tight">
-                      Nur ein Code gleichzeitig – der mit dem höheren Rabatt gewinnt.
-                    </p>
+
+                    {discountCode && (
+                      <div className="mt-3 inline-flex items-center gap-2 bg-green-50 border-2 border-green-500 rounded-full pl-2 pr-1 py-1">
+                        <span className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                          <Check size={12} className="text-white" strokeWidth={3} />
+                        </span>
+                        <span className="text-green-800 font-black text-xs uppercase tracking-wide">
+                          {discountCode}
+                        </span>
+                        {manualDiscountCode ? (
+                          <button
+                            onClick={clearManualDiscountCode}
+                            className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center hover:bg-green-500/40 transition-colors"
+                            aria-label="Rabattcode entfernen"
+                          >
+                            <X size={12} className="text-green-800" strokeWidth={3} />
+                          </button>
+                        ) : (
+                          <span className="w-5 h-5" />
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  {items.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: 100 }}
-                      className="flex gap-4 p-4 bg-muted/50 rounded-xl border-2 border-foreground"
-                    >
-                      {item.image && (
-                        <img src={item.image} alt={item.name} width={80} height={80} className="w-20 h-20 object-cover rounded-lg" />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-black text-sm uppercase truncate">{item.name}</h3>
-                        {activeDiscountPercent > 0 ? (
-                          <div className="mt-1 flex items-baseline gap-2 flex-wrap">
-                            <span className="text-sm text-muted-foreground line-through">€{item.price.toFixed(2)}</span>
-                            <span className="text-lg font-black text-primary">€{(item.price * (1 - activeDiscountPercent / 100)).toFixed(2)}</span>
-                            <span className="text-[10px] font-black uppercase bg-primary/10 text-primary px-1.5 py-0.5 rounded">
-                              -{activeDiscountPercent}%
-                            </span>
-                          </div>
-                        ) : (
-                          <p className="text-lg font-black mt-1">€{item.price.toFixed(2)}</p>
-                        )}
-
-                        <div className="flex items-center gap-2 mt-2">
-                          <button
-                            onClick={() => updateQty(item.id, item.qty - 1)}
-                            className="w-8 h-8 flex items-center justify-center border-2 border-foreground rounded-lg hover:bg-muted transition-colors"
-                            aria-label="Menge verringern"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="font-black text-sm w-8 text-center">{item.qty}</span>
-                          <button
-                            onClick={() => updateQty(item.id, item.qty + 1)}
-                            className="w-8 h-8 flex items-center justify-center border-2 border-foreground rounded-lg hover:bg-muted transition-colors"
-                            aria-label="Menge erhöhen"
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
+                  {/* Free-shipping progress bar with truck */}
+                  <div>
+                    <div className="relative h-6 flex items-center">
+                      <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
+                        <motion.div
+                          className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
+                          initial={false}
+                          animate={{ width: `${shipProgress}%` }}
+                          transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                        />
                       </div>
+                      <div className="absolute right-0 -top-1 flex flex-col items-center">
+                        <div
+                          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center bg-background ${
+                            freeShipping ? "border-green-500 text-green-600" : "border-foreground text-foreground"
+                          }`}
+                        >
+                          <Truck size={16} />
+                        </div>
+                        <span className="text-[10px] font-black mt-0.5">
+                          {FREE_SHIPPING_THRESHOLD.toFixed(0)}€
+                        </span>
+                      </div>
+                    </div>
 
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="self-start p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                        aria-label="Produkt entfernen"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </motion.div>
-                  ))}
+                    <div
+                      className={`mt-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
+                        freeShipping
+                          ? "bg-green-50 text-green-800"
+                          : "bg-blue-50 text-blue-900"
+                      }`}
+                    >
+                      {freeShipping ? (
+                        <>🎉 Du hast <strong>kostenlosen Versand</strong> freigeschaltet!</>
+                      ) : (
+                        <>
+                          Nur noch{" "}
+                          <strong>€{missingForFreeShip.toFixed(2).replace(".", ",")}</strong>{" "}
+                          zum kostenlosen Versand!
+                        </>
+                      )}
+                    </div>
+                  </div>
 
-                  {/* Dezenter Bundle-Upsell im Cart (ersetzt das alte Popup) */}
+                  <div className="border-t border-foreground/10" />
+
+                  {/* Items */}
+                  <div className="space-y-4">
+                    {items.map((item) => {
+                      const hasDiscount = activeDiscountPercent > 0;
+                      const finalPrice = hasDiscount
+                        ? item.price * (1 - activeDiscountPercent / 100)
+                        : item.price;
+                      return (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, x: 100 }}
+                          className="flex gap-4"
+                        >
+                          <div className="w-24 shrink-0">
+                            {item.image && (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                width={96}
+                                height={96}
+                                className="w-24 h-24 object-cover rounded-lg bg-muted/40"
+                              />
+                            )}
+                            {hasDiscount && (
+                              <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
+                                Aktion -{activeDiscountPercent}%
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <h3 className="font-black text-base leading-tight">{item.name}</h3>
+                              </div>
+                              <button
+                                onClick={() => removeFromCart(item.id)}
+                                className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0"
+                                aria-label="Produkt entfernen"
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            </div>
+
+                            <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+                              {hasDiscount ? (
+                                <>
+                                  <span className="text-sm text-muted-foreground line-through">
+                                    €{item.price.toFixed(2).replace(".", ",")}
+                                  </span>
+                                  <span className="text-lg font-black text-pink-600">
+                                    €{finalPrice.toFixed(2).replace(".", ",")}
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-lg font-black">
+                                  €{item.price.toFixed(2).replace(".", ",")}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-2 mt-2 w-fit border-2 border-foreground/80 rounded-lg px-1">
+                              <button
+                                onClick={() => updateQty(item.id, item.qty - 1)}
+                                className="w-8 h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                aria-label="Menge verringern"
+                              >
+                                <Minus size={14} />
+                              </button>
+                              <span className="font-black text-sm w-8 text-center">{item.qty}</span>
+                              <button
+                                onClick={() => updateQty(item.id, item.qty + 1)}
+                                className="w-8 h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                aria-label="Menge erhöhen"
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Bundle upsell */}
                   {showBundleUpsell && (
                     <motion.div
                       layout
@@ -231,8 +356,10 @@ const CartDrawer = () => {
                           Alle 3 Sorten – Power Bundle
                         </h3>
                         <p className="text-xs text-muted-foreground mt-1">
-                          3× einzeln <span className="line-through">€{singlesPriceLabel}</span>{" "}
-                          → Bundle <span className="line-through">€{BUNDLE_LIST_PRICE.toFixed(2)}</span> mit Code <span className="font-black text-foreground">LAUNCH25</span> nur <span className="font-black text-foreground">€{BUNDLE_EFFECTIVE_PRICE.toFixed(2)}</span>{" "}
+                          3× einzeln <span className="line-through">€{singlesPriceLabel}</span> → Bundle{" "}
+                          <span className="line-through">€{BUNDLE_LIST_PRICE.toFixed(2)}</span> mit Code{" "}
+                          <span className="font-black text-foreground">LAUNCH25</span> nur{" "}
+                          <span className="font-black text-foreground">€{BUNDLE_EFFECTIVE_PRICE.toFixed(2)}</span>{" "}
                           <span className="font-bold text-green-700">(spare €{bundleSavings})</span>
                         </p>
                         <button
@@ -252,170 +379,187 @@ const CartDrawer = () => {
                     </motion.div>
                   )}
 
-                  {/* Entdecke weitere Sorten */}
-                  {(() => {
-                    const inCartIds = new Set(items.map((i) => i.id));
-                    const suggestions = allSorten.filter((p) => !inCartIds.has(p.name));
-                    if (suggestions.length === 0) return null;
-                    return (
-                      <div className="pt-2">
-                        <h3 className="font-black text-sm uppercase mb-3 flex items-center gap-1.5">
-                          <Sparkles size={14} className="text-primary" />
-                          Entdecke weitere Sorten
-                        </h3>
-                        <div className="flex gap-3 overflow-x-auto -mx-6 px-6 pb-2 snap-x snap-mandatory scrollbar-hide">
+                  {/* Entdecke unsere Proben (Carousel) */}
+                  {suggestions.length > 0 && (
+                    <div className="pt-2 border-t border-foreground/10">
+                      <h3 className="font-black text-lg mt-4 mb-3">Entdecke unsere Proben</h3>
+                      <div className="relative">
+                        <div
+                          ref={carouselRef}
+                          onScroll={onCarouselScroll}
+                          className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6 pb-1"
+                        >
                           {suggestions.map((p) => {
-                            const discounted = activeDiscountPercent > 0
-                              ? p.numericPrice * (1 - activeDiscountPercent / 100)
-                              : null;
+                            const discounted =
+                              activeDiscountPercent > 0
+                                ? p.numericPrice * (1 - activeDiscountPercent / 100)
+                                : null;
                             return (
                               <div
                                 key={p.handle}
-                                className="shrink-0 w-40 snap-start rounded-xl border-2 border-foreground bg-background p-2 flex flex-col"
+                                data-carousel-card
+                                className="shrink-0 snap-center rounded-xl border-2 border-foreground/80 bg-background p-3 flex gap-3"
+                                style={{ width: "calc(100% - 3rem)" }}
                               >
                                 <div
-                                  className="w-full h-24 rounded-lg flex items-center justify-center mb-2"
+                                  className="w-24 h-24 rounded-lg flex items-center justify-center shrink-0"
                                   style={{ backgroundColor: `${p.color}22` }}
                                 >
-                                  <img src={p.image} alt={p.name} className="max-h-full max-w-full object-contain" />
+                                  <img
+                                    src={p.image}
+                                    alt={p.name}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
                                 </div>
-                                <div className="font-black text-[11px] uppercase leading-tight line-clamp-2">{p.name}</div>
-                                <div className="mt-1 flex items-baseline gap-1 flex-wrap">
-                                  {discounted !== null ? (
-                                    <>
-                                      <span className="text-[11px] text-muted-foreground line-through">€{p.numericPrice.toFixed(2)}</span>
-                                      <span className="text-sm font-black text-primary">€{discounted.toFixed(2)}</span>
-                                    </>
-                                  ) : (
-                                    <span className="text-sm font-black">€{p.numericPrice.toFixed(2)}</span>
+                                <div className="flex-1 min-w-0 flex flex-col">
+                                  <div className="font-black text-sm leading-tight">{p.name}</div>
+                                  <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                                    {p.desc.split("\n")[0]}
+                                  </div>
+                                  <div className="mt-auto flex items-end justify-between gap-2">
+                                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                                      {discounted !== null ? (
+                                        <>
+                                          <span className="text-xs text-muted-foreground line-through">
+                                            €{p.numericPrice.toFixed(2).replace(".", ",")}
+                                          </span>
+                                          <span className="text-sm font-black text-pink-600">
+                                            €{discounted.toFixed(2).replace(".", ",")}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <span className="text-sm font-black">
+                                          €{p.numericPrice.toFixed(2).replace(".", ",")}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <button
+                                      onClick={() =>
+                                        addToCart(1, {
+                                          id: p.name,
+                                          name: p.name,
+                                          price: p.numericPrice,
+                                          image: p.image,
+                                        })
+                                      }
+                                      className="w-9 h-9 rounded-lg bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition-colors shrink-0"
+                                      aria-label={`${p.name} zum Warenkorb hinzufügen`}
+                                    >
+                                      <PlusIcon size={16} strokeWidth={3} />
+                                    </button>
+                                  </div>
+                                  {discounted !== null && (
+                                    <div className="mt-1 inline-block self-start bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded">
+                                      Aktion -{activeDiscountPercent}%
+                                    </div>
                                   )}
                                 </div>
-                                <button
-                                  onClick={() =>
-                                    addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })
-                                  }
-                                  className="mt-2 comic-btn bg-primary text-primary-foreground text-[11px] py-1.5 px-2 flex items-center justify-center gap-1"
-                                  aria-label={`${p.name} zum Warenkorb hinzufügen`}
-                                >
-                                  <PlusIcon size={12} strokeWidth={3} /> HINZUFÜGEN
-                                </button>
                               </div>
                             );
                           })}
                         </div>
+
+                        {/* Dots + Arrows */}
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            {suggestions.map((_, i) => (
+                              <span
+                                key={i}
+                                className={`h-1.5 rounded-full transition-all ${
+                                  i === carouselIndex ? "w-4 bg-foreground" : "w-1.5 bg-foreground/25"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => scrollCarousel(-1)}
+                              disabled={carouselIndex === 0}
+                              className="w-9 h-9 rounded-full border-2 border-foreground/30 flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
+                              aria-label="Vorheriges Produkt"
+                            >
+                              <ChevronLeft size={18} />
+                            </button>
+                            <button
+                              onClick={() => scrollCarousel(1)}
+                              disabled={carouselIndex >= suggestions.length - 1}
+                              className="w-9 h-9 rounded-full border-2 border-foreground/30 flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
+                              aria-label="Nächstes Produkt"
+                            >
+                              <ChevronRight size={18} />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    );
-                  })()}
-                </>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="p-6 border-t-2 border-foreground space-y-3">
-                {discountCode && activeDiscountPercent > 0 && (
-                  <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5">
-                    <Tag size={18} className="text-green-600 shrink-0" />
-                    <div className="flex-1">
-                      <span className="text-green-800 font-bold text-sm">
-                        {activeDiscountPercent}% Rabatt (Code: {discountCode})
-                      </span>
-                    </div>
-                    <span className="text-green-700 font-black text-sm">-€{discountAmount.toFixed(2)}</span>
+              <div className="px-6 py-4 border-t border-foreground/10 space-y-2 bg-card">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-foreground/80">Versandkosten Deutschland:</span>
+                  <span className="font-black">
+                    {freeShipping ? (
+                      <span className="text-green-600">Gratis</span>
+                    ) : (
+                      <>€{shippingCost.toFixed(2).replace(".", ",")}</>
+                    )}
+                  </span>
+                </div>
+
+                {totalSavings > 0 && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-black">Du sparst:</span>
+                    <span className="bg-pink-100 text-pink-700 text-xs font-black px-2 py-1 rounded">
+                      €{totalSavings.toFixed(2).replace(".", ",")}
+                    </span>
                   </div>
                 )}
 
-                {/* Versand-Hinweis + Progressbar zum Gratis-Versand */}
-                {(() => {
-                  const THRESHOLD = 29.99;
-                  const freeShipping = discountedTotal >= THRESHOLD;
-                  const missing = Math.max(0, THRESHOLD - discountedTotal);
-                  const pct = Math.min(100, (discountedTotal / THRESHOLD) * 100);
-                  return (
-                    <div className="rounded-xl border-2 border-foreground bg-muted/40 p-3 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-black uppercase">
-                        <span className="flex items-center gap-1.5">🚚 Gratis-Versand</span>
-                        {freeShipping ? (
-                          <span className="text-green-700">Freigeschaltet ✓</span>
-                        ) : (
-                          <span className="text-foreground/70">
-                            Noch €{missing.toFixed(2).replace(".", ",")}
-                          </span>
-                        )}
-                      </div>
-                      <div className="h-2 w-full rounded-full bg-foreground/10 overflow-hidden border border-foreground/20">
-                        <motion.div
-                          className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
-                          initial={false}
-                          animate={{ width: `${pct}%` }}
-                          transition={{ type: "spring", stiffness: 120, damping: 20 }}
-                        />
-                      </div>
-                      <div className="text-[11px] font-bold text-foreground/70">
-                        {freeShipping
-                          ? "Dein Versand geht aufs Haus 🎉"
-                          : `Versand: DE €2,90 · AT/CH €3,00 · gratis ab €${THRESHOLD.toFixed(2).replace(".", ",")}`}
-                      </div>
-                    </div>
-                  );
-                })()}
-
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-lg">Gesamt</span>
-                  <div className="text-right">
-                    {activeDiscountPercent > 0 && (
-                      <span className="text-sm text-muted-foreground line-through block">€{total.toFixed(2)}</span>
-                    )}
-                    <span className="text-2xl font-black">€{discountedTotal.toFixed(2)}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground text-right -mt-2">
-                  inkl. MwSt., zzgl. Versand (gratis ab €29,99).
-                </p>
                 {checkoutUrl ? (
                   <a
                     href={checkoutUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
-                    className="comic-btn bg-primary text-primary-foreground w-full text-lg block text-center"
+                    className="mt-2 flex items-center justify-center gap-3 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-black text-base py-3.5 transition-colors"
                   >
-                    ZUR KASSE
+                    <span>Zur Kasse</span>
+                    <span>€{discountedTotal.toFixed(2).replace(".", ",")}</span>
                   </a>
                 ) : (
                   <button
                     onClick={checkout}
                     disabled={isCheckingOut}
-                    className="comic-btn bg-primary text-primary-foreground w-full text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="mt-2 flex items-center justify-center gap-3 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-black text-base py-3.5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                   >
                     LÄDT...
                   </button>
                 )}
 
                 {/* Zahlungsmethoden */}
-                <div className="pt-1">
-                  <div className="text-[10px] font-black uppercase tracking-wide text-muted-foreground text-center mb-1.5">
-                    Sichere Zahlung
-                  </div>
-                  <div className="flex flex-wrap items-center justify-center gap-1.5">
-                    {[
-                      { label: "PayPal", bg: "#003087", fg: "#ffffff" },
-                      { label: "Klarna", bg: "#ffb3c7", fg: "#0a0a0a" },
-                      { label: "VISA", bg: "#1a1f71", fg: "#ffffff" },
-                      { label: "Mastercard", bg: "#ffffff", fg: "#0a0a0a" },
-                      { label: "AMEX", bg: "#2e77bb", fg: "#ffffff" },
-                      { label: "Apple Pay", bg: "#000000", fg: "#ffffff" },
-                      { label: "G Pay", bg: "#ffffff", fg: "#0a0a0a" },
-                    ].map((m) => (
-                      <span
-                        key={m.label}
-                        className="text-[9px] font-black uppercase tracking-wide border border-foreground/20 rounded px-1.5 py-1 leading-none"
-                        style={{ backgroundColor: m.bg, color: m.fg }}
-                      >
-                        {m.label}
-                      </span>
-                    ))}
-                  </div>
+                <div className="pt-2 flex flex-wrap items-center justify-center gap-1.5">
+                  {[
+                    { label: "PayPal", bg: "#003087", fg: "#ffffff" },
+                    { label: "Klarna", bg: "#ffb3c7", fg: "#0a0a0a" },
+                    { label: "VISA", bg: "#1a1f71", fg: "#ffffff" },
+                    { label: "Mastercard", bg: "#ffffff", fg: "#0a0a0a" },
+                    { label: "AMEX", bg: "#2e77bb", fg: "#ffffff" },
+                    { label: "Apple Pay", bg: "#000000", fg: "#ffffff" },
+                    { label: "G Pay", bg: "#ffffff", fg: "#0a0a0a" },
+                  ].map((m) => (
+                    <span
+                      key={m.label}
+                      className="text-[9px] font-black uppercase tracking-wide border border-foreground/15 rounded px-1.5 py-1 leading-none"
+                      style={{ backgroundColor: m.bg, color: m.fg }}
+                    >
+                      {m.label}
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
