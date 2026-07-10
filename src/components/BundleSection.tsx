@@ -95,14 +95,20 @@ const BundleSection = () => {
               ))}
             </div>
 
-            {/* Price - klarer Vergleich */}
+            {/* Price - klarer Vergleich mit automatischem Launch-Code */}
             <div className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-2 flex-wrap bundle-price-row">
-              <span className="text-2xl md:text-4xl font-black text-white bundle-price">Nur 14,99€</span>
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">19,99€</span>
+              <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 14,99€</span>
             </div>
-            <p className="text-white/90 font-bold text-sm md:text-base mb-4 lg:mb-6 text-center md:text-left">
-              3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="text-[#ffd618]">14,99€</span> · <span className="text-[#ffd618]">Du sparst 7,48€</span>
+            <p className="text-white/90 font-bold text-sm md:text-base mb-2 text-center md:text-left">
+              3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="line-through">19,99€</span> → mit Code <span className="text-[#ffd618]">LAUNCH25</span> nur <span className="text-[#ffd618]">14,99€</span>
             </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/25 mb-4 lg:mb-6">
+              <span className="text-[#ffd618] text-sm">🎟️</span>
+              <span className="text-white text-xs md:text-sm font-bold">
+                Code <span className="text-[#ffd618] font-black">LAUNCH25</span> wird automatisch angewendet – du sparst 25%
+              </span>
+            </div>
 
             {/* CTA + Scarcity banner */}
             <div className="flex flex-col items-center md:items-start gap-3 md:gap-4">
