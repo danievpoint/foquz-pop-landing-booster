@@ -56,7 +56,7 @@ const FaqSection = () => {
           ))}
         </div>
 
-        <div className="mt-8 md:mt-10 flex flex-col items-center gap-3">
+        <div className="mt-8 md:mt-10 flex justify-center">
           <Link
             to="/faq"
             className="comic-btn bg-primary text-primary-foreground inline-flex items-center gap-2"
@@ -64,9 +64,6 @@ const FaqSection = () => {
             Alle {faqs.length} Fragen anzeigen
             <ArrowRight size={20} />
           </Link>
-          <p className="text-xs md:text-sm text-muted-foreground">
-            Zeige {INITIAL_VISIBLE.length} von {faqs.length} Fragen
-          </p>
         </div>
       </div>
     </section>
