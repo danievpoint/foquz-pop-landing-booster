@@ -17,6 +17,21 @@ import {
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten } from "@/data/products";
+import payPaypal from "@/assets/payment/paypal.svg";
+import payKlarna from "@/assets/payment/klarna.svg";
+import payVisa from "@/assets/payment/visa.svg";
+import payMastercard from "@/assets/payment/mastercard.svg";
+import payAmex from "@/assets/payment/amex.svg";
+import payApplePay from "@/assets/payment/apple-pay.svg";
+
+const PAYMENT_METHODS = [
+  { label: "PayPal", src: payPaypal },
+  { label: "Klarna", src: payKlarna },
+  { label: "Visa", src: payVisa },
+  { label: "Mastercard", src: payMastercard },
+  { label: "American Express", src: payAmex },
+  { label: "Apple Pay", src: payApplePay },
+];
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
@@ -202,7 +217,7 @@ const CartDrawer = () => {
 
                   {/* Free-shipping progress bar with truck */}
                   <div>
-                    <div className="relative h-6 flex items-center">
+                    <div className="relative pt-2 pb-12 pr-2">
                       <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
                         <motion.div
                           className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
@@ -211,7 +226,7 @@ const CartDrawer = () => {
                           transition={{ type: "spring", stiffness: 120, damping: 20 }}
                         />
                       </div>
-                      <div className="absolute right-0 -top-1 flex flex-col items-center">
+                      <div className="absolute right-0 top-0 flex flex-col items-center">
                         <div
                           className={`w-8 h-8 rounded-full border-2 flex items-center justify-center bg-background ${
                             freeShipping ? "border-green-500 text-green-600" : "border-foreground text-foreground"
@@ -219,14 +234,14 @@ const CartDrawer = () => {
                         >
                           <Truck size={16} />
                         </div>
-                        <span className="text-[10px] font-black mt-0.5">
+                        <span className="text-[10px] font-black mt-1 whitespace-nowrap">
                           {FREE_SHIPPING_THRESHOLD.toFixed(0)}€
                         </span>
                       </div>
                     </div>
 
                     <div
-                      className={`mt-3 rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
+                      className={`rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
                         freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
@@ -539,22 +554,16 @@ const CartDrawer = () => {
 
                 {/* Zahlungsmethoden */}
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-1.5">
-                  {[
-                    { label: "PayPal", bg: "#003087", fg: "#ffffff" },
-                    { label: "Klarna", bg: "#ffb3c7", fg: "#0a0a0a" },
-                    { label: "VISA", bg: "#1a1f71", fg: "#ffffff" },
-                    { label: "Mastercard", bg: "#ffffff", fg: "#0a0a0a" },
-                    { label: "AMEX", bg: "#2e77bb", fg: "#ffffff" },
-                    { label: "Apple Pay", bg: "#000000", fg: "#ffffff" },
-                    { label: "G Pay", bg: "#ffffff", fg: "#0a0a0a" },
-                  ].map((m) => (
-                    <span
+                  {PAYMENT_METHODS.map((m) => (
+                    <img
                       key={m.label}
-                      className="text-[9px] font-black uppercase tracking-wide border border-foreground/15 rounded px-1.5 py-1 leading-none"
-                      style={{ backgroundColor: m.bg, color: m.fg }}
-                    >
-                      {m.label}
-                    </span>
+                      src={m.src}
+                      alt={m.label}
+                      width={38}
+                      height={24}
+                      className="h-6 w-auto"
+                      loading="lazy"
+                    />
                   ))}
                 </div>
               </div>
