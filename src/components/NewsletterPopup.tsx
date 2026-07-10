@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotWatermelon from "@/assets/mascot-watermelon.png";
 
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
@@ -42,6 +43,7 @@ const NewsletterPopup = () => {
   const triggered = useRef(false);
   const loadingPopup = useRef(false);
   const mounted = useRef(false);
+  useLockBodyScroll(visible);
 
   useEffect(() => {
     mounted.current = true;

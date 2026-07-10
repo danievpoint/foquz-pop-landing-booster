@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { products } from "@/data/products";
 import AutoVideo from "@/components/AutoVideo";
 
@@ -127,6 +128,7 @@ const ProductGrid = () => {
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
+  useLockBodyScroll(Boolean(infoProduct));
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 

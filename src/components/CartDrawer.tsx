@@ -23,6 +23,7 @@ import payVisa from "@/assets/payment/visa.svg";
 import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 const PAYMENT_METHODS = [
   { label: "PayPal", src: payPaypal },
@@ -65,6 +66,7 @@ const CartDrawer = () => {
   const [codeInput, setCodeInput] = useState("");
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  useLockBodyScroll(isOpen);
 
   const handleApplyCode = () => {
     const c = codeInput.trim();
@@ -130,8 +132,10 @@ const CartDrawer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-[10001]"
+            className="fixed inset-0 bg-black/50 z-[10001] overscroll-contain"
             onClick={closeCart}
+            onWheel={(e) => e.preventDefault()}
+            onTouchMove={(e) => e.preventDefault()}
           />
 
           <motion.div
@@ -139,24 +143,25 @@ const CartDrawer = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-card z-[10002] flex flex-col border-l-4 border-foreground shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-card z-[10002] flex flex-col border-l-0 sm:border-l-4 border-foreground shadow-2xl overscroll-contain"
+            style={{ height: "100dvh", maxHeight: "100dvh" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b-2 border-foreground">
-              <h2 className="text-2xl font-black uppercase flex items-center gap-2">
-                <ShoppingBag size={24} />
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-6 border-b-2 border-foreground shrink-0" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}>
+              <h2 className="text-xl sm:text-2xl font-black uppercase flex items-center gap-2">
+                <ShoppingBag size={22} />
                 Warenkorb ({count})
               </h2>
               <button
                 onClick={closeCart}
-                className="p-2 hover:bg-muted rounded-full transition-colors"
+                className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
                 aria-label="Warenkorb schließen"
               >
                 <X size={24} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]" style={{ touchAction: "pan-y" }}>
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-6">
                   <ShoppingBag size={64} strokeWidth={1} />
@@ -170,10 +175,10 @@ const CartDrawer = () => {
                   )}
                 </div>
               ) : (
-                <div className="px-6 pt-3 md:pt-6 pb-4 space-y-3 md:space-y-5">
+                <div className="px-4 sm:px-6 pt-2 md:pt-6 pb-3 space-y-2.5 md:space-y-5">
                   {/* Rabattcode-Eingabe */}
                   <div>
-                    <div className="text-xs font-black uppercase tracking-wide mb-1.5 md:mb-2">Code einfügen</div>
+                    <div className="text-[11px] md:text-xs font-black uppercase tracking-wide mb-1 md:mb-2">Code einfügen</div>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -181,12 +186,12 @@ const CartDrawer = () => {
                         onChange={(e) => setCodeInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
                         placeholder="Code"
-                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1.5 md:py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1 md:py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim()}
-                        className="comic-btn bg-primary text-primary-foreground text-xs py-1.5 md:py-2 px-4 md:px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
+                        className="comic-btn bg-primary text-primary-foreground text-[11px] md:text-xs py-1 md:py-2 px-3 md:px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
                         ANWENDEN
                       </button>
@@ -217,7 +222,7 @@ const CartDrawer = () => {
 
                   {/* Free-shipping progress bar with truck */}
                   <div>
-                    <div className="relative pt-1 md:pt-2 pb-8 md:pb-12 pr-2">
+                      <div className="relative pt-1 md:pt-2 pb-6 md:pb-12 pr-2">
                       <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
                         <motion.div
                           className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
@@ -235,14 +240,14 @@ const CartDrawer = () => {
                           <Truck size={14} className="md:hidden" />
                           <Truck size={16} className="hidden md:block" />
                         </div>
-                        <span className="text-[10px] font-black mt-0.5 md:mt-1 whitespace-nowrap">
+                          <span className="text-[9px] md:text-[10px] font-black mt-0.5 md:mt-1 whitespace-nowrap">
                           {FREE_SHIPPING_THRESHOLD.toFixed(0)}€
                         </span>
                       </div>
                     </div>
 
                     <div
-                      className={`rounded-xl border-2 border-foreground px-3 py-1.5 md:py-2.5 text-xs md:text-sm font-bold ${
+                        className={`rounded-xl border-2 border-foreground px-3 py-1 md:py-2.5 text-[11px] md:text-sm font-bold ${
                         freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
@@ -261,7 +266,7 @@ const CartDrawer = () => {
                   <div className="border-t-2 border-foreground/80" />
 
                   {/* Items */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const hasDiscount = activeDiscountPercent > 0;
                       const finalPrice = hasDiscount
@@ -274,16 +279,16 @@ const CartDrawer = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, x: 100 }}
-                          className="flex gap-4"
+                          className="flex gap-3 sm:gap-4"
                         >
-                          <div className="w-24 shrink-0">
+                          <div className="w-20 sm:w-24 shrink-0">
                             {item.image && (
                               <img
                                 src={item.image}
                                 alt={item.name}
                                 width={96}
                                 height={96}
-                                className="w-24 h-24 object-cover rounded-lg bg-muted/40"
+                                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
                               />
                             )}
                             {hasDiscount && (
@@ -296,7 +301,7 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                <h3 className="font-black text-base leading-tight">{item.name}</h3>
+                                 <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
                               </div>
                               <button
                                 onClick={() => removeFromCart(item.id)}
@@ -313,12 +318,12 @@ const CartDrawer = () => {
                                   <span className="text-sm text-muted-foreground line-through">
                                     €{item.price.toFixed(2).replace(".", ",")}
                                   </span>
-                                  <span className="text-lg font-black text-pink-600">
+                                  <span className="text-base sm:text-lg font-black text-pink-600">
                                     €{finalPrice.toFixed(2).replace(".", ",")}
                                   </span>
                                 </>
                               ) : (
-                                <span className="text-lg font-black">
+                                <span className="text-base sm:text-lg font-black">
                                   €{item.price.toFixed(2).replace(".", ",")}
                                 </span>
                               )}
@@ -327,15 +332,15 @@ const CartDrawer = () => {
                             <div className="flex items-center gap-2 mt-2 w-fit border-2 border-foreground/80 rounded-lg px-1">
                               <button
                                 onClick={() => updateQty(item.id, item.qty - 1)}
-                                className="w-8 h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
                                 aria-label="Menge verringern"
                               >
                                 <Minus size={14} />
                               </button>
-                              <span className="font-black text-sm w-8 text-center">{item.qty}</span>
+                              <span className="font-black text-sm w-7 sm:w-8 text-center">{item.qty}</span>
                               <button
                                 onClick={() => updateQty(item.id, item.qty + 1)}
-                                className="w-8 h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
                                 aria-label="Menge erhöhen"
                               >
                                 <Plus size={14} />
@@ -353,14 +358,14 @@ const CartDrawer = () => {
                       layout
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex gap-4 p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                      className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
                     >
                       <img
                         src={foquzBox}
                         alt="FOQUZ Power Bundle"
                         width={80}
                         height={80}
-                        className="w-20 h-20 object-cover rounded-lg shrink-0"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
@@ -396,15 +401,15 @@ const CartDrawer = () => {
                   {/* Nachschub-Upsell (Carousel) */}
                   {suggestions.length > 0 && (
                     <div className="pt-2 border-t-2 border-foreground/80">
-                      <h3 className="font-black text-lg uppercase mt-4 mb-1">Nachschub sichern</h3>
-                      <p className="text-xs text-muted-foreground mb-3 font-semibold">
+                          <h3 className="font-black text-base sm:text-lg uppercase mt-3 sm:mt-4 mb-1">Nachschub sichern</h3>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground mb-2 sm:mb-3 font-semibold">
                         Deine Lieblingssorte gibt's nur solange der Vorrat reicht – leg direkt eine Reserve drauf.
                       </p>
                       <div className="relative">
                         <div
                           ref={carouselRef}
                           onScroll={onCarouselScroll}
-                          className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6 pb-1"
+                          className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6 pb-1"
                         >
                           {suggestions.map((p) => {
                             const discounted =
@@ -415,11 +420,11 @@ const CartDrawer = () => {
                               <div
                                 key={p.handle}
                                 data-carousel-card
-                                className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-3 flex gap-3"
-                                style={{ width: "calc(100% - 3rem)" }}
+                                  className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-2.5 sm:p-3 flex gap-2.5 sm:gap-3"
+                                  style={{ width: "calc(100% - 2rem)" }}
                               >
                                 <div
-                                  className="w-24 h-24 rounded-lg flex items-center justify-center shrink-0"
+                                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg flex items-center justify-center shrink-0"
                                   style={{ backgroundColor: `${p.color}22` }}
                                 >
                                   <img
@@ -514,7 +519,7 @@ const CartDrawer = () => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="px-6 py-4 border-t-2 border-foreground space-y-2 bg-card">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t-2 border-foreground space-y-1.5 sm:space-y-2 bg-card shrink-0" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-foreground/80">Versandkosten (DE/AT/CH):</span>
                   <span className="font-black">

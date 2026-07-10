@@ -7,6 +7,7 @@ import {
   writeConsent,
   type ConsentCategory,
 } from "@/lib/consent";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotLemon from "@/assets/mascot-lemon.png";
 
 type View = "hidden" | "banner" | "settings";
@@ -31,6 +32,7 @@ const CookieBanner = () => {
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [expanded, setExpanded] = useState<ConsentCategory | null>(null);
+  useLockBodyScroll(view === "settings");
 
   useEffect(() => {
     const current = readConsent();
