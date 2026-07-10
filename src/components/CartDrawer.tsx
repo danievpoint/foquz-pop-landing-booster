@@ -392,10 +392,13 @@ const CartDrawer = () => {
                     </motion.div>
                   )}
 
-                  {/* Entdecke unsere Proben (Carousel) */}
+                  {/* Nachschub-Upsell (Carousel) */}
                   {suggestions.length > 0 && (
                     <div className="pt-2 border-t-2 border-foreground/80">
-                      <h3 className="font-black text-lg uppercase mt-4 mb-3">Entdecke unsere Proben</h3>
+                      <h3 className="font-black text-lg uppercase mt-4 mb-1">Nachschub sichern</h3>
+                      <p className="text-xs text-muted-foreground mb-3 font-semibold">
+                        Deine Lieblingssorte gibt's nur solange der Vorrat reicht – leg direkt eine Reserve drauf.
+                      </p>
                       <div className="relative">
                         <div
                           ref={carouselRef}
