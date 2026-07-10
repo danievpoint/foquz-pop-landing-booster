@@ -10,6 +10,7 @@ import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
+import AutoVideo from "@/components/AutoVideo";
 import { ChevronLeft, ChevronDown, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
@@ -212,17 +213,9 @@ const ProductDetail = () => {
           {/* Image — sticky on desktop */}
           <div className="rounded-2xl overflow-hidden w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
             {product.video ? (
-              <video
+              <AutoVideo
                 src={product.video}
                 poster={product.videoPoster ?? product.image}
-                muted
-                loop
-                autoPlay
-                playsInline
-                disablePictureInPicture
-                controlsList="nodownload nofullscreen noremoteplayback"
-                onContextMenu={(e) => e.preventDefault()}
-                preload="auto"
                 className="w-full aspect-square object-cover"
               />
             ) : (
