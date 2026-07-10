@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag, Tag, Sparkles, Check } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, Tag, Sparkles, Check, Plus as PlusIcon } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
+import { products as allSorten } from "@/data/products";
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
@@ -166,7 +167,17 @@ const CartDrawer = () => {
                       )}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-black text-sm uppercase truncate">{item.name}</h3>
-                        <p className="text-lg font-black mt-1">€{item.price.toFixed(2)}</p>
+                        {activeDiscountPercent > 0 ? (
+                          <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+                            <span className="text-sm text-muted-foreground line-through">€{item.price.toFixed(2)}</span>
+                            <span className="text-lg font-black text-primary">€{(item.price * (1 - activeDiscountPercent / 100)).toFixed(2)}</span>
+                            <span className="text-[10px] font-black uppercase bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                              -{activeDiscountPercent}%
+                            </span>
+                          </div>
+                        ) : (
+                          <p className="text-lg font-black mt-1">€{item.price.toFixed(2)}</p>
+                        )}
 
                         <div className="flex items-center gap-2 mt-2">
                           <button
@@ -240,6 +251,61 @@ const CartDrawer = () => {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Entdecke weitere Sorten */}
+                  {(() => {
+                    const inCartIds = new Set(items.map((i) => i.id));
+                    const suggestions = allSorten.filter((p) => !inCartIds.has(p.name));
+                    if (suggestions.length === 0) return null;
+                    return (
+                      <div className="pt-2">
+                        <h3 className="font-black text-sm uppercase mb-3 flex items-center gap-1.5">
+                          <Sparkles size={14} className="text-primary" />
+                          Entdecke weitere Sorten
+                        </h3>
+                        <div className="flex gap-3 overflow-x-auto -mx-6 px-6 pb-2 snap-x snap-mandatory scrollbar-hide">
+                          {suggestions.map((p) => {
+                            const discounted = activeDiscountPercent > 0
+                              ? p.numericPrice * (1 - activeDiscountPercent / 100)
+                              : null;
+                            return (
+                              <div
+                                key={p.handle}
+                                className="shrink-0 w-40 snap-start rounded-xl border-2 border-foreground bg-background p-2 flex flex-col"
+                              >
+                                <div
+                                  className="w-full h-24 rounded-lg flex items-center justify-center mb-2"
+                                  style={{ backgroundColor: `${p.color}22` }}
+                                >
+                                  <img src={p.image} alt={p.name} className="max-h-full max-w-full object-contain" />
+                                </div>
+                                <div className="font-black text-[11px] uppercase leading-tight line-clamp-2">{p.name}</div>
+                                <div className="mt-1 flex items-baseline gap-1 flex-wrap">
+                                  {discounted !== null ? (
+                                    <>
+                                      <span className="text-[11px] text-muted-foreground line-through">€{p.numericPrice.toFixed(2)}</span>
+                                      <span className="text-sm font-black text-primary">€{discounted.toFixed(2)}</span>
+                                    </>
+                                  ) : (
+                                    <span className="text-sm font-black">€{p.numericPrice.toFixed(2)}</span>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() =>
+                                    addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })
+                                  }
+                                  className="mt-2 comic-btn bg-primary text-primary-foreground text-[11px] py-1.5 px-2 flex items-center justify-center gap-1"
+                                  aria-label={`${p.name} zum Warenkorb hinzufügen`}
+                                >
+                                  <PlusIcon size={12} strokeWidth={3} /> HINZUFÜGEN
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </>
               )}
             </div>
@@ -325,6 +391,32 @@ const CartDrawer = () => {
                     LÄDT...
                   </button>
                 )}
+
+                {/* Zahlungsmethoden */}
+                <div className="pt-1">
+                  <div className="text-[10px] font-black uppercase tracking-wide text-muted-foreground text-center mb-1.5">
+                    Sichere Zahlung
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-1.5">
+                    {[
+                      { label: "PayPal", bg: "#003087", fg: "#ffffff" },
+                      { label: "Klarna", bg: "#ffb3c7", fg: "#0a0a0a" },
+                      { label: "VISA", bg: "#1a1f71", fg: "#ffffff" },
+                      { label: "Mastercard", bg: "#ffffff", fg: "#0a0a0a" },
+                      { label: "AMEX", bg: "#2e77bb", fg: "#ffffff" },
+                      { label: "Apple Pay", bg: "#000000", fg: "#ffffff" },
+                      { label: "G Pay", bg: "#ffffff", fg: "#0a0a0a" },
+                    ].map((m) => (
+                      <span
+                        key={m.label}
+                        className="text-[9px] font-black uppercase tracking-wide border border-foreground/20 rounded px-1.5 py-1 leading-none"
+                        style={{ backgroundColor: m.bg, color: m.fg }}
+                      >
+                        {m.label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>
