@@ -142,7 +142,7 @@ const CartDrawer = () => {
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim()}
-                        className="comic-btn bg-foreground text-background text-xs py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                        className="comic-btn bg-primary text-primary-foreground text-xs py-2 px-4 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
                         ANWENDEN
                       </button>
