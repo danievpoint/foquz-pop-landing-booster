@@ -303,19 +303,11 @@ const ProductGrid = () => {
               <div className="flex flex-col items-center w-full">
                 <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block" style={{ backgroundColor: products[activeIndex].color + '22' }}>
                   {products[activeIndex].video ? (
-                    <video
+                    <AutoVideo
                       key={`video-${activeIndex}`}
-                      src={products[activeIndex].video}
+                      src={products[activeIndex].video!}
                       poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                      muted
-                      playsInline
-                      autoPlay
-                      loop
-                      controls={false}
-                      disablePictureInPicture
-                      controlsList="nodownload nofullscreen noremoteplayback"
-                      onContextMenu={(e) => e.preventDefault()}
-                      preload="metadata"
+                      loop={false}
                       className="w-full aspect-square object-cover"
                       onEnded={() => {
                         if (!autoPlay) return;
