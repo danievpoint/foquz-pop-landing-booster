@@ -11,7 +11,7 @@ import {
   Plus,
   Minus,
   HelpingHand,
-  HelpingHand,
+  Ruler,
   Timer,
   Archive,
   Thermometer,
