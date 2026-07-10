@@ -29,7 +29,7 @@ import {
   Scale,
   Repeat,
   Flower2,
-  Flame as FlameIcon,
+  Zap,
   Sprout,
   GitCompare,
   Rocket,
