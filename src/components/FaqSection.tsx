@@ -215,24 +215,19 @@ const FaqSection = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
 
-      {/* Decorative floating accents */}
+      {/* Subtle FOQUZ accent shapes */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute top-10 left-4 md:left-16 w-8 h-8 md:w-12 md:h-12 rounded-full bg-foquz-lemon comic-outline animate-float" />
-        <div
-          className="absolute top-24 right-6 md:right-24 w-10 h-10 md:w-16 md:h-16 rounded-full bg-foquz-watermelon comic-outline animate-float"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute bottom-20 left-8 md:left-32 w-6 h-6 md:w-10 md:h-10 rounded-full bg-foquz-thai comic-outline animate-float"
-          style={{ animationDelay: "1.5s" }}
+        <Sparkles
+          className="absolute top-10 left-6 md:left-16 text-primary/40 hidden md:block"
+          size={26}
         />
         <Sparkles
-          className="absolute top-8 right-1/3 text-foreground/30 hidden md:block"
-          size={28}
-        />
-        <Sparkles
-          className="absolute bottom-16 right-10 text-foreground/30"
+          className="absolute top-8 right-1/3 text-foreground/20 hidden md:block"
           size={22}
+        />
+        <Sparkles
+          className="absolute bottom-16 right-8 md:right-16 text-primary/30"
+          size={20}
         />
       </div>
 
