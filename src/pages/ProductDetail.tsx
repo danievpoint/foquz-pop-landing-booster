@@ -213,17 +213,9 @@ const ProductDetail = () => {
           {/* Image — sticky on desktop */}
           <div className="rounded-2xl overflow-hidden w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
             {product.video ? (
-              <video
+              <AutoVideo
                 src={product.video}
                 poster={product.videoPoster ?? product.image}
-                muted
-                loop
-                autoPlay
-                playsInline
-                disablePictureInPicture
-                controlsList="nodownload nofullscreen noremoteplayback"
-                onContextMenu={(e) => e.preventDefault()}
-                preload="auto"
                 className="w-full aspect-square object-cover"
               />
             ) : (
