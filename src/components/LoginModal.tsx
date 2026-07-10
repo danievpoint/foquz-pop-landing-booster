@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 interface LoginModalProps {
   open: boolean;
@@ -12,6 +13,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  useLockBodyScroll(open);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

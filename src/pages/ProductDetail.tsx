@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
@@ -24,6 +25,7 @@ const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const { addToCart, isOpen: cartOpen } = useCart();
+  useLockBodyScroll(visible && !dismissed && !cartOpen);
 
   useEffect(() => {
     if (dismissed) return;

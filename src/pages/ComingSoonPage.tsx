@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 const StarSVG = () => (
   <svg viewBox="0 0 24 24" fill="#ffd618" stroke="#1d1d1b" strokeWidth="1.5">
@@ -18,6 +19,7 @@ const ComingSoonPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
+  useLockBodyScroll(showPopup);
   
 
   const handleSubmit = async (e: React.FormEvent) => {
