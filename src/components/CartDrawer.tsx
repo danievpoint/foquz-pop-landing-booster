@@ -438,7 +438,7 @@ const CartDrawer = () => {
                                           image: p.image,
                                         })
                                       }
-                                      className="w-9 h-9 rounded-lg bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition-colors shrink-0"
+                                      className="w-9 h-9 rounded-lg border-2 border-foreground bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-[2px_2px_0_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_hsl(var(--foreground))] transition-transform"
                                       aria-label={`${p.name} zum Warenkorb hinzufügen`}
                                     >
                                       <PlusIcon size={16} strokeWidth={3} />
