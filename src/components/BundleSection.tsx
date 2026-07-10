@@ -117,7 +117,7 @@ const BundleSection = () => {
                   addToCart(1, {
                     id: "starter-bundle",
                     name: "FOQUZ Power Bundle (3 Sorten)",
-                    price: 14.99,
+                    price: 19.99,
                     image: foquzBox,
                   })
                 }
