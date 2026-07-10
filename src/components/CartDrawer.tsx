@@ -396,7 +396,7 @@ const CartDrawer = () => {
                               <div
                                 key={p.handle}
                                 data-carousel-card
-                                className="shrink-0 snap-center rounded-xl border-2 border-foreground/80 bg-background p-3 flex gap-3"
+                                className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-3 flex gap-3"
                                 style={{ width: "calc(100% - 3rem)" }}
                               >
                                 <div
