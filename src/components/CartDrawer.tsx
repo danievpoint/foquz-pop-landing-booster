@@ -247,11 +247,13 @@ const CartDrawer = () => {
             {/* Footer */}
             {items.length > 0 && (
               <div className="p-6 border-t-2 border-foreground space-y-3">
-                {hasNewsletterDiscount && (
+                {discountCode && activeDiscountPercent > 0 && (
                   <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5">
                     <Tag size={18} className="text-green-600 shrink-0" />
                     <div className="flex-1">
-                      <span className="text-green-800 font-bold text-sm">Newsletter-Rabatt: 10% (Code: {discountCode})</span>
+                      <span className="text-green-800 font-bold text-sm">
+                        {activeDiscountPercent}% Rabatt (Code: {discountCode})
+                      </span>
                     </div>
                     <span className="text-green-700 font-black text-sm">-€{discountAmount.toFixed(2)}</span>
                   </div>
