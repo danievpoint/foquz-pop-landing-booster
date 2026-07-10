@@ -412,7 +412,6 @@ const CartDrawer = () => {
                                 <div className="flex-1 min-w-0 flex flex-col">
                                   <div className="font-black text-sm uppercase leading-tight">{p.name}</div>
                                   <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.desc.split("\n")[0]}</div>
-                                  </div>
                                   <div className="mt-auto flex items-end justify-between gap-2">
                                     <div className="flex items-baseline gap-1.5 flex-wrap">
                                       {discounted !== null ? (
