@@ -84,6 +84,8 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
 
 const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
+const FREE_SHIPPING_THRESHOLD = 29.99;
+
 
 const CONFETTI_COLORS = [
   "#ffd618", "#ff4d8d", "#00d4aa", "#ff6b6b", "#75559f",
