@@ -202,7 +202,7 @@ const CartDrawer = () => {
 
                   {/* Free-shipping progress bar with truck */}
                   <div>
-                    <div className="relative h-6 flex items-center">
+                    <div className="relative pt-2 pb-12 pr-2">
                       <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
                         <motion.div
                           className={`h-full ${freeShipping ? "bg-green-500" : "bg-primary"}`}
@@ -211,7 +211,7 @@ const CartDrawer = () => {
                           transition={{ type: "spring", stiffness: 120, damping: 20 }}
                         />
                       </div>
-                      <div className="absolute right-0 -top-1 flex flex-col items-center">
+                      <div className="absolute right-0 top-0 flex flex-col items-center">
                         <div
                           className={`w-8 h-8 rounded-full border-2 flex items-center justify-center bg-background ${
                             freeShipping ? "border-green-500 text-green-600" : "border-foreground text-foreground"
@@ -219,7 +219,7 @@ const CartDrawer = () => {
                         >
                           <Truck size={16} />
                         </div>
-                        <span className="text-[10px] font-black mt-0.5">
+                        <span className="text-[10px] font-black mt-1 whitespace-nowrap">
                           {FREE_SHIPPING_THRESHOLD.toFixed(0)}€
                         </span>
                       </div>
