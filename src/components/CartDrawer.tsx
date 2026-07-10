@@ -226,25 +226,23 @@ const CartDrawer = () => {
                     </div>
 
                     <div
-                      className={`mt-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
-                        freeShipping
-                          ? "bg-green-50 text-green-800"
-                          : "bg-blue-50 text-blue-900"
+                      className={`mt-3 rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
+                        freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
                       {freeShipping ? (
-                        <>🎉 Du hast <strong>kostenlosen Versand</strong> freigeschaltet!</>
+                        <>🎉 Du hast <span className="font-black uppercase">kostenlosen Versand</span> freigeschaltet!</>
                       ) : (
                         <>
                           Nur noch{" "}
-                          <strong>€{missingForFreeShip.toFixed(2).replace(".", ",")}</strong>{" "}
+                          <span className="font-black">€{missingForFreeShip.toFixed(2).replace(".", ",")}</span>{" "}
                           zum kostenlosen Versand!
                         </>
                       )}
                     </div>
                   </div>
 
-                  <div className="border-t border-foreground/10" />
+                  <div className="border-t-2 border-foreground/80" />
 
                   {/* Items */}
                   <div className="space-y-4">
