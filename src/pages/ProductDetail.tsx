@@ -10,6 +10,7 @@ import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
+import AutoVideo from "@/components/AutoVideo";
 import { ChevronLeft, ChevronDown, X, ShoppingBag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
