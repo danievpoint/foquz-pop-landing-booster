@@ -226,7 +226,7 @@ const CartDrawer = () => {
                     </div>
 
                     <div
-                      className={`mt-3 rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
+                      className={`rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
                         freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
