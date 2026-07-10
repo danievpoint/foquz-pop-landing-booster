@@ -479,7 +479,7 @@ const CartDrawer = () => {
                             <button
                               onClick={() => scrollCarousel(1)}
                               disabled={carouselIndex >= suggestions.length - 1}
-                              className="w-9 h-9 rounded-full border-2 border-foreground/30 flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
+                              className="w-9 h-9 rounded-full border-2 border-foreground bg-background flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
                               aria-label="Nächstes Produkt"
                             >
                               <ChevronRight size={18} />
