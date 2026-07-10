@@ -554,22 +554,16 @@ const CartDrawer = () => {
 
                 {/* Zahlungsmethoden */}
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-1.5">
-                  {[
-                    { label: "PayPal", bg: "#003087", fg: "#ffffff" },
-                    { label: "Klarna", bg: "#ffb3c7", fg: "#0a0a0a" },
-                    { label: "VISA", bg: "#1a1f71", fg: "#ffffff" },
-                    { label: "Mastercard", bg: "#ffffff", fg: "#0a0a0a" },
-                    { label: "AMEX", bg: "#2e77bb", fg: "#ffffff" },
-                    { label: "Apple Pay", bg: "#000000", fg: "#ffffff" },
-                    { label: "G Pay", bg: "#ffffff", fg: "#0a0a0a" },
-                  ].map((m) => (
-                    <span
+                  {PAYMENT_METHODS.map((m) => (
+                    <img
                       key={m.label}
-                      className="text-[9px] font-black uppercase tracking-wide border border-foreground/15 rounded px-1.5 py-1 leading-none"
-                      style={{ backgroundColor: m.bg, color: m.fg }}
-                    >
-                      {m.label}
-                    </span>
+                      src={m.src}
+                      alt={m.label}
+                      width={38}
+                      height={24}
+                      className="h-6 w-auto"
+                      loading="lazy"
+                    />
                   ))}
                 </div>
               </div>
