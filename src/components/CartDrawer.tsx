@@ -158,7 +158,7 @@ const CartDrawer = () => {
                 <div className="px-6 pt-6 pb-4 space-y-5">
                   {/* Rabattcode-Eingabe */}
                   <div>
-                    <div className="text-sm font-black mb-2">Code einfügen</div>
+                    <div className="text-xs font-black uppercase tracking-wide mb-2">Code einfügen</div>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -171,9 +171,9 @@ const CartDrawer = () => {
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim()}
-                        className="rounded-full border-2 border-foreground bg-background text-foreground text-sm font-black px-6 py-2.5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0 hover:bg-muted transition-colors"
+                        className="comic-btn bg-primary text-primary-foreground text-xs py-2 px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
-                        Anwenden
+                        ANWENDEN
                       </button>
                     </div>
 
@@ -226,25 +226,23 @@ const CartDrawer = () => {
                     </div>
 
                     <div
-                      className={`mt-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
-                        freeShipping
-                          ? "bg-green-50 text-green-800"
-                          : "bg-blue-50 text-blue-900"
+                      className={`mt-3 rounded-xl border-2 border-foreground px-3 py-2.5 text-sm font-bold ${
+                        freeShipping ? "bg-green-100 text-green-800" : "bg-muted/40 text-foreground"
                       }`}
                     >
                       {freeShipping ? (
-                        <>🎉 Du hast <strong>kostenlosen Versand</strong> freigeschaltet!</>
+                        <>🎉 Du hast <span className="font-black uppercase">kostenlosen Versand</span> freigeschaltet!</>
                       ) : (
                         <>
                           Nur noch{" "}
-                          <strong>€{missingForFreeShip.toFixed(2).replace(".", ",")}</strong>{" "}
+                          <span className="font-black">€{missingForFreeShip.toFixed(2).replace(".", ",")}</span>{" "}
                           zum kostenlosen Versand!
                         </>
                       )}
                     </div>
                   </div>
 
-                  <div className="border-t border-foreground/10" />
+                  <div className="border-t-2 border-foreground/80" />
 
                   {/* Items */}
                   <div className="space-y-4">
@@ -381,8 +379,8 @@ const CartDrawer = () => {
 
                   {/* Entdecke unsere Proben (Carousel) */}
                   {suggestions.length > 0 && (
-                    <div className="pt-2 border-t border-foreground/10">
-                      <h3 className="font-black text-lg mt-4 mb-3">Entdecke unsere Proben</h3>
+                    <div className="pt-2 border-t-2 border-foreground/80">
+                      <h3 className="font-black text-lg uppercase mt-4 mb-3">Entdecke unsere Proben</h3>
                       <div className="relative">
                         <div
                           ref={carouselRef}
@@ -398,7 +396,7 @@ const CartDrawer = () => {
                               <div
                                 key={p.handle}
                                 data-carousel-card
-                                className="shrink-0 snap-center rounded-xl border-2 border-foreground/80 bg-background p-3 flex gap-3"
+                                className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-3 flex gap-3"
                                 style={{ width: "calc(100% - 3rem)" }}
                               >
                                 <div
@@ -412,10 +410,8 @@ const CartDrawer = () => {
                                   />
                                 </div>
                                 <div className="flex-1 min-w-0 flex flex-col">
-                                  <div className="font-black text-sm leading-tight">{p.name}</div>
-                                  <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
-                                    {p.desc.split("\n")[0]}
-                                  </div>
+                                  <div className="font-black text-sm uppercase leading-tight">{p.name}</div>
+                                  <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.desc.split("\n")[0]}</div>
                                   <div className="mt-auto flex items-end justify-between gap-2">
                                     <div className="flex items-baseline gap-1.5 flex-wrap">
                                       {discounted !== null ? (
@@ -442,7 +438,7 @@ const CartDrawer = () => {
                                           image: p.image,
                                         })
                                       }
-                                      className="w-9 h-9 rounded-lg bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition-colors shrink-0"
+                                      className="w-9 h-9 rounded-lg border-2 border-foreground bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-[2px_2px_0_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_hsl(var(--foreground))] transition-transform"
                                       aria-label={`${p.name} zum Warenkorb hinzufügen`}
                                     >
                                       <PlusIcon size={16} strokeWidth={3} />
@@ -475,7 +471,7 @@ const CartDrawer = () => {
                             <button
                               onClick={() => scrollCarousel(-1)}
                               disabled={carouselIndex === 0}
-                              className="w-9 h-9 rounded-full border-2 border-foreground/30 flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
+                              className="w-9 h-9 rounded-full border-2 border-foreground bg-background flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
                               aria-label="Vorheriges Produkt"
                             >
                               <ChevronLeft size={18} />
@@ -483,7 +479,7 @@ const CartDrawer = () => {
                             <button
                               onClick={() => scrollCarousel(1)}
                               disabled={carouselIndex >= suggestions.length - 1}
-                              className="w-9 h-9 rounded-full border-2 border-foreground/30 flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
+                              className="w-9 h-9 rounded-full border-2 border-foreground bg-background flex items-center justify-center disabled:opacity-40 hover:bg-muted transition-colors"
                               aria-label="Nächstes Produkt"
                             >
                               <ChevronRight size={18} />
@@ -499,12 +495,12 @@ const CartDrawer = () => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="px-6 py-4 border-t border-foreground/10 space-y-2 bg-card">
+              <div className="px-6 py-4 border-t-2 border-foreground space-y-2 bg-card">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-foreground/80">Versandkosten Deutschland:</span>
                   <span className="font-black">
                     {freeShipping ? (
-                      <span className="text-green-600">Gratis</span>
+                      <span className="text-primary font-black uppercase">Gratis</span>
                     ) : (
                       <>€{shippingCost.toFixed(2).replace(".", ",")}</>
                     )}
@@ -526,16 +522,16 @@ const CartDrawer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
-                    className="mt-2 flex items-center justify-center gap-3 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-black text-base py-3.5 transition-colors"
+                    className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
-                    <span>Zur Kasse</span>
+                    <span>ZUR KASSE</span>
                     <span>€{discountedTotal.toFixed(2).replace(".", ",")}</span>
                   </a>
                 ) : (
                   <button
                     onClick={checkout}
                     disabled={isCheckingOut}
-                    className="mt-2 flex items-center justify-center gap-3 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-black text-base py-3.5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                    className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     LÄDT...
                   </button>
