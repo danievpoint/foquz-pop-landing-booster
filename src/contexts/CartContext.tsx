@@ -133,7 +133,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setHasNewsletterDiscount(true);
   }, []);
 
-  const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
+  const [manualDiscountCode, setManualDiscountCode] = useState<string | null>(() => {
+    return localStorage.getItem(MANUAL_CODE_KEY);
+  });
+
+  const applyManualDiscountCode = useCallback((code: string) => {
+    const normalized = code.trim().toUpperCase();
+    if (!normalized) return;
+    localStorage.setItem(MANUAL_CODE_KEY, normalized);
+    setManualDiscountCode(normalized);
+  }, []);
+
+  const clearManualDiscountCode = useCallback(() => {
+    localStorage.removeItem(MANUAL_CODE_KEY);
+    setManualDiscountCode(null);
+  }, []);
+
     const p = product || DEFAULT_PRODUCT;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
