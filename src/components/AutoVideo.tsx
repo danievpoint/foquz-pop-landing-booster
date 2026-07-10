@@ -70,8 +70,6 @@ const AutoVideo = ({ src, poster, onEnded, className, ...rest }: Props) => {
       autoPlay
       loop={rest.loop ?? true}
       playsInline
-      // @ts-expect-error iOS-specific attribute
-      "webkit-playsinline"=""
       controls={false}
       disablePictureInPicture
       controlsList="nodownload nofullscreen noremoteplayback"
