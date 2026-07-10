@@ -84,6 +84,8 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
 
 const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
+const FREE_SHIPPING_THRESHOLD = 29.99;
+
 
 const CONFETTI_COLORS = [
   "#ffd618", "#ff4d8d", "#00d4aa", "#ff6b6b", "#75559f",
@@ -108,6 +110,27 @@ const getConfettiInstance = () => {
   confettiInstance = confetti.create(confettiCanvas, { resize: true });
   return confettiInstance;
 };
+
+const fireCelebrationConfetti = () => {
+  const myConfetti = getConfettiInstance();
+  void myConfetti({
+    particleCount: 120, spread: 160, origin: { x: 0.5, y: 0.1 },
+    gravity: 1.4, ticks: 140, startVelocity: 28, decay: 0.93, scalar: 1.1, colors: CONFETTI_COLORS,
+  });
+  const origins = [
+    { x: 0.1, y: 0.03 }, { x: 0.3, y: 0.02 }, { x: 0.5, y: 0.03 },
+    { x: 0.7, y: 0.02 }, { x: 0.9, y: 0.03 },
+  ];
+  void Promise.all(
+    origins.map((origin, i) =>
+      myConfetti({
+        particleCount: 60, spread: 90, origin, gravity: 1.3, ticks: 150,
+        startVelocity: 30, decay: 0.93, scalar: 1.0, colors: CONFETTI_COLORS, drift: (i - 2) * 0.15,
+      })
+    )
+  );
+};
+
 
 const DISCOUNT_KEY = "foquz_newsletter_discount";
 const NEWSLETTER_DISCOUNT_CODE = "CLOUD10";
@@ -162,25 +185,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setLastAddedProductId(p.id);
     setAddToCartTimestamp(Date.now());
 
-    const myConfetti = getConfettiInstance();
-    void myConfetti({
-      particleCount: 120, spread: 160, origin: { x: 0.5, y: 0.1 },
-      gravity: 1.4, ticks: 140, startVelocity: 28, decay: 0.93, scalar: 1.1, colors: CONFETTI_COLORS,
-    });
-    const origins = [
-      { x: 0.1, y: 0.03 }, { x: 0.3, y: 0.02 }, { x: 0.5, y: 0.03 },
-      { x: 0.7, y: 0.02 }, { x: 0.9, y: 0.03 },
-    ];
-    void Promise.all(
-      origins.map((origin, i) =>
-        myConfetti({
-          particleCount: 60, spread: 90, origin, gravity: 1.3, ticks: 150,
-          startVelocity: 30, decay: 0.93, scalar: 1.0, colors: CONFETTI_COLORS, drift: (i - 2) * 0.15,
-        })
-      )
-    );
+    fireCelebrationConfetti();
     setIsOpen(true);
   }, []);
+
 
   const removeFromCart = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
@@ -236,6 +244,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       })
       .filter((l): l is { variantId: string; quantity: number } => l !== null);
   }, [items]);
+
+  // Fire celebration confetti when free-shipping threshold is unlocked.
+  const freeShippingUnlocked = items.length > 0 && discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const prevFreeShippingRef = useRef(freeShippingUnlocked);
+  useEffect(() => {
+    if (freeShippingUnlocked && !prevFreeShippingRef.current) {
+      fireCelebrationConfetti();
+    }
+    prevFreeShippingRef.current = freeShippingUnlocked;
+  }, [freeShippingUnlocked]);
+
+
 
   useEffect(() => {
     if (items.length === 0) {
