@@ -271,7 +271,7 @@ const CartDrawer = () => {
                               />
                             )}
                             {hasDiscount && (
-                              <div className="mt-2 inline-block bg-primary/15 text-primary text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded border border-primary/30">
+                              <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
                                 Aktion -{activeDiscountPercent}%
                               </div>
                             )}
