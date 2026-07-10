@@ -522,7 +522,7 @@ const CartDrawer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
-                    className="mt-2 flex items-center justify-center gap-3 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-black text-base py-3.5 transition-colors"
+                    className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>Zur Kasse</span>
                     <span>€{discountedTotal.toFixed(2).replace(".", ",")}</span>
