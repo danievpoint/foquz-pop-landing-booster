@@ -8,6 +8,7 @@ import navbarHeaderBgSvg from "@/assets/navbar-header-bg.svg";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import LoginModal from "@/components/LoginModal";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -15,6 +16,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const { count, openCart } = useCart();
   const location = useLocation();
+  useLockBodyScroll(mobileOpen);
   
 
   useEffect(() => {
@@ -61,8 +63,8 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className={`fixed top-[24px] md:top-[28px] left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
-      style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+      className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
+      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
