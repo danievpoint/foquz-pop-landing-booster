@@ -196,8 +196,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const discountedTotal = hasNewsletterDiscount ? total * 0.9 : total;
-  const discountCode = hasNewsletterDiscount ? NEWSLETTER_DISCOUNT_CODE : null;
+
+  // Auto-applied codes based on cart state:
+  //  - LAUNCH25 (25%) whenever the Power Bundle is in the cart
+  //  - CLOUD10  (10%) when the newsletter discount is unlocked
+  // Only ONE code applies. If the user entered a manual code, that wins.
+  // Otherwise the highest-percentage auto code wins (no stacking).
+  const hasBundleInCart = items.some((i) => BUNDLE_IDS.has(i.id));
+
+  let discountCode: string | null = null;
+  let activeDiscountPercent = 0;
+
+  if (manualDiscountCode) {
+    discountCode = manualDiscountCode;
+    activeDiscountPercent = KNOWN_DISCOUNTS[manualDiscountCode] ?? 0;
+  } else {
+    const candidates: { code: string; pct: number }[] = [];
+    if (hasBundleInCart) candidates.push({ code: "LAUNCH25", pct: 25 });
+    if (hasNewsletterDiscount) candidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
+    const best = candidates.sort((a, b) => b.pct - a.pct)[0];
+    if (best) {
+      discountCode = best.code;
+      activeDiscountPercent = best.pct;
+    }
+  }
+
+  const discountedTotal = total * (1 - activeDiscountPercent / 100);
+
 
   const getCheckoutLines = useCallback(() => {
     return items
