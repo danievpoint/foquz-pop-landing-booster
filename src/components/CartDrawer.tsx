@@ -251,6 +251,61 @@ const CartDrawer = () => {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Entdecke weitere Sorten */}
+                  {(() => {
+                    const inCartIds = new Set(items.map((i) => i.id));
+                    const suggestions = allSorten.filter((p) => !inCartIds.has(p.name));
+                    if (suggestions.length === 0) return null;
+                    return (
+                      <div className="pt-2">
+                        <h3 className="font-black text-sm uppercase mb-3 flex items-center gap-1.5">
+                          <Sparkles size={14} className="text-primary" />
+                          Entdecke weitere Sorten
+                        </h3>
+                        <div className="flex gap-3 overflow-x-auto -mx-6 px-6 pb-2 snap-x snap-mandatory scrollbar-hide">
+                          {suggestions.map((p) => {
+                            const discounted = activeDiscountPercent > 0
+                              ? p.numericPrice * (1 - activeDiscountPercent / 100)
+                              : null;
+                            return (
+                              <div
+                                key={p.handle}
+                                className="shrink-0 w-40 snap-start rounded-xl border-2 border-foreground bg-background p-2 flex flex-col"
+                              >
+                                <div
+                                  className="w-full h-24 rounded-lg flex items-center justify-center mb-2"
+                                  style={{ backgroundColor: `${p.color}22` }}
+                                >
+                                  <img src={p.image} alt={p.name} className="max-h-full max-w-full object-contain" />
+                                </div>
+                                <div className="font-black text-[11px] uppercase leading-tight line-clamp-2">{p.name}</div>
+                                <div className="mt-1 flex items-baseline gap-1 flex-wrap">
+                                  {discounted !== null ? (
+                                    <>
+                                      <span className="text-[11px] text-muted-foreground line-through">€{p.numericPrice.toFixed(2)}</span>
+                                      <span className="text-sm font-black text-primary">€{discounted.toFixed(2)}</span>
+                                    </>
+                                  ) : (
+                                    <span className="text-sm font-black">€{p.numericPrice.toFixed(2)}</span>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() =>
+                                    addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })
+                                  }
+                                  className="mt-2 comic-btn bg-primary text-primary-foreground text-[11px] py-1.5 px-2 flex items-center justify-center gap-1"
+                                  aria-label={`${p.name} zum Warenkorb hinzufügen`}
+                                >
+                                  <PlusIcon size={12} strokeWidth={3} /> HINZUFÜGEN
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </>
               )}
             </div>
