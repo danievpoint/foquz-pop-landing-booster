@@ -167,7 +167,17 @@ const CartDrawer = () => {
                       )}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-black text-sm uppercase truncate">{item.name}</h3>
-                        <p className="text-lg font-black mt-1">€{item.price.toFixed(2)}</p>
+                        {activeDiscountPercent > 0 ? (
+                          <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+                            <span className="text-sm text-muted-foreground line-through">€{item.price.toFixed(2)}</span>
+                            <span className="text-lg font-black text-primary">€{(item.price * (1 - activeDiscountPercent / 100)).toFixed(2)}</span>
+                            <span className="text-[10px] font-black uppercase bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                              -{activeDiscountPercent}%
+                            </span>
+                          </div>
+                        ) : (
+                          <p className="text-lg font-black mt-1">€{item.price.toFixed(2)}</p>
+                        )}
 
                         <div className="flex items-center gap-2 mt-2">
                           <button
