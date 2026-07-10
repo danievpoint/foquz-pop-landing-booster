@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { products } from "@/data/products";
+import AutoVideo from "@/components/AutoVideo";
 
 // Preload all product images immediately
 products.forEach((p) => {
