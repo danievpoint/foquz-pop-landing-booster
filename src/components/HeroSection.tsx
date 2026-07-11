@@ -114,6 +114,8 @@ const HeroSection = () => {
           {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
           <div style={{ height: "100px" }} aria-hidden="true" />
 
+          <HeroPromoBanner />
+
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
             style={{
