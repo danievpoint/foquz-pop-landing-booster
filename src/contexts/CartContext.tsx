@@ -85,7 +85,10 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
 
 const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
-const FREE_SHIPPING_THRESHOLD = 29.99;
+// Muss identisch zu Shopify-Versandprofil (Zone DE) sein. Änderungen in
+// Shopify müssen hier nachgezogen werden – Storefront API liefert die
+// Versandschwelle nicht aus.
+const FREE_SHIPPING_THRESHOLD = 29;
 
 
 const CONFETTI_COLORS = [
