@@ -8,6 +8,7 @@ let previousBodyBg = "";
 let previousHtmlBg = "";
 let previousThemeColor = "";
 let previousRootBg = "";
+let previousStatusBarStyle = "";
 
 const LOCK_ATTR = "data-scroll-locked";
 
