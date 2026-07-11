@@ -143,7 +143,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
   </div>
 );
 
-type AccordionKey = "ingredients" | "usage" | "faq";
+type AccordionKey = "description" | "ingredients" | "usage" | "faq";
 
 const AccordionSections = ({
   product,
@@ -201,6 +201,16 @@ const AccordionSections = ({
 
   return (
     <div className={`border-b-2 ${borderCls}`}>
+      {product.longDesc && (
+        <Item k="description" title="BESCHREIBUNG">
+          <h4 className="font-extrabold text-base lg:text-lg mb-3">{product.longDesc.heading}</h4>
+          <div className="space-y-3">
+            {product.longDesc.paragraphs.map((p, i) => (
+              <p key={i} className={mutedCls}>{p}</p>
+            ))}
+          </div>
+        </Item>
+      )}
       <Item k="ingredients" title={product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}>
         <ul className="space-y-2">
           {product.ingredients.map((ing) => (

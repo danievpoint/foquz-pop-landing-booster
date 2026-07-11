@@ -13,6 +13,7 @@ export interface Product {
   numericPrice: number;
   originalPrice?: string;
   desc: string;
+  longDesc?: { heading: string; paragraphs: string[] };
   image: string;
   video?: string;
   videoPoster?: string;
@@ -28,6 +29,15 @@ export const products: Product[] = [
     price: "€7,49",
     numericPrice: 7.49,
     desc: "Auch Mario wollte nur Peach.\nFruchtige Frische, einfach durchgespielt.",
+    longDesc: {
+      heading: "Was ist Peach Party?",
+      paragraphs: [
+        "Peach Party ist deine Frische-Dose für die Nase.",
+        "Einfach Dose öffnen, kurz daran riechen und tief durchatmen. Der intensive Duft aus Menthol, Kräutern und fruchtigem Pfirsich sorgt für einen angenehm frischen Moment – egal ob beim Arbeiten, Lernen, Zocken, Sport oder unterwegs.",
+        "Kein Energy Drink. Kein Kaffee. Kein Nikotin.",
+        "Einfach kurz durchatmen und weiter geht's.",
+      ],
+    },
     image: productWatermelon,
     video: "/videos/video_product_peach.mp4",
     videoPoster: productPeachVideoPoster,
@@ -40,6 +50,14 @@ export const products: Product[] = [
     price: "€7,49",
     numericPrice: 7.49,
     desc: "Thailand für die Tasche.\nAbheben ohne Flugticket.",
+    longDesc: {
+      heading: "Was ist Thai Style?",
+      paragraphs: [
+        "Thai Style ist der intensivste FOQUZ-Flavour.",
+        "Der klassische Mix aus Menthol und aromatischen Kräutern sorgt für einen besonders kräftigen Frischemoment.",
+        "Inspiriert vom typischen Kräuterduft, den Millionen Menschen aus Thailand kennen.",
+      ],
+    },
     image: productThai,
     video: "/videos/video_product_mint.mp4",
     videoPoster: productThaiVideoPoster,
@@ -52,6 +70,14 @@ export const products: Product[] = [
     price: "€7,49",
     numericPrice: 7.49,
     desc: "Nimm's Easy, bleib Breezy.\nHol dir einen Tag unter Zitronenbäumen.",
+    longDesc: {
+      heading: "Was ist Lemon Breezy?",
+      paragraphs: [
+        "Lemon Breezy verbindet den klassischen FOQUZ-Frischemoment mit einer angenehm fruchtigen Zitronennote.",
+        "Dose öffnen, kurz daran riechen und tief durchatmen. Ideal für Schule, Uni, Büro, Gaming, Autofahrten oder einfach zwischendurch.",
+        "Ein kleines Ritual. Große Frische.",
+      ],
+    },
     image: productLemon,
     video: "/videos/video_product_lemon.mp4",
     videoPoster: productLemonVideoPoster,
