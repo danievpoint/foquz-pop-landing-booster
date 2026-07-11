@@ -88,16 +88,50 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playPromiseRef = useRef<Promise<void> | null>(null);
+  const wantPlayRef = useRef(false);
 
   const handleEnter = useCallback(() => {
-    videoRef.current?.play().catch(() => {});
+    const el = videoRef.current;
+    if (!el) return;
+    wantPlayRef.current = true;
+    // Await any in-flight play/pause transition before issuing a new play()
+    const attempt = () => {
+      if (!wantPlayRef.current || !videoRef.current) return;
+      const p = videoRef.current.play();
+      if (p !== undefined) {
+        playPromiseRef.current = p;
+        p.catch(() => {}).finally(() => {
+          playPromiseRef.current = null;
+        });
+      }
+    };
+    if (playPromiseRef.current) {
+      playPromiseRef.current.then(attempt, attempt);
+    } else {
+      attempt();
+    }
   }, []);
 
   const handleLeave = useCallback(() => {
     const el = videoRef.current;
-    if (el) {
-      el.pause();
-      el.currentTime = 0;
+    if (!el) return;
+    wantPlayRef.current = false;
+    const doPause = () => {
+      const v = videoRef.current;
+      if (!v || wantPlayRef.current) return;
+      try {
+        v.pause();
+        v.currentTime = 0;
+      } catch {
+        // ignore
+      }
+    };
+    // If a play() is still pending, wait for it to resolve to avoid AbortError
+    if (playPromiseRef.current) {
+      playPromiseRef.current.then(doPause, doPause);
+    } else {
+      doPause();
     }
   }, []);
 
