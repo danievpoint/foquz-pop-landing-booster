@@ -213,21 +213,37 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Otherwise the highest-percentage auto code wins (no stacking).
   const hasBundleInCart = items.some((i) => BUNDLE_IDS.has(i.id));
 
+  // Collect auto-applied candidates
+  const autoCandidates: { code: string; pct: number }[] = [];
+  if (hasBundleInCart) autoCandidates.push({ code: "LAUNCH25", pct: 25 });
+  if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
+  const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
+
   let discountCode: string | null = null;
   let activeDiscountPercent = 0;
 
   if (manualDiscountCode) {
-    discountCode = manualDiscountCode;
-    activeDiscountPercent = KNOWN_DISCOUNTS[manualDiscountCode] ?? 0;
-  } else {
-    const candidates: { code: string; pct: number }[] = [];
-    if (hasBundleInCart) candidates.push({ code: "LAUNCH25", pct: 25 });
-    if (hasNewsletterDiscount) candidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
-    const best = candidates.sort((a, b) => b.pct - a.pct)[0];
-    if (best) {
-      discountCode = best.code;
-      activeDiscountPercent = best.pct;
+    // Unknown codes (e.g. influencer codes) are assumed to be at least as good
+    // as the best auto code, so influencers always get attribution when their
+    // code is entered. Known codes are compared by their percentage value.
+    const knownPct = KNOWN_DISCOUNTS[manualDiscountCode];
+    const manualPct = knownPct ?? (bestAuto?.pct ?? 0);
+    const bestAutoPct = bestAuto?.pct ?? 0;
+
+    if (manualPct >= bestAutoPct) {
+      discountCode = manualDiscountCode;
+      activeDiscountPercent = manualPct;
+    } else if (bestAuto) {
+      // Manual code is worse than auto — keep the better auto code.
+      discountCode = bestAuto.code;
+      activeDiscountPercent = bestAuto.pct;
+    } else {
+      discountCode = manualDiscountCode;
+      activeDiscountPercent = manualPct;
     }
+  } else if (bestAuto) {
+    discountCode = bestAuto.code;
+    activeDiscountPercent = bestAuto.pct;
   }
 
   const discountedTotal = total * (1 - activeDiscountPercent / 100);
