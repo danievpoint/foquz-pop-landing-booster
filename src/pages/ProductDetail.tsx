@@ -388,7 +388,25 @@ const ProductDetail = () => {
               )}
               <StockBadge available={isAvailable(product.name)} variant={isBundlePage ? "light" : "dark"} />
             </div>
-            <span className={`text-[10px] lg:text-xs mb-3 lg:mb-6 block ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>inkl. MwSt.</span>
+            <span className={`text-[10px] lg:text-xs mb-3 lg:mb-4 block ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>inkl. MwSt.</span>
+
+            {/* Product benefits icons */}
+            <div className="grid grid-cols-2 gap-2 mb-5 lg:mb-8">
+              {[
+                { icon: Ban, label: "Ohne Nikotin" },
+                { icon: ZapOff, label: "Ohne Koffein" },
+                { icon: Leaf, label: "Echte Kräuter" },
+                { icon: Flag, label: "Deutsche Marke" },
+              ].map(({ icon: Icon, label }) => (
+                <div
+                  key={label}
+                  className={`flex items-center gap-2 text-xs lg:text-sm font-bold ${isBundlePage ? "text-white" : "text-foreground"}`}
+                >
+                  <Icon className="w-4 h-4 lg:w-5 lg:h-5 shrink-0" />
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
 
             <button
               onClick={() =>
