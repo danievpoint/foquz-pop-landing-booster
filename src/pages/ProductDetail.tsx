@@ -251,7 +251,19 @@ const AccordionSections = ({
       <Item k="faq" title="FAQ">
         <div className="space-y-6">
           {(() => {
-            const grouped = faqs.reduce((acc, faq) => {
+            const productFaqQuestions = [
+              "Wofür ist FOQUZ?",
+              "Wie sollte ich FOQUZ lagern?",
+              "Ist FOQUZ legal?",
+              "Wie schnell wird meine Bestellung geliefert?",
+              "Womit wird meine Bestellung versendet?",
+              "Kann ich FOQUZ in der Schwangerschaft verwenden?",
+              "Ab welchem Alter ist FOQUZ geeignet?",
+              "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
+              "Was mache ich, wenn der Duft unangenehm brennt oder mich reizt?",
+            ];
+            const filtered = faqs.filter((faq) => productFaqQuestions.includes(faq.q));
+            const grouped = filtered.reduce((acc, faq) => {
               if (!acc[faq.category]) acc[faq.category] = [];
               acc[faq.category].push(faq);
               return acc;
