@@ -38,7 +38,12 @@ const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
 const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
-const FREE_SHIPPING_THRESHOLD = 29.99;
+// Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
+// Versand-Profil (Zone Deutschland) sein – dort ist die Grenze 29,00 €.
+// Shopify stellt die Versandschwelle via Storefront API leider nicht bereit,
+// deshalb wird der Wert hier gepflegt und muss bei Änderungen in Shopify
+// nachgezogen werden.
+const FREE_SHIPPING_THRESHOLD = 29;
 const SHIPPING_COST_DE = 4.49;
 
 const CartDrawer = () => {
