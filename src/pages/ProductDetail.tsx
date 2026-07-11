@@ -76,7 +76,7 @@ const BundleBanner = () => {
               FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
+              <strong>Spare 25%</strong> zum Launch und teste alle unsere 3 Sorten in einer Box.
             </p>
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
@@ -233,7 +233,11 @@ const ProductDetail = () => {
           <div className="py-0 lg:py-4">
             <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
             <p className={`text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
-              {product.desc}
+              {product.isBundle ? (
+                <>Alle 3 Sorten in einer Box.<br />Mit Code <strong>LAUNCH25</strong> (wird automatisch angewendet) nur 14,99€.</>
+              ) : (
+                product.desc
+              )}
             </p>
 
             <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
@@ -300,7 +304,7 @@ const ProductDetail = () => {
                 </ul>
                 <p className={`text-[10px] lg:text-xs mt-2 lg:mt-4 ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
                   {product.isBundle ? (
-                    <>Spar <span className="font-black text-xs lg:text-sm" style={{ color: "#ffd618" }}>25%</span> gegenüber Einzelkauf.</>
+                    <><strong className="text-white">Spar 25%</strong> gegenüber Einzelkauf.</>
                   ) : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>
