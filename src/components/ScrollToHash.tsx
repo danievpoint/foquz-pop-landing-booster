@@ -34,14 +34,14 @@ const ScrollToHash = () => {
       requestAnimationFrame(() => {
         const el = document.querySelector(hash);
         if (el) {
-          el.scrollIntoView({ behavior: "auto", block: "start" });
+          el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
         }
       });
       return;
     }
 
-    // Neue Seite ohne Hash → instant nach ganz oben.
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // Neue Seite ohne Hash → instant nach ganz oben (überschreibt CSS scroll-behavior: smooth).
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
   }, [hash, pathname]);
 
   return null;
