@@ -36,7 +36,11 @@ const MarqueeBanner = () => {
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
         contain: "paint",
+        opacity: ready ? 1 : 0,
+        transition: "opacity 500ms ease",
+        pointerEvents: ready ? "auto" : "none",
       }}
+
     >
       <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
         {repeated.map((text, i) => (
