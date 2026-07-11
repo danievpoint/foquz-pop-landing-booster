@@ -8,7 +8,7 @@ const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
   "25% Sparen",
-  "Nasen Stripes und Sticker for free",
+  "Inklusive limitierten Sticker-Set & Nasenstrips",
 ];
 
 const BundleSection = () => {
