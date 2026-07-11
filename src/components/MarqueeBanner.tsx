@@ -1,5 +1,4 @@
-import { useLayoutEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useLayoutEffect } from "react";
 
 const items = [
   "100% ÄTHERISCHE ÖLE",
@@ -14,27 +13,21 @@ const items = [
 ];
 
 const MarqueeBanner = () => {
-  const [mounted, setMounted] = useState(false);
   const repeated = [...items, ...items, ...items, ...items];
 
   useLayoutEffect(() => {
-    setMounted(true);
     document.documentElement.setAttribute("data-marquee-page", "true");
-
     return () => {
       document.documentElement.removeAttribute("data-marquee-page");
     };
   }, []);
 
-  if (!mounted) return null;
-
-  return createPortal(
+  return (
     <section
       className="fixed left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-6 md:h-7"
       data-banner
       style={{
         top: "var(--safe-area-top)",
-        position: "fixed",
         transform: "translate3d(0, 0, 0)",
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
@@ -42,7 +35,6 @@ const MarqueeBanner = () => {
       }}
     >
       <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
-
         {repeated.map((text, i) => (
           <span
             key={i}
@@ -54,8 +46,7 @@ const MarqueeBanner = () => {
           </span>
         ))}
       </div>
-    </section>,
-    document.body
+    </section>
   );
 };
 
