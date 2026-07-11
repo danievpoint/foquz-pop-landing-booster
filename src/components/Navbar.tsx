@@ -135,28 +135,47 @@ const Navbar = () => {
           {/* Center – clickable area to scroll to top */}
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
-          {/* Right: cart icon (same style as mobile) */}
-          <button
-            type="button"
-            onClick={openCart}
-            aria-label="Warenkorb öffnen"
-            className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            <ShoppingCart size={20} className="text-foreground" />
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center comic-outline">
-                {count}
-              </span>
-            )}
-          </button>
+          {/* Right: FAQ button + cart icon */}
+          <div className="hidden lg:flex items-center gap-2.5">
+            <Link
+              to="/faq"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-2 rounded-full px-4 py-2 bg-card border-2 border-foreground shadow-lg font-extrabold text-sm uppercase tracking-wide text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+              aria-label="Zur FAQ-Seite"
+            >
+              <MessageCircleQuestion size={18} />
+              FAQ
+            </Link>
+            <button
+              type="button"
+              onClick={openCart}
+              aria-label="Warenkorb öffnen"
+              className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
+            >
+              <ShoppingCart size={20} className="text-foreground" />
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center comic-outline">
+                  {count}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile: burger left, logo center, cart right */}
-        <div className="lg:hidden flex items-center justify-between w-full px-4">
+        {/* Mobile: burger left, logo center, FAQ + cart right */}
+        <div className="lg:hidden flex items-center justify-between w-full px-4 gap-2.5">
           <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
             {mobileOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
           </button>
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
+          <Link
+            to="/faq"
+            className="flex items-center gap-1 rounded-full px-3 py-1.5 bg-card border-2 border-foreground shadow-lg font-extrabold text-xs uppercase tracking-wide text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+            aria-label="Zur FAQ-Seite"
+          >
+            <MessageCircleQuestion size={16} />
+            FAQ
+          </Link>
           <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={openCart}>
             <ShoppingCart size={20} className="text-foreground" />
             {count > 0 && (
