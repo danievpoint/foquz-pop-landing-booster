@@ -368,13 +368,20 @@ const ProductDetail = () => {
           {/* Info + Entdecke auch on desktop */}
           <div className="py-0 lg:py-4">
             <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
-            <p className={`text-sm lg:text-lg mb-3 lg:mb-6 whitespace-pre-line leading-snug ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
+            <div className={`text-sm lg:text-lg mb-3 lg:mb-6 leading-snug ${isBundlePage ? "text-white/90" : "text-muted-foreground"}`}>
               {product.isBundle ? (
-                <>Alle 3 Sorten in einer Box.<br />Mit Code <strong>LAUNCH25</strong> (wird automatisch angewendet) nur 14,99€.</>
+                <div className="space-y-1.5">
+                  <p>Alle 3 Sorten in einer Box.</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-white/60 line-through">19,99€</span>
+                    <span className="text-[#ffd618] font-black text-base lg:text-xl">Nur 14,99€</span>
+                    <span className="text-xs text-white/70">mit Code <strong className="text-white">LAUNCH25</strong> (automatisch)</span>
+                  </div>
+                </div>
               ) : (
-                product.desc
+                <p className="whitespace-pre-line">{product.desc}</p>
               )}
-            </p>
+            </div>
 
             <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
               <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
