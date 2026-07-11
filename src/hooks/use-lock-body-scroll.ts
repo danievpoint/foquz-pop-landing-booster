@@ -27,6 +27,21 @@ const getThemeColor = () => {
   return meta?.getAttribute("content") ?? "";
 };
 
+const setStatusBarStyle = (value: string) => {
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "apple-mobile-web-app-status-bar-style";
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute("content", value);
+};
+
+const getStatusBarStyle = () => {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="apple-mobile-web-app-status-bar-style"]');
+  return meta?.getAttribute("content") ?? "";
+};
+
 export const useLockBodyScroll = (locked: boolean) => {
   useEffect(() => {
     if (!locked || typeof window === "undefined") return;
