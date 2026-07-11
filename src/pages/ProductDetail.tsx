@@ -239,44 +239,29 @@ const AccordionSections = ({
       </Item>
 
       <Item k="faq" title="FAQ">
-        <div className="space-y-4">
-          <div>
-            <p className="font-bold mb-1">Wofür ist FOQUZ?</p>
-            <p className={mutedCls}>
-              FOQUZ ist ein natürlicher Kräuter-Inhalator zum kurzen Durchatmen – für einen
-              frischen Kick zwischendurch. Kein Nikotin, kein Tabak, keine Chemie.
-            </p>
-          </div>
-          <div>
-            <p className="font-bold mb-1">Lagerung</p>
-            <p className={mutedCls}>
-              Kühl, trocken und vor direkter Sonneneinstrahlung geschützt lagern. Dose nach
-              Gebrauch stets fest verschließen, damit das Aroma erhalten bleibt.
-            </p>
-          </div>
-          <div>
-            <p className="font-bold mb-1">Versand</p>
-            <p className={mutedCls}>
-              Versand innerhalb 1–2 Werktagen. Lieferzeit in Deutschland i. d. R. 2–4
-              Werktage. Kostenloser Versand ab 30 €.
-            </p>
-          </div>
-          <div>
-            <p className="font-bold mb-1">Warnhinweise</p>
-            <p className={mutedCls}>
-              Nicht geeignet für Kinder unter 12 Jahren, Schwangere und Stillende. Nicht
-              anwenden bei bekannter Überempfindlichkeit gegen einen der Inhaltsstoffe. Nur
-              zur äußerlichen Anwendung durch Inhalation des Duftes – nicht verzehren, nicht
-              in Augen oder Schleimhäute bringen.
-            </p>
-          </div>
-          <div>
-            <p className="font-bold mb-1">Rechtliches</p>
-            <p className={mutedCls}>
-              FOQUZ ist ein Duft-/Kräuterprodukt und kein Arzneimittel. Es dient nicht der
-              Diagnose, Behandlung oder Heilung von Krankheiten. Angaben ohne Gewähr.
-            </p>
-          </div>
+        <div className="space-y-6">
+          {(() => {
+            const grouped = faqs.reduce((acc, faq) => {
+              if (!acc[faq.category]) acc[faq.category] = [];
+              acc[faq.category].push(faq);
+              return acc;
+            }, {} as Record<string, typeof faqs>);
+            return Object.entries(grouped).map(([category, entries]) => (
+              <div key={category}>
+                <p className="font-extrabold text-sm lg:text-base mb-2 uppercase tracking-wide">
+                  {category}
+                </p>
+                <div className="space-y-3">
+                  {entries.map((faq) => (
+                    <div key={faq.q}>
+                      <p className="font-bold mb-1">{faq.q}</p>
+                      <p className={mutedCls}>{faq.a}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ));
+          })()}
         </div>
       </Item>
     </div>
