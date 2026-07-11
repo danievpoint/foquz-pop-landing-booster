@@ -9,7 +9,7 @@
   :root {
     --safe-area-top: env(safe-area-inset-top, 0px);
     --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-    --marquee-height: 24px;
+    --marquee-height: 0px;
 
     --background: 203 92% 89%;
     --foreground: 0 0% 0%;
@@ -120,8 +120,12 @@
     transform: translateZ(0);
   }
 
+  html[data-marquee-page="true"] {
+    --marquee-height: 24px;
+  }
+
   @media (min-width: 768px) {
-    :root {
+    html[data-marquee-page="true"] {
       --marquee-height: 28px;
     }
   }
