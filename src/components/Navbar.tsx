@@ -20,6 +20,8 @@ const Navbar = () => {
   const { count, openCart } = useCart();
   const location = useLocation();
   useLockBodyScroll(mobileOpen);
+  const heroReady = useHeroReady();
+
   
 
   useEffect(() => {
