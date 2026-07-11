@@ -73,7 +73,7 @@
     min-height: 100%;
     overflow-x: clip;
     -webkit-overflow-scrolling: touch;
-    background-color: hsl(var(--background));
+    background-color: #ffffff;
     overscroll-behavior-y: none;
     scroll-behavior: smooth;
   }
