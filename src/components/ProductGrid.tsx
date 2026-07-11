@@ -337,14 +337,24 @@ const ProductGrid = () => {
               style={{ minHeight: 380, touchAction: 'pan-y' }}>
               
               <div className="flex flex-col items-center w-full">
-                <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block" style={{ backgroundColor: products[activeIndex].color + '22' }}>
+                <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block relative" style={{ backgroundColor: products[activeIndex].color + '22' }}>
+                  {/* Poster image sits underneath the video so the next product
+                      is visible INSTANTLY on swipe, even before the video has
+                      loaded its first frame. */}
+                  <img
+                    key={`poster-${activeIndex}`}
+                    src={products[activeIndex].videoPoster ?? products[activeIndex].image}
+                    alt={products[activeIndex].name}
+                    className="absolute inset-0 w-full h-full aspect-square object-cover"
+                    draggable={false}
+                  />
                   {products[activeIndex].video ? (
                     <AutoVideo
                       key={`video-${activeIndex}`}
                       src={products[activeIndex].video!}
                       poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
                       loop={false}
-                      className="w-full aspect-square object-cover"
+                      className="relative w-full aspect-square object-cover"
                       onEnded={() => {
                         if (!autoPlay) return;
                         setTimeout(() => {
@@ -358,7 +368,7 @@ const ProductGrid = () => {
                     <img
                       src={products[activeIndex].image}
                       alt={products[activeIndex].name}
-                      className="w-full aspect-square object-cover" />
+                      className="relative w-full aspect-square object-cover" />
                   )}
                 </Link>
                 {/* Preload neighbour videos so swiping is instant */}
