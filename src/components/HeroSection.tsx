@@ -62,6 +62,7 @@ const HeroSection = () => {
       >
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
+          <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+72px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+80px)]" />
           <img
             src={heroBgMobile}
             alt=""
@@ -71,7 +72,6 @@ const HeroSection = () => {
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
-            <HeroPromoBanner />
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -114,8 +114,6 @@ const HeroSection = () => {
           {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
           <div style={{ height: "100px" }} aria-hidden="true" />
 
-          <HeroPromoBanner />
-
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
             style={{
@@ -123,6 +121,8 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
+            <HeroPromoBanner className="absolute left-0 right-0 top-0" />
+
             <style>{`
               @keyframes hero-float {
                 0%, 100% { transform: translateY(-6px); }
