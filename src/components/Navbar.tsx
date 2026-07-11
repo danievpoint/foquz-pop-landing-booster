@@ -14,6 +14,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [pendingHash, setPendingHash] = useState<string | null>(null);
   const { count, openCart } = useCart();
   const location = useLocation();
   useLockBodyScroll(mobileOpen);
@@ -29,6 +30,26 @@ const Navbar = () => {
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
+
+  // Scrolle NACH dem Schließen des Mobile-Menüs zur Ziel-Sektion.
+  // Der Body-Scroll-Lock wird beim Schließen aufgehoben (und die Scroll-Position
+  // wiederhergestellt) — erst danach dürfen wir zum Anker springen, sonst
+  // überschreibt die Wiederherstellung unseren scrollIntoView-Sprung.
+  useEffect(() => {
+    if (mobileOpen || !pendingHash) return;
+    const hash = pendingHash;
+    setPendingHash(null);
+    // Zwei Frames warten: 1) Lock-Cleanup führt window.scrollTo aus,
+    // 2) Layout ist stabil → dann instant zum Anker.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+  }, [mobileOpen, pendingHash]);
 
   const leftLinks = [
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
@@ -48,10 +69,16 @@ const Navbar = () => {
     if (to.startsWith("/#")) {
       const hash = to.slice(1); // e.g. "#sorten"
       if (location.pathname === "/") {
+        // Mobile-Menü offen? → Erst Menü schließen (löst Scroll-Unlock aus),
+        // dann in nächstem Effect zum Anker scrollen.
+        if (mobileOpen) {
+          setPendingHash(hash);
+          setMobileOpen(false);
+          return true; // handled
+        }
         const el = document.querySelector(hash);
         if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-          setMobileOpen(false);
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
           return true; // handled
         }
       }
