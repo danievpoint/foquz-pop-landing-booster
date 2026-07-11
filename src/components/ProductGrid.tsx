@@ -361,6 +361,14 @@ const ProductGrid = () => {
                       className="w-full aspect-square object-cover" />
                   )}
                 </Link>
+                {/* Preload neighbour videos so swiping is instant */}
+                <div aria-hidden className="hidden">
+                  {products.map((p, i) =>
+                    p.video && i !== activeIndex ? (
+                      <link key={`preload-${i}`} rel="preload" as="video" href={p.video} />
+                    ) : null
+                  )}
+                </div>
                 <div className="py-1 text-center flex flex-col items-center">
                   <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
                     {products[activeIndex].name}
