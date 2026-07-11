@@ -6,7 +6,6 @@ import type { CartItem } from "@/contexts/CartContext";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
-import MarqueeBanner from "@/components/MarqueeBanner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
@@ -193,7 +192,6 @@ const ProductDetail = () => {
         type="product"
         jsonLd={productLd}
       />
-      <MarqueeBanner />
       <Navbar />
 
       {/* Purple wrapper for bundle page */}

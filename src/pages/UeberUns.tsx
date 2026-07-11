@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
 import foundersAsset from "@/assets/foquz-founders.png.asset.json";
@@ -7,7 +6,6 @@ import foundersAsset from "@/assets/foquz-founders.png.asset.json";
 const UeberUns = () => (
   <div className="min-h-screen">
     <SeoHead title={"Über uns – FOQUZ"} description={"Die FOQUZ Brand Story: Wie zwei Musikproduzenten aus einer asiatischen Kräuterdose die Original Riechdose entwickelt haben."} path={"/ueber-uns"} />
-      <MarqueeBanner />
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Unsere Geschichte</h1>
