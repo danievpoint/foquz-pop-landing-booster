@@ -13,6 +13,7 @@ export interface Product {
   numericPrice: number;
   originalPrice?: string;
   desc: string;
+  longDesc?: { heading: string; paragraphs: string[] };
   image: string;
   video?: string;
   videoPoster?: string;
