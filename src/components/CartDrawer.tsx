@@ -79,15 +79,29 @@ const CartDrawer = () => {
   } = useCart();
 
   const [codeInput, setCodeInput] = useState("");
+  const [isValidatingCode, setIsValidatingCode] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   useLockBodyScroll(isOpen);
 
-  const handleApplyCode = () => {
+  const handleApplyCode = async () => {
     const c = codeInput.trim();
-    if (!c) return;
-    applyManualDiscountCode(c);
-    setCodeInput("");
+    if (!c || isValidatingCode) return;
+    setIsValidatingCode(true);
+    setCodeError(null);
+    try {
+      const { validateDiscountCode } = await import("@/lib/shopify");
+      const isValid = await validateDiscountCode(c);
+      if (!isValid) {
+        setCodeError("Dieser Rabattcode existiert nicht.");
+        return;
+      }
+      applyManualDiscountCode(c);
+      setCodeInput("");
+    } finally {
+      setIsValidatingCode(false);
+    }
   };
 
   const discountAmount = total - discountedTotal;
