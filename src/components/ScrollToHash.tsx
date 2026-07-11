@@ -29,16 +29,19 @@ const ScrollToHash = () => {
     }
 
     if (hash) {
-      setTimeout(() => {
+      // Warte einen Frame, damit das Ziel-Element im DOM ist,
+      // und springe INSTANT zum Anker (kein Smooth-Scroll).
+      requestAnimationFrame(() => {
         const el = document.querySelector(hash);
         if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
+          el.scrollIntoView({ behavior: "auto", block: "start" });
         }
-      }, 100);
+      });
       return;
     }
 
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    // Neue Seite ohne Hash → instant nach ganz oben.
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [hash, pathname]);
 
   return null;
