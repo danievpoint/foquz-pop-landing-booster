@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, ShoppingBag, Layers, BookOpen, Star, HelpCircle, MessageCircleQuestion } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import foquzLogo from "@/assets/foquz-logo-full.svg";
 import navbarHeaderBgPng from "@/assets/navbar-header-bg.png";
