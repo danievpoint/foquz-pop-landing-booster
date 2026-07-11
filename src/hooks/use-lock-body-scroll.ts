@@ -57,6 +57,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       documentElement.style.overflow = "hidden";
       documentElement.style.overscrollBehaviorY = "none";
       documentElement.style.backgroundColor = "#ffffff";
+      documentElement.setAttribute(LOCK_ATTR, "true");
       body.style.position = "fixed";
       body.style.top = `-${lockedScrollY}px`;
       body.style.left = "0";
@@ -85,6 +86,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       documentElement.style.overflow = previousHtmlStyles.overflow ?? "";
       documentElement.style.overscrollBehaviorY = previousHtmlStyles.overscrollBehaviorY ?? "";
       documentElement.style.backgroundColor = previousHtmlBg;
+      documentElement.removeAttribute(LOCK_ATTR);
       if (root) root.style.backgroundColor = previousRootBg;
       body.removeAttribute(LOCK_ATTR);
       if (previousThemeColor) setThemeColor(previousThemeColor);
