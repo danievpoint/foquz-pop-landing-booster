@@ -150,3 +150,49 @@ export async function isShopifyCartCompleted(cartId: string): Promise<boolean> {
     return false;
   }
 }
+
+// Validates a discount code against Shopify by creating a throwaway cart with
+// the code applied and checking the `applicable` flag on the returned cart.
+// Returns true only for codes that actually exist and can be used.
+const CART_VALIDATE_DISCOUNT_MUTATION = `
+  mutation cartCreate($input: CartInput!) {
+    cartCreate(input: $input) {
+      cart {
+        id
+        discountCodes { code applicable }
+      }
+      userErrors { field message code }
+    }
+  }
+`;
+
+export async function validateDiscountCode(code: string): Promise<boolean> {
+  const normalized = code.trim();
+  if (!normalized) return false;
+
+  // Use any known variant as a stub line so Shopify actually evaluates the code.
+  const stubVariantId =
+    VARIANT_GID_BY_ID["starter-bundle"] ||
+    Object.values(VARIANT_GID_BY_ID)[0];
+  if (!stubVariantId) return false;
+
+  try {
+    const data = await storefrontApiRequest(CART_VALIDATE_DISCOUNT_MUTATION, {
+      input: {
+        lines: [{ quantity: 1, merchandiseId: stubVariantId }],
+        discountCodes: [normalized],
+      },
+    });
+    const userErrors = data?.data?.cartCreate?.userErrors ?? [];
+    if (userErrors.length > 0) return false;
+    const codes = data?.data?.cartCreate?.cart?.discountCodes ?? [];
+    const match = codes.find(
+      (c: { code: string; applicable: boolean }) =>
+        c.code?.toUpperCase() === normalized.toUpperCase()
+    );
+    return !!match?.applicable;
+  } catch (e) {
+    console.error("Failed to validate discount code:", e);
+    return false;
+  }
+}

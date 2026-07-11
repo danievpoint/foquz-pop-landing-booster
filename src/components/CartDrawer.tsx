@@ -79,15 +79,29 @@ const CartDrawer = () => {
   } = useCart();
 
   const [codeInput, setCodeInput] = useState("");
+  const [isValidatingCode, setIsValidatingCode] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   useLockBodyScroll(isOpen);
 
-  const handleApplyCode = () => {
+  const handleApplyCode = async () => {
     const c = codeInput.trim();
-    if (!c) return;
-    applyManualDiscountCode(c);
-    setCodeInput("");
+    if (!c || isValidatingCode) return;
+    setIsValidatingCode(true);
+    setCodeError(null);
+    try {
+      const { validateDiscountCode } = await import("@/lib/shopify");
+      const isValid = await validateDiscountCode(c);
+      if (!isValid) {
+        setCodeError("Dieser Rabattcode existiert nicht.");
+        return;
+      }
+      applyManualDiscountCode(c);
+      setCodeInput("");
+    } finally {
+      setIsValidatingCode(false);
+    }
   };
 
   const discountAmount = total - discountedTotal;
@@ -204,19 +218,30 @@ const CartDrawer = () => {
                       <input
                         type="text"
                         value={codeInput}
-                        onChange={(e) => setCodeInput(e.target.value)}
+                        onChange={(e) => {
+                          setCodeInput(e.target.value);
+                          if (codeError) setCodeError(null);
+                        }}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
                         placeholder="Code"
-                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1 md:py-2.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        disabled={isValidatingCode}
+                        style={{ fontSize: "16px" }}
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1 md:py-2.5 font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary md:!text-sm"
                       />
                       <button
                         onClick={handleApplyCode}
-                        disabled={!codeInput.trim()}
+                        disabled={!codeInput.trim() || isValidatingCode}
                         className="comic-btn bg-primary text-primary-foreground text-[11px] md:text-xs py-1 md:py-2 px-3 md:px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
-                        ANWENDEN
+                        {isValidatingCode ? "PRÜFT…" : "ANWENDEN"}
                       </button>
                     </div>
+
+                    {codeError && (
+                      <div className="mt-2 text-xs font-bold text-red-600">
+                        {codeError}
+                      </div>
+                    )}
 
                     {discountCode && (
                       <div className="mt-3 inline-flex items-center gap-2 bg-green-50 border-2 border-green-500 rounded-full pl-2 pr-1 py-1">
