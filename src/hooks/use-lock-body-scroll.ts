@@ -69,6 +69,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       previousHtmlBg = documentElement.style.backgroundColor;
       previousRootBg = root?.style.backgroundColor ?? "";
       previousThemeColor = getThemeColor();
+      previousStatusBarStyle = getStatusBarStyle();
 
       documentElement.style.overflow = "hidden";
       documentElement.style.overscrollBehaviorY = "none";
@@ -84,6 +85,8 @@ export const useLockBodyScroll = (locked: boolean) => {
       if (root) root.style.backgroundColor = "#ffffff";
       body.setAttribute(LOCK_ATTR, "true");
       setThemeColor("#ffffff");
+      // iOS: verhindert, dass Safari die Statusbar/Dynamic-Island-Zone einfärbt.
+      setStatusBarStyle("default");
     }
 
     return () => {
