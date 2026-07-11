@@ -142,7 +142,148 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
   </div>
 );
 
+type AccordionKey = "ingredients" | "usage" | "faq";
+
+const AccordionSections = ({
+  product,
+  isBundlePage,
+}: {
+  product: typeof allProducts[0];
+  isBundlePage: boolean;
+}) => {
+  const [open, setOpen] = useState<AccordionKey | null>(null);
+  const toggle = (k: AccordionKey) => setOpen((cur) => (cur === k ? null : k));
+
+  const borderCls = isBundlePage ? "border-white/20" : "border-foreground/10";
+  const mutedCls = isBundlePage ? "text-white/70" : "text-muted-foreground";
+
+  const Item = ({
+    k,
+    title,
+    children,
+  }: {
+    k: AccordionKey;
+    title: string;
+    children: React.ReactNode;
+  }) => {
+    const isOpen = open === k;
+    return (
+      <div className={`border-t-2 ${borderCls}`}>
+        <button
+          onClick={() => toggle(k)}
+          className="flex items-center justify-between w-full py-3 lg:py-4"
+          aria-expanded={isOpen}
+        >
+          <h3 className="font-extrabold text-sm lg:text-lg text-left">{title}</h3>
+          <ChevronDown
+            className={`w-5 h-5 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="pb-4 lg:pb-5 text-sm lg:text-base leading-relaxed">
+                {children}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
+  return (
+    <div className={`border-b-2 ${borderCls}`}>
+      <Item k="ingredients" title={product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}>
+        <ul className="space-y-2">
+          {product.ingredients.map((ing) => (
+            <li key={ing} className="flex items-center gap-2">
+              <span
+                className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
+                style={{ backgroundColor: "#ffd618", color: "#000" }}
+              >
+                ✓
+              </span>
+              <span>{ing}</span>
+            </li>
+          ))}
+        </ul>
+        <p className={`text-xs mt-4 ${mutedCls}`}>
+          {product.isBundle ? (
+            <>
+              <strong className={isBundlePage ? "text-white" : ""}>Spar 25%</strong> gegenüber Einzelkauf.
+            </>
+          ) : (
+            "100% Natur. Ohne Chemie. Ohne Bullshit."
+          )}
+        </p>
+      </Item>
+
+      <Item k="usage" title="ANWENDUNG">
+        <ol className="space-y-2 list-decimal pl-5">
+          <li>Dose öffnen.</li>
+          <li>Kurz daran riechen.</li>
+          <li>Tief durchatmen.</li>
+          <li>Fertig.</li>
+        </ol>
+        <p className={`text-xs mt-4 ${mutedCls}`}>
+          Ideal für alle, die den traditionellen Kräuterduft lieben.
+        </p>
+      </Item>
+
+      <Item k="faq" title="FAQ">
+        <div className="space-y-4">
+          <div>
+            <p className="font-bold mb-1">Wofür ist FOQUZ?</p>
+            <p className={mutedCls}>
+              FOQUZ ist ein natürlicher Kräuter-Inhalator zum kurzen Durchatmen – für einen
+              frischen Kick zwischendurch. Kein Nikotin, kein Tabak, keine Chemie.
+            </p>
+          </div>
+          <div>
+            <p className="font-bold mb-1">Lagerung</p>
+            <p className={mutedCls}>
+              Kühl, trocken und vor direkter Sonneneinstrahlung geschützt lagern. Dose nach
+              Gebrauch stets fest verschließen, damit das Aroma erhalten bleibt.
+            </p>
+          </div>
+          <div>
+            <p className="font-bold mb-1">Versand</p>
+            <p className={mutedCls}>
+              Versand innerhalb 1–2 Werktagen. Lieferzeit in Deutschland i. d. R. 2–4
+              Werktage. Kostenloser Versand ab 30 €.
+            </p>
+          </div>
+          <div>
+            <p className="font-bold mb-1">Warnhinweise</p>
+            <p className={mutedCls}>
+              Nicht geeignet für Kinder unter 12 Jahren, Schwangere und Stillende. Nicht
+              anwenden bei bekannter Überempfindlichkeit gegen einen der Inhaltsstoffe. Nur
+              zur äußerlichen Anwendung durch Inhalation des Duftes – nicht verzehren, nicht
+              in Augen oder Schleimhäute bringen.
+            </p>
+          </div>
+          <div>
+            <p className="font-bold mb-1">Rechtliches</p>
+            <p className={mutedCls}>
+              FOQUZ ist ein Duft-/Kräuterprodukt und kein Arzneimittel. Es dient nicht der
+              Diagnose, Behandlung oder Heilung von Krankheiten. Angaben ohne Gewähr.
+            </p>
+          </div>
+        </div>
+      </Item>
+    </div>
+  );
+};
+
 const ProductDetail = () => {
+
   const { handle } = useParams<{ handle: string }>();
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
