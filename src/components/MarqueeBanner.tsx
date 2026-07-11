@@ -1,4 +1,6 @@
 import { useLayoutEffect } from "react";
+import { useHeroReady } from "@/components/HeroSection";
+
 
 const items = [
   "100% ÄTHERISCHE ÖLE",
@@ -13,7 +15,9 @@ const items = [
 ];
 
 const MarqueeBanner = () => {
+  const ready = useHeroReady();
   const repeated = [...items, ...items, ...items, ...items];
+
 
   useLayoutEffect(() => {
     document.documentElement.setAttribute("data-marquee-page", "true");
@@ -32,7 +36,11 @@ const MarqueeBanner = () => {
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
         contain: "paint",
+        opacity: ready ? 1 : 0,
+        transition: "opacity 500ms ease",
+        pointerEvents: ready ? "auto" : "none",
       }}
+
     >
       <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
         {repeated.map((text, i) => (

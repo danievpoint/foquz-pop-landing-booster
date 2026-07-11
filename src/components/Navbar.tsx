@@ -9,6 +9,8 @@ import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import LoginModal from "@/components/LoginModal";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
+import { useHeroReady } from "@/components/HeroSection";
+
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -18,6 +20,8 @@ const Navbar = () => {
   const { count, openCart } = useCart();
   const location = useLocation();
   useLockBodyScroll(mobileOpen);
+  const heroReady = useHeroReady();
+
   
 
   useEffect(() => {
@@ -95,7 +99,7 @@ const Navbar = () => {
     <>
     <nav
       className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
-      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', opacity: heroReady ? 1 : 0, transition: 'opacity 500ms ease', pointerEvents: heroReady ? 'auto' : 'none' }}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
