@@ -279,7 +279,10 @@ const CartDrawer = () => {
                   {/* Items */}
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
-                      const hasDiscount = activeDiscountPercent > 0;
+                      const isBundleItem = item.id === BUNDLE_ID;
+                      const hasDiscount =
+                        activeDiscountPercent > 0 &&
+                        (discountCode !== "LAUNCH25" || isBundleItem);
                       const finalPrice = hasDiscount
                         ? item.price * (1 - activeDiscountPercent / 100)
                         : item.price;
@@ -423,8 +426,9 @@ const CartDrawer = () => {
                           className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6 pb-1"
                         >
                           {suggestions.map((p) => {
+                            // LAUNCH25 applies only to the Power Bundle, not to single sorten.
                             const discounted =
-                              activeDiscountPercent > 0
+                              activeDiscountPercent > 0 && discountCode !== "LAUNCH25"
                                 ? p.numericPrice * (1 - activeDiscountPercent / 100)
                                 : null;
                             return (
