@@ -14,9 +14,10 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { useCart, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
-import { products as allSorten } from "@/data/products";
+import { products as allSorten, allProducts } from "@/data/products";
+import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
 import payVisa from "@/assets/payment/visa.svg";
@@ -45,6 +46,15 @@ const SINGLE_PRICE = 7.49;
 // nachgezogen werden.
 const FREE_SHIPPING_THRESHOLD = 29;
 const SHIPPING_COST_DE = 4.49;
+
+const getProductHandle = (item: CartItem): string | null => {
+  if (item.id === "bundle" || item.id === "starter-bundle") return "starter-bundle";
+  const byName = allProducts.find((p) => p.name === item.name);
+  if (byName) return byName.handle;
+  const byId = allProducts.find((p) => p.handle === item.id);
+  if (byId) return byId.handle;
+  return null;
+};
 
 const CartDrawer = () => {
   const {
@@ -286,6 +296,8 @@ const CartDrawer = () => {
                       const finalPrice = hasDiscount
                         ? item.price * (1 - activeDiscountPercent / 100)
                         : item.price;
+                      const productHandle = getProductHandle(item);
+                      const productLink = productHandle ? `/produkt/${productHandle}` : "#";
                       return (
                         <motion.div
                           key={item.id}
@@ -297,13 +309,15 @@ const CartDrawer = () => {
                         >
                           <div className="w-20 sm:w-24 shrink-0">
                             {item.image && (
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                width={96}
-                                height={96}
-                                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
-                              />
+                              <Link to={productLink} onClick={closeCart} className="block">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  width={96}
+                                  height={96}
+                                  className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
+                                />
+                              </Link>
                             )}
                             {hasDiscount && (
                               <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
@@ -315,7 +329,9 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                 <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
+                                <Link to={productLink} onClick={closeCart} className="block hover:opacity-80 transition-opacity">
+                                  <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
+                                </Link>
                               </div>
                               <button
                                 onClick={() => removeFromCart(item.id)}
