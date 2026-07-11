@@ -112,7 +112,9 @@ const HeroSection = () => {
         {/* === DESKTOP (lg+) — unchanged from today's version === */}
         <div className="hidden lg:block">
           {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
-          <div style={{ height: "100px" }} aria-hidden="true" />
+          <div className="relative" style={{ height: "100px" }} aria-hidden="true">
+            <HeroPromoBanner className="absolute left-0 right-0 bottom-1" />
+          </div>
 
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
@@ -121,7 +123,7 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
-            <HeroPromoBanner className="absolute left-0 right-0 top-0" />
+
 
             <style>{`
               @keyframes hero-float {
