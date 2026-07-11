@@ -253,14 +253,9 @@ const AccordionSections = ({
           {(() => {
             const productFaqQuestions = [
               "Wofür ist FOQUZ?",
-              "Wie sollte ich FOQUZ lagern?",
+              "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
               "Ist FOQUZ legal?",
               "Wie schnell wird meine Bestellung geliefert?",
-              "Womit wird meine Bestellung versendet?",
-              "Kann ich FOQUZ in der Schwangerschaft verwenden?",
-              "Ab welchem Alter ist FOQUZ geeignet?",
-              "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
-              "Was mache ich, wenn der Duft unangenehm brennt oder mich reizt?",
             ];
             const filtered = faqs.filter((faq) => productFaqQuestions.includes(faq.q));
             const grouped = filtered.reduce((acc, faq) => {
