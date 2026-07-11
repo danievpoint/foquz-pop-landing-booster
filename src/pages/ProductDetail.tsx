@@ -249,37 +249,25 @@ const AccordionSections = ({
       </Item>
 
       <Item k="faq" title="FAQ">
-        <div className="space-y-6">
-          {(() => {
-            const productFaqQuestions = [
-              "Wofür ist FOQUZ?",
-              "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
-              "Ist FOQUZ legal?",
-              "Wie schnell wird meine Bestellung geliefert?",
-            ];
-            const filtered = faqs.filter((faq) => productFaqQuestions.includes(faq.q));
-            const grouped = filtered.reduce((acc, faq) => {
-              if (!acc[faq.category]) acc[faq.category] = [];
-              acc[faq.category].push(faq);
-              return acc;
-            }, {} as Record<string, typeof faqs>);
-            return Object.entries(grouped).map(([category, entries]) => (
-              <div key={category}>
-                <p className="font-extrabold text-sm lg:text-base mb-2 uppercase tracking-wide">
-                  {category}
-                </p>
-                <div className="space-y-3">
-                  {entries.map((faq) => (
-                    <div key={faq.q}>
-                      <p className="font-bold mb-1">{faq.q}</p>
-                      <p className={mutedCls}>{faq.a}</p>
-                    </div>
-                  ))}
+        {(() => {
+          const productFaqQuestions = [
+            "Wofür ist FOQUZ?",
+            "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
+            "Ist FOQUZ legal?",
+            "Wie schnell wird meine Bestellung geliefert?",
+          ];
+          const filtered = faqs.filter((faq) => productFaqQuestions.includes(faq.q));
+          return (
+            <div className="space-y-5">
+              {filtered.map((faq) => (
+                <div key={faq.q}>
+                  <p className="font-bold mb-1">{faq.q}</p>
+                  <p className={mutedCls}>{faq.a}</p>
                 </div>
-              </div>
-            ));
-          })()}
-        </div>
+              ))}
+            </div>
+          );
+        })()}
       </Item>
     </div>
   );
