@@ -90,7 +90,10 @@ html {
 }
 
 section[id] {
-  scroll-margin-top: calc(var(--safe-area-top) + var(--marquee-height) + 84px) !important;
+  /* Neutralisiert jegliche in Sections gesetzte Tailwind-`scroll-mt-*`
+     Utility. Der komplette Offset wird über scroll-padding-top am <html>
+     Element gesteuert, damit nichts doppelt addiert wird. */
+  scroll-margin-top: 0 !important;
 }
 
 @layer base {
