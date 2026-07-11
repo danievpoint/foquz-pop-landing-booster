@@ -1,3 +1,6 @@
+import { useLayoutEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
 const items = [
   "100% ÄTHERISCHE ÖLE",
   "INSTANT-FRISCHE",
@@ -11,13 +14,32 @@ const items = [
 ];
 
 const MarqueeBanner = () => {
+  const [mounted, setMounted] = useState(false);
   const repeated = [...items, ...items, ...items, ...items];
 
-  return (
+  useLayoutEffect(() => {
+    setMounted(true);
+    document.documentElement.setAttribute("data-marquee-page", "true");
+
+    return () => {
+      document.documentElement.removeAttribute("data-marquee-page");
+    };
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <section
-      className="fixed left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-[var(--marquee-height)]"
+      className="fixed left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-6 md:h-7"
       data-banner
-      style={{ top: "var(--safe-area-top)" }}
+      style={{
+        top: "var(--safe-area-top)",
+        position: "fixed",
+        transform: "translate3d(0, 0, 0)",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+        contain: "paint",
+      }}
     >
       <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
 
@@ -32,7 +54,8 @@ const MarqueeBanner = () => {
           </span>
         ))}
       </div>
-    </section>
+    </section>,
+    document.body
   );
 };
 

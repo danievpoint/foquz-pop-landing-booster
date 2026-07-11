@@ -62,7 +62,11 @@ const Navbar = () => {
     { label: "REVIEWS", to: "/#reviews", icon: Star },
   ];
 
-  const mobileLinks = [...leftLinks, ...rightLinks.filter(l => l.label === "SO GEHTS")];
+  const mobileLinks = [
+    ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?"),
+    ...rightLinks.filter(l => l.label === "SO GEHTS"),
+    ...leftLinks.filter(l => l.label === "WAS IST FOQUZ ?"),
+  ];
 
   // Helper: for hash links on the same page, scroll to element; otherwise navigate
   const handleNavClick = (to: string) => {

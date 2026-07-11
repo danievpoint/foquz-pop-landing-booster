@@ -3,8 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import PullToRefresh from "@/components/PullToRefresh";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useLayoutEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -27,21 +26,6 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
-
-const RouteChromeState = () => {
-  const { pathname } = useLocation();
-
-  useLayoutEffect(() => {
-    if (pathname === "/") {
-      document.documentElement.setAttribute("data-marquee-page", "true");
-      return;
-    }
-
-    document.documentElement.removeAttribute("data-marquee-page");
-  }, [pathname]);
-
-  return null;
-};
 
 // Coming Soon Modus — mit ?key=fq2026x in der URL umgehen
 // Legal-Seiten sind auch ohne Key erreichbar
@@ -82,7 +66,6 @@ const App = () => {
         <Sonner />
         <PullToRefresh>
         <BrowserRouter>
-          <RouteChromeState />
           <ScrollToHash />
           <Routes>
             <Route path="/" element={<Index />} />
