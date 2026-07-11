@@ -14,13 +14,12 @@ const HeroPromoBanner = ({ className = "" }: HeroPromoBannerProps) => {
     >
       <a
         href="#bundle"
-        className="pointer-events-auto inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-transparent border-2 border-white/90 px-3 sm:px-4 py-1.5 shadow-sm hover:bg-white/10 transition-colors"
-        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
+        className="pointer-events-auto inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-white border-2 border-white px-3 sm:px-4 py-1.5 shadow-md hover:bg-white/90 transition-colors"
       >
         <span className="font-black text-[10px] sm:text-xs text-primary uppercase tracking-wide">
           <strong>-20%</strong>
         </span>
-        <span className="text-[10px] sm:text-xs font-bold text-secondary-foreground whitespace-nowrap">
+        <span className="text-[10px] sm:text-xs font-bold text-foreground whitespace-nowrap">
           auf das FOQUZ Power Bundle
         </span>
         <span className="text-[10px] sm:text-xs font-black text-primary uppercase tracking-wide">
