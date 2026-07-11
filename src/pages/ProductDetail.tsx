@@ -143,7 +143,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
   </div>
 );
 
-type AccordionKey = "ingredients" | "usage" | "faq";
+type AccordionKey = "description" | "ingredients" | "usage" | "faq";
 
 const AccordionSections = ({
   product,
