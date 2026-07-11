@@ -42,6 +42,7 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <MarqueeBanner />
               <Routes>
                 <Route path="/datenschutz" element={<Datenschutz />} />
                 <Route path="/impressum" element={<Impressum />} />
@@ -68,6 +69,7 @@ const App = () => {
         <PullToRefresh>
         <BrowserRouter>
           <ScrollToHash />
+          <MarqueeBanner />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
