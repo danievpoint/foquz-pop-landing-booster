@@ -8,6 +8,7 @@ let previousBodyBg = "";
 let previousHtmlBg = "";
 let previousThemeColor = "";
 let previousRootBg = "";
+let previousStatusBarStyle = "";
 
 const LOCK_ATTR = "data-scroll-locked";
 
@@ -23,6 +24,21 @@ const setThemeColor = (color: string) => {
 
 const getThemeColor = () => {
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  return meta?.getAttribute("content") ?? "";
+};
+
+const setStatusBarStyle = (value: string) => {
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "apple-mobile-web-app-status-bar-style";
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute("content", value);
+};
+
+const getStatusBarStyle = () => {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="apple-mobile-web-app-status-bar-style"]');
   return meta?.getAttribute("content") ?? "";
 };
 
@@ -53,6 +69,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       previousHtmlBg = documentElement.style.backgroundColor;
       previousRootBg = root?.style.backgroundColor ?? "";
       previousThemeColor = getThemeColor();
+      previousStatusBarStyle = getStatusBarStyle();
 
       documentElement.style.overflow = "hidden";
       documentElement.style.overscrollBehaviorY = "none";
@@ -68,6 +85,8 @@ export const useLockBodyScroll = (locked: boolean) => {
       if (root) root.style.backgroundColor = "#ffffff";
       body.setAttribute(LOCK_ATTR, "true");
       setThemeColor("#ffffff");
+      // iOS: verhindert, dass Safari die Statusbar/Dynamic-Island-Zone einfärbt.
+      setStatusBarStyle("default");
     }
 
     return () => {
@@ -90,6 +109,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       if (root) root.style.backgroundColor = previousRootBg;
       body.removeAttribute(LOCK_ATTR);
       if (previousThemeColor) setThemeColor(previousThemeColor);
+      if (previousStatusBarStyle) setStatusBarStyle(previousStatusBarStyle);
       window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
     };
   }, [locked]);
