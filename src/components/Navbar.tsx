@@ -9,6 +9,8 @@ import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import LoginModal from "@/components/LoginModal";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
+import { useHeroReady } from "@/components/HeroSection";
+
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
