@@ -162,12 +162,20 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile: burger left, logo center, cart right */}
-        <div className="lg:hidden flex items-center justify-between w-full px-4">
+        {/* Mobile: burger left, logo center, FAQ + cart right */}
+        <div className="lg:hidden flex items-center justify-between w-full px-4 gap-2.5">
           <button onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 bg-card border-2 border-foreground shadow-lg">
             {mobileOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
           </button>
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
+          <Link
+            to="/faq"
+            className="flex items-center gap-1 rounded-full px-3 py-1.5 bg-card border-2 border-foreground shadow-lg font-extrabold text-xs uppercase tracking-wide text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+            aria-label="Zur FAQ-Seite"
+          >
+            <MessageCircleQuestion size={16} />
+            FAQ
+          </Link>
           <button className="relative rounded-full p-2 bg-card border-2 border-foreground shadow-lg" onClick={openCart}>
             <ShoppingCart size={20} className="text-foreground" />
             {count > 0 && (
