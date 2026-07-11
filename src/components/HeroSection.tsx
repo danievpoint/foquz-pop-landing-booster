@@ -60,8 +60,6 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        <HeroPromoBanner />
-
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <img
