@@ -14,9 +14,10 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { useCart, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
-import { products as allSorten } from "@/data/products";
+import { products as allSorten, allProducts } from "@/data/products";
+import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
 import payVisa from "@/assets/payment/visa.svg";
