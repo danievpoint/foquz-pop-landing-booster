@@ -76,6 +76,13 @@
     background-color: #ffffff;
     overscroll-behavior-y: none;
     scroll-behavior: smooth;
+    /* Header-Höhe (Safe-Area + Marquee + Navbar) für Anker-Sprünge.
+       Höhere Spezifität als Tailwind scroll-mt-* Utilities. */
+    scroll-padding-top: calc(var(--safe-area-top) + var(--marquee-height) + 76px);
+  }
+
+  section[id] {
+    scroll-margin-top: calc(var(--safe-area-top) + var(--marquee-height) + 80px);
   }
 
   body {

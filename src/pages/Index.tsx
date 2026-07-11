@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection, { useHeroReady } from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
-import MarqueeBanner from "@/components/MarqueeBanner";
 import CookieBanner from "@/components/CookieBanner";
 import NewsletterPopup from "@/components/NewsletterPopup";
 
@@ -48,7 +47,6 @@ const Index = () => {
               <div className="w-10 h-10 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             </div>
           )}
-        <MarqueeBanner />
         <Navbar />
         <HeroSection />
         <ProductGrid />

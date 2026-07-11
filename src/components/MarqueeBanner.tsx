@@ -17,9 +17,10 @@ const MarqueeBanner = () => {
     <section
       className="fixed left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-[var(--marquee-height)]"
       data-banner
-      style={{ top: "var(--safe-area-top)", WebkitTransform: 'translate3d(0,0,0)' } as React.CSSProperties}
+      style={{ top: "var(--safe-area-top)" }}
     >
-      <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center" style={{ willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' } as React.CSSProperties}>
+      <div className="marquee-track flex whitespace-nowrap gap-6 md:gap-12 h-full items-center">
+
         {repeated.map((text, i) => (
           <span
             key={i}
