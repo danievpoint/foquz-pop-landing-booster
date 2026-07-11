@@ -254,13 +254,21 @@ const AccordionSections = ({
           ];
           const filtered = faqs.filter((faq) => productFaqQuestions.includes(faq.q));
           return (
-            <div className="space-y-5">
+            <div className="space-y-6">
               {filtered.map((faq) => (
                 <div key={faq.q}>
-                  <p className="font-bold mb-1">{faq.q}</p>
-                  <p className={mutedCls}>{faq.a}</p>
+                  <p className="font-bold mb-2">{faq.q}</p>
+                  <p className={`${mutedCls} leading-loose`}>{faq.a}</p>
                 </div>
               ))}
+              <Link to="/faq">
+                <button
+                  className="comic-btn w-full text-sm py-2.5 px-6 font-black mt-2"
+                  style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
+                >
+                  ALLE FAQ-FRAGEN
+                </button>
+              </Link>
             </div>
           );
         })()}
