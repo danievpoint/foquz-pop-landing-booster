@@ -47,6 +47,15 @@ const SINGLE_PRICE = 7.49;
 const FREE_SHIPPING_THRESHOLD = 29;
 const SHIPPING_COST_DE = 4.49;
 
+const getProductHandle = (item: CartItem): string | null => {
+  if (item.id === "bundle" || item.id === "starter-bundle") return "starter-bundle";
+  const byName = allProducts.find((p) => p.name === item.name);
+  if (byName) return byName.handle;
+  const byId = allProducts.find((p) => p.handle === item.id);
+  if (byId) return byId.handle;
+  return null;
+};
+
 const CartDrawer = () => {
   const {
     items,
