@@ -225,15 +225,11 @@ const AccordionSections = ({
             </li>
           ))}
         </ul>
-        <p className={`text-xs mt-4 ${mutedCls}`}>
-          {product.isBundle ? (
-            <>
-              <strong className={isBundlePage ? "text-white" : ""}>Spar 25%</strong> gegenüber Einzelkauf.
-            </>
-          ) : (
-            "100% Natur. Ohne Chemie. Ohne Bullshit."
-          )}
-        </p>
+        {product.isBundle && (
+          <p className={`text-xs mt-4 ${mutedCls}`}>
+            <strong className={isBundlePage ? "text-white" : ""}>Spar 25%</strong> gegenüber Einzelkauf.
+          </p>
+        )}
       </Item>
 
       <Item k="usage" title="ANWENDUNG">
