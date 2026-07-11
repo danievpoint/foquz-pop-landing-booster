@@ -109,6 +109,7 @@ export const useLockBodyScroll = (locked: boolean) => {
       if (root) root.style.backgroundColor = previousRootBg;
       body.removeAttribute(LOCK_ATTR);
       if (previousThemeColor) setThemeColor(previousThemeColor);
+      if (previousStatusBarStyle) setStatusBarStyle(previousStatusBarStyle);
       window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
     };
   }, [locked]);
