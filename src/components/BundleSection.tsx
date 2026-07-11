@@ -96,11 +96,11 @@ const BundleSection = () => {
             </div>
 
             {/* Price - klarer Vergleich mit automatischem Launch-Code */}
-            <div className="flex items-center justify-center gap-3 lg:gap-4 mb-2 flex-wrap bundle-price-row">
+            <div className="flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-2 flex-wrap bundle-price-row">
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">19,99€</span>
               <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 14,99€</span>
             </div>
-            <p className="text-white/90 font-bold text-sm md:text-base mb-2 text-center">
+            <p className="text-white/90 font-bold text-sm md:text-base mb-2 text-center lg:text-left">
               3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="line-through">19,99€</span> → mit Code <span className="text-[#ffd618]">LAUNCH25</span> nur <span className="text-[#ffd618]">14,99€</span>
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/25 mb-4 lg:mb-6">
