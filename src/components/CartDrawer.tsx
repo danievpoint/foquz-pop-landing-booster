@@ -128,6 +128,12 @@ const CartDrawer = () => {
     <AnimatePresence>
       {isOpen && (
         <>
+          <div
+            aria-hidden="true"
+            className="fixed inset-x-0 top-0 z-[10003] bg-card pointer-events-none"
+            style={{ height: "env(safe-area-inset-top, 0px)" }}
+          />
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

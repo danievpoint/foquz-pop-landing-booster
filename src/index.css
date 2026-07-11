@@ -94,6 +94,25 @@
     background-color: hsl(var(--background));
   }
 
+  html[data-scroll-locked],
+  html[data-scroll-locked] body,
+  html[data-scroll-locked] #root {
+    background-color: hsl(var(--card)) !important;
+  }
+
+  html[data-scroll-locked]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 0px);
+    background-color: hsl(var(--card));
+    pointer-events: none;
+    z-index: 2147483647;
+    transform: translateZ(0);
+  }
+
   @media (min-width: 768px) {
     :root {
       --marquee-height: 28px;
