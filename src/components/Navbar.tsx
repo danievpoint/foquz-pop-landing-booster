@@ -70,6 +70,7 @@ const Navbar = () => {
     ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?"),
     ...rightLinks.filter(l => l.label === "SO GEHTS"),
     ...leftLinks.filter(l => l.label === "WAS IST FOQUZ ?"),
+    { label: "FAQ", to: "/faq", icon: MessageCircleQuestion },
   ];
 
   // Helper: for hash links on the same page, scroll to element; otherwise navigate
