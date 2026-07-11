@@ -1,6 +1,6 @@
 const HeroPromoBanner = () => {
   return (
-    <div className="relative z-10 w-full flex justify-center px-4 pt-2 sm:pt-3 md:pt-4 lg:pt-2">
+    <div className="relative z-10 w-full flex justify-center px-4 mb-2 sm:mb-3">
       <a
         href="#bundle"
         className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-card/80 border border-foreground/10 px-3 sm:px-4 py-1.5 shadow-sm hover:bg-card transition-colors"
