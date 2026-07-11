@@ -4,6 +4,7 @@ import { X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { Link } from "react-router-dom";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 const STORAGE_KEY = "foquz_bundle_popup_dismissed";
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
@@ -12,6 +13,7 @@ const BundlePopup = () => {
   const [visible, setVisible] = useState(false);
   const { addToCart, popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp } = useCart();
   const shownRef = useRef(false);
+  useLockBodyScroll(visible);
 
   useEffect(() => {
     if (addToCartTimestamp === 0) return;

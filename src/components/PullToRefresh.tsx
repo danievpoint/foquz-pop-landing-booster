@@ -10,6 +10,7 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
   const isDragging = useRef(false);
 
   const onTouchStart = useCallback((e: TouchEvent) => {
+    if (document.body.hasAttribute("data-scroll-locked")) return;
     if (window.scrollY === 0) {
       startY.current = e.touches[0].clientY;
       isDragging.current = true;
@@ -17,6 +18,7 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const onTouchMove = useCallback((e: TouchEvent) => {
+    if (document.body.hasAttribute("data-scroll-locked")) return;
     if (!isDragging.current || refreshing) return;
     const diff = e.touches[0].clientY - startY.current;
     if (diff > 0 && window.scrollY === 0) {
@@ -29,6 +31,12 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
   }, [refreshing]);
 
   const onTouchEnd = useCallback(() => {
+    if (document.body.hasAttribute("data-scroll-locked")) {
+      isDragging.current = false;
+      setPulling(false);
+      setPullDistance(0);
+      return;
+    }
     isDragging.current = false;
     if (pullDistance >= THRESHOLD && !refreshing) {
       setRefreshing(true);
@@ -56,18 +64,13 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
   const offset = pulling || refreshing ? pullDistance : 0;
 
   return (
-    <div
-      style={{
-        transform: offset > 0 ? `translateY(${offset}px)` : undefined,
-        transition: !pulling ? 'transform 0.3s ease' : undefined,
-      }}
-    >
+    <>
       {offset > 0 && (
         <div
-          className="absolute left-0 right-0 z-[99999] flex items-center justify-center pointer-events-none"
+          className="fixed left-0 right-0 top-0 z-[99999] flex items-center justify-center pointer-events-none"
           style={{
-            top: -offset,
-            height: offset,
+            height: Math.max(offset, 48),
+            paddingTop: "env(safe-area-inset-top, 0px)",
             opacity: Math.min(offset / THRESHOLD, 1),
           }}
         >
@@ -99,7 +102,7 @@ const PullToRefresh = ({ children }: { children: React.ReactNode }) => {
         </div>
       )}
       {children}
-    </div>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
+import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 
 const NewsletterSection = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ const NewsletterSection = () => {
   const [alreadySubscribed, setAlreadySubscribed] = useState(false);
   const [consent, setConsent] = useState(false);
   const { activateNewsletterDiscount } = useCart();
+  useLockBodyScroll(showPopup);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
