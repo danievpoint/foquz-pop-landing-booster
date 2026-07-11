@@ -241,7 +241,7 @@ const ProductDetail = () => {
               {product.originalPrice && (
                 <span className={`text-base lg:text-lg line-through ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>{product.originalPrice}</span>
               )}
-              <StockBadge available={isAvailable(product.name)} />
+              {!product.isBundle && <StockBadge available={isAvailable(product.name)} />}
             </div>
             <span className={`text-[10px] lg:text-xs mb-3 lg:mb-6 block ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>inkl. MwSt.</span>
 
