@@ -76,14 +76,25 @@
     background-color: #ffffff;
     overscroll-behavior-y: none;
     scroll-behavior: smooth;
-    /* Header-Höhe (Safe-Area + Marquee + Navbar) für Anker-Sprünge.
-       Höhere Spezifität als Tailwind scroll-mt-* Utilities. */
-    scroll-padding-top: calc(var(--safe-area-top) + var(--marquee-height) + 76px);
   }
+}
 
-  section[id] {
-    scroll-margin-top: calc(var(--safe-area-top) + var(--marquee-height) + 80px);
-  }
+/* Anker-Sprünge: einheitlicher Offset für Safe-Area + Marquee + Navbar.
+   BEWUSST außerhalb von @layer base, damit die Tailwind-Utility
+   `scroll-mt-*` (Layer utilities) diese Regel nicht überschreiben kann.
+   Zusätzlich `!important`, um jegliche Section-spezifische scroll-mt
+   Utility zuverlässig zu neutralisieren. */
+html {
+  /* Navbar ~68px mobile / ~72px desktop + 12px Puffer */
+  scroll-padding-top: calc(var(--safe-area-top) + var(--marquee-height) + 84px) !important;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--safe-area-top) + var(--marquee-height) + 84px) !important;
+}
+
+@layer base {
+  /* placeholder so the following body{} bleibt in @layer base */
 
   body {
     @apply bg-background text-foreground font-barlow leading-none;
