@@ -7,7 +7,7 @@ import bundleBg from "@/assets/bundle-bg.png";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  <strong key="save">25% Sparen</strong>,
+  "25% Sparen",
   "Nasen Stripes und Sticker for free",
 ];
 
@@ -90,7 +90,9 @@ const BundleSection = () => {
                     style={{ backgroundColor: "#ffd618" }}>
                     ✓
                   </span>
-                  <span className="text-white font-semibold text-sm lg:text-base bundle-check-text">{c}</span>
+                  <span className="text-white font-semibold text-sm lg:text-base bundle-check-text">
+                    {c.includes("25%") ? <strong>{c}</strong> : c}
+                  </span>
                 </div>
               ))}
             </div>
