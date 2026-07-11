@@ -264,51 +264,9 @@ const ProductDetail = () => {
               {product.isBundle ? "BUNDLE SICHERN" : "IN DEN WARENKORB"}
             </button>
 
-            {/* Ingredients – collapsible on mobile/tablet */}
-            <div className={`border-t-2 pt-3 lg:pt-6 ${isBundlePage ? "border-white/20" : "border-foreground/10"}`}>
-              {/* Mobile/Tablet: dropdown */}
-              <button
-                onClick={() => {
-                  const el = document.getElementById('ingredients-dropdown');
-                  if (el) el.classList.toggle('hidden');
-                  const arrow = document.getElementById('ingredients-arrow');
-                  if (arrow) arrow.classList.toggle('rotate-180');
-                }}
-                className="lg:hidden flex items-center justify-between w-full"
-              >
-                <h3 className="font-extrabold text-sm">
-                  {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
-                </h3>
-                <ChevronDown id="ingredients-arrow" className="w-5 h-5 transition-transform duration-200" />
-              </button>
-              {/* Desktop: always visible title */}
-              <h3 className="hidden lg:block font-extrabold text-lg mb-4">
-                {product.isBundle ? "WAS IST DRIN?" : "WAS STECKT DRIN?"}
-              </h3>
-              <div id="ingredients-dropdown" className="hidden lg:!block mt-2 lg:mt-0">
-                <div className="flex flex-wrap gap-1.5 lg:hidden">
-                   {product.ingredients.map((ing) => (
-                     <span key={ing} className="inline-flex items-center gap-1 text-[10px] font-semibold bg-secondary/30 rounded-full px-2.5 py-1">
-                       <span className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black shrink-0" style={{ backgroundColor: "#ffd618", color: "#000" }}>✓</span>
-                       {ing}
-                     </span>
-                  ))}
-                </div>
-                <ul className="hidden lg:block space-y-2">
-                  {product.ingredients.map((ing) => (
-                    <li key={ing} className="flex items-center gap-2 text-sm">
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0" style={{ backgroundColor: "#ffd618" }}>✓</span>
-                      {ing}
-                    </li>
-                  ))}
-                </ul>
-                <p className={`text-[10px] lg:text-xs mt-2 lg:mt-4 ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
-                  {product.isBundle ? (
-                    <><strong className="text-white">Spar 25%</strong> gegenüber Einzelkauf.</>
-                  ) : "100% Natur. Ohne Chemie. Ohne Bullshit."}
-                </p>
-              </div>
-            </div>
+            {/* Collapsible sections: Was steckt drin, Anwendung, FAQ */}
+            <AccordionSections product={product} isBundlePage={isBundlePage} />
+
 
 
             {/* Entdecke auch – inline on desktop */}
