@@ -76,7 +76,7 @@ const BundleBanner = () => {
               FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
+              <strong>Spare 25%</strong> zum Launch und teste alle unsere 3 Sorten in einer Box.
             </p>
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-2xl md:text-3xl">14,99€</span>
@@ -300,7 +300,7 @@ const ProductDetail = () => {
                 </ul>
                 <p className={`text-[10px] lg:text-xs mt-2 lg:mt-4 ${isBundlePage ? "text-white/70" : "text-muted-foreground"}`}>
                   {product.isBundle ? (
-                    <>Spar <span className="font-black text-xs lg:text-sm" style={{ color: "#ffd618" }}>25%</span> gegenüber Einzelkauf.</>
+                    <><strong className="text-white">Spar 25%</strong> gegenüber Einzelkauf.</>
                   ) : "100% Natur. Ohne Chemie. Ohne Bullshit."}
                 </p>
               </div>

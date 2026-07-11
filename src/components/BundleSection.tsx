@@ -7,7 +7,7 @@ import bundleBg from "@/assets/bundle-bg.png";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  "25% Sparen",
+  <strong key="save">25% Sparen</strong>,
   "Nasen Stripes und Sticker for free",
 ];
 
@@ -79,7 +79,7 @@ const BundleSection = () => {
               Eine Box. Voller Fokus.
             </p>
             <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg bundle-body">
-              Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
+              <strong>Spare 25%</strong> zum Launch und teste alle unsere 3 Sorten in einer Box.
             </p>
 
             {/* Checkpoints - 2 columns on mobile */}
@@ -101,12 +101,12 @@ const BundleSection = () => {
               <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 14,99€</span>
             </div>
             <p className="text-white/90 font-bold text-sm md:text-base mb-2 text-center lg:text-left">
-              3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="line-through">19,99€</span> → mit Code <span className="text-[#ffd618]">LAUNCH25</span> nur <span className="text-[#ffd618]">14,99€</span>
+              3× einzeln <span className="line-through">22,47€</span> → Bundle <span className="line-through">19,99€</span> → mit Code <span className="text-[#ffd618] font-black">LAUNCH25</span> nur <span className="text-[#ffd618] font-black">14,99€</span>
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/25 mb-4 lg:mb-6">
               <span className="text-[#ffd618] text-sm">🎟️</span>
               <span className="text-white text-xs md:text-sm font-bold">
-                Code <span className="text-[#ffd618] font-black">LAUNCH25</span> wird automatisch angewendet – du sparst 25%
+                Code <span className="text-[#ffd618] font-black">LAUNCH25</span> wird automatisch angewendet – du sparst <strong className="text-[#ffd618]">25%</strong>
               </span>
             </div>
 

@@ -91,7 +91,7 @@ const BundlePopup = () => {
                 FOQUZ POWER BUNDLE – Alle 3 Sorten!
               </h3>
               <p className="text-white/70 text-sm md:text-base">
-                Spare 25% zum Launch und teste alle unsere 3 Sorten in einer Box.
+                <strong>Spare 25%</strong> zum Launch und teste alle unsere 3 Sorten in einer Box.
               </p>
 
               <div className="flex items-center gap-3">
