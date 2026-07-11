@@ -393,16 +393,16 @@ const ProductDetail = () => {
             {/* Product benefits icons */}
             <div className="grid grid-cols-2 gap-2 mb-5 lg:mb-8">
               {[
-                { icon: Ban, label: "Ohne Nikotin" },
-                { icon: ZapOff, label: "Ohne Koffein" },
-                { icon: Leaf, label: "Echte Kräuter" },
-                { icon: Flag, label: "Deutsche Marke" },
-              ].map(({ icon: Icon, label }) => (
+                { emoji: "🚫", label: "Ohne Nikotin" },
+                { emoji: "⚡", label: "Ohne Koffein" },
+                { emoji: "🌿", label: "Mit echten Kräutern" },
+                { emoji: "🇩🇪", label: "Deutsche Marke" },
+              ].map(({ emoji, label }) => (
                 <div
                   key={label}
                   className={`flex items-center gap-2 text-xs lg:text-sm font-bold ${isBundlePage ? "text-white" : "text-foreground"}`}
                 >
-                  <Icon className="w-4 h-4 lg:w-5 lg:h-5 shrink-0" />
+                  <span className="text-base lg:text-lg shrink-0" aria-hidden="true">{emoji}</span>
                   <span>{label}</span>
                 </div>
               ))}
