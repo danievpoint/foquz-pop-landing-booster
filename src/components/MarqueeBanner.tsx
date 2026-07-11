@@ -15,7 +15,9 @@ const items = [
 ];
 
 const MarqueeBanner = () => {
+  const ready = useHeroReady();
   const repeated = [...items, ...items, ...items, ...items];
+
 
   useLayoutEffect(() => {
     document.documentElement.setAttribute("data-marquee-page", "true");
