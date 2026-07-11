@@ -296,6 +296,8 @@ const CartDrawer = () => {
                       const finalPrice = hasDiscount
                         ? item.price * (1 - activeDiscountPercent / 100)
                         : item.price;
+                      const productHandle = getProductHandle(item);
+                      const productLink = productHandle ? `/produkt/${productHandle}` : "#";
                       return (
                         <motion.div
                           key={item.id}
@@ -307,13 +309,15 @@ const CartDrawer = () => {
                         >
                           <div className="w-20 sm:w-24 shrink-0">
                             {item.image && (
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                width={96}
-                                height={96}
-                                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
-                              />
+                              <Link to={productLink} onClick={closeCart} className="block">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  width={96}
+                                  height={96}
+                                  className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
+                                />
+                              </Link>
                             )}
                             {hasDiscount && (
                               <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
@@ -325,7 +329,9 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                 <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
+                                <Link to={productLink} onClick={closeCart} className="block hover:opacity-80 transition-opacity">
+                                  <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
+                                </Link>
                               </div>
                               <button
                                 onClick={() => removeFromCart(item.id)}
