@@ -23,8 +23,8 @@ const Footer = () => {
         }
       `}</style>
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-[3fr_1fr_1fr_1fr] gap-4 md:gap-6 mb-6 md:mb-10 ft-grid">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr_1fr] gap-4 md:gap-6 mb-6 md:mb-10 ft-grid">
+          <div className="md:order-1">
             <img src={foquzLogo} alt="FOQUZ Logo" className="h-14 md:h-20 mb-2 md:mb-3 -ml-2 ft-logo" />
             <p className="text-sm md:text-lg opacity-80 mb-0.5 md:mb-1 font-bold ft-claim">
               Die Original Foquz Riechdose aus Deutschland.
@@ -50,59 +50,64 @@ const Footer = () => {
             </div>
           </div>
 
-          <div>
-            <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">INFO</h4>
-            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
-              <li>
-                <Link to="/ueber-uns" className="hover:opacity-100 transition-opacity ft-link">Über uns</Link>
-              </li>
-              <li>
-                <Link to="/b2b-anfragen" className="hover:opacity-100 transition-opacity ft-link">B2B Anfragen</Link>
-              </li>
-            </ul>
-          </div>
+          <div className="flex md:contents gap-4 md:gap-0">
+            <div className="flex flex-col gap-2 md:contents flex-1">
+              <div className="md:order-2">
+                <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">INFO</h4>
+                <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
+                  <li>
+                    <Link to="/ueber-uns" className="hover:opacity-100 transition-opacity ft-link">Über uns</Link>
+                  </li>
+                  <li>
+                    <Link to="/b2b-anfragen" className="hover:opacity-100 transition-opacity ft-link">B2B Anfragen</Link>
+                  </li>
+                </ul>
+              </div>
 
-          <div>
-            <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">LEGAL</h4>
-            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
-              <li>
-                <Link to="/impressum" className="hover:opacity-100 transition-opacity ft-link">Impressum</Link>
-              </li>
-              <li>
-                <Link to="/datenschutz" className="hover:opacity-100 transition-opacity ft-link">Datenschutz</Link>
-              </li>
-              <li>
-                <Link to="/agb" className="hover:opacity-100 transition-opacity ft-link">AGB</Link>
-              </li>
-              <li>
-                <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
-              </li>
-              <li>
-                <Link to="/widerrufsbelehrung#widerrufsformular" className="hover:opacity-100 transition-opacity ft-link">Widerrufsformular</Link>
-              </li>
-              <li>
-                <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
-              </li>
-              <li>
-                <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity ft-link">EU-Streitschlichtung</a>
-              </li>
-              <li>
-                <button onClick={openCookieSettings} className="hover:opacity-100 transition-opacity ft-link text-left">Cookie-Einstellungen</button>
-              </li>
+              <div className="md:order-4">
+                <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">HILFE</h4>
+                <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
+                  <li>
+                    <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
+                  </li>
+                  <li>
+                    <Link to="/hilfe" className="hover:opacity-100 transition-opacity ft-link">Help Center</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">HILFE</h4>
-            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
-              <li>
-                <Link to="/faq" className="hover:opacity-100 transition-opacity ft-link">FAQ</Link>
-              </li>
-              <li>
-                <Link to="/hilfe" className="hover:opacity-100 transition-opacity ft-link">Help Center</Link>
-              </li>
-            </ul>
+            <div className="md:contents flex-1">
+              <div className="md:order-3">
+                <h4 className="text-sm md:text-base font-extrabold mb-2 md:mb-4 ft-heading">LEGAL</h4>
+                <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm opacity-80 ft-links">
+                  <li>
+                    <Link to="/impressum" className="hover:opacity-100 transition-opacity ft-link">Impressum</Link>
+                  </li>
+                  <li>
+                    <Link to="/datenschutz" className="hover:opacity-100 transition-opacity ft-link">Datenschutz</Link>
+                  </li>
+                  <li>
+                    <Link to="/agb" className="hover:opacity-100 transition-opacity ft-link">AGB</Link>
+                  </li>
+                  <li>
+                    <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
+                  </li>
+                  <li>
+                    <Link to="/widerrufsbelehrung#widerrufsformular" className="hover:opacity-100 transition-opacity ft-link">Widerrufsformular</Link>
+                  </li>
+                  <li>
+                    <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
+                  </li>
+                  <li>
+                    <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity ft-link">EU-Streitschlichtung</a>
+                  </li>
+                  <li>
+                    <button onClick={openCookieSettings} className="hover:opacity-100 transition-opacity ft-link text-left">Cookie-Einstellungen</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
