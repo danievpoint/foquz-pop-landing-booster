@@ -420,7 +420,7 @@ const ProductDetail = () => {
 
 
             {/* Entdecke auch – inline on desktop */}
-            <div className={`hidden lg:block border-t-2 pt-6 mt-8 ${isBundlePage ? "border-white/20" : "border-foreground/10"}`}>
+            <div className="hidden lg:block pt-6 mt-8">
               <h3 className="font-extrabold text-lg mb-4">ENTDECKE AUCH</h3>
               <div className="grid grid-cols-3 gap-4">
                 {otherProducts.map((p) => (
