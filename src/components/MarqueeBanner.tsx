@@ -1,4 +1,6 @@
 import { useLayoutEffect } from "react";
+import { useHeroReady } from "@/components/HeroSection";
+
 
 const items = [
   "100% ÄTHERISCHE ÖLE",
