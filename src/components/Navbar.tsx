@@ -59,6 +59,7 @@ const Navbar = () => {
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
     { label: "BUNDLE", to: "/#bundle", icon: Layers },
     { label: "WAS IST FOQUZ ?", to: "/#das-ist-foquz", icon: HelpCircle },
+    { label: "FAQ", to: "/faq", icon: MessageCircleQuestion },
   ];
 
   const rightLinks = [
@@ -67,10 +68,10 @@ const Navbar = () => {
   ];
 
   const mobileLinks = [
-    ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?"),
+    ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?" && l.label !== "FAQ"),
     ...rightLinks.filter(l => l.label === "SO GEHTS"),
     ...leftLinks.filter(l => l.label === "WAS IST FOQUZ ?"),
-    { label: "FAQ", to: "/faq", icon: MessageCircleQuestion },
+    ...leftLinks.filter(l => l.label === "FAQ"),
   ];
 
   // Helper: for hash links on the same page, scroll to element; otherwise navigate
@@ -136,17 +137,8 @@ const Navbar = () => {
           {/* Center – clickable area to scroll to top */}
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
-          {/* Right: FAQ button + cart icon */}
-          <div className="hidden lg:flex items-center gap-2.5">
-            <Link
-              to="/faq"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 rounded-full px-4 py-2 bg-card border-2 border-foreground shadow-lg font-extrabold text-sm uppercase tracking-wide text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="Zur FAQ-Seite"
-            >
-              <MessageCircleQuestion size={18} />
-              FAQ
-            </Link>
+          {/* Right: cart icon */}
+          <div className="hidden lg:flex items-center">
             <button
               type="button"
               onClick={openCart}
