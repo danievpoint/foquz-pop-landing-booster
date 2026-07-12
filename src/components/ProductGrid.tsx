@@ -82,6 +82,10 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 <button
   onClick={onClick}
   className="w-8 h-8 rounded-full comic-btn bg-white text-black flex items-center justify-center font-barlow font-bold text-lg leading-none hover:opacity-80 shrink-0 !p-0">
+  ?
+</button>;
+
+
 
 
 /**
