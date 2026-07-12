@@ -581,6 +581,23 @@ const CartDrawer = () => {
             {items.length > 0 && (
               <div className="px-4 sm:px-6 py-3 sm:py-4 border-t-2 border-foreground space-y-1.5 sm:space-y-2 bg-card shrink-0" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}>
                 <div className="flex items-center justify-between text-sm">
+                  <span className="text-foreground/80">Zwischensumme:</span>
+                  <span className="font-black">€{total.toFixed(2).replace(".", ",")}</span>
+                </div>
+
+                {discountAmount > 0 && discountCode && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground/80 flex items-center gap-1.5">
+                      <Tag size={14} className="text-pink-600" />
+                      Rabatt (<span className="font-black uppercase">{discountCode}</span>):
+                    </span>
+                    <span className="font-black text-pink-600">
+                      −€{discountAmount.toFixed(2).replace(".", ",")}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between text-sm">
                   <span className="text-foreground/80">Versandkosten (DE/AT/CH):</span>
                   <span className="font-black">
                     {freeShipping ? (
@@ -593,7 +610,7 @@ const CartDrawer = () => {
 
                 {totalSavings > 0 && (
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="font-black">Du sparst:</span>
+                    <span className="font-black">Du sparst insgesamt:</span>
                     <span className="bg-pink-100 text-pink-700 text-xs font-black px-2 py-1 rounded">
                       €{totalSavings.toFixed(2).replace(".", ",")}
                     </span>
