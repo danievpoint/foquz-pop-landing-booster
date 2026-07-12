@@ -90,33 +90,59 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 /**
  * Mobile carousel slide: exact-first-frame poster overlays the video.
- * Video stays invisible until its first `playing` event fires, then the
- * poster is removed instantly (no transition). If iOS blocks autoplay, only
- * the first frame stays visible — the video element remains hidden so the
- * native Safari inline play button is never shown.
+ * The video only starts playing once ≥60% of it is visible (IntersectionObserver
+ * threshold 0.6). It loops endlessly; the next slide is chosen exclusively by
+ * swipe/arrows/dots (no auto-advance on video end).
+ *
+ * The poster stays on top of the video until the real `playing` event fires,
+ * then it is removed instantly (no transition). If iOS blocks autoplay the
+ * poster stays visible — the native Safari play button never appears because
+ * the video element itself stays `visibility: hidden` until it truly plays.
  */
 const MobileVideoWithPoster = memo(({
   src,
   poster,
   alt,
-  onEnded,
 }: {
   src: string;
   poster: string;
   alt: string;
-  onEnded?: () => void;
 }) => {
   const [playing, setPlaying] = useState(false);
+  const [inView, setInView] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= 0.6),
+      { threshold: [0, 0.6, 1] }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Reset poster overlay when src changes (new slide mounted).
+  useEffect(() => {
+    setPlaying(false);
+  }, [src]);
+
   return (
-    <>
+    <div ref={wrapRef} className="relative w-full aspect-square">
       <AutoVideo
         src={src}
         poster={poster}
-        loop={false}
+        loop
+        play={inView}
+        preload="metadata"
         className="relative w-full aspect-square object-cover"
         style={{ visibility: playing ? "visible" : "hidden" }}
         onPlaying={() => setPlaying(true)}
-        onEnded={onEnded}
+        onPause={() => {
+          // Keep poster hidden once we've actually played at least once, so a
+          // programmatic pause on swipe-out doesn't flash the poster back in.
+        }}
       />
       {!playing && (
         <img
@@ -126,7 +152,7 @@ const MobileVideoWithPoster = memo(({
           className="absolute inset-0 w-full h-full aspect-square object-cover z-10 pointer-events-none"
         />
       )}
-    </>
+    </div>
   );
 });
 MobileVideoWithPoster.displayName = "MobileVideoWithPoster";
