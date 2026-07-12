@@ -137,17 +137,8 @@ const Navbar = () => {
           {/* Center – clickable area to scroll to top */}
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex-1 h-full min-h-[40px] cursor-pointer" aria-label="Zur Startseite" />
 
-          {/* Right: FAQ button + cart icon */}
-          <div className="hidden lg:flex items-center gap-2.5">
-            <Link
-              to="/faq"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 rounded-full px-4 py-2 bg-card border-2 border-foreground shadow-lg font-extrabold text-sm uppercase tracking-wide text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="Zur FAQ-Seite"
-            >
-              <MessageCircleQuestion size={18} />
-              FAQ
-            </Link>
+          {/* Right: cart icon */}
+          <div className="hidden lg:flex items-center">
             <button
               type="button"
               onClick={openCart}
