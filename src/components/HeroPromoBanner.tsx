@@ -23,7 +23,7 @@ const HeroPromoBanner = ({ className = "" }: HeroPromoBannerProps) => {
           auf das FOQUZ Power Bundle
         </span>
         <span className="text-[10px] sm:text-xs font-black text-primary uppercase tracking-wide">
-          <strong>Code LAUNCH25</strong>
+          <strong>Code FOQUZ25</strong>
         </span>
       </a>
     </motion.div>
