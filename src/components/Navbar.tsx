@@ -59,6 +59,7 @@ const Navbar = () => {
     { label: "PRODUKTE", to: "/#sorten", icon: ShoppingBag },
     { label: "BUNDLE", to: "/#bundle", icon: Layers },
     { label: "WAS IST FOQUZ ?", to: "/#das-ist-foquz", icon: HelpCircle },
+    { label: "FAQ", to: "/faq", icon: MessageCircleQuestion },
   ];
 
   const rightLinks = [
@@ -67,10 +68,10 @@ const Navbar = () => {
   ];
 
   const mobileLinks = [
-    ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?"),
+    ...leftLinks.filter(l => l.label !== "WAS IST FOQUZ ?" && l.label !== "FAQ"),
     ...rightLinks.filter(l => l.label === "SO GEHTS"),
     ...leftLinks.filter(l => l.label === "WAS IST FOQUZ ?"),
-    { label: "FAQ", to: "/faq", icon: MessageCircleQuestion },
+    ...leftLinks.filter(l => l.label === "FAQ"),
   ];
 
   // Helper: for hash links on the same page, scroll to element; otherwise navigate
