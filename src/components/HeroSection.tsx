@@ -170,6 +170,7 @@ const HeroSection = () => {
               loading="eager"
               decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
+              style={{ transform: "scale(0.92)", transformOrigin: "top center" }}
             />
 
             {/* Layer 2: Clouds overlay */}
