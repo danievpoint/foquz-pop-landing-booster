@@ -82,8 +82,52 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 <button
   onClick={onClick}
   className="w-8 h-8 rounded-full comic-btn bg-white text-black flex items-center justify-center font-barlow font-bold text-lg leading-none hover:opacity-80 shrink-0 !p-0">
-  ?
-</button>;
+
+
+/**
+ * Mobile carousel slide: exact-first-frame poster overlays the video.
+ * Video stays invisible until its first `playing` event fires, then the
+ * poster is removed instantly (no transition). If iOS blocks autoplay, only
+ * the first frame stays visible — the video element remains hidden so the
+ * native Safari inline play button is never shown.
+ */
+const MobileVideoWithPoster = memo(({
+  src,
+  poster,
+  alt,
+  onEnded,
+}: {
+  src: string;
+  poster: string;
+  alt: string;
+  onEnded?: () => void;
+}) => {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <>
+      <AutoVideo
+        src={src}
+        poster={poster}
+        loop={false}
+        className="relative w-full aspect-square object-cover"
+        style={{ visibility: playing ? "visible" : "hidden" }}
+        onPlaying={() => setPlaying(true)}
+        onEnded={onEnded}
+      />
+      {!playing && (
+        <img
+          src={poster}
+          alt={alt}
+          draggable={false}
+          className="absolute inset-0 w-full h-full aspect-square object-cover z-10 pointer-events-none"
+        />
+      )}
+    </>
+  );
+});
+MobileVideoWithPoster.displayName = "MobileVideoWithPoster";
+
+
 
 
 const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string }) => {
