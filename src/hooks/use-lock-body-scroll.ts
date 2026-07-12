@@ -42,6 +42,15 @@ const getStatusBarStyle = () => {
   return meta?.getAttribute("content") ?? "";
 };
 
+/**
+ * Call before closing an overlay that used useLockBodyScroll when the close
+ * navigates to a new route. Prevents the scroll-restore from overriding the
+ * router's scroll-to-top on the new page.
+ */
+export const skipNextScrollRestore = () => {
+  lockedScrollY = 0;
+};
+
 export const useLockBodyScroll = (locked: boolean) => {
   useEffect(() => {
     if (!locked || typeof window === "undefined") return;

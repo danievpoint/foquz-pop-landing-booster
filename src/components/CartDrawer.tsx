@@ -24,7 +24,7 @@ import payVisa from "@/assets/payment/visa.svg";
 import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
-import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
+import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
 
 const PAYMENT_METHODS = [
   { label: "PayPal", src: payPaypal },
@@ -334,7 +334,7 @@ const CartDrawer = () => {
                         >
                           <div className="w-20 sm:w-24 shrink-0">
                             {item.image && (
-                              <Link to={productLink} onClick={closeCart} className="block">
+                              <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block">
                                 <img
                                   src={item.image}
                                   alt={item.name}
@@ -354,7 +354,7 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                <Link to={productLink} onClick={closeCart} className="block hover:opacity-80 transition-opacity">
+                                <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block hover:opacity-80 transition-opacity">
                                   <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
                                 </Link>
                               </div>
@@ -473,11 +473,13 @@ const CartDrawer = () => {
                                 ? p.numericPrice * (1 - activeDiscountPercent / 100)
                                 : null;
                             return (
-                              <div
+                              <Link
                                 key={p.handle}
+                                to={`/produkt/${p.handle}`}
+                                onClick={() => { skipNextScrollRestore(); closeCart(); }}
                                 data-carousel-card
-                                  className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-2.5 sm:p-3 flex gap-2.5 sm:gap-3"
-                                  style={{ width: "calc(100% - 2rem)" }}
+                                className="shrink-0 snap-center rounded-xl border-2 border-foreground bg-background p-2.5 sm:p-3 flex gap-2.5 sm:gap-3 hover:opacity-90 transition-opacity"
+                                style={{ width: "calc(100% - 2rem)" }}
                               >
                                 <div
                                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg flex items-center justify-center shrink-0"
@@ -510,14 +512,16 @@ const CartDrawer = () => {
                                       )}
                                     </div>
                                     <button
-                                      onClick={() =>
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
                                         addToCart(1, {
                                           id: p.name,
                                           name: p.name,
                                           price: p.numericPrice,
                                           image: p.image,
-                                        })
-                                      }
+                                        });
+                                      }}
                                       className="w-9 h-9 rounded-lg border-2 border-foreground bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-[2px_2px_0_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_hsl(var(--foreground))] transition-transform"
                                       aria-label={`${p.name} zum Warenkorb hinzufügen`}
                                     >
@@ -530,7 +534,7 @@ const CartDrawer = () => {
                                     </div>
                                   )}
                                 </div>
-                              </div>
+                              </Link>
                             );
                           })}
                         </div>
