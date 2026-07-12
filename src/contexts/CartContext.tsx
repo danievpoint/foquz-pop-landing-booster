@@ -48,6 +48,8 @@ const CartContext = createContext<CartContextType>({
   hasNewsletterDiscount: false,
   discountCode: null,
   activeDiscountPercent: 0,
+  bundleDiscountPercent: 0,
+  otherDiscountPercent: 0,
   manualDiscountCode: null,
   applyManualDiscountCode: () => {},
   clearManualDiscountCode: () => {},
