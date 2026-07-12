@@ -598,7 +598,7 @@ const CartDrawer = () => {
                 )}
 
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground/80">Versandkosten (DE/AT/CH):</span>
+                  <span className="text-foreground/80">Versand (DE):</span>
                   <span className="font-black">
                     {freeShipping ? (
                       <span className="text-primary font-black uppercase">Gratis</span>
@@ -606,6 +606,11 @@ const CartDrawer = () => {
                       <>€{shippingCost.toFixed(2).replace(".", ",")}</>
                     )}
                   </span>
+                </div>
+
+                <div className="flex items-center justify-between text-base pt-1 border-t border-foreground/20 mt-1">
+                  <span className="font-black uppercase">Gesamt:</span>
+                  <span className="font-black">€{(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}</span>
                 </div>
 
                 {totalSavings > 0 && (
@@ -626,7 +631,7 @@ const CartDrawer = () => {
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>ZUR KASSE</span>
-                    <span>€{discountedTotal.toFixed(2).replace(".", ",")}</span>
+                    <span>€{(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}</span>
                   </a>
                 ) : (
                   <button
