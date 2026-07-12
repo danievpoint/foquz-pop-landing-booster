@@ -315,11 +315,10 @@ const CartDrawer = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const isBundleItem = item.id === BUNDLE_ID;
-                      const hasDiscount =
-                        activeDiscountPercent > 0 &&
-                        (discountCode !== "LAUNCH25" || isBundleItem);
+                      const itemPct = isBundleItem ? bundleDiscountPercent : otherDiscountPercent;
+                      const hasDiscount = itemPct > 0;
                       const finalPrice = hasDiscount
-                        ? item.price * (1 - activeDiscountPercent / 100)
+                        ? item.price * (1 - itemPct / 100)
                         : item.price;
                       const productHandle = getProductHandle(item);
                       const productLink = productHandle ? `/produkt/${productHandle}` : "#";
@@ -346,10 +345,11 @@ const CartDrawer = () => {
                             )}
                             {hasDiscount && (
                               <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
-                                Aktion -{activeDiscountPercent}%
+                                Aktion -{itemPct}%
                               </div>
                             )}
                           </div>
+
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
