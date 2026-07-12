@@ -329,7 +329,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsCheckingOut(true);
     setCheckoutUrl(null);
 
-    createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
+    createShopifyCheckout(lines, codesForCheckout.length > 0 ? codesForCheckout : undefined)
       .then((result) => {
         if (cancelled) return;
         if (result) {
