@@ -96,19 +96,6 @@ const MobileVideoWithPoster = memo(({
   alt: string;
 }) => {
   const [playing, setPlaying] = useState(false);
-  const [inView, setInView] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= 0.6),
-      { threshold: [0, 0.6, 1] }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   // Reset poster overlay when src changes (new slide mounted).
   useEffect(() => {
@@ -116,20 +103,16 @@ const MobileVideoWithPoster = memo(({
   }, [src]);
 
   return (
-    <div ref={wrapRef} className="relative w-full aspect-square">
+    <div className="relative w-full aspect-square">
       <AutoVideo
         src={src}
         poster={poster}
         loop
-        play={inView}
+        playWhenVisible
         preload="metadata"
         className="relative w-full aspect-square object-cover"
         style={{ visibility: playing ? "visible" : "hidden" }}
         onPlaying={() => setPlaying(true)}
-        onPause={() => {
-          // Keep poster hidden once we've actually played at least once, so a
-          // programmatic pause on swipe-out doesn't flash the poster back in.
-        }}
       />
       {!playing && (
         <img

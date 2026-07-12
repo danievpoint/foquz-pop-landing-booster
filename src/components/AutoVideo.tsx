@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, VideoHTMLAttributes } from "react";
+import { useEffect, useRef, useCallback, useState, VideoHTMLAttributes } from "react";
 
 type Props = VideoHTMLAttributes<HTMLVideoElement> & {
   src: string;
@@ -10,15 +10,33 @@ type Props = VideoHTMLAttributes<HTMLVideoElement> & {
    * as the element mounts (legacy behavior).
    */
   play?: boolean;
+  /**
+   * When true, an IntersectionObserver on the <video> element itself gates
+   * playback: it plays when ≥60% is visible and pauses when it leaves the
+   * viewport. Used by the mobile carousel so the first (below-the-fold) slide
+   * still autoplays on iOS once the user scrolls to it.
+   */
+  playWhenVisible?: boolean;
 };
 
 /**
  * Reliable autoplaying inline video for mobile (iOS/Safari) and desktop.
- * See notes below for the iOS quirks handled here.
  */
-const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...rest }: Props) => {
+const AutoVideo = ({
+  src,
+  poster,
+  onEnded,
+  className,
+  loop,
+  play,
+  playWhenVisible,
+  preload,
+  ...rest
+}: Props) => {
   const ref = useRef<HTMLVideoElement>(null);
-  const gated = play !== undefined;
+  const [visible, setVisible] = useState(false);
+  const gated = play !== undefined || playWhenVisible === true;
+  const effectivePlay = playWhenVisible ? visible : play;
 
   // Ref callback runs synchronously the first time the element exists,
   // BEFORE the browser starts loading the src, so iOS sees the muted +
@@ -38,6 +56,21 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       if (p && typeof p.catch === "function") p.catch(() => {});
     }
   }, [gated]);
+
+  // IntersectionObserver-gated mode: mount an IO on the video element itself.
+  useEffect(() => {
+    if (!playWhenVisible) return;
+    const v = ref.current;
+    if (!v) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting && entry.intersectionRatio >= 0.6);
+      },
+      { threshold: [0, 0.6, 1] }
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, [playWhenVisible]);
 
   // Ungated legacy path: retry autoplay via multiple event hooks.
   useEffect(() => {
@@ -74,31 +107,38 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
     };
   }, [src, gated]);
 
-  // Gated path: react to `play` prop changes.
+  // Gated path: react to `play`/`visible` changes.
   useEffect(() => {
     if (!gated) return;
     const v = ref.current;
     if (!v) return;
     v.muted = true;
-    if (play) {
+    if (effectivePlay) {
       const attempt = () => {
-        if (!ref.current) return;
-        const p = ref.current.play();
+        const el = ref.current;
+        if (!el) return;
+        // Only start if still marked visible (for IO mode).
+        if (playWhenVisible && !visible) return;
+        el.muted = true;
+        const p = el.play();
         if (p && typeof p.catch === "function") p.catch(() => {});
       };
       attempt();
-      // Retry once metadata/data is ready in case play() was too early.
+      // Retry as soon as the media is ready — handles the case where the
+      // element became visible before the first frame was decoded.
       const onReady = () => attempt();
       v.addEventListener("loadedmetadata", onReady);
+      v.addEventListener("loadeddata", onReady);
       v.addEventListener("canplay", onReady);
       return () => {
         v.removeEventListener("loadedmetadata", onReady);
+        v.removeEventListener("loadeddata", onReady);
         v.removeEventListener("canplay", onReady);
       };
     } else {
       try { v.pause(); } catch { /* ignore */ }
     }
-  }, [play, gated, src]);
+  }, [effectivePlay, gated, playWhenVisible, visible, src]);
 
   return (
     <video
@@ -122,3 +162,4 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
 };
 
 export default AutoVideo;
+
