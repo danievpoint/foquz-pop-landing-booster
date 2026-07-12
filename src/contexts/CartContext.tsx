@@ -19,6 +19,8 @@ interface CartContextType {
   hasNewsletterDiscount: boolean;
   discountCode: string | null;
   activeDiscountPercent: number;
+  bundleDiscountPercent: number;
+  otherDiscountPercent: number;
   manualDiscountCode: string | null;
   applyManualDiscountCode: (code: string) => void;
   clearManualDiscountCode: () => void;
