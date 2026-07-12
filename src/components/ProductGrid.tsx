@@ -338,23 +338,12 @@ const ProductGrid = () => {
               
               <div className="flex flex-col items-center w-full">
                 <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block relative" style={{ backgroundColor: products[activeIndex].color + '22' }}>
-                  {/* Poster image sits underneath the video so the next product
-                      is visible INSTANTLY on swipe, even before the video has
-                      loaded its first frame. */}
-                  <img
-                    key={`poster-${activeIndex}`}
-                    src={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                    alt={products[activeIndex].name}
-                    className="absolute inset-0 w-full h-full aspect-square object-cover"
-                    draggable={false}
-                  />
                   {products[activeIndex].video ? (
-                    <AutoVideo
-                      key={`video-${activeIndex}`}
+                    <MobileVideoWithPoster
+                      key={`slide-${activeIndex}`}
                       src={products[activeIndex].video!}
                       poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                      loop={false}
-                      className="relative w-full aspect-square object-cover"
+                      alt={products[activeIndex].name}
                       onEnded={() => {
                         if (!autoPlay) return;
                         setTimeout(() => {
@@ -371,6 +360,7 @@ const ProductGrid = () => {
                       className="relative w-full aspect-square object-cover" />
                   )}
                 </Link>
+
                 {/* Preload neighbour videos so swiping is instant */}
                 <div aria-hidden className="hidden">
                   {products.map((p, i) =>
