@@ -257,7 +257,7 @@ export const AccordionSections = ({
             <div className="space-y-6">
               {filtered.map((faq) => (
                 <div key={faq.q}>
-                  <p className="font-bold mb-2 leading-[1.45]">{faq.q}</p>
+                  <p className="font-bold mb-3 leading-[1.7]">{faq.q}</p>
                   <p className={`${mutedCls} leading-snug`}>{faq.a}</p>
                 </div>
               ))}
