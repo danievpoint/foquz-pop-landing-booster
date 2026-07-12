@@ -19,8 +19,6 @@ interface CartContextType {
   hasNewsletterDiscount: boolean;
   discountCode: string | null;
   activeDiscountPercent: number;
-  bundleDiscountPercent: number;
-  otherDiscountPercent: number;
   manualDiscountCode: string | null;
   applyManualDiscountCode: (code: string) => void;
   clearManualDiscountCode: () => void;
@@ -48,8 +46,6 @@ const CartContext = createContext<CartContextType>({
   hasNewsletterDiscount: false,
   discountCode: null,
   activeDiscountPercent: 0,
-  bundleDiscountPercent: 0,
-  otherDiscountPercent: 0,
   manualDiscountCode: null,
   applyManualDiscountCode: () => {},
   clearManualDiscountCode: () => {},
@@ -213,77 +209,56 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  // LAUNCH25 only applies to the Power Bundle. When the bundle is in the cart,
-  // all other products additionally get 10% off (CLOUD10).
+  // LAUNCH25 only applies to the Power Bundle, not to other products.
   const bundleTotal = items
     .filter((i) => BUNDLE_IDS.has(i.id))
     .reduce((sum, i) => sum + i.price * i.qty, 0);
-  const nonBundleTotal = total - bundleTotal;
+
+  // Auto-applied codes based on cart state:
+  //  - LAUNCH25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
+  //  - CLOUD10  (10%) on the entire cart when the newsletter discount is unlocked
+  // Only ONE code applies. If the user entered a manual code, that wins.
+  // Otherwise the highest-percentage auto code wins (no stacking).
   const hasBundleInCart = bundleTotal > 0;
 
-  // Auto behaviour:
-  //  - Bundle in cart  → LAUNCH25 (25% bundle) + CLOUD10 (10% on all other products)
-  //  - No bundle, only newsletter → CLOUD10 (10% on entire cart)
-  // Manual codes override auto per historical behaviour.
-  let bundleDiscountPercent = 0;
-  let otherDiscountPercent = 0;
-  const codesForCheckout: string[] = [];
-  const codesForDisplay: string[] = [];
+  // Collect auto-applied candidates
+  const autoCandidates: { code: string; pct: number }[] = [];
+  if (hasBundleInCart) autoCandidates.push({ code: "LAUNCH25", pct: 25 });
+  if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
+  const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
 
-  const pushCode = (code: string) => {
-    if (!codesForCheckout.includes(code)) codesForCheckout.push(code);
-    if (!codesForDisplay.includes(code)) codesForDisplay.push(code);
-  };
+  let discountCode: string | null = null;
+  let activeDiscountPercent = 0;
 
   if (manualDiscountCode) {
+    // Unknown codes (e.g. influencer codes) are assumed to be at least as good
+    // as the best auto code, so influencers always get attribution when their
+    // code is entered. Known codes are compared by their percentage value.
     const knownPct = KNOWN_DISCOUNTS[manualDiscountCode];
-    if (manualDiscountCode === "LAUNCH25" || manualDiscountCode === "ICEBLOCK25") {
-      // Bundle-only 25% code — behaves like the auto bundle discount.
-      if (hasBundleInCart) {
-        bundleDiscountPercent = 25;
-        otherDiscountPercent = 10;
-        pushCode(manualDiscountCode);
-        pushCode("CLOUD10");
-      } else {
-        // No bundle → code has no effect locally, still pass to Shopify.
-        pushCode(manualDiscountCode);
-      }
-    } else if (knownPct) {
-      // e.g. CLOUD10 — applies to whole cart.
-      bundleDiscountPercent = knownPct;
-      otherDiscountPercent = knownPct;
-      pushCode(manualDiscountCode);
+    const manualPct = knownPct ?? (bestAuto?.pct ?? 0);
+    const bestAutoPct = bestAuto?.pct ?? 0;
+
+    if (manualPct >= bestAutoPct) {
+      discountCode = manualDiscountCode;
+      activeDiscountPercent = manualPct;
+    } else if (bestAuto) {
+      // Manual code is worse than auto — keep the better auto code.
+      discountCode = bestAuto.code;
+      activeDiscountPercent = bestAuto.pct;
     } else {
-      // Unknown / influencer code — assume applies to whole cart. Combine with
-      // bundle auto-boost when applicable so the customer never loses the
-      // bundle bonus.
-      if (hasBundleInCart) {
-        bundleDiscountPercent = 25;
-        otherDiscountPercent = 10;
-        pushCode("LAUNCH25");
-        pushCode("CLOUD10");
-      }
-      pushCode(manualDiscountCode);
+      discountCode = manualDiscountCode;
+      activeDiscountPercent = manualPct;
     }
-  } else if (hasBundleInCart) {
-    bundleDiscountPercent = 25;
-    otherDiscountPercent = 10;
-    pushCode("LAUNCH25");
-    pushCode("CLOUD10");
-  } else if (hasNewsletterDiscount) {
-    bundleDiscountPercent = 10;
-    otherDiscountPercent = 10;
-    pushCode(NEWSLETTER_DISCOUNT_CODE);
+  } else if (bestAuto) {
+    discountCode = bestAuto.code;
+    activeDiscountPercent = bestAuto.pct;
   }
 
-  const discountCode: string | null =
-    codesForDisplay.length > 0 ? codesForDisplay.join(" + ") : null;
-  // Legacy field — used by suggestion cards / non-bundle items.
-  const activeDiscountPercent = otherDiscountPercent;
-
+  // LAUNCH25 only discounts the Power Bundle subtotal; other codes apply to the whole cart.
   const discountedTotal =
-    bundleTotal * (1 - bundleDiscountPercent / 100) +
-    nonBundleTotal * (1 - otherDiscountPercent / 100);
+    discountCode === "LAUNCH25"
+      ? total - bundleTotal * (activeDiscountPercent / 100)
+      : total * (1 - activeDiscountPercent / 100);
 
 
   const getCheckoutLines = useCallback(() => {
@@ -329,7 +304,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsCheckingOut(true);
     setCheckoutUrl(null);
 
-    createShopifyCheckout(lines, codesForCheckout.length > 0 ? codesForCheckout : undefined)
+    createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
         if (cancelled) return;
         if (result) {
@@ -410,8 +385,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
-      activeDiscountPercent, bundleDiscountPercent, otherDiscountPercent,
-      manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
+      activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
