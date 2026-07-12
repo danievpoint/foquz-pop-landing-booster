@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
-
+import ComingSoonPage from "./pages/ComingSoonPage";
 import UeberUns from "./pages/UeberUns";
 import DasIstDrin from "./pages/DasIstDrin";
 import AGB from "./pages/AGB";
