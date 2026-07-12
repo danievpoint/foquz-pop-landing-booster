@@ -24,7 +24,7 @@ import payVisa from "@/assets/payment/visa.svg";
 import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
-import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
+import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
 
 const PAYMENT_METHODS = [
   { label: "PayPal", src: payPaypal },
