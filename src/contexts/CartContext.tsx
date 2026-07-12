@@ -216,6 +216,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const bundleTotal = items
     .filter((i) => BUNDLE_IDS.has(i.id))
     .reduce((sum, i) => sum + i.price * i.qty, 0);
+  const bundleQty = items
+    .filter((i) => BUNDLE_IDS.has(i.id))
+    .reduce((sum, i) => sum + i.qty, 0);
 
   // Auto-applied codes based on cart state:
   //  - LAUNCH25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
@@ -257,12 +260,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // LAUNCH25 gilt nur auf den Power Bundle Subtotal; andere Codes auf den ganzen Warenkorb.
-  // Shopify-Preisregeln nutzen allocation_method "across" → Rabatt wird auf die
-  // Gesamtsumme berechnet und einmal gerundet, deshalb passt diese Rechnung.
+  // LAUNCH25 soll das Bundle exakt von 19,99 € auf 14,99 € reduzieren.
+  // Shopify ist dafür auf 25,02% gesetzt; lokal rechnen wir denselben Effekt
+  // als 5,00 € Rabatt pro Bundle, damit alle Mengen exakt übereinstimmen.
   const discountedTotal =
     discountCode === "LAUNCH25"
-      ? total - bundleTotal * (activeDiscountPercent / 100)
+      ? total - bundleQty * 5
       : total * (1 - activeDiscountPercent / 100);
 
 
