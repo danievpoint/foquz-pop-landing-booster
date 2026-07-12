@@ -145,7 +145,7 @@ const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts
 
 type AccordionKey = "description" | "ingredients" | "usage" | "faq";
 
-const AccordionSections = ({
+export const AccordionSections = ({
   product,
   isBundlePage,
 }: {

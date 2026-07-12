@@ -8,6 +8,7 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { products } from "@/data/products";
 import AutoVideo from "@/components/AutoVideo";
+import { AccordionSections } from "@/pages/ProductDetail";
 
 // Preload all product images immediately
 products.forEach((p) => {
@@ -40,7 +41,7 @@ const InfoOverlay = ({
   
     <div className="absolute inset-0 bg-black/50" onClick={onClose} />
     <motion.div
-    className="relative bg-card rounded-2xl p-8 max-w-sm w-full shadow-2xl border-2 border-foreground/10"
+    className="relative bg-card rounded-2xl max-w-md w-full shadow-2xl border-2 border-foreground/10 max-h-[85vh] flex flex-col"
     initial={{ scale: 0.9, opacity: 0 }}
     animate={{ scale: 1, opacity: 1 }}
     exit={{ scale: 0.9, opacity: 0 }}
@@ -48,32 +49,18 @@ const InfoOverlay = ({
     
       <button
       onClick={onClose}
-      className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground/20 hover:bg-foreground/10 transition-colors font-barlow font-extrabold text-sm">
+      className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground/20 hover:bg-foreground/10 transition-colors font-barlow font-extrabold text-sm z-10 bg-card">
       
         ✕
       </button>
-      <h3 className="font-barlow font-extrabold text-2xl mb-1">
-        WAS STECKT DRIN?
-      </h3>
-      <p className="text-sm text-muted-foreground mb-5 font-semibold">
-        {product.name}
-      </p>
-      <ul className="space-y-2 mb-6">
-        {product.ingredients.map((ing) =>
-      <li key={ing} className="flex items-center gap-2 text-sm">
-            <span
-          className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
-          style={{ backgroundColor: "#ffd618" }}>
-          
-              ✓
-            </span>
-            {ing}
-          </li>
-      )}
-      </ul>
-      <p className="text-xs font-bold text-muted-foreground">
-        100% Natur. Ohne Chemie. Ohne Bullshit.
-      </p>
+      <div className="px-6 pt-6 pb-2 shrink-0">
+        <h3 className="font-barlow font-extrabold text-2xl mb-1 pr-10">
+          {product.name}
+        </h3>
+      </div>
+      <div className="px-6 pb-6 overflow-y-auto">
+        <AccordionSections product={product} isBundlePage={false} />
+      </div>
     </motion.div>
   </motion.div>;
 
