@@ -334,7 +334,7 @@ const CartDrawer = () => {
                         >
                           <div className="w-20 sm:w-24 shrink-0">
                             {item.image && (
-                              <Link to={productLink} onClick={closeCart} className="block">
+                              <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block">
                                 <img
                                   src={item.image}
                                   alt={item.name}
@@ -354,7 +354,7 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                <Link to={productLink} onClick={closeCart} className="block hover:opacity-80 transition-opacity">
+                                <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block hover:opacity-80 transition-opacity">
                                   <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
                                 </Link>
                               </div>
