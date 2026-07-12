@@ -4,25 +4,21 @@ type Props = VideoHTMLAttributes<HTMLVideoElement> & {
   src: string;
   poster?: string;
   onEnded?: () => void;
+  /**
+   * When defined, playback is gated by this flag: play when true, pause when
+   * false. When undefined (default), the component tries to autoplay as soon
+   * as the element mounts (legacy behavior).
+   */
+  play?: boolean;
 };
 
 /**
  * Reliable autoplaying inline video for mobile (iOS/Safari) and desktop.
- *
- * Key iOS gotchas handled here:
- * - iOS only autoplays when the element has `muted` AND `playsinline` set as
- *   real HTML attributes BEFORE the src starts loading. React's JSX `muted`
- *   prop is applied as a property after the element exists, which is too
- *   late – iOS then shows the native "tap to play" overlay. We fix this with
- *   a ref callback that sets the attributes synchronously on mount.
- * - iOS pauses videos that were programmatically played if we call
- *   pause() ourselves from an IntersectionObserver. In the carousel only
- *   the active slide is mounted anyway, so we don't need to pause here.
- * - `play()` returns a promise that can reject on iOS Low Power Mode; we
- *   retry on `canplay`, `loadeddata`, and visibility changes.
+ * See notes below for the iOS quirks handled here.
  */
-const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) => {
+const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...rest }: Props) => {
   const ref = useRef<HTMLVideoElement>(null);
+  const gated = play !== undefined;
 
   // Ref callback runs synchronously the first time the element exists,
   // BEFORE the browser starts loading the src, so iOS sees the muted +
@@ -37,12 +33,15 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) =>
     el.setAttribute("webkit-playsinline", "");
     el.setAttribute("x-webkit-airplay", "deny");
     el.setAttribute("disableRemotePlayback", "");
-    // Kick off playback as soon as the element is attached.
-    const p = el.play();
-    if (p && typeof p.catch === "function") p.catch(() => {});
-  }, []);
+    if (!gated) {
+      const p = el.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    }
+  }, [gated]);
 
+  // Ungated legacy path: retry autoplay via multiple event hooks.
   useEffect(() => {
+    if (gated) return;
     const v = ref.current;
     if (!v) return;
 
@@ -53,7 +52,6 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) =>
       if (p && typeof p.catch === "function") p.catch(() => {});
     };
 
-    // Multiple retry hooks – whichever fires first wins.
     v.addEventListener("loadedmetadata", tryPlay);
     v.addEventListener("loadeddata", tryPlay);
     v.addEventListener("canplay", tryPlay);
@@ -64,8 +62,6 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) =>
     };
     document.addEventListener("visibilitychange", onVis);
 
-    // As a last resort, if playback still hasn't started after a beat,
-    // retry once more. Fixes rare iOS races on slow networks.
     const t = window.setTimeout(tryPlay, 400);
 
     return () => {
@@ -76,7 +72,33 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) =>
       document.removeEventListener("visibilitychange", onVis);
       window.clearTimeout(t);
     };
-  }, [src]);
+  }, [src, gated]);
+
+  // Gated path: react to `play` prop changes.
+  useEffect(() => {
+    if (!gated) return;
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    if (play) {
+      const attempt = () => {
+        if (!ref.current) return;
+        const p = ref.current.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      };
+      attempt();
+      // Retry once metadata/data is ready in case play() was too early.
+      const onReady = () => attempt();
+      v.addEventListener("loadedmetadata", onReady);
+      v.addEventListener("canplay", onReady);
+      return () => {
+        v.removeEventListener("loadedmetadata", onReady);
+        v.removeEventListener("canplay", onReady);
+      };
+    } else {
+      try { v.pause(); } catch { /* ignore */ }
+    }
+  }, [play, gated, src]);
 
   return (
     <video
@@ -84,13 +106,13 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, ...rest }: Props) =>
       src={src}
       poster={poster}
       muted
-      autoPlay
+      autoPlay={!gated}
       loop={loop ?? true}
       playsInline
       controls={false}
       disablePictureInPicture
       controlsList="nodownload nofullscreen noremoteplayback"
-      preload="auto"
+      preload={preload ?? "metadata"}
       onContextMenu={(e) => e.preventDefault()}
       onEnded={onEnded}
       className={className}
