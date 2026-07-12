@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -84,6 +84,54 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
   className="w-8 h-8 rounded-full comic-btn bg-white text-black flex items-center justify-center font-barlow font-bold text-lg leading-none hover:opacity-80 shrink-0 !p-0">
   ?
 </button>;
+
+
+
+
+/**
+ * Mobile carousel slide: exact-first-frame poster overlays the video.
+ * Video stays invisible until its first `playing` event fires, then the
+ * poster is removed instantly (no transition). If iOS blocks autoplay, only
+ * the first frame stays visible — the video element remains hidden so the
+ * native Safari inline play button is never shown.
+ */
+const MobileVideoWithPoster = memo(({
+  src,
+  poster,
+  alt,
+  onEnded,
+}: {
+  src: string;
+  poster: string;
+  alt: string;
+  onEnded?: () => void;
+}) => {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <>
+      <AutoVideo
+        src={src}
+        poster={poster}
+        loop={false}
+        className="relative w-full aspect-square object-cover"
+        style={{ visibility: playing ? "visible" : "hidden" }}
+        onPlaying={() => setPlaying(true)}
+        onEnded={onEnded}
+      />
+      {!playing && (
+        <img
+          src={poster}
+          alt={alt}
+          draggable={false}
+          className="absolute inset-0 w-full h-full aspect-square object-cover z-10 pointer-events-none"
+        />
+      )}
+    </>
+  );
+});
+MobileVideoWithPoster.displayName = "MobileVideoWithPoster";
+
+
 
 
 const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string }) => {
@@ -338,23 +386,12 @@ const ProductGrid = () => {
               
               <div className="flex flex-col items-center w-full">
                 <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block relative" style={{ backgroundColor: products[activeIndex].color + '22' }}>
-                  {/* Poster image sits underneath the video so the next product
-                      is visible INSTANTLY on swipe, even before the video has
-                      loaded its first frame. */}
-                  <img
-                    key={`poster-${activeIndex}`}
-                    src={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                    alt={products[activeIndex].name}
-                    className="absolute inset-0 w-full h-full aspect-square object-cover"
-                    draggable={false}
-                  />
                   {products[activeIndex].video ? (
-                    <AutoVideo
-                      key={`video-${activeIndex}`}
+                    <MobileVideoWithPoster
+                      key={`slide-${activeIndex}`}
                       src={products[activeIndex].video!}
                       poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                      loop={false}
-                      className="relative w-full aspect-square object-cover"
+                      alt={products[activeIndex].name}
                       onEnded={() => {
                         if (!autoPlay) return;
                         setTimeout(() => {
@@ -371,6 +408,7 @@ const ProductGrid = () => {
                       className="relative w-full aspect-square object-cover" />
                   )}
                 </Link>
+
                 {/* Preload neighbour videos so swiping is instant */}
                 <div aria-hidden className="hidden">
                   {products.map((p, i) =>
