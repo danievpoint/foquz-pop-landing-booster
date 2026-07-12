@@ -4,6 +4,7 @@ import PullToRefresh from "@/components/PullToRefresh";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -27,13 +28,28 @@ import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
-// Coming Soon Modus — mit ?key=fq2026x in der URL umgehen
-// Legal-Seiten sind auch ohne Key erreichbar
-const params = new URLSearchParams(window.location.search);
-const COMING_SOON = params.get("key") !== "fq2026x";
+// Fester Launch-Zeitpunkt: 12. Juli 2026, 09:00 UTC (04:25 CEST-Angabe des Nutzers)
+const LAUNCH_TS = Date.UTC(2026, 6, 12, 9, 0, 0);
 
 const App = () => {
-  if (COMING_SOON) {
+  const [launched, setLaunched] = useState(() => Date.now() >= LAUNCH_TS);
+
+  useEffect(() => {
+    if (launched) return;
+    const remaining = LAUNCH_TS - Date.now();
+    if (remaining <= 0) {
+      setLaunched(true);
+      return;
+    }
+    const t = window.setTimeout(() => setLaunched(true), remaining);
+    return () => window.clearTimeout(t);
+  }, [launched]);
+
+  // Vor Launch: Vorschau via ?key=fq2026x. Nach Launch: Key irrelevant.
+  const params = new URLSearchParams(window.location.search);
+  const comingSoon = !launched && params.get("key") !== "fq2026x";
+
+  if (comingSoon) {
     return (
       <QueryClientProvider client={queryClient}>
         <CartProvider>
