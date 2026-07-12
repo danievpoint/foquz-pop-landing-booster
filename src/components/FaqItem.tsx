@@ -32,7 +32,7 @@ const FaqItem = ({ faq, index }: { faq: Faq; index: number }) => {
           <span className="block text-[10px] md:text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
             {faq.category}
           </span>
-          <span className="block font-extrabold text-base md:text-lg leading-tight">
+          <span className="block font-extrabold text-base md:text-lg leading-loose">
             {faq.q}
           </span>
         </span>
@@ -57,7 +57,7 @@ const FaqItem = ({ faq, index }: { faq: Faq; index: number }) => {
           >
             <div className="px-4 pb-5 md:px-5 md:pb-6 pl-[68px] md:pl-[76px]">
               <div className="border-t-2 border-foreground/10 pt-3 md:pt-4">
-                <p className="text-sm md:text-base text-foreground/80 leading-relaxed">
+                <p className="text-sm md:text-base text-foreground/80 leading-snug">
                   {faq.a}
                 </p>
               </div>
