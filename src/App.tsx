@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
-import ComingSoonPage from "./pages/ComingSoonPage";
+
 import UeberUns from "./pages/UeberUns";
 import DasIstDrin from "./pages/DasIstDrin";
 import AGB from "./pages/AGB";
@@ -26,23 +26,7 @@ import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
-const params = new URLSearchParams(window.location.search);
-const COMING_SOON = params.get("key") !== "fq2026x";
-
 const App = () => {
-  if (COMING_SOON) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <ComingSoonPage />
-          </TooltipProvider>
-        </CartProvider>
-      </QueryClientProvider>
-    );
-  }
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
