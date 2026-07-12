@@ -257,11 +257,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // LAUNCH25 only discounts the Power Bundle subtotal; other codes apply to the whole cart.
-  const discountedTotal =
-    discountCode === "LAUNCH25"
-      ? total - bundleTotal * (activeDiscountPercent / 100)
-      : total * (1 - activeDiscountPercent / 100);
+  // Shopify rundet den Rabatt PRO STÜCK auf 2 Nachkommastellen und
+  // multipliziert dann mit der Menge. Wir müssen exakt so rechnen, damit
+  // der im Cart angezeigte Betrag mit dem Checkout-Betrag übereinstimmt.
+  const roundCents = (n: number) => Math.round(n * 100) / 100;
+  const computeShopifyDiscount = (its: CartItem[]) =>
+    its.reduce((sum, i) => {
+      const perUnitDiscount = roundCents(i.price * (activeDiscountPercent / 100));
+      return sum + perUnitDiscount * i.qty;
+    }, 0);
+
+  const discountAmount =
+    activeDiscountPercent === 0
+      ? 0
+      : discountCode === "LAUNCH25"
+        ? computeShopifyDiscount(items.filter((i) => BUNDLE_IDS.has(i.id)))
+        : computeShopifyDiscount(items);
+
+  const discountedTotal = roundCents(total - discountAmount);
 
 
   const getCheckoutLines = useCallback(() => {
