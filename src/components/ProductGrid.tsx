@@ -8,6 +8,7 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { products } from "@/data/products";
 import AutoVideo from "@/components/AutoVideo";
+import { AccordionSections } from "@/pages/ProductDetail";
 
 // Preload all product images immediately
 products.forEach((p) => {
