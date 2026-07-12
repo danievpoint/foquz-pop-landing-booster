@@ -375,7 +375,7 @@ const ProductDetail = () => {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-white/60 line-through">19,99€</span>
                     <span className="text-[#ffd618] font-black text-base lg:text-xl">Nur 14,99€</span>
-                    <span className="text-xs text-white/70">mit Code <strong className="text-white">LAUNCH25</strong> (automatisch)</span>
+                    <span className="text-xs text-white/70">mit Code <strong className="text-white">FOQUZ25</strong> (automatisch)</span>
                   </div>
                 </div>
               ) : (

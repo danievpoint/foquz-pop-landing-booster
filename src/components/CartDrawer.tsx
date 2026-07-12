@@ -317,7 +317,7 @@ const CartDrawer = () => {
                       const isBundleItem = item.id === BUNDLE_ID;
                       const hasDiscount =
                         activeDiscountPercent > 0 &&
-                        (discountCode !== "LAUNCH25" || isBundleItem);
+                        (discountCode !== "FOQUZ25" || isBundleItem);
                       const finalPrice = hasDiscount
                         ? item.price * (1 - activeDiscountPercent / 100)
                         : item.price;
@@ -432,7 +432,7 @@ const CartDrawer = () => {
                         <p className="text-xs text-muted-foreground mt-1">
                           3× einzeln <span className="line-through">€{singlesPriceLabel}</span> → Bundle{" "}
                           <span className="line-through">€{BUNDLE_LIST_PRICE.toFixed(2)}</span> mit Code{" "}
-                          <span className="font-black text-foreground">LAUNCH25</span> nur{" "}
+                          <span className="font-black text-foreground">FOQUZ25</span> nur{" "}
                           <span className="font-black text-foreground">€{BUNDLE_EFFECTIVE_PRICE.toFixed(2)}</span>{" "}
                           <span className="font-bold text-green-700">(spare €{bundleSavings})</span>
                         </p>
@@ -467,9 +467,9 @@ const CartDrawer = () => {
                           className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6 pb-1"
                         >
                           {suggestions.map((p) => {
-                            // LAUNCH25 applies only to the Power Bundle, not to single sorten.
+                            // FOQUZ25 applies only to the Power Bundle, not to single sorten.
                             const discounted =
-                              activeDiscountPercent > 0 && discountCode !== "LAUNCH25"
+                              activeDiscountPercent > 0 && discountCode !== "FOQUZ25"
                                 ? p.numericPrice * (1 - activeDiscountPercent / 100)
                                 : null;
                             return (

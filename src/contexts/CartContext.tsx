@@ -78,7 +78,7 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Used so we can locally pick the highest-value code and preview the total.
 // Unknown (e.g. influencer) codes still get passed to Shopify.
 const KNOWN_DISCOUNTS: Record<string, number> = {
-  LAUNCH25: 25,
+  FOQUZ25: 25,
   ICEBLOCK25: 25,
   CLOUD10: 10,
 };
@@ -209,13 +209,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  // LAUNCH25 only applies to the Power Bundle, not to other products.
+  // FOQUZ25 only applies to the Power Bundle, not to other products.
   const bundleTotal = items
     .filter((i) => BUNDLE_IDS.has(i.id))
     .reduce((sum, i) => sum + i.price * i.qty, 0);
 
   // Auto-applied codes based on cart state:
-  //  - LAUNCH25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
+  //  - FOQUZ25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
   //  - CLOUD10  (10%) on the entire cart when the newsletter discount is unlocked
   // Only ONE code applies. If the user entered a manual code, that wins.
   // Otherwise the highest-percentage auto code wins (no stacking).
@@ -223,7 +223,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Collect auto-applied candidates
   const autoCandidates: { code: string; pct: number }[] = [];
-  if (hasBundleInCart) autoCandidates.push({ code: "LAUNCH25", pct: 25 });
+  if (hasBundleInCart) autoCandidates.push({ code: "FOQUZ25", pct: 25 });
   if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
   const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
 
@@ -254,9 +254,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // LAUNCH25 only discounts the Power Bundle subtotal; other codes apply to the whole cart.
+  // FOQUZ25 only discounts the Power Bundle subtotal; other codes apply to the whole cart.
   const discountedTotal =
-    discountCode === "LAUNCH25"
+    discountCode === "FOQUZ25"
       ? total - bundleTotal * (activeDiscountPercent / 100)
       : total * (1 - activeDiscountPercent / 100);
 
