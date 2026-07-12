@@ -65,6 +65,8 @@ const CartDrawer = () => {
     hasNewsletterDiscount,
     discountCode,
     activeDiscountPercent,
+    bundleDiscountPercent,
+    otherDiscountPercent,
     manualDiscountCode,
     applyManualDiscountCode,
     clearManualDiscountCode,
