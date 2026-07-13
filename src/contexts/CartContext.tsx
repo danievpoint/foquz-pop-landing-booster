@@ -260,6 +260,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
+  // LAUNCH25 darf nur greifen, wenn tatsächlich ein Power Bundle im Warenkorb ist.
+  // Auch bei manueller Eingabe ohne Bundle wird der Code komplett entfernt,
+  // damit er nicht an den Shopify-Checkout weitergegeben wird.
+  if (discountCode === "LAUNCH25" && !hasBundleInCart) {
+    discountCode = null;
+    activeDiscountPercent = 0;
+  }
+
   // LAUNCH25 soll das Bundle exakt von 19,99 € auf 14,99 € reduzieren.
   // Shopify ist dafür auf 25,02% gesetzt; lokal rechnen wir denselben Effekt
   // als 5,00 € Rabatt pro Bundle, damit alle Mengen exakt übereinstimmen.
