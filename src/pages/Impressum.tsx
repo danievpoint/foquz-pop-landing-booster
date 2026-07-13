@@ -14,7 +14,7 @@ const Impressum = () => (
         <p>Handelsregister: HRB 311769<br />Registergericht: Amtsgericht München</p>
         <p>Vertreten durch die Geschäftsführer:<br />Matthias Kurpiers<br />Kevin Zaremba</p>
         <h2 className="text-xl font-bold">Kontakt:</h2>
-        <p>E-Mail: info@foquz.de<br />Telefon: +49 170 2420257</p>
+        <p>E-Mail: info@foquz.de<br />Telefon: +49 179 1599764</p>
         <h2 className="text-xl font-bold">Berufsbezeichnung:</h2>
         <p>Onlinehändler</p>
         <h2 className="text-xl font-bold">Verbraucherstreitbeilegung / Universalschlichtungsstelle:</h2>
