@@ -268,13 +268,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = 0;
   }
 
-  // LAUNCH25 soll das Bundle exakt von 19,99 € auf 14,99 € reduzieren.
-  // Shopify ist dafür auf 25,02% gesetzt; lokal rechnen wir denselben Effekt
-  // als 5,00 € Rabatt pro Bundle, damit alle Mengen exakt übereinstimmen.
-  const discountedTotal =
-    discountCode === "LAUNCH25"
-      ? total - bundleQty * 5
-      : total * (1 - activeDiscountPercent / 100);
+  // LAUNCH25 wird in Shopify auf den gesamten Bestellwert angewendet (25%).
+  // Damit die Preise im Warenkorb exakt mit dem Shopify-Checkout übereinstimmen,
+  // rechnen wir auch lokal 25% auf die komplette Zwischensumme.
+  const discountedTotal = total * (1 - activeDiscountPercent / 100);
 
 
   const getCheckoutLines = useCallback(() => {
