@@ -315,9 +315,7 @@ const CartDrawer = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const isBundleItem = item.id === BUNDLE_ID;
-                      const hasDiscount =
-                        activeDiscountPercent > 0 &&
-                        (discountCode !== "LAUNCH25" || isBundleItem);
+                      const hasDiscount = activeDiscountPercent > 0;
                       const finalPrice = hasDiscount
                         ? item.price * (1 - activeDiscountPercent / 100)
                         : item.price;
