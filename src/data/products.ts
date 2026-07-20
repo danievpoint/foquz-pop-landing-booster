@@ -92,7 +92,7 @@ export const bundleProduct: Product = {
   price: "19,99€",
   originalPrice: "22,47€",
   numericPrice: 19.99,
-  desc: "Alle 3 Sorten in einer Box.\nMit Code LAUNCH25 (wird automatisch angewendet) nur 14,99€.",
+  desc: "Alle 3 Sorten in einer Box.",
   image: foquzBox,
   color: "#75559f",
   isBundle: true,
