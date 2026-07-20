@@ -7,7 +7,6 @@ import bundleBg from "@/assets/bundle-bg.png";
 const checks = [
   "Alle Sorten testen",
   "Exklusive Box",
-  "25% Sparen",
   "Inklusive limitierten Sticker-Set & Nasenstrips",
 ];
 
