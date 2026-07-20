@@ -6,7 +6,7 @@ import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
-import HeroPromoBanner from "@/components/HeroPromoBanner";
+
 
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
 const heroBgDesktop = heroBgAsset.url;
