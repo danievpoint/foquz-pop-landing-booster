@@ -111,7 +111,7 @@ const CartDrawer = () => {
   const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
   const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
   const showBundleUpsell = !hasBundle && singlesCount > 0;
-  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_EFFECTIVE_PRICE).toFixed(2).replace(".", ",");
+  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_LIST_PRICE).toFixed(2).replace(".", ",");
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
   // Shipping/savings
@@ -429,9 +429,7 @@ const CartDrawer = () => {
                         </h3>
                         <p className="text-xs text-muted-foreground mt-1">
                           3× einzeln <span className="line-through">€{singlesPriceLabel}</span> → Bundle{" "}
-                          <span className="line-through">€{BUNDLE_LIST_PRICE.toFixed(2)}</span> mit Code{" "}
-                          <span className="font-black text-foreground">LAUNCH25</span> nur{" "}
-                          <span className="font-black text-foreground">€{BUNDLE_EFFECTIVE_PRICE.toFixed(2)}</span>{" "}
+                          <span className="font-black text-foreground">€{BUNDLE_LIST_PRICE.toFixed(2)}</span>{" "}
                           <span className="font-bold text-green-700">(spare €{bundleSavings})</span>
                         </p>
                         <button
@@ -465,9 +463,8 @@ const CartDrawer = () => {
                           className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6 pb-1"
                         >
                           {suggestions.map((p) => {
-                            // LAUNCH25 applies only to the Power Bundle, not to single sorten.
                             const discounted =
-                              activeDiscountPercent > 0 && discountCode !== "LAUNCH25"
+                              activeDiscountPercent > 0
                                 ? p.numericPrice * (1 - activeDiscountPercent / 100)
                                 : null;
                             return (

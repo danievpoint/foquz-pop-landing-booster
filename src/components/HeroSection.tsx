@@ -6,7 +6,7 @@ import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
-import HeroPromoBanner from "@/components/HeroPromoBanner";
+
 
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
 const heroBgDesktop = heroBgAsset.url;
@@ -62,7 +62,7 @@ const HeroSection = () => {
       >
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
-          <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+72px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+80px)]" />
+          
           <img
             src={heroBgMobile}
             alt=""
@@ -121,8 +121,6 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
-            {/* Promo banner overlaid on top of hero scene */}
-            <HeroPromoBanner className="absolute left-0 right-0 top-4 xl:top-6 z-30" />
 
 
 
