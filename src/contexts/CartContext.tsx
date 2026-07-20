@@ -227,7 +227,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Collect auto-applied candidates
   const autoCandidates: { code: string; pct: number }[] = [];
-  if (hasBundleInCart) autoCandidates.push({ code: "LAUNCH25", pct: 25 });
   if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
   const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
 
@@ -235,9 +234,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   let activeDiscountPercent = 0;
 
   if (manualDiscountCode) {
-    // Unknown codes (e.g. influencer codes) are assumed to be at least as good
-    // as the best auto code, so influencers always get attribution when their
-    // code is entered. Known codes are compared by their percentage value.
     const knownPct = KNOWN_DISCOUNTS[manualDiscountCode];
     const manualPct = knownPct ?? (bestAuto?.pct ?? 0);
     const bestAutoPct = bestAuto?.pct ?? 0;
@@ -246,7 +242,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       discountCode = manualDiscountCode;
       activeDiscountPercent = manualPct;
     } else if (bestAuto) {
-      // Manual code is worse than auto — keep the better auto code.
       discountCode = bestAuto.code;
       activeDiscountPercent = bestAuto.pct;
     } else {
@@ -258,17 +253,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // LAUNCH25 darf nur greifen, wenn tatsächlich ein Power Bundle im Warenkorb ist.
-  // Auch bei manueller Eingabe ohne Bundle wird der Code komplett entfernt,
-  // damit er nicht an den Shopify-Checkout weitergegeben wird.
-  if (discountCode === "LAUNCH25" && !hasBundleInCart) {
-    discountCode = null;
-    activeDiscountPercent = 0;
-  }
-
-  // LAUNCH25 wird in Shopify auf den gesamten Bestellwert angewendet (25%).
-  // Damit die Preise im Warenkorb exakt mit dem Shopify-Checkout übereinstimmen,
-  // rechnen wir auch lokal 25% auf die komplette Zwischensumme.
   const discountedTotal = total * (1 - activeDiscountPercent / 100);
 
 
