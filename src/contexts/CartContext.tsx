@@ -78,8 +78,6 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Used so we can locally pick the highest-value code and preview the total.
 // Unknown (e.g. influencer) codes still get passed to Shopify.
 const KNOWN_DISCOUNTS: Record<string, number> = {
-  LAUNCH25: 25,
-  FOQUZ25: 25,
   ICEBLOCK25: 25,
   KEVIN25: 25,
   MATYAS25: 25,
