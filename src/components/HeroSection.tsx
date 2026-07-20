@@ -121,8 +121,6 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
-            {/* Promo banner overlaid on top of hero scene */}
-            <HeroPromoBanner className="absolute left-0 right-0 top-4 xl:top-6 z-30" />
 
 
 
