@@ -254,7 +254,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  const discountedTotal = total * (1 - activeDiscountPercent / 100);
+  // Use Shopify's returned subtotal as source of truth (handles unknown codes).
+  // Falls back to local KNOWN_DISCOUNTS calculation while Shopify is loading.
+  const localDiscountedTotal = total * (1 - activeDiscountPercent / 100);
+  const discountedTotal =
+    discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total
+      ? shopifyDiscountedSubtotal
+      : localDiscountedTotal;
+  if (discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total && total > 0) {
+    activeDiscountPercent = Math.round(((total - shopifyDiscountedSubtotal) / total) * 100);
+  }
 
 
   const getCheckoutLines = useCallback(() => {
