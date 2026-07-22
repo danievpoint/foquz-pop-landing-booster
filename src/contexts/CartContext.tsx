@@ -84,7 +84,6 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
   CLOUD10: 10,
 };
 
-const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 // Muss identisch zu Shopify-Versandprofil (Zone DE) sein. Änderungen in
 // Shopify müssen hier nachgezogen werden – Storefront API liefert die
