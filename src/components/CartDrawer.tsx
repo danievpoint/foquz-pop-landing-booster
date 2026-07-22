@@ -37,7 +37,6 @@ const PAYMENT_METHODS = [
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
-const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
 // Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
 // Versand-Profil (Zone Deutschland) sein – dort ist die Grenze 29,00 €.

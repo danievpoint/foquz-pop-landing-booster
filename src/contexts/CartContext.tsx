@@ -78,9 +78,9 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Used so we can locally pick the highest-value code and preview the total.
 // Unknown (e.g. influencer) codes still get passed to Shopify.
 const KNOWN_DISCOUNTS: Record<string, number> = {
-  ICEBLOCK25: 25,
-  KEVIN25: 25,
-  MATYAS25: 25,
+  MATYAS: 10,
+  KEVIN: 10,
+  LIVIO: 10,
   CLOUD10: 10,
 };
 
@@ -211,22 +211,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  // LAUNCH25 only applies to the Power Bundle, not to other products.
-  const bundleTotal = items
-    .filter((i) => BUNDLE_IDS.has(i.id))
-    .reduce((sum, i) => sum + i.price * i.qty, 0);
-  const bundleQty = items
-    .filter((i) => BUNDLE_IDS.has(i.id))
-    .reduce((sum, i) => sum + i.qty, 0);
-
   // Auto-applied codes based on cart state:
-  //  - LAUNCH25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
   //  - CLOUD10  (10%) on the entire cart when the newsletter discount is unlocked
   // Only ONE code applies. If the user entered a manual code, that wins.
   // Otherwise the highest-percentage auto code wins (no stacking).
-  const hasBundleInCart = bundleTotal > 0;
-
-  // Collect auto-applied candidates
   const autoCandidates: { code: string; pct: number }[] = [];
   if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
   const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
