@@ -295,6 +295,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (items.length === 0) {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
+      setShopifyDiscountedSubtotal(null);
       return;
     }
 
@@ -302,6 +303,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (lines.length === 0) {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
+      setShopifyDiscountedSubtotal(null);
       return;
     }
 
@@ -315,13 +317,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         if (result) {
           shopifyCartIdRef.current = result.cartId;
           setCheckoutUrl(result.url);
+          setShopifyDiscountedSubtotal(result.discountedSubtotal);
         } else {
           setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
         }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
-        if (!cancelled) setCheckoutUrl(null);
+        if (!cancelled) {
+          setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
+        }
       })
       .finally(() => {
         if (!cancelled) setIsCheckingOut(false);
