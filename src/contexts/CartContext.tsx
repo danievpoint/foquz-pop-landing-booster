@@ -245,11 +245,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Falls back to local KNOWN_DISCOUNTS calculation while Shopify is loading.
   const localDiscountedTotal = total * (1 - activeDiscountPercent / 100);
   const discountedTotal =
-    discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total
-      ? shopifyDiscountedSubtotal
+    discountCode && shopifyDiscountedSubtotal !== null
+      ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total && total > 0) {
-    activeDiscountPercent = Math.round(((total - shopifyDiscountedSubtotal) / total) * 100);
+  if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
+    activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
   }
 
 
@@ -305,6 +305,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           shopifyCartIdRef.current = result.cartId;
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
+
+          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
+            localStorage.removeItem(MANUAL_CODE_KEY);
+            setManualDiscountCode(null);
+            toast.error("Dieser Rabattcode ist für deinen Warenkorb nicht gültig.");
+          }
         } else {
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
@@ -324,7 +330,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, discountCode, getCheckoutLines]);
+  }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
     if (items.length === 0 || isCheckingOut) return;
