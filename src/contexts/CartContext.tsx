@@ -78,13 +78,12 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Used so we can locally pick the highest-value code and preview the total.
 // Unknown (e.g. influencer) codes still get passed to Shopify.
 const KNOWN_DISCOUNTS: Record<string, number> = {
-  ICEBLOCK25: 25,
-  KEVIN25: 25,
-  MATYAS25: 25,
+  MATYAS: 10,
+  KEVIN: 10,
+  LIVIO: 10,
   CLOUD10: 10,
 };
 
-const BUNDLE_IDS = new Set(["bundle", "starter-bundle"]);
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 // Muss identisch zu Shopify-Versandprofil (Zone DE) sein. Änderungen in
 // Shopify müssen hier nachgezogen werden – Storefront API liefert die
@@ -211,22 +210,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  // LAUNCH25 only applies to the Power Bundle, not to other products.
-  const bundleTotal = items
-    .filter((i) => BUNDLE_IDS.has(i.id))
-    .reduce((sum, i) => sum + i.price * i.qty, 0);
-  const bundleQty = items
-    .filter((i) => BUNDLE_IDS.has(i.id))
-    .reduce((sum, i) => sum + i.qty, 0);
-
   // Auto-applied codes based on cart state:
-  //  - LAUNCH25 (25%) on the Power Bundle subtotal whenever the bundle is in the cart
   //  - CLOUD10  (10%) on the entire cart when the newsletter discount is unlocked
   // Only ONE code applies. If the user entered a manual code, that wins.
   // Otherwise the highest-percentage auto code wins (no stacking).
-  const hasBundleInCart = bundleTotal > 0;
-
-  // Collect auto-applied candidates
   const autoCandidates: { code: string; pct: number }[] = [];
   if (hasNewsletterDiscount) autoCandidates.push({ code: NEWSLETTER_DISCOUNT_CODE, pct: 10 });
   const bestAuto = autoCandidates.sort((a, b) => b.pct - a.pct)[0];
@@ -258,11 +245,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Falls back to local KNOWN_DISCOUNTS calculation while Shopify is loading.
   const localDiscountedTotal = total * (1 - activeDiscountPercent / 100);
   const discountedTotal =
-    discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total
-      ? shopifyDiscountedSubtotal
+    discountCode && shopifyDiscountedSubtotal !== null
+      ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total && total > 0) {
-    activeDiscountPercent = Math.round(((total - shopifyDiscountedSubtotal) / total) * 100);
+  if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
+    activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
   }
 
 
@@ -318,6 +305,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           shopifyCartIdRef.current = result.cartId;
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
+
+          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
+            localStorage.removeItem(MANUAL_CODE_KEY);
+            setManualDiscountCode(null);
+            toast.error("Dieser Rabattcode ist für deinen Warenkorb nicht gültig.");
+          }
         } else {
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
@@ -337,7 +330,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, discountCode, getCheckoutLines]);
+  }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
     if (items.length === 0 || isCheckingOut) return;

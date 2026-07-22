@@ -83,7 +83,10 @@ const CART_CREATE_MUTATION = `
       cart {
         id
         checkoutUrl
-        cost { subtotalAmount { amount currencyCode } }
+        cost {
+          subtotalAmount { amount currencyCode }
+          totalAmount { amount currencyCode }
+        }
         discountCodes { code applicable }
       }
       userErrors { field message }
@@ -131,7 +134,9 @@ export async function createShopifyCheckout(
   const cartId: string | undefined = cart?.id;
   if (!checkoutUrl || !cartId) return null;
 
-  const subtotalRaw = cart?.cost?.subtotalAmount?.amount;
+  // Shopify's subtotalAmount is BEFORE discount codes. totalAmount reflects
+  // the Storefront cart total after discount codes, before shipping selection.
+  const subtotalRaw = cart?.cost?.totalAmount?.amount;
   const discountedSubtotal =
     typeof subtotalRaw === "string" && !Number.isNaN(parseFloat(subtotalRaw))
       ? parseFloat(subtotalRaw)

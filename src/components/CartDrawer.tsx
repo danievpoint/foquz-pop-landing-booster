@@ -37,7 +37,6 @@ const PAYMENT_METHODS = [
 
 const BUNDLE_ID = "starter-bundle";
 const BUNDLE_LIST_PRICE = 19.99;
-const BUNDLE_EFFECTIVE_PRICE = 14.99;
 const SINGLE_PRICE = 7.49;
 // Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
 // Versand-Profil (Zone Deutschland) sein – dort ist die Grenze 29,00 €.
@@ -104,7 +103,9 @@ const CartDrawer = () => {
     }
   };
 
-  const discountAmount = total - discountedTotal;
+  const discountAmount = Math.max(0, total - discountedTotal);
+  const hasAppliedDiscount = Boolean(discountCode) && discountAmount > 0;
+  const discountRatio = total > 0 && hasAppliedDiscount ? discountedTotal / total : 1;
 
   // Bundle upsell
   const hasBundle = items.some((i) => i.id === BUNDLE_ID);
@@ -243,7 +244,7 @@ const CartDrawer = () => {
                       </div>
                     )}
 
-                    {discountCode && (
+                    {hasAppliedDiscount && (
                       <div className="mt-3 inline-flex items-center gap-2 bg-green-50 border-2 border-green-500 rounded-full pl-2 pr-1 py-1">
                         <span className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0">
                           <Check size={12} className="text-white" strokeWidth={3} />
@@ -315,9 +316,9 @@ const CartDrawer = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const isBundleItem = item.id === BUNDLE_ID;
-                      const hasDiscount = activeDiscountPercent > 0;
+                      const hasDiscount = hasAppliedDiscount;
                       const finalPrice = hasDiscount
-                        ? item.price * (1 - activeDiscountPercent / 100)
+                        ? item.price * discountRatio
                         : item.price;
                       const productHandle = getProductHandle(item);
                       const productLink = productHandle ? `/produkt/${productHandle}` : "#";
@@ -464,8 +465,8 @@ const CartDrawer = () => {
                         >
                           {suggestions.map((p) => {
                             const discounted =
-                              activeDiscountPercent > 0
-                                ? p.numericPrice * (1 - activeDiscountPercent / 100)
+                              hasAppliedDiscount
+                                ? p.numericPrice * discountRatio
                                 : null;
                             return (
                               <Link
@@ -580,7 +581,7 @@ const CartDrawer = () => {
                   <span className="font-black">€{total.toFixed(2).replace(".", ",")}</span>
                 </div>
 
-                {discountAmount > 0 && discountCode && (
+                {hasAppliedDiscount && discountCode && (
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-foreground/80 flex items-center gap-1.5">
                       <Tag size={14} className="text-pink-600" />
