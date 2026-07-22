@@ -80,7 +80,12 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
-      cart { id checkoutUrl }
+      cart {
+        id
+        checkoutUrl
+        cost { subtotalAmount { amount currencyCode } }
+        discountCodes { code applicable }
+      }
       userErrors { field message }
     }
   }
@@ -100,6 +105,8 @@ export interface CheckoutLine {
 export interface ShopifyCheckout {
   url: string;
   cartId: string;
+  discountedSubtotal: number | null;
+  discountApplicable: boolean;
 }
 
 export async function createShopifyCheckout(
@@ -124,6 +131,14 @@ export async function createShopifyCheckout(
   const cartId: string | undefined = cart?.id;
   if (!checkoutUrl || !cartId) return null;
 
+  const subtotalRaw = cart?.cost?.subtotalAmount?.amount;
+  const discountedSubtotal =
+    typeof subtotalRaw === "string" && !Number.isNaN(parseFloat(subtotalRaw))
+      ? parseFloat(subtotalRaw)
+      : null;
+  const codes: Array<{ code: string; applicable: boolean }> = cart?.discountCodes ?? [];
+  const discountApplicable = codes.length === 0 ? true : codes.every((c) => c.applicable);
+
   let finalUrl = checkoutUrl;
   try {
     const url = new URL(checkoutUrl);
@@ -132,7 +147,7 @@ export async function createShopifyCheckout(
   } catch {
     // ignore
   }
-  return { url: finalUrl, cartId };
+  return { url: finalUrl, cartId, discountedSubtotal, discountApplicable };
 }
 
 /**

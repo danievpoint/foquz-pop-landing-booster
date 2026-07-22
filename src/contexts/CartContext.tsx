@@ -151,6 +151,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
   const shopifyCartIdRef = useRef<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
@@ -253,7 +254,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  const discountedTotal = total * (1 - activeDiscountPercent / 100);
+  // Use Shopify's returned subtotal as source of truth (handles unknown codes).
+  // Falls back to local KNOWN_DISCOUNTS calculation while Shopify is loading.
+  const localDiscountedTotal = total * (1 - activeDiscountPercent / 100);
+  const discountedTotal =
+    discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total
+      ? shopifyDiscountedSubtotal
+      : localDiscountedTotal;
+  if (discountCode && shopifyDiscountedSubtotal !== null && shopifyDiscountedSubtotal < total && total > 0) {
+    activeDiscountPercent = Math.round(((total - shopifyDiscountedSubtotal) / total) * 100);
+  }
 
 
   const getCheckoutLines = useCallback(() => {
@@ -285,6 +295,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (items.length === 0) {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
+      setShopifyDiscountedSubtotal(null);
       return;
     }
 
@@ -292,6 +303,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (lines.length === 0) {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
+      setShopifyDiscountedSubtotal(null);
       return;
     }
 
@@ -305,13 +317,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         if (result) {
           shopifyCartIdRef.current = result.cartId;
           setCheckoutUrl(result.url);
+          setShopifyDiscountedSubtotal(result.discountedSubtotal);
         } else {
           setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
         }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
-        if (!cancelled) setCheckoutUrl(null);
+        if (!cancelled) {
+          setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
+        }
       })
       .finally(() => {
         if (!cancelled) setIsCheckingOut(false);
