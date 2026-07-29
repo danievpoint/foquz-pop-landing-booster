@@ -138,6 +138,19 @@ section[id] {
     --marquee-height: 24px;
   }
 
+  html[data-marquee-page="true"]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--safe-area-top);
+    background-color: hsl(var(--background));
+    pointer-events: none;
+    z-index: 10001;
+    transform: translateZ(0);
+  }
+
   @media (min-width: 768px) {
     html[data-marquee-page="true"] {
       --marquee-height: 28px;
