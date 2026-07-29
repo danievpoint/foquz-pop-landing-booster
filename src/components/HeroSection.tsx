@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
+import { Truck } from "lucide-react";
 
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
@@ -71,6 +72,18 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
+
+          {/* Mobile shipping-promo banner */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-20 lg:hidden flex items-center gap-1 sm:gap-1.5 bg-secondary text-secondary-foreground comic-outline comic-shadow rounded-full px-2.5 sm:px-3 py-1 font-extrabold uppercase tracking-tight text-center"
+            style={{ top: "12%", maxWidth: "90vw" }}
+          >
+            <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs md:text-sm leading-tight">
+              Versandkostenfreier Versand ab 29€ nach DE & AT
+            </span>
+          </div>
+
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
