@@ -122,6 +122,7 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
+            <HeroPromoBanner className="absolute left-0 right-0 top-0" />
 
 
 
