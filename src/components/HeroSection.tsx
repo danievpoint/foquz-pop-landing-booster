@@ -75,8 +75,8 @@ const HeroSection = () => {
 
           {/* Mobile shipping-promo banner */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-20 lg:hidden flex items-center gap-1 sm:gap-1.5 bg-secondary text-secondary-foreground comic-outline comic-shadow rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 font-extrabold uppercase tracking-tight text-center"
-            style={{ top: "14%", maxWidth: "90vw" }}
+            className="absolute left-1/2 -translate-x-1/2 z-20 lg:hidden flex items-center gap-1 sm:gap-1.5 bg-secondary text-secondary-foreground comic-outline comic-shadow rounded-full px-2.5 sm:px-3 py-1 font-extrabold uppercase tracking-tight text-center"
+            style={{ top: "12%", maxWidth: "90vw" }}
           >
             <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
             <span className="text-[10px] sm:text-xs md:text-sm leading-tight">
