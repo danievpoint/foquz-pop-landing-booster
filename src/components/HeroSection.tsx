@@ -63,7 +63,7 @@ const HeroSection = () => {
       >
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
-          <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+63px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+71px)]" />
+          <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <img
             src={heroBgMobile}
             alt=""
