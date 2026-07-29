@@ -72,6 +72,18 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
+
+          {/* Mobile shipping-promo banner */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-20 lg:hidden flex items-center gap-1.5 sm:gap-2 bg-secondary text-secondary-foreground comic-outline comic-shadow rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-extrabold uppercase tracking-tight text-center"
+            style={{ top: "18%", maxWidth: "90vw" }}
+          >
+            <Truck className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+            <span className="text-[11px] sm:text-xs md:text-sm leading-tight">
+              Versandkostenfreier Versand ab 29€ nach DE & AT
+            </span>
+          </div>
+
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
