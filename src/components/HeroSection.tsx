@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
+import { Truck } from "lucide-react";
 
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
