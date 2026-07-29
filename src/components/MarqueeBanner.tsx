@@ -31,7 +31,9 @@ const MarqueeBanner = () => {
       className="fixed left-0 right-0 z-[10000] bg-background overflow-hidden border-b border-foreground/30 h-6 md:h-7"
       data-banner
       style={{
-        top: "var(--safe-area-top)",
+        top: 0,
+        height: "calc(var(--safe-area-top) + var(--marquee-height))",
+        paddingTop: "var(--safe-area-top)",
         transform: "translate3d(0, 0, 0)",
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
