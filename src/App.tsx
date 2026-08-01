@@ -21,8 +21,12 @@ import HelpCenter from "./pages/HelpCenter";
 import Faq from "./pages/Faq";
 import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import DiscountRedirect from "./pages/DiscountRedirect";
+import ShopifyRedirectRoute from "./pages/ShopifyRedirectRoute";
+
 
 const queryClient = new QueryClient();
 
