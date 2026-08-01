@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
 
@@ -21,8 +20,12 @@ import HelpCenter from "./pages/HelpCenter";
 import Faq from "./pages/Faq";
 import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import DiscountRedirect from "./pages/DiscountRedirect";
+import ShopifyRedirectRoute from "./pages/ShopifyRedirectRoute";
+
 
 const queryClient = new QueryClient();
 
@@ -35,9 +38,12 @@ const App = () => {
           <Sonner />
           <PullToRefresh>
             <BrowserRouter>
-              <ScrollToHash />
+                <ScrollToHash />
+                <AnalyticsTracker />
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/discount/:code" element={<DiscountRedirect />} />
+
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/datenschutz" element={<Datenschutz />} />
@@ -52,7 +58,7 @@ const App = () => {
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<ShopifyRedirectRoute />} />
               </Routes>
             </BrowserRouter>
           </PullToRefresh>

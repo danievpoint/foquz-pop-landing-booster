@@ -1,7 +1,9 @@
 import { toast } from "sonner";
+import { getCreator, getDtId } from "./attribution";
+
 
 const SHOPIFY_API_VERSION = '2025-07';
-const SHOPIFY_STORE_PERMANENT_DOMAIN = 'foquz-pop-landing-booster-xb8ca.myshopify.com';
+export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'foquz-pop-landing-booster-xb8ca.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 const SHOPIFY_STOREFRONT_TOKEN = '8aca74773e74c1661173fb980846444a';
 
@@ -123,6 +125,14 @@ export async function createShopifyCheckout(
     input.discountCodes = discountCodes;
   }
 
+  // Persist Collabs attribution on the cart so it reaches the Shopify order.
+  const dtId = getDtId();
+  const creator = getCreator();
+  const attributes: Array<{ key: string; value: string }> = [];
+  if (dtId) attributes.push({ key: "dt_id", value: dtId });
+  if (creator) attributes.push({ key: "creator", value: creator });
+  if (attributes.length > 0) input.attributes = attributes;
+
   const data = await storefrontApiRequest(CART_CREATE_MUTATION, { input });
   const userErrors = data?.data?.cartCreate?.userErrors ?? [];
   if (userErrors.length > 0) {
@@ -144,16 +154,105 @@ export async function createShopifyCheckout(
   const codes: Array<{ code: string; applicable: boolean }> = cart?.discountCodes ?? [];
   const discountApplicable = codes.length === 0 ? true : codes.every((c) => c.applicable);
 
-  let finalUrl = checkoutUrl;
+  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable };
+}
+
+/**
+ * The checkout URL is ALWAYS the untouched `cart.checkoutUrl` returned by
+ * Shopify – host and path are never rebuilt or string-replaced. We only append
+ * the tracking query params Shopify itself expects on a custom storefront
+ * (`channel` and the Collabs `dt_id`).
+ */
+export function decorateCheckoutUrl(checkoutUrl: string): string {
   try {
     const url = new URL(checkoutUrl);
     url.searchParams.set('channel', 'online_store');
-    finalUrl = url.toString();
+    const dtId = getDtId();
+    if (dtId && !url.searchParams.has('dt_id')) url.searchParams.set('dt_id', dtId);
+    return url.toString();
   } catch {
-    // ignore
+    return checkoutUrl;
   }
-  return { url: finalUrl, cartId, discountedSubtotal, discountApplicable };
 }
+
+const CART_DISCOUNT_CODES_UPDATE_MUTATION = `
+  mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        id
+        checkoutUrl
+        cost { totalAmount { amount currencyCode } }
+        discountCodes { code applicable }
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
+/** Applies a discount code to an EXISTING Shopify cart. */
+export async function applyDiscountCodeToCart(
+  cartId: string,
+  discountCodes: string[]
+): Promise<ShopifyCheckout | null> {
+  const data = await storefrontApiRequest(CART_DISCOUNT_CODES_UPDATE_MUTATION, {
+    cartId,
+    discountCodes,
+  });
+  const userErrors = data?.data?.cartDiscountCodesUpdate?.userErrors ?? [];
+  if (userErrors.length > 0) {
+    console.error('Shopify cartDiscountCodesUpdate errors:', userErrors);
+    return null;
+  }
+  const cart = data?.data?.cartDiscountCodesUpdate?.cart;
+  if (!cart?.checkoutUrl || !cart?.id) return null;
+
+  const amountRaw = cart?.cost?.totalAmount?.amount;
+  const discountedSubtotal =
+    typeof amountRaw === "string" && !Number.isNaN(parseFloat(amountRaw))
+      ? parseFloat(amountRaw)
+      : null;
+  const codes: Array<{ code: string; applicable: boolean }> = cart?.discountCodes ?? [];
+  const discountApplicable = codes.length === 0 ? true : codes.every((c) => c.applicable);
+
+  return {
+    url: decorateCheckoutUrl(cart.checkoutUrl),
+    cartId: cart.id,
+    discountedSubtotal,
+    discountApplicable,
+  };
+}
+
+const URL_REDIRECTS_QUERY = `
+  query UrlRedirects($first: Int!, $query: String) {
+    urlRedirects(first: $first, query: $query) {
+      edges { node { id path target } }
+    }
+  }
+`;
+
+/**
+ * Resolves a Shopify "URL Redirect" (Online Store > Navigation > URL Redirects).
+ * Used for personalised Collabs links like /creatorname.
+ */
+export async function resolveShopifyRedirect(path: string): Promise<string | null> {
+  try {
+    const data = await storefrontApiRequest(URL_REDIRECTS_QUERY, {
+      first: 10,
+      query: `path:${path}`,
+    });
+    const edges: Array<{ node: { path: string; target: string } }> =
+      data?.data?.urlRedirects?.edges ?? [];
+    const normalized = path.replace(/\/+$/, "").toLowerCase() || "/";
+    const match =
+      edges.find((e) => (e.node.path ?? "").replace(/\/+$/, "").toLowerCase() === normalized) ??
+      edges[0];
+    return match?.node?.target ?? null;
+  } catch (e) {
+    console.error('Failed to resolve Shopify URL redirect:', e);
+    return null;
+  }
+}
+
 
 /**
  * Returns true when the Shopify cart no longer exists or has 0 items,
