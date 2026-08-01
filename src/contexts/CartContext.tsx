@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
-import { createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
 
 export interface CartItem {
   id: string;
@@ -163,18 +164,40 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const [manualDiscountCode, setManualDiscountCode] = useState<string | null>(() => {
-    return localStorage.getItem(MANUAL_CODE_KEY);
+    // A code coming from /discount/:code wins over a previously stored one.
+    return getPendingDiscountCode() ?? localStorage.getItem(MANUAL_CODE_KEY);
   });
 
   const applyManualDiscountCode = useCallback((code: string) => {
     const normalized = code.trim().toUpperCase();
     if (!normalized) return;
     localStorage.setItem(MANUAL_CODE_KEY, normalized);
+    setPendingDiscountCode(normalized);
     setManualDiscountCode(normalized);
+
+    // If a Shopify cart already exists, update it in place via
+    // cartDiscountCodesUpdate instead of recreating the cart.
+    const cartId = shopifyCartIdRef.current;
+    if (cartId) {
+      void applyDiscountCodeToCart(cartId, [normalized])
+        .then((result) => {
+          if (!result) return;
+          setCheckoutUrl(result.url);
+          setShopifyDiscountedSubtotal(result.discountedSubtotal);
+          if (!result.discountApplicable) {
+            localStorage.removeItem(MANUAL_CODE_KEY);
+            setPendingDiscountCode(null);
+            setManualDiscountCode(null);
+            toast.error("Dieser Rabattcode ist f\u00fcr deinen Warenkorb nicht g\u00fcltig.");
+          }
+        })
+        .catch((e) => console.error("cartDiscountCodesUpdate failed:", e));
+    }
   }, []);
 
   const clearManualDiscountCode = useCallback(() => {
     localStorage.removeItem(MANUAL_CODE_KEY);
+    setPendingDiscountCode(null);
     setManualDiscountCode(null);
   }, []);
 
@@ -312,6 +335,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
           if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
             localStorage.removeItem(MANUAL_CODE_KEY);
+            setPendingDiscountCode(null);
             setManualDiscountCode(null);
             toast.error("Dieser Rabattcode ist für deinen Warenkorb nicht gültig.");
           }
@@ -377,6 +401,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           localStorage.removeItem(DISCOUNT_KEY);
           setHasNewsletterDiscount(false);
           localStorage.removeItem(MANUAL_CODE_KEY);
+          setPendingDiscountCode(null);
           setManualDiscountCode(null);
         }
       } finally {
