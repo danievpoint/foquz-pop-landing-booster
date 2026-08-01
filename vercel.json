@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/discount/:code",
+      "destination": "https://fdwaufhnkrqbbxmdmxjf.supabase.co/functions/v1/discount-redirect/:code",
+      "statusCode": 302
+    }
+  ],
+  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
+}
