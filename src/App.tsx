@@ -41,8 +41,10 @@ const App = () => {
             <BrowserRouter>
                 <ScrollToHash />
                 <AnalyticsTracker />
-
+              <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/discount/:code" element={<DiscountRedirect />} />
+
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/datenschutz" element={<Datenschutz />} />
