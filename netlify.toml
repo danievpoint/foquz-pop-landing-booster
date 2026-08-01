@@ -1,0 +1,18 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Shopify Collabs requires https://www.foquz.de/discount/:code to answer with a
+# REAL HTTP 302 (not the SPA with 200). Netlify serves this rule at the edge,
+# before the static site, so the very first response is a redirect.
+[[redirects]]
+  from = "/discount/*"
+  to = "https://fdwaufhnkrqbbxmdmxjf.supabase.co/functions/v1/discount-redirect/:splat"
+  status = 302
+  force = true
+
+# Everything else keeps working as a normal SPA.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
