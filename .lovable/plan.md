@@ -1,124 +1,88 @@
+## Ziel
 
-# Rechtssicherheits-Audit FOQUZ Shop (EU/DE)
+`https://www.foquz.de/discount/:code` muss **selbst** mit HTTP 301/302 antworten. Lovable-Hosting kann das nicht (Static + SPA-Fallback → immer 200). Also muss vor oder statt Lovable eine Instanz stehen, die auf diesem Pfad einen echten Redirect ausliefert.
 
-Geprüft: Impressum, Datenschutz, AGB, Widerruf, Versand, Cookie-Banner, Newsletter, Footer, Checkout-Flow.
+Keine DNS-Änderung in diesem Schritt – hier nur die Optionen und ihre Konsequenzen.
 
-## Befunde
+---
 
-### 🔴 Kritisch (rechtlich problematisch, muss vor Live-Gang behoben werden)
+## Option A (empfohlen): Netlify oder Vercel als Host für www.foquz.de
 
-1. **Cookie-Banner nicht TTDSG/DSGVO-konform**
-   - Kein „Ablehnen"-Button gleichwertig zu „Akzeptieren" (vorhanden, aber nur Text — okay)
-   - Aber: **keine granulare Auswahl** (Notwendig / Statistik / Marketing)
-   - **Keine Einstellungs-Seite/Link** zum späteren Ändern der Einwilligung
-   - **Keine Auflistung der gesetzten Cookies/Drittanbieter** (Pflicht nach EuGH „Planet49")
-   - **Skripte werden trotzdem geladen**, der Banner blockiert nichts → reine Show. Muss tatsächlich Drittanbieter-Skripte (z. B. Meta-Pixel, Analytics, falls genutzt) erst nach Consent laden.
+Das bestehende Vite-Projekt wird zusätzlich auf Netlify/Vercel deployed. Dort existiert eine echte Server-Redirect-Regel für exakt `/discount/*`, alles andere geht unverändert an die SPA.
 
-2. **Versandbedingungen leer** („wird in Kürze veröffentlicht")
-   - Pflicht nach Art. 246a § 1 EGBGB: Lieferzeit, Versandkosten, Lieferländer.
-   - Footer-Link führt aktuell ins Leere → **Abmahnrisiko**.
-
-3. **OS-Plattform-Link fehlt komplett** (Art. 14 ODR-VO)
-   - Pflicht: anklickbarer Link zu `https://ec.europa.eu/consumers/odr` im Impressum **und** leicht zugänglich (Footer).
-
-4. **„Zur Kasse"-Button entspricht nicht § 312j Abs. 3 BGB („Button-Lösung")**
-   - Der Button heißt aktuell „ZUR KASSE". Vorgeschrieben ist eine eindeutige Formulierung wie **„Zahlungspflichtig bestellen"**, „Kaufen" oder gleichwertig **direkt vor der Bestellabgabe**. „Zur Kasse" ist okay, **wenn** danach noch ein finaler Bestellbutton im Shopify-Checkout kommt (was hier der Fall ist, da Shopify übernimmt) — also okay, aber: **Checkout läuft auf Shopify-Domain**, dort muss Shopify-Checkout den Pflicht-Button-Text setzen (Standard ist konform). → **Hinweis, kein Codefix**.
-
-5. **Checkout-Zusammenfassung vor Bestellabgabe (§ 312j Abs. 2 BGB)**
-   - Pflichtangaben unmittelbar vor Bestellung: wesentliche Produktmerkmale, Gesamtpreis, Versandkosten, Vertragslaufzeit.
-   - Der Cart-Drawer zeigt nur Name + Preis, **keine Produktmerkmale, keine Versandkosten-Info**. Versand wird erst im Shopify-Checkout berechnet → akzeptabel, **aber** Hinweis „zzgl. Versand" im Drawer ergänzen.
-
-6. **Datenschutzerklärung listet Plattformen, die nicht (mehr) genutzt werden**
-   - Facebook, Twitter/X, Twitch, LinkedIn, Xing werden beschrieben, sind aber im Footer nicht verlinkt. Das ist nicht direkt rechtswidrig, aber **inhaltlich falsch** und schwächt die Glaubwürdigkeit. TikTok ist neu verlinkt — gut, ist drin.
-   - **Shopify als Auftragsverarbeiter fehlt** in der Datenschutzerklärung (Pflicht Art. 13 DSGVO: Empfänger personenbezogener Daten). Auch **Lovable Cloud / Supabase** (Newsletter-E-Mails, Edge Functions) muss genannt werden.
-   - **Newsletter-Verarbeitung (Double-Opt-In, Speicherung, Widerruf)** ist nicht erkennbar dokumentiert.
-
-7. **Newsletter ohne Double-Opt-In erkennbar**
-   - Anmeldung scheint sofort den Rabatt zu aktivieren. DSGVO/UWG fordern **Double-Opt-In** (Bestätigungs-Mail mit Verifikations-Link). Bitte serverseitig prüfen / dokumentieren.
-   - Checkbox „Ich willige in die Verarbeitung … ein" fehlt — der Disclaimer-Text alleine ersetzt keine aktive Einwilligungshandlung (laut Aufsichtsbehörden empfohlen: opt-in-Checkbox, nicht vorausgewählt).
-
-8. **AGB §10 Abs. 5 unzulässig**
-   - „Ein Widerspruchsrecht gegen Änderungen dieser AGB besteht nicht" → bei Verbrauchern **unwirksam** (BGH-Rspr.). Muss raus / umformuliert werden.
-
-9. **AGB §7 Abs. 4 (Haftungsausschluss)** ist zu pauschal
-   - Haftung für Leben, Körper, Gesundheit, Kardinalpflichten, Produkthaftungsgesetz darf nicht ausgeschlossen werden → klarstellende Formulierung ergänzen.
-
-10. **Impressum §5 DDG vs. §18 MStV**
-    - §5 DDG ist korrekt (DDG hat TMG abgelöst). Aber: bei journalistisch-redaktionellen Inhalten (Blog, Social-Posts mit redaktionellem Charakter) fehlt der **Verantwortliche nach §18 Abs. 2 MStV**. → Optional, falls Content/Blog kommt.
-
-11. **USt-ID fehlt** im Impressum (Pflicht nur wenn vorhanden — falls vorhanden, **muss** sie rein).
-
-12. **Telefonnummer im Impressum** ist eine Mobilnummer ohne Vorwahl-Format („01702420257"). Sollte als `+49 170 2420257` formatiert sein für Erreichbarkeit-Pflicht.
-
-### 🟡 Empfohlen (Best Practice / nice-to-have)
-
-13. **Preisangabenverordnung (PAngV)**: Produktseiten müssen zeigen:
-    - Gesamtpreis inkl. MwSt.
-    - „inkl. MwSt., zzgl. [Versandkosten-Link]"
-    - Bei Verbrauchsgütern: **Grundpreis pro 100 g / kg / ml** (Pflicht bei Riechdosen mit Füllmenge!)
-    - **Aktuell fehlt der Grundpreis** auf Karten und Produktdetailseite — **abmahnrelevant**.
-
-14. **Streichpreise / Rabatte (PAngV §11)**: Bei „10% Rabatt" muss der **niedrigste Preis der letzten 30 Tage** angegeben werden.
-
-15. **Barrierefreiheit (BFSG, gilt ab 28.06.2025)**
-    - Onlineshops müssen barrierefrei sein. Mind. WCAG 2.1 AA: Kontraste, Alt-Texte, Tastaturbedienung, Formular-Labels. Sollte separat geprüft werden.
-
-16. **Cookie-Consent-Logging**: aktuell nur `localStorage`. DSGVO-Beweispflicht erfordert serverseitiges Logging mit Zeitstempel.
-
-17. **Datenschutz: Rechtsgrundlage für Shopify-Checkout** (Drittland USA?) und SCC-Hinweis ergänzen.
-
-## Plan der Umsetzung (in Code)
-
-Frontend-Anpassungen (alles ohne Design-Änderung):
-
-```
-1. src/pages/Versandbedingungen.tsx      → vollständigen Text einfügen
-                                            (Lieferzeit, Versandkosten,
-                                            Lieferländer, Versanddienstleister)
-2. src/pages/Impressum.tsx                → OS-Plattform-Link (Art. 14 ODR-VO)
-                                            ergänzen + Tel. neu formatieren
-3. src/components/Footer.tsx              → Link „Versand" wieder relevant,
-                                            zusätzlich OS-Plattform-Hinweis
-                                            (optional)
-4. src/pages/Datenschutz.tsx              → Shopify, Lovable Cloud/Supabase,
-                                            Newsletter-Verarbeitung,
-                                            Drittlandtransfers ergänzen
-                                          → nicht genutzte Plattformen
-                                            (Facebook, X, Twitch, LinkedIn,
-                                            Xing) entfernen
-5. src/pages/AGB.tsx                      → §10(5) entfernen, §7(4) um
-                                            gesetzlich zwingende Haftung
-                                            ergänzen
-6. src/components/CookieBanner.tsx        → granulare Einwilligung
-                                            (Notwendig / Statistik / Marketing)
-                                          → „Einstellungen ändern"-Link im
-                                            Footer
-                                          → Skript-Loader, der externe
-                                            Skripte nur nach Consent lädt
-                                            (sofern Analytics/Pixel genutzt)
-7. src/components/NewsletterSection.tsx   → Opt-in-Checkbox (nicht
-                                            vorausgewählt) ergänzen
-                                          → Hinweis auf Double-Opt-In-Mail
-8. supabase/functions/shopify-newsletter  → Double-Opt-In-Flow
-                                            (Confirmation-Mail mit Token)
-                                            *(falls noch nicht vorhanden —
-                                             vor Implementierung prüfen)*
-9. src/components/CartDrawer.tsx          → Hinweis „zzgl. Versand" und
-                                            Link zu Versandbedingungen
-10. ProductGrid / ProductDetail           → Grundpreis (€/100 g) anzeigen
-                                          → bei Rabatten Streichpreis
-                                            korrekt nach PAngV §11
+**Netlify – `public/_redirects` (oder `netlify.toml`)**
+```text
+/discount/*  https://<edge-function-host>/discount-redirect/:splat  302
+/*           /index.html  200
 ```
 
-## Was ich von dir noch brauche (vor Umsetzung)
+**Vercel – `vercel.json`**
+```json
+{
+  "redirects": [
+    { "source": "/discount/:code", "destination": "https://<edge-function-host>/discount-redirect/:code", "statusCode": 302 }
+  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
 
-Damit ich keine erfundenen Angaben schreibe:
+Alternativ ohne Supabase-Hop: eine native Serverless-Route (`api/discount/[code].ts` bzw. Netlify Function), die dieselbe Logik wie `supabase/functions/discount-redirect/index.ts` enthält und direkt 302 auf `https://www.foquz.de/?discount=CODE&dt_id=...` setzt. Weniger Latenz, ein Hop weniger, aber Logik dann an zwei Stellen.
 
-1. **Versandbedingungen**: Versanddienstleister (DHL/DPD/…?), Versandkosten DE/EU, Versandkostenfrei-Grenze, Lieferzeiten DE/EU, welche Länder bedient werden.
-2. **USt-ID** der FOQUZ GmbH (falls vorhanden → ins Impressum).
-3. **Genutzte Tracking-Tools**: Meta-Pixel, Google Analytics, TikTok-Pixel? (für Cookie-Banner-Logik)
-4. **Newsletter Double-Opt-In** bereits implementiert in der Edge Function `shopify-newsletter`? Wenn nein → soll ich das nachrüsten?
-5. **Grundpreis-Angabe**: Füllmenge pro Riechdose (z. B. 5 g)? → für €/100 g.
-6. **Produktverantwortlichkeit/Sicherheit**: Sind die Riechdosen als Verbraucherprodukte unter GPSR (General Product Safety Regulation, gilt seit 13.12.2024) gekennzeichnet? Falls ja: Herstellerangaben + Sicherheits-Warnhinweise auf Produktdetailseite.
+### Was sich ändert
+- **Repo**: `netlify.toml` bzw. `vercel.json` (+ optional Serverless-Route). Kein Anwendungscode.
+- **Build**: identisch (`npm run build`, Output `dist`).
+- **Env-Variablen**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` müssen im Netlify/Vercel-Dashboard gesetzt werden (Build-Zeit-Variablen, sie landen ohnehin im Client-Bundle – keine Secrets).
+- **Backend**: bleibt vollständig bei Lovable Cloud. Edge Functions, DB, Auth, Shopify-Funktionen unverändert. CORS ist bereits `*`.
+- **Lovable-Publishing**: Der Lovable-Publish-Flow bleibt bestehen, `*.lovable.app` läuft weiter. Aber `www.foquz.de` zeigt dann **nicht mehr** auf Lovable. Änderungen im Editor gehen nicht mehr automatisch live – es braucht einen Deploy-Pfad (GitHub-Verbindung → Netlify/Vercel baut bei Push). Das ist die zentrale Konsequenz dieser Option.
+- **DNS bei one.com** (später auszuführen):
+  - `A @` und `A www` (aktuell `185.158.133.1`) werden ersetzt: Vercel → `A @ 76.76.21.21` + `CNAME www cname.vercel-dns.com`; Netlify → `CNAME www <site>.netlify.app` + ALIAS/A für Apex laut Netlify.
+  - Der TXT-Record `_lovable` kann bleiben (schadet nicht, hält die Domain für Lovable verifiziert).
+- **E-Mail**: MX, SPF, DKIM, DMARC sind **eigene Record-Typen** und von A/CNAME-Änderungen nicht betroffen – solange die Nameserver bei one.com bleiben. Nichts anfassen. Nur ein Wechsel der Nameserver würde Mail brechen; den machen wir nicht.
+- **SSL**: Netlify/Vercel stellen Let's-Encrypt-Zertifikate automatisch aus, sobald DNS zeigt. Kurzes Fenster (Minuten) zwischen DNS-Umstellung und Zertifikat. Falls CAA-Records existieren: Let's Encrypt muss erlaubt sein.
+- **Risiko**: mittel. Rückweg = A-Records zurück auf `185.158.133.1`.
 
-Sag mir, welche Punkte ich umsetzen soll (alles, oder Auswahl) und liefere die offenen Angaben — dann baue ich's in einem Rutsch ein.
+---
+
+## Option B: Reverse Proxy vor Lovable
+
+Cloudflare (oder ein anderer Proxy) steht vor Lovable, eine Redirect Rule fängt `/discount/*` ab, alles andere wird durchgereicht.
+
+### Variante B1 – Cloudflare mit Nameserver-Wechsel
+Erfordert genau das, was du vermeiden willst: NS von one.com auf Cloudflare. Dabei müssen **alle** bestehenden Records (inkl. MX, SPF, DKIM, DMARC, Autodiscover von one.com) vorher exportiert und in Cloudflare nachgebaut werden, sonst fällt E-Mail aus. Cloudflares Scanner findet meist 90 %, nicht 100 %.
+
+### Variante B2 – Cloudflare nur für www per CNAME (ohne NS-Wechsel)
+Cloudflare CNAME Setup (Partial/CNAME Setup) ist Enterprise-only. Für Business-Pläne nicht verfügbar. → praktisch ausgeschlossen.
+
+### Variante B3 – kleiner eigener Proxy (Fly.io / Cloudflare Worker auf Worker-Domain)
+Löst das Problem nicht: Shopify prüft `www.foquz.de`, und ohne Kontrolle über das Routing dieser Hostnames landet der Request weiter bei Lovable.
+
+**Fazit B**: nur B1 funktioniert, und die kostet den NS-Wechsel inkl. E-Mail-Risiko. Höheres Risiko als Option A.
+
+---
+
+## Option C: Shopify-native Collabs-Links (kein Infrastruktur-Umbau)
+
+Collabs kann statt der Custom-Domain die Shop-Domain für Discount-Links nutzen (`<shop>.myshopify.com/discount/:code?redirect=...`). Das setzt das Rabatt-Cookie direkt in der Checkout-Domain – technisch sogar zuverlässiger als der Umweg über die Storefront. Nachteil: die Links tragen nicht den foquz.de-Markennamen, und laut deiner Rückmeldung besteht Collabs auf `www.foquz.de`. Als Fallback halten, falls A und B abgelehnt werden.
+
+---
+
+## Empfehlung
+
+**Option A mit Netlify** (einfachstes Redirect-Handling, `_redirects`-Datei im Repo, kein Nameserver-Wechsel, E-Mail bleibt bei one.com unberührt).
+
+## Reihenfolge der Umsetzung (nichts davon jetzt ausgeführt)
+
+1. GitHub-Verbindung des Lovable-Projekts prüfen/aktivieren.
+2. `netlify.toml` mit der `/discount/*`-Regel ins Repo legen.
+3. Netlify-Site anlegen, Env-Variablen setzen, Deploy auf `<site>.netlify.app` verifizieren.
+4. Test gegen die Netlify-URL: `curl -I https://<site>.netlify.app/discount/test-discount?redirect=/&dt_id=0` → erwartet 302 + Location.
+5. Erst dann DNS bei one.com umstellen (nur A/CNAME für `@` und `www`; MX/SPF/DKIM/DMARC unangetastet).
+6. SSL-Ausstellung abwarten, erneut curl-Test gegen `www.foquz.de`.
+7. Collabs-Domain-Verifizierung auslösen.
+
+## Technische Details
+
+- Die bestehende Edge Function `supabase/functions/discount-redirect/index.ts` bleibt unverändert nutzbar und liefert bereits korrekt 302 mit `Cache-Control: no-store`.
+- Der Redirect hängt `discount=CODE` an die Ziel-URL; `captureAttributionFromSearch()` in `src/lib/attribution.ts` liest ihn aus und `cartDiscountCodesUpdate` wendet ihn auf den Cart an. Diese Kette ist bereits getestet und wird durch den Hosting-Wechsel nicht berührt.
+- `redirect`-Parameter wird serverseitig auf interne Hosts begrenzt – keine offenen Weiterleitungen.
+- Shopify-Pageview-Events (`src/lib/shopifyAnalytics.ts`, Monorail) laufen clientseitig und sind hostingunabhängig.
