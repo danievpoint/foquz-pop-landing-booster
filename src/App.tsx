@@ -59,7 +59,7 @@ const App = () => {
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<ShopifyRedirectRoute />} />
               </Routes>
             </BrowserRouter>
           </PullToRefresh>
