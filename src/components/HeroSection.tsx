@@ -17,7 +17,7 @@ const heroGuyCans = heroGuyCansAsset.url;
 
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroGuyCans, heroProducts, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
