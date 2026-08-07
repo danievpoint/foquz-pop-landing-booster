@@ -64,7 +64,7 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) === */}
         <div
           className="lg:hidden relative w-full overflow-hidden md:!min-h-[max(840px,88vh)]"
-          style={{ minHeight: "max(900px, 270vw)" }}
+          style={{ minHeight: "max(860px, 235vw)" }}
         >
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <img
@@ -78,7 +78,7 @@ const HeroSection = () => {
           {/* Layer 1: Motiv (nur Handy) – liegt hinter den Wolken */}
           <Link
             to="/produkt/starter-bundle"
-            className="md:hidden absolute bottom-10 right-0 w-[102%] z-[2] block"
+            className="md:hidden absolute bottom-[-6%] right-[-16%] w-[132%] z-[2] block"
             aria-label="FOQUZ Produkte ansehen"
           >
             <img
