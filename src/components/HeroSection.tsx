@@ -9,12 +9,10 @@ import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
-
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + guy-with-cans PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
 const heroGuyCans = heroGuyCansAsset.url;
-
 
 const heroImagePromise = Promise.all(
   [heroBgDesktop, heroGuyCans, heroProducts, heroClouds, heroScene].map(
@@ -64,7 +62,10 @@ const HeroSection = () => {
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
         {/* === MOBILE / TABLET (< lg) === */}
-        <div className="lg:hidden relative w-full overflow-hidden md:!min-h-[max(840px,88vh)]" style={{ minHeight: "max(900px, 270vw)" }}>
+        <div
+          className="lg:hidden relative w-full overflow-hidden md:!min-h-[max(840px,88vh)]"
+          style={{ minHeight: "max(900px, 270vw)" }}
+        >
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <img
             src={heroBgMobile}
@@ -77,7 +78,7 @@ const HeroSection = () => {
           {/* Layer 1: Motiv (nur Handy) – liegt hinter den Wolken */}
           <Link
             to="/produkt/starter-bundle"
-            className="md:hidden absolute bottom-0 right-0 w-[102%] z-[2] block"
+            className="md:hidden absolute bottom-10 right-0 w-[102%] z-[2] block"
             aria-label="FOQUZ Produkte ansehen"
           >
             <img
@@ -98,8 +99,6 @@ const HeroSection = () => {
             className="md:hidden absolute inset-0 w-full h-full object-cover object-top z-[3] pointer-events-none"
           />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
-
-
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -134,8 +133,6 @@ const HeroSection = () => {
                   className="w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
                 />
               </Link>
-
-
             </div>
           </div>
         </div>
@@ -153,8 +150,6 @@ const HeroSection = () => {
             }}
           >
             <HeroPromoBanner className="absolute left-0 right-0 top-0" />
-
-
 
             <style>{`
               @keyframes hero-float {
@@ -217,7 +212,10 @@ const HeroSection = () => {
             <div className="absolute inset-0 z-10">
               <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
-                  <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
+                  <div
+                    aria-hidden="true"
+                    className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight"
+                  >
                     <span className="block">KURZ RIECHEN.</span>
                     <span className="block text-secondary">AB AUF WOLKE 7.</span>
                   </div>
