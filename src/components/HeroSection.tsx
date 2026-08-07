@@ -63,8 +63,8 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
+        {/* === MOBILE / TABLET (< lg) === */}
+        <div className="lg:hidden relative w-full overflow-hidden" style={{ minHeight: "max(840px, 88vh)" }}>
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <img
             src={heroBgMobile}
@@ -74,9 +74,10 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
+          {/* Layer 1: Motiv (nur Handy) – liegt hinter den Wolken */}
           <Link
             to="/produkt/starter-bundle"
-            className="absolute bottom-0 left-0 right-0 z-[5] block"
+            className="md:hidden absolute bottom-0 right-0 w-[78%] z-[2] block"
             aria-label="FOQUZ Produkte ansehen"
           >
             <img
@@ -84,10 +85,20 @@ const HeroSection = () => {
               alt="FOQUZ Dosen – Thai Style, Lemon Breezy und Peachy Punch"
               loading="eager"
               decoding="async"
-              className="w-full h-auto object-contain object-bottom"
+              className="w-full h-auto"
             />
           </Link>
+          {/* Layer 2: Wolken im Vordergrund */}
+          <img
+            src={heroClouds}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="md:hidden absolute inset-0 w-full h-full object-cover object-top z-[3] pointer-events-none"
+          />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
+
 
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
@@ -113,7 +124,17 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <div aria-hidden="true" className="h-[52vw] sm:h-[38vw]" />
+              <div aria-hidden="true" className="md:hidden h-[112vw]" />
+              <Link to="/produkt/starter-bundle" className="hidden md:flex md:justify-center">
+                <img
+                  src={heroProducts}
+                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  loading="eager"
+                  decoding="async"
+                  className="w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                />
+              </Link>
+
 
             </div>
           </div>
