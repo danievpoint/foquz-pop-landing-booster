@@ -74,7 +74,21 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
+          <Link
+            to="/produkt/starter-bundle"
+            className="absolute bottom-0 left-0 right-0 z-[5] block"
+            aria-label="FOQUZ Produkte ansehen"
+          >
+            <img
+              src={heroGuyCans}
+              alt="FOQUZ Dosen – Thai Style, Lemon Breezy und Peachy Punch"
+              loading="eager"
+              decoding="async"
+              className="w-full h-auto object-contain object-bottom"
+            />
+          </Link>
+          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
+
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
