@@ -95,7 +95,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="md:hidden absolute inset-x-0 bottom-0 w-full z-[3] pointer-events-none"
+            className="md:hidden absolute inset-0 w-full h-full object-cover object-top z-[3] pointer-events-none"
           />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
 
