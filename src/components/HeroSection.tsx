@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
+import heroGuyCansAsset from "@/assets/hero-guy-cans-trim.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
 
-// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
+// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + guy-with-cans PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
-const heroJars = heroProducts; // hero-products.png (3 cans)
+const heroGuyCans = heroGuyCansAsset.url;
+
 
 const heroImagePromise = Promise.all(
   [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
