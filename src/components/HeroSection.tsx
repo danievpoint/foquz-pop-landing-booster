@@ -16,7 +16,7 @@ const heroBgMobile = heroScene; // hero-bg.svg
 const heroJars = heroProducts; // hero-products.png (3 cans)
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroProducts, heroClouds, heroScene, heroMobileGuyAsset.url].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
