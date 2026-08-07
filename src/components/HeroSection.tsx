@@ -124,7 +124,17 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <div aria-hidden="true" className="h-[52vw] sm:h-[38vw]" />
+              <div aria-hidden="true" className="md:hidden h-[62vw]" />
+              <Link to="/produkt/starter-bundle" className="hidden md:flex md:justify-center">
+                <img
+                  src={heroProducts}
+                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  loading="eager"
+                  decoding="async"
+                  className="w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                />
+              </Link>
+
 
             </div>
           </div>
