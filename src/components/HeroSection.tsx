@@ -78,7 +78,7 @@ const HeroSection = () => {
           {/* Layer 1: Motiv (nur Handy) – liegt hinter den Wolken */}
           <Link
             to="/produkt/starter-bundle"
-            className="md:hidden absolute bottom-[14%] right-[-16%] w-[132%] z-[2] block"
+            className="md:hidden absolute bottom-[14%] right-[-12%] w-[132%] z-[2] block"
             aria-label="FOQUZ Produkte ansehen"
           >
             <img
