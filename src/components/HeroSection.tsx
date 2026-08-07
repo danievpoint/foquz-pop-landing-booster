@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
+import heroMobileGuyAsset from "@/assets/hero-mobile-guy.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
@@ -15,7 +16,7 @@ const heroBgMobile = heroScene; // hero-bg.svg
 const heroJars = heroProducts; // hero-products.png (3 cans)
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroProducts, heroClouds, heroScene, heroMobileGuyAsset.url].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -97,13 +98,13 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
+              <Link to="/produkt/starter-bundle" className="block w-full">
                 <img
-                  src={heroJars}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  src={heroMobileGuyAsset.url}
+                  alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
                   loading="eager"
                   decoding="async"
-                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                  className="w-full h-auto origin-top-right cursor-pointer"
                 />
               </Link>
             </div>
