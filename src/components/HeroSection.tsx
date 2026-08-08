@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
-import heroGuyCansAsset from "@/assets/hero-guy-cans-v2.png.asset.json";
+import heroGuyCansAsset from "@/assets/hero-guy-cans-trim.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
+
 
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + guy-with-cans PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
 const heroGuyCans = heroGuyCansAsset.url;
+
 
 const heroImagePromise = Promise.all(
   [heroBgDesktop, heroGuyCans, heroProducts, heroClouds, heroScene].map(
@@ -61,11 +63,8 @@ const HeroSection = () => {
         className="transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
       >
-        {/* === MOBILE / TABLET (< lg) === */}
-        <div
-          className="lg:hidden relative w-full overflow-hidden md:!min-h-[max(840px,88vh)]"
-          style={{ minHeight: "max(860px, 235vw)" }}
-        >
+        {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
+        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <img
             src={heroBgMobile}
@@ -75,10 +74,9 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          {/* Layer 1: Motiv (nur Handy) – liegt hinter den Wolken */}
           <Link
             to="/produkt/starter-bundle"
-            className="md:hidden absolute bottom-[14%] right-[-12%] w-[132%] z-[2] block"
+            className="absolute bottom-0 left-0 right-0 z-[5] block"
             aria-label="FOQUZ Produkte ansehen"
           >
             <img
@@ -86,19 +84,11 @@ const HeroSection = () => {
               alt="FOQUZ Dosen – Thai Style, Lemon Breezy und Peachy Punch"
               loading="eager"
               decoding="async"
-              className="w-full h-auto"
+              className="w-full h-auto object-contain object-bottom"
             />
           </Link>
-          {/* Layer 2: Wolken im Vordergrund */}
-          <img
-            src={heroClouds}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="md:hidden absolute inset-0 w-full h-full object-cover object-top z-[3] pointer-events-none"
-          />
           <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
+
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -123,16 +113,8 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <div aria-hidden="true" className="md:hidden h-[128vw]" />
-              <Link to="/produkt/starter-bundle" className="hidden md:flex md:justify-center">
-                <img
-                  src={heroProducts}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
-                  loading="eager"
-                  decoding="async"
-                  className="w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
-                />
-              </Link>
+              <div aria-hidden="true" className="h-[52vw] sm:h-[38vw]" />
+
             </div>
           </div>
         </div>
@@ -150,6 +132,8 @@ const HeroSection = () => {
             }}
           >
             <HeroPromoBanner className="absolute left-0 right-0 top-0" />
+
+
 
             <style>{`
               @keyframes hero-float {
@@ -212,10 +196,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 z-10">
               <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
-                  <div
-                    aria-hidden="true"
-                    className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight"
-                  >
+                  <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
                     <span className="block text-secondary">AB AUF WOLKE 7.</span>
                   </div>
