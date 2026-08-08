@@ -4,20 +4,18 @@ import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
-import heroGuyCansAsset from "@/assets/hero-guy-cans-trim.png.asset.json";
 import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
 
-// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + guy-with-cans PNG.
+// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
-const heroGuyCans = heroGuyCansAsset.url;
-
+const heroJars = heroProducts; // hero-products.png (3 cans)
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroGuyCans, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -74,21 +72,7 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <Link
-            to="/produkt/starter-bundle"
-            className="absolute bottom-0 left-0 right-0 z-[5] block"
-            aria-label="FOQUZ Produkte ansehen"
-          >
-            <img
-              src={heroGuyCans}
-              alt="FOQUZ Dosen – Thai Style, Lemon Breezy und Peachy Punch"
-              loading="eager"
-              decoding="async"
-              className="w-full h-auto object-contain object-bottom"
-            />
-          </Link>
-          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0 pointer-events-none [&_a]:pointer-events-auto">
-
+          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -113,8 +97,15 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <div aria-hidden="true" className="h-[52vw] sm:h-[38vw]" />
-
+              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
+                <img
+                  src={heroJars}
+                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  loading="eager"
+                  decoding="async"
+                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                />
+              </Link>
             </div>
           </div>
         </div>
