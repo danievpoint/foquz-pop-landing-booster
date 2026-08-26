@@ -103,7 +103,7 @@ const HeroSection = () => {
                   alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
                   loading="eager"
                   decoding="async"
-                  className="w-[100%] sm:w-[85%] md:w-[60%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                  className="w-[100%] sm:w-[85%] md:w-[60%] h-auto cursor-pointer"
                 />
               </Link>
             </div>
