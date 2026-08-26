@@ -64,13 +64,16 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
-          <Link to="/produkt/starter-bundle" className="absolute inset-0 w-full h-full">
+          <Link
+            to="/produkt/starter-bundle"
+            className="absolute right-0 bottom-0 z-[-1] -mr-4 sm:-mr-6 md:mr-0"
+          >
             <img
               src={heroJars}
               alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
               loading="eager"
               decoding="async"
-              className="absolute right-0 bottom-0 w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[5%] sm:translate-x-[8%] md:translate-x-[2%] -translate-y-[2%] scale-[1.07]"
+              className="w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[5%] sm:translate-x-[8%] md:translate-x-[2%] -translate-y-[2%] scale-[1.07]"
             />
           </Link>
           <img
