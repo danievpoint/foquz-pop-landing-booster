@@ -97,13 +97,13 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
+              <Link to="/produkt/starter-bundle" className="md:flex md:justify-end -mr-4 sm:-mr-6 md:mr-0">
                 <img
                   src={heroJars}
                   alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
                   loading="eager"
                   decoding="async"
-                  className="w-[100%] sm:w-[85%] md:w-[60%] h-auto cursor-pointer"
+                  className="w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[12%] sm:translate-x-[15%] md:translate-x-[8%]"
                 />
               </Link>
             </div>
