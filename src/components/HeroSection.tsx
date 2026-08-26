@@ -66,7 +66,7 @@ const HeroSection = () => {
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
           <Link
             to="/produkt/starter-bundle"
-            className="absolute right-0 bottom-0 z-[-1] -mr-4 sm:-mr-6 md:mr-0"
+            className="absolute right-0 bottom-0 z-0 -mr-4 sm:-mr-6 md:mr-0"
           >
             <img
               src={heroJars}
@@ -82,7 +82,7 @@ const HeroSection = () => {
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top z-0"
+            className="absolute inset-0 w-full h-full object-cover object-top z-[-1]"
           />
           <div className="relative w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
