@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
-import heroProducts from "@/assets/hero-products.png";
+import heroGuyJarsAsset from "@/assets/hero-guy-jars.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
@@ -12,10 +12,10 @@ import heroScene from "@/assets/hero-bg.svg";
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
-const heroJars = heroProducts; // hero-products.png (3 cans)
+const heroJars = heroGuyJarsAsset.url; // mobile/tablet hero visual (guy + jars)
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroJars, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -100,10 +100,10 @@ const HeroSection = () => {
               <Link to="/produkt/starter-bundle" className="md:flex md:justify-center">
                 <img
                   src={heroJars}
-                  alt="FOQUZ Produkte – Watermelon Flex, Thai Style und Lemon Breezy"
+                  alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
                   loading="eager"
                   decoding="async"
-                  className="w-[115%] sm:w-[98%] md:w-[70%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
+                  className="w-[100%] sm:w-[85%] md:w-[60%] h-auto animate-[breathe_3s_ease-in-out_infinite] cursor-pointer"
                 />
               </Link>
             </div>
