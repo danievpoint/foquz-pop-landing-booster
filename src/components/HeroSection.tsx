@@ -13,10 +13,10 @@ import heroScene from "@/assets/hero-bg.svg";
 // Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
 const heroBgDesktop = heroBgAsset.url;
 const heroBgMobile = heroScene; // hero-bg.svg
-const heroJars = heroProducts; // hero-products.png (3 cans)
+const heroJars = heroGuyJarsAsset.url; // mobile/tablet hero visual (guy + jars)
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroProducts, heroClouds, heroScene].map(
+  [heroBgDesktop, heroJars, heroClouds, heroScene].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
