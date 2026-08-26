@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import HeroPromoBanner from "@/components/HeroPromoBanner";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroGuyJarsAsset from "@/assets/hero-guy-jars.png.asset.json";
-import heroProducts from "@/assets/hero-products.png";
 import heroClouds from "@/assets/hero-clouds.svg";
 import heroScene from "@/assets/hero-bg.svg";
 
