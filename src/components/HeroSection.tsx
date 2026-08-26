@@ -64,15 +64,27 @@ const HeroSection = () => {
         {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
         <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
           <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+78px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+86px)]" />
+          <Link
+            to="/produkt/starter-bundle"
+            className="absolute right-0 bottom-0 z-[-1] -mr-4 sm:-mr-6 md:mr-0"
+          >
+            <img
+              src={heroJars}
+              alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
+              loading="eager"
+              decoding="async"
+              className="w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[5%] sm:translate-x-[8%] md:translate-x-[2%] -translate-y-[2%] scale-[1.07]"
+            />
+          </Link>
           <img
             src={heroBgMobile}
             alt=""
             aria-hidden="true"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover object-top z-0"
           />
-          <div className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
+          <div className="relative w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="relative z-10 pb-4 sm:pb-8">
                 <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
@@ -97,15 +109,6 @@ const HeroSection = () => {
                   </a>
                 </div>
               </div>
-              <Link to="/produkt/starter-bundle" className="relative z-[-10] md:flex md:justify-end -mr-4 sm:-mr-6 md:mr-0">
-                <img
-                  src={heroJars}
-                  alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
-                  loading="eager"
-                  decoding="async"
-                  className="w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[5%] sm:translate-x-[8%] md:translate-x-[2%] -translate-y-[2%] scale-[1.07]"
-                />
-              </Link>
             </div>
           </div>
         </div>
