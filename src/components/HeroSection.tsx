@@ -84,6 +84,15 @@ const HeroSection = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top z-[-1]"
           />
+          {/* Foreground blue clouds mask the bottom edge of the hero image */}
+          <img
+            src={heroClouds}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            className="absolute bottom-0 left-0 w-full h-[35%] object-cover object-bottom pointer-events-none z-[5]"
+          />
           <div className="relative w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-40 sm:pt-44 md:pt-48 pb-4 sm:pb-0">
             <div className="flex flex-col">
               <div className="relative z-10 pb-4 sm:pb-8">
