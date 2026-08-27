@@ -108,7 +108,7 @@ const HeroSection = () => {
                     href="#bundle"
                     className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
                   >
-                    POWERBUNDLE HOLEN
+                    POWER-BUNDLE HOLEN
                   </a>
                   <a
                     href="#sorten"
@@ -211,7 +211,7 @@ const HeroSection = () => {
                       href="#bundle"
                       className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
                     >
-                      POWERBUNDLE HOLEN
+                      POWER-BUNDLE HOLEN
                     </a>
                     <a
                       href="#sorten"
