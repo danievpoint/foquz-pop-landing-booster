@@ -77,20 +77,30 @@ const NewsletterPopup = () => {
     if (!canShow()) return;
 
     triggered.current = true;
+    openedAt.current = Date.now();
     setVisible(true);
     setPopupOpen(true);
   }, [canShow, setPopupOpen]);
 
-  // Desktop: Exit Intent
+  // Desktop: Exit Intent (erst nach 8s scharf, damit kein Fehlauslöser beim Laden)
   useEffect(() => {
     if (isMobile) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
 
+    let armed = false;
+    const armTimer = setTimeout(() => {
+      armed = true;
+    }, 8000);
+
     const handler = (e: MouseEvent) => {
+      if (!armed) return;
       if (e.clientY < 0) trigger();
     };
     document.documentElement.addEventListener("mouseleave", handler);
-    return () => document.documentElement.removeEventListener("mouseleave", handler);
+    return () => {
+      clearTimeout(armTimer);
+      document.documentElement.removeEventListener("mouseleave", handler);
+    };
   }, [isMobile, items.length, popupOpen, trigger]);
 
   // Mobile: 25s timer OR 55% scroll
