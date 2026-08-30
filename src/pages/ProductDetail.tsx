@@ -348,23 +348,58 @@ const ProductDetail = () => {
       <section className="container mx-auto px-4 pb-8 lg:pb-24">
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
           {/* Image — sticky on desktop */}
-          <div className="rounded-2xl overflow-hidden w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
-            {product.video ? (
-              <AutoVideo
-                src={product.video}
-                poster={product.videoPoster ?? product.image}
-                className="w-full aspect-square object-cover"
-              />
-            ) : (
-              <img
-                src={product.image}
-                alt={product.name}
-                loading="eager"
-                decoding="async"
-                className="w-full aspect-square object-cover"
-              />
+          <div className="w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
+            <div className="rounded-2xl overflow-hidden">
+              {selectedImage ? (
+                <img
+                  src={selectedImage}
+                  alt={product.name}
+                  loading="eager"
+                  decoding="async"
+                  className="w-full aspect-square object-cover"
+                />
+              ) : product.video ? (
+                <AutoVideo
+                  src={product.video}
+                  poster={product.videoPoster ?? product.image}
+                  className="w-full aspect-square object-cover"
+                />
+              ) : (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  loading="eager"
+                  decoding="async"
+                  className="w-full aspect-square object-cover"
+                />
+              )}
+            </div>
+
+            {galleryImages.length > 0 && (
+              <div className="mt-3 grid grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedImage(null)}
+                  className={`rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === null ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100"}`}
+                  aria-label={`${product.name} Hauptansicht`}
+                >
+                  <img src={product.videoPoster ?? product.image} alt={product.name} className="w-full aspect-square object-cover" />
+                </button>
+                {galleryImages.map((img) => (
+                  <button
+                    key={img.url}
+                    type="button"
+                    onClick={() => setSelectedImage(img.url)}
+                    className={`rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === img.url ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100"}`}
+                    aria-label={img.altText ?? `${product.name} Bild`}
+                  >
+                    <img src={img.url} alt={img.altText ?? product.name} loading="lazy" className="w-full aspect-square object-cover" />
+                  </button>
+                ))}
+              </div>
             )}
           </div>
+
 
           {/* Info + Entdecke auch on desktop */}
           <div className="py-0 lg:py-4">
