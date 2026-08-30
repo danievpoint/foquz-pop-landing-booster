@@ -250,24 +250,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Gratis-Zugaben automatisch mit dem Power Bundle synchronisieren.
+  // Bei deaktiviertem Flag werden evtl. gespeicherte Zugaben entfernt.
   useEffect(() => {
     const bundleQty = items
       .filter((i) => BUNDLE_IDS.includes(i.id))
       .reduce((s, i) => s + i.qty, 0);
 
+    const wantedQty = GIFTS_ENABLED && bundleQty > 0 ? 1 : 0;
     const needsUpdate = GIFT_ITEMS.some((g) => {
       const current = items.find((i) => i.id === g.id);
-      const wanted = bundleQty > 0 ? 1 : 0;
-      return (current?.qty ?? 0) !== wanted;
+      return (current?.qty ?? 0) !== wantedQty;
     });
     if (!needsUpdate) return;
 
     setItems((prev) => {
-      const withoutGifts = prev.filter((i) => !isGiftItem(i.id));
-      if (bundleQty <= 0) return withoutGifts;
+      const withoutGifts = prev.filter((i) => !isGiftItemId(i.id));
+      if (wantedQty <= 0) return withoutGifts;
       return [...withoutGifts, ...GIFT_ITEMS.map((g) => ({ ...g, qty: 1 }))];
     });
   }, [items]);
+
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
