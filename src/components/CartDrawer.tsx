@@ -316,11 +316,12 @@ const CartDrawer = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const isBundleItem = item.id === BUNDLE_ID;
-                      const hasDiscount = hasAppliedDiscount;
+                      const isGift = isGiftItem(item.id);
+                      const hasDiscount = hasAppliedDiscount && !isGift;
                       const finalPrice = hasDiscount
                         ? item.price * discountRatio
                         : item.price;
-                      const productHandle = getProductHandle(item);
+                      const productHandle = isGift ? null : getProductHandle(item);
                       const productLink = productHandle ? `/produkt/${productHandle}` : "#";
                       return (
                         <motion.div
