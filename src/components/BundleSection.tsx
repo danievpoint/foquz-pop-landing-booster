@@ -99,7 +99,7 @@ const BundleSection = () => {
             {/* Price */}
             <div className="flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
               <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">22,47€</span>
-              <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 19,99€</span>
+              <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 19,98€</span>
             </div>
 
             {/* CTA + Scarcity banner */}
@@ -109,7 +109,7 @@ const BundleSection = () => {
                   addToCart(1, {
                     id: "starter-bundle",
                     name: "FOQUZ Power Bundle (3 Sorten)",
-                    price: 19.99,
+                    price: 19.98,
                     image: foquzBox,
                   })
                 }

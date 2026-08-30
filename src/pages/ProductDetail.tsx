@@ -82,12 +82,12 @@ const BundleBanner = () => {
               <strong>Spare 11%</strong> gegenüber dem Einzelkauf und teste alle unsere 3 Sorten in einer Box.
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-white font-black text-2xl md:text-3xl">19,99€</span>
+              <span className="text-white font-black text-2xl md:text-3xl">19,98€</span>
               <span className="text-white/50 line-through text-base md:text-lg">22,47€</span>
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 19.99, image: foquzBox });
+                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 19.98, image: foquzBox });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
