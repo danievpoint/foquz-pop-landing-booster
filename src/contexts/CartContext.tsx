@@ -213,6 +213,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
+    // Gratis-Zugaben können nicht direkt gekauft werden.
+    if (isGiftItem(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
       if (existing) {
@@ -230,16 +232,38 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 
   const removeFromCart = useCallback((id: string) => {
+    if (isGiftItem(id)) return;
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
   const updateQty = useCallback((id: string, qty: number) => {
+    if (isGiftItem(id)) return;
     if (qty <= 0) {
       setItems((prev) => prev.filter((i) => i.id !== id));
     } else {
       setItems((prev) => prev.map((i) => (i.id === id ? { ...i, qty } : i)));
     }
   }, []);
+
+  // Gratis-Zugaben automatisch mit dem Power Bundle synchronisieren.
+  useEffect(() => {
+    const bundleQty = items
+      .filter((i) => BUNDLE_IDS.includes(i.id))
+      .reduce((s, i) => s + i.qty, 0);
+
+    const needsUpdate = GIFT_ITEMS.some((g) => {
+      const current = items.find((i) => i.id === g.id);
+      const wanted = bundleQty > 0 ? 1 : 0;
+      return (current?.qty ?? 0) !== wanted;
+    });
+    if (!needsUpdate) return;
+
+    setItems((prev) => {
+      const withoutGifts = prev.filter((i) => !isGiftItem(i.id));
+      if (bundleQty <= 0) return withoutGifts;
+      return [...withoutGifts, ...GIFT_ITEMS.map((g) => ({ ...g, qty: 1 }))];
+    });
+  }, [items]);
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
