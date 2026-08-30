@@ -98,6 +98,8 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
   LIVIO: 10,
   CLOUD10: 10,
   WOLKE7: 15,
+  FOQUZ20: 20,
+
 };
 
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
