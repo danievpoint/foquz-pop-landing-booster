@@ -247,8 +247,8 @@ const NewsletterPopup = () => {
                   </h3>
                   <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                     {alreadySubscribed
-                      ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
-                      : "Vielen Dank! Du bist jetzt für das Gewinnspiel eingetragen. Wir drücken dir die Daumen!"
+                      ? "Diese E-Mail ist schon für unseren Newsletter angemeldet. Dein 10% Rabattcode ist in der nächsten E-Mail für dich bereit."
+                      : "Vielen Dank! Du bist jetzt für das Gewinnspiel eingetragen und bekommst deinen 10% Rabattcode per E-Mail zugeschickt. Wir drücken dir die Daumen!"
                     }
                   </p>
                   <button
