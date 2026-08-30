@@ -130,6 +130,13 @@ const NewsletterPopup = () => {
     sessionStorage.setItem(STORAGE_KEY, "1");
   };
 
+  // Overlay-Klicks in den ersten 800ms ignorieren (verhindert sofortiges Auto-Schließen)
+  const dismissFromOverlay = () => {
+    if (Date.now() - openedAt.current < 800) return;
+    dismiss();
+  };
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || loading) return;
