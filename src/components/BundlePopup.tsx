@@ -43,7 +43,7 @@ const BundlePopup = () => {
     addToCart(1, {
       id: "starter-bundle",
       name: "FOQUZ Power Bundle (3 Sorten)",
-      price: 19.99,
+      price: 19.98,
       image: foquzBox,
     });
     
@@ -96,7 +96,7 @@ const BundlePopup = () => {
               </p>
 
               <div className="flex items-center gap-3">
-                <span className="text-white font-black text-2xl md:text-3xl">19,99€</span>
+                <span className="text-white font-black text-2xl md:text-3xl">19,98€</span>
                 <span className="text-white/50 line-through text-base md:text-lg">22,47€</span>
               </div>
 

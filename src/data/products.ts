@@ -89,9 +89,9 @@ export const products: Product[] = [
 export const bundleProduct: Product = {
   name: "FOQUZ Power Bundle",
   handle: "starter-bundle",
-  price: "19,99€",
+  price: "19,98€",
   originalPrice: "22,47€",
-  numericPrice: 19.99,
+  numericPrice: 19.98,
   desc: "Alle 3 Sorten in einer Box.",
   image: foquzBox,
   color: "#75559f",
