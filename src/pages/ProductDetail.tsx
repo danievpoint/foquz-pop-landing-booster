@@ -14,7 +14,7 @@ import AutoVideo from "@/components/AutoVideo";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
-import { fetchProductGalleryImages, type ShopifyImage } from "@/lib/shopify";
+import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, type ShopifyImage } from "@/lib/shopify";
 
 
 // Preload all product images on module load
@@ -368,12 +368,15 @@ const ProductDetail = () => {
             <div className="rounded-2xl overflow-hidden">
               {selectedImage ? (
                 <img
-                  src={selectedImage}
+                  src={shopifyImageUrl(selectedImage, 1000)}
+                  srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
+                  sizes="(min-width: 1024px) 600px, 90vw"
                   alt={product.name}
                   loading="eager"
                   decoding="async"
                   className="w-full aspect-square object-cover"
                 />
+
               ) : product.video ? (
                 <AutoVideo
                   src={product.video}
@@ -409,7 +412,7 @@ const ProductDetail = () => {
                     className={`rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === img.url ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100"}`}
                     aria-label={img.altText ?? `${product.name} Bild`}
                   >
-                    <img src={img.url} alt={img.altText ?? product.name} loading="lazy" className="w-full aspect-square object-cover" />
+                    <img src={shopifyImageUrl(img.url, 200)} alt={img.altText ?? product.name} loading="lazy" decoding="async" className="w-full aspect-square object-cover" />
                   </button>
                 ))}
               </div>

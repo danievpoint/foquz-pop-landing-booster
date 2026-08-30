@@ -334,6 +334,28 @@ export interface ShopifyImage {
   altText: string | null;
 }
 
+/**
+ * Skaliert Shopify-CDN-Bilder serverseitig herunter (WebP), damit statt
+ * mehrerer MB nur wenige hundert KB geladen werden.
+ */
+export function shopifyImageUrl(url: string, width: number): string {
+  try {
+    const u = new URL(url);
+    if (!u.hostname.includes("shopify")) return url;
+    u.searchParams.set("width", String(Math.round(width)));
+    u.searchParams.set("format", "webp");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+/** srcSet für responsive Auslieferung. */
+export function shopifyImageSrcSet(url: string, widths: number[]): string {
+  return widths.map((w) => `${shopifyImageUrl(url, w)} ${w}w`).join(", ");
+}
+
+
 /** Extra gallery images uploaded in Shopify (primary image excluded). */
 export async function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
   try {
