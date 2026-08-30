@@ -336,7 +336,19 @@ export async function fetchProductGalleryImages(handle: string): Promise<Shopify
   try {
     const data = await storefrontApiRequest(PRODUCT_IMAGES_QUERY, { handle });
     const edges: Array<{ node: ShopifyImage }> = data?.data?.product?.images?.edges ?? [];
-    return edges.slice(1).map((e) => e.node);
+    // Feste Reihenfolge: 1. Warum FOQUZ (Inhaltsstoffe), 2. How to FOQUZ
+    // (Anwendung), 3. Sortiment / Go Thai, danach der Rest.
+    const order = ["inhaltsstoffe", "anwendung", "sortiment"];
+    const rank = (url: string) => {
+      const name = url.toLowerCase();
+      const i = order.findIndex((k) => name.includes(k));
+      return i === -1 ? order.length : i;
+    };
+    return edges
+      .slice(1)
+      .map((e) => e.node)
+      .sort((a, b) => rank(a.url) - rank(b.url));
+
   } catch (e) {
     console.error("Failed to fetch product images:", e);
     return [];
