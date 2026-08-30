@@ -185,10 +185,10 @@ const NewsletterPopup = () => {
                 <>
                   <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-1">
-                    250€ GEWINNEN
+                    250€ GEWINNEN + 10% RABATT
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
-                    Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen.
+                    Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen. Zusätzlich bekommst du direkt <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung geschenkt.
                   </p>
                   <motion.div
                     key={shake}
