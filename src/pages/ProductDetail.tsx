@@ -287,9 +287,23 @@ const ProductDetail = () => {
   const product = allProducts.find((p) => p.handle === handle);
   const otherProducts = allProducts.filter((p) => p.handle !== handle);
 
+  const [galleryImages, setGalleryImages] = useState<ShopifyImage[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    setSelectedImage(null);
+    setGalleryImages([]);
+    if (!handle) return;
+    let cancelled = false;
+    fetchProductGalleryImages(handle).then((imgs) => {
+      if (!cancelled) setGalleryImages(imgs);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [handle]);
+
 
   if (!product) {
     return (
