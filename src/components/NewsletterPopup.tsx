@@ -43,6 +43,7 @@ const NewsletterPopup = () => {
   const triggered = useRef(false);
   const loadingPopup = useRef(false);
   const mounted = useRef(false);
+  const openedAt = useRef(0);
   useLockBodyScroll(visible);
 
   useEffect(() => {
