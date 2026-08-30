@@ -356,26 +356,50 @@ export function shopifyImageSrcSet(url: string, widths: number[]): string {
 }
 
 
-/** Extra gallery images uploaded in Shopify (primary image excluded). */
-export async function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
-  try {
-    const data = await storefrontApiRequest(PRODUCT_IMAGES_QUERY, { handle });
-    const edges: Array<{ node: ShopifyImage }> = data?.data?.product?.images?.edges ?? [];
-    // Feste Reihenfolge nach dem Video/Hauptbild:
-    // 1. Sortiment, 2. Anwendung, 3. Inhaltsstoffe, danach der Rest.
-    const order = ["sortiment", "anwendung", "inhaltsstoffe"];
-    const rank = (url: string) => {
-      const name = url.toLowerCase();
-      const i = order.findIndex((k) => name.includes(k));
-      return i === -1 ? order.length : i;
-    };
-    return edges
-      .slice(1)
-      .map((e) => e.node)
-      .sort((a, b) => rank(a.url) - rank(b.url));
+const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
-  } catch (e) {
-    console.error("Failed to fetch product images:", e);
-    return [];
-  }
+/** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
+export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
+  const cached = galleryCache.get(handle);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    try {
+      const data = await storefrontApiRequest(PRODUCT_IMAGES_QUERY, { handle });
+      const edges: Array<{ node: ShopifyImage }> = data?.data?.product?.images?.edges ?? [];
+      // Feste Reihenfolge nach dem Video/Hauptbild:
+      // 1. Sortiment, 2. Anwendung, 3. Inhaltsstoffe, danach der Rest.
+      const order = ["sortiment", "anwendung", "inhaltsstoffe"];
+      const rank = (url: string) => {
+        const name = url.toLowerCase();
+        const i = order.findIndex((k) => name.includes(k));
+        return i === -1 ? order.length : i;
+      };
+      return edges
+        .slice(1)
+        .map((e) => e.node)
+        .sort((a, b) => rank(a.url) - rank(b.url));
+    } catch (e) {
+      console.error("Failed to fetch product images:", e);
+      galleryCache.delete(handle);
+      return [];
+    }
+  })();
+
+  galleryCache.set(handle, promise);
+  return promise;
+}
+
+/** Lädt Galerie-Daten + Bilddateien im Hintergrund vor, damit die Produktseite instant wirkt. */
+export function prefetchProductGallery(handle: string, widths: number[] = [200, 800]) {
+  fetchProductGalleryImages(handle).then((imgs) => {
+    if (typeof window === "undefined") return;
+    imgs.forEach((img) => {
+      widths.forEach((w) => {
+        const preload = new Image();
+        preload.decoding = "async";
+        preload.src = shopifyImageUrl(img.url, w);
+      });
+    });
+  });
 }

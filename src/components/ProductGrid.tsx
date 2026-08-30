@@ -9,12 +9,24 @@ import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { products } from "@/data/products";
 import AutoVideo from "@/components/AutoVideo";
 import { AccordionSections } from "@/pages/ProductDetail";
+import { prefetchProductGallery } from "@/lib/shopify";
 
 // Preload all product images immediately
 products.forEach((p) => {
   const img = new Image();
   img.src = p.videoPoster ?? p.image;
 });
+
+// Galerie-Bilder der Produktseiten im Hintergrund vorladen (kleine WebP-Varianten)
+if (typeof window !== "undefined") {
+  const warm = () => products.forEach((p) => prefetchProductGallery(p.handle, [200, 800]));
+  if ("requestIdleCallback" in window) {
+    (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(warm);
+  } else {
+    setTimeout(warm, 1500);
+  }
+}
+
 
 const cardVariants = {
   hidden: { opacity: 1, y: 0 },
