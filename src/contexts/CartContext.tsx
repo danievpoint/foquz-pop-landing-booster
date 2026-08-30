@@ -3,6 +3,8 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
+import giftSticker from "@/assets/gift-sticker.png.asset.json";
+import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 
 export interface CartItem {
   id: string;
@@ -78,11 +80,11 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // Gratis-Zugaben: liegen automatisch im Warenkorb, sobald das Power Bundle
 // enthalten ist. Nicht einzeln kaufbar, nicht entfernbar.
 // FEATURE-FLAG: auf `true` setzen, um die Gratis-Zugaben wieder zu aktivieren.
-export const GIFTS_ENABLED = false;
+export const GIFTS_ENABLED = true;
 const BUNDLE_IDS = ["bundle", "starter-bundle"];
 export const GIFT_ITEMS: Omit<CartItem, "qty">[] = [
-  { id: "gift-nasenstripes", name: "Nasen-Stripes (gratis)", price: 0, image: "" },
-  { id: "gift-sticker", name: "FOQUZ Sticker (gratis)", price: 0, image: "" },
+  { id: "gift-nasenstripes", name: "Nasen-Stripes (gratis)", price: 0, image: giftNasenstripes.url },
+  { id: "gift-sticker", name: "FOQUZ Sticker (gratis)", price: 0, image: giftSticker.url },
 ];
 export const GIFT_ITEM_IDS = GIFT_ITEMS.map((g) => g.id);
 export const isGiftItem = (id: string) => GIFTS_ENABLED && GIFT_ITEM_IDS.includes(id);
