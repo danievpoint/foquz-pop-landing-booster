@@ -333,8 +333,8 @@ const CartDrawer = () => {
                           className="flex gap-3 sm:gap-4"
                         >
                           <div className="w-20 sm:w-24 shrink-0">
-                            {item.image && (
-                              <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block">
+                            {item.image ? (
+                              isGift ? (
                                 <img
                                   src={item.image}
                                   alt={item.name}
@@ -342,7 +342,23 @@ const CartDrawer = () => {
                                   height={96}
                                   className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
                                 />
-                              </Link>
+                              ) : (
+                                <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block">
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    width={96}
+                                    height={96}
+                                    className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg bg-muted/40"
+                                  />
+                                </Link>
+                              )
+                            ) : (
+                              isGift && (
+                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-[#ffd618]/30 border-2 border-dashed border-foreground/40 flex items-center justify-center">
+                                  <Sparkles size={22} />
+                                </div>
+                              )
                             )}
                             {hasDiscount && (
                               <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
@@ -354,21 +370,34 @@ const CartDrawer = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block hover:opacity-80 transition-opacity">
+                                {isGift ? (
                                   <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
-                                </Link>
+                                ) : (
+                                  <Link to={productLink} onClick={() => { skipNextScrollRestore(); closeCart(); }} className="block hover:opacity-80 transition-opacity">
+                                    <h3 className="font-black text-sm sm:text-base leading-tight">{item.name}</h3>
+                                  </Link>
+                                )}
+                                {isGift && (
+                                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                                    Gratis-Zugabe zum Power Bundle
+                                  </p>
+                                )}
                               </div>
-                              <button
-                                onClick={() => removeFromCart(item.id)}
-                                className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0"
-                                aria-label="Produkt entfernen"
-                              >
-                                <Trash2 size={18} />
-                              </button>
+                              {!isGift && (
+                                <button
+                                  onClick={() => removeFromCart(item.id)}
+                                  className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0"
+                                  aria-label="Produkt entfernen"
+                                >
+                                  <Trash2 size={18} />
+                                </button>
+                              )}
                             </div>
 
                             <div className="mt-1 flex items-baseline gap-2 flex-wrap">
-                              {hasDiscount ? (
+                              {isGift ? (
+                                <span className="text-base sm:text-lg font-black text-green-700 uppercase">Gratis</span>
+                              ) : hasDiscount ? (
                                 <>
                                   <span className="text-sm text-muted-foreground line-through">
                                     €{item.price.toFixed(2).replace(".", ",")}
@@ -384,23 +413,25 @@ const CartDrawer = () => {
                               )}
                             </div>
 
-                            <div className="flex items-center gap-2 mt-2 w-fit border-2 border-foreground/80 rounded-lg px-1">
-                              <button
-                                onClick={() => updateQty(item.id, item.qty - 1)}
-                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
-                                aria-label="Menge verringern"
-                              >
-                                <Minus size={14} />
-                              </button>
-                              <span className="font-black text-sm w-7 sm:w-8 text-center">{item.qty}</span>
-                              <button
-                                onClick={() => updateQty(item.id, item.qty + 1)}
-                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
-                                aria-label="Menge erhöhen"
-                              >
-                                <Plus size={14} />
-                              </button>
-                            </div>
+                            {!isGift && (
+                              <div className="flex items-center gap-2 mt-2 w-fit border-2 border-foreground/80 rounded-lg px-1">
+                                <button
+                                  onClick={() => updateQty(item.id, item.qty - 1)}
+                                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                  aria-label="Menge verringern"
+                                >
+                                  <Minus size={14} />
+                                </button>
+                                <span className="font-black text-sm w-7 sm:w-8 text-center">{item.qty}</span>
+                                <button
+                                  onClick={() => updateQty(item.id, item.qty + 1)}
+                                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-muted transition-colors rounded"
+                                  aria-label="Menge erhöhen"
+                                >
+                                  <Plus size={14} />
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       );
