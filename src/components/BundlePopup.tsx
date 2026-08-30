@@ -46,7 +46,7 @@ const BundlePopup = () => {
       price: 19.99,
       image: foquzBox,
     });
-    applyManualDiscountCode("WOLKE7");
+    
     dismiss();
   };
 
