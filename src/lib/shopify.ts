@@ -403,5 +403,3 @@ export function prefetchProductGallery(handle: string, widths: number[] = [200, 
     });
   });
 }
-
-}
