@@ -77,13 +77,17 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 
 // Gratis-Zugaben: liegen automatisch im Warenkorb, sobald das Power Bundle
 // enthalten ist. Nicht einzeln kaufbar, nicht entfernbar.
+// FEATURE-FLAG: auf `true` setzen, um die Gratis-Zugaben wieder zu aktivieren.
+export const GIFTS_ENABLED = false;
 const BUNDLE_IDS = ["bundle", "starter-bundle"];
 export const GIFT_ITEMS: Omit<CartItem, "qty">[] = [
   { id: "gift-nasenstripes", name: "Nasen-Stripes (gratis)", price: 0, image: "" },
   { id: "gift-sticker", name: "FOQUZ Sticker (gratis)", price: 0, image: "" },
 ];
 export const GIFT_ITEM_IDS = GIFT_ITEMS.map((g) => g.id);
-export const isGiftItem = (id: string) => GIFT_ITEM_IDS.includes(id);
+export const isGiftItem = (id: string) => GIFTS_ENABLED && GIFT_ITEM_IDS.includes(id);
+const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
+
 
 // Known discount codes and their percentage values.
 // Used so we can locally pick the highest-value code and preview the total.
@@ -246,24 +250,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Gratis-Zugaben automatisch mit dem Power Bundle synchronisieren.
+  // Bei deaktiviertem Flag werden evtl. gespeicherte Zugaben entfernt.
   useEffect(() => {
     const bundleQty = items
       .filter((i) => BUNDLE_IDS.includes(i.id))
       .reduce((s, i) => s + i.qty, 0);
 
+    const wantedQty = GIFTS_ENABLED && bundleQty > 0 ? 1 : 0;
     const needsUpdate = GIFT_ITEMS.some((g) => {
       const current = items.find((i) => i.id === g.id);
-      const wanted = bundleQty > 0 ? 1 : 0;
-      return (current?.qty ?? 0) !== wanted;
+      return (current?.qty ?? 0) !== wantedQty;
     });
     if (!needsUpdate) return;
 
     setItems((prev) => {
-      const withoutGifts = prev.filter((i) => !isGiftItem(i.id));
-      if (bundleQty <= 0) return withoutGifts;
+      const withoutGifts = prev.filter((i) => !isGiftItemId(i.id));
+      if (wantedQty <= 0) return withoutGifts;
       return [...withoutGifts, ...GIFT_ITEMS.map((g) => ({ ...g, qty: 1 }))];
     });
   }, [items]);
+
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
