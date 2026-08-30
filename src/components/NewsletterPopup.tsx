@@ -234,7 +234,7 @@ const NewsletterPopup = () => {
                       disabled={loading}
                       className="comic-btn text-sm py-3 px-8 font-black bg-primary text-primary-foreground w-full"
                     >
-                      {loading ? "..." : "TEILNEHMEN"}
+                      {loading ? "..." : "TEILNEHMEN & 10% SPAREN"}
                     </button>
                   </form>
                   </motion.div>
