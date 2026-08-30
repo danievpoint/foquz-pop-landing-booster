@@ -102,6 +102,13 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
 
 };
 
+// Codes, die in Shopify als FESTER Betrag (pro Artikel) hinterlegt sind.
+// Shopify kann keine Nachkommastellen bei % – daher fester Betrag für 19,99 € → 15,99 €.
+const KNOWN_FIXED_DISCOUNTS: Record<string, number> = {
+  FOQUZ20: 4.0,
+};
+
+
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 // Muss identisch zu Shopify-Versandprofil (Zone DE) sein. Änderungen in
 // Shopify müssen hier nachgezogen werden – Storefront API liefert die
@@ -309,12 +316,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
   // Falls back to a Shopify-compatible preview while the API response loads.
-  // Shopify truncates percentage allocations to whole cents per unit before
-  // multiplying by quantity: FOQUZ20 on 19,99 € => 3,99 € off => 16,00 €.
+  // Shopify erlaubt nur ganze Prozentschritte. Für krumme Preise (19,99 €)
+  // wird deshalb im Shopify-Admin ein FESTER Betrag hinterlegt – hier gespiegelt.
+  const fixedUnitDiscount = discountCode ? KNOWN_FIXED_DISCOUNTS[discountCode] : undefined;
   const localDiscountAmount = items.reduce((sum, item) => {
-    const unitDiscount = Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
+    const unitDiscount =
+      fixedUnitDiscount !== undefined
+        ? Math.min(item.price / 100, fixedUnitDiscount)
+        : Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
     return sum + unitDiscount * item.qty;
   }, 0);
+
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   const discountedTotal =
     discountCode && shopifyDiscountedSubtotal !== null
