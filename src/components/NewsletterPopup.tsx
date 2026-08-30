@@ -182,7 +182,7 @@ const NewsletterPopup = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[10005] bg-black/50 backdrop-blur-sm"
-            onClick={dismiss}
+            onClick={dismissFromOverlay}
           />
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
