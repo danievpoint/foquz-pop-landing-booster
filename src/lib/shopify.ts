@@ -336,9 +336,9 @@ export async function fetchProductGalleryImages(handle: string): Promise<Shopify
   try {
     const data = await storefrontApiRequest(PRODUCT_IMAGES_QUERY, { handle });
     const edges: Array<{ node: ShopifyImage }> = data?.data?.product?.images?.edges ?? [];
-    // Feste Reihenfolge: 1. Warum FOQUZ (Inhaltsstoffe), 2. How to FOQUZ
-    // (Anwendung), 3. Sortiment / Go Thai, danach der Rest.
-    const order = ["inhaltsstoffe", "anwendung", "sortiment"];
+    // Feste Reihenfolge: 1. Inhaltsstoffe (Sorte), 2. Warum FOQUZ (Sortiment),
+    // 3. How to FOQUZ (Anwendung), danach der Rest.
+    const order = ["inhaltsstoffe", "sortiment", "anwendung"];
     const rank = (url: string) => {
       const name = url.toLowerCase();
       const i = order.findIndex((k) => name.includes(k));
