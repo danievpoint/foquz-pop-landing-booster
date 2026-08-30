@@ -315,3 +315,30 @@ export async function validateDiscountCode(code: string): Promise<boolean> {
     return false;
   }
 }
+
+const PRODUCT_IMAGES_QUERY = `
+  query ProductImages($handle: String!) {
+    product(handle: $handle) {
+      images(first: 12) {
+        edges { node { url altText } }
+      }
+    }
+  }
+`;
+
+export interface ShopifyImage {
+  url: string;
+  altText: string | null;
+}
+
+/** Extra gallery images uploaded in Shopify (primary image excluded). */
+export async function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
+  try {
+    const data = await storefrontApiRequest(PRODUCT_IMAGES_QUERY, { handle });
+    const edges: Array<{ node: ShopifyImage }> = data?.data?.product?.images?.edges ?? [];
+    return edges.slice(1).map((e) => e.node);
+  } catch (e) {
+    console.error("Failed to fetch product images:", e);
+    return [];
+  }
+}
