@@ -141,7 +141,7 @@ const NewsletterPopup = () => {
         setSuccess(true);
         setAlreadySubscribed(true);
       } else {
-        activateNewsletterDiscount();
+        
         setSuccess(true);
         setAlreadySubscribed(false);
         sessionStorage.setItem(STORAGE_KEY, "1");
@@ -185,10 +185,10 @@ const NewsletterPopup = () => {
                 <>
                   <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-1">
-                    10% RABATT SICHERN
+                    250€ GEWINNEN
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
-                    Melde dich für unseren Newsletter an und erhalte <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung.
+                    Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen.
                   </p>
                   <motion.div
                     key={shake}
@@ -216,7 +216,7 @@ const NewsletterPopup = () => {
                         required
                       />
                       <span>
-                        Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Widerruf jederzeit möglich (Abmeldelink in jeder E-Mail).{" "}
+                        Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Teilnahme am Gewinnspiel verarbeitet wird. Widerruf jederzeit möglich (Abmeldelink in jeder E-Mail).{" "}
                         <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutz</a>.
                       </span>
                     </label>
@@ -226,7 +226,7 @@ const NewsletterPopup = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-[11px] text-destructive font-medium text-left -mt-1"
                       >
-                        Bitte setze den Haken, damit wir dir den Rabattcode zuschicken können.
+                        Bitte setze den Haken, damit wir deine Gewinnspiel-Teilnahme bestätigen können.
                       </motion.p>
                     )}
                     <button
@@ -234,7 +234,7 @@ const NewsletterPopup = () => {
                       disabled={loading}
                       className="comic-btn text-sm py-3 px-8 font-black bg-primary text-primary-foreground w-full"
                     >
-                      {loading ? "..." : "RABATT AKTIVIEREN"}
+                      {loading ? "..." : "TEILNEHMEN"}
                     </button>
                   </form>
                   </motion.div>
@@ -243,12 +243,12 @@ const NewsletterPopup = () => {
                 <>
                   <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
                   <h3 className="text-2xl font-extrabold mb-2">
-                    {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
+                    {alreadySubscribed ? "Du bist bereits dabei! 💪" : "DU NIMMST TEIL! 🎉"}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                     {alreadySubscribed
                       ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
-                      : "Dein Rabatt wird automatisch im Warenkorb angewendet. Viel Spaß beim Shoppen!"
+                      : "Vielen Dank! Du bist jetzt für das Gewinnspiel eingetragen. Wir drücken dir die Daumen!"
                     }
                   </p>
                   <button
