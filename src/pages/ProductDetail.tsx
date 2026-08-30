@@ -299,8 +299,18 @@ const ProductDetail = () => {
     if (!handle) return;
     let cancelled = false;
     fetchProductGalleryImages(handle).then((imgs) => {
-      if (!cancelled) setGalleryImages(imgs);
+      if (cancelled) return;
+      setGalleryImages(imgs);
+      // Vollbilder direkt vorladen, damit der Wechsel instant ist
+      imgs.forEach((img) => {
+        [200, 800, 1200].forEach((w) => {
+          const pre = new Image();
+          pre.decoding = "async";
+          pre.src = shopifyImageUrl(img.url, w);
+        });
+      });
     });
+
     return () => {
       cancelled = true;
     };
