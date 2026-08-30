@@ -368,12 +368,15 @@ const ProductDetail = () => {
             <div className="rounded-2xl overflow-hidden">
               {selectedImage ? (
                 <img
-                  src={selectedImage}
+                  src={shopifyImageUrl(selectedImage, 1000)}
+                  srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
+                  sizes="(min-width: 1024px) 600px, 90vw"
                   alt={product.name}
                   loading="eager"
                   decoding="async"
                   className="w-full aspect-square object-cover"
                 />
+
               ) : product.video ? (
                 <AutoVideo
                   src={product.video}
