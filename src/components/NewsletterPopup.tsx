@@ -43,6 +43,7 @@ const NewsletterPopup = () => {
   const triggered = useRef(false);
   const loadingPopup = useRef(false);
   const mounted = useRef(false);
+  const openedAt = useRef(0);
   useLockBodyScroll(visible);
 
   useEffect(() => {
@@ -76,20 +77,30 @@ const NewsletterPopup = () => {
     if (!canShow()) return;
 
     triggered.current = true;
+    openedAt.current = Date.now();
     setVisible(true);
     setPopupOpen(true);
   }, [canShow, setPopupOpen]);
 
-  // Desktop: Exit Intent
+  // Desktop: Exit Intent (erst nach 8s scharf, damit kein Fehlauslöser beim Laden)
   useEffect(() => {
     if (isMobile) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
 
+    let armed = false;
+    const armTimer = setTimeout(() => {
+      armed = true;
+    }, 8000);
+
     const handler = (e: MouseEvent) => {
+      if (!armed) return;
       if (e.clientY < 0) trigger();
     };
     document.documentElement.addEventListener("mouseleave", handler);
-    return () => document.documentElement.removeEventListener("mouseleave", handler);
+    return () => {
+      clearTimeout(armTimer);
+      document.documentElement.removeEventListener("mouseleave", handler);
+    };
   }, [isMobile, items.length, popupOpen, trigger]);
 
   // Mobile: 25s timer OR 55% scroll
@@ -118,6 +129,13 @@ const NewsletterPopup = () => {
     setPopupOpen(false);
     sessionStorage.setItem(STORAGE_KEY, "1");
   };
+
+  // Overlay-Klicks in den ersten 800ms ignorieren (verhindert sofortiges Auto-Schließen)
+  const dismissFromOverlay = () => {
+    if (Date.now() - openedAt.current < 800) return;
+    dismiss();
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,7 +182,7 @@ const NewsletterPopup = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[10005] bg-black/50 backdrop-blur-sm"
-            onClick={dismiss}
+            onClick={dismissFromOverlay}
           />
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
