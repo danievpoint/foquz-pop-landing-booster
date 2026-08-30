@@ -308,10 +308,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
-  // Falls back to local KNOWN_DISCOUNTS calculation while Shopify is loading.
-  // Shopify rundet den Rabattbetrag auf ganze Cent (nicht den Endbetrag).
-  // 19,99 € − round(2,9985) = 19,99 − 3,00 = 16,99 € (statt fälschlich 17,00 €).
-  const localDiscountAmount = Math.round(total * activeDiscountPercent) / 100;
+  // Falls back to a Shopify-compatible preview while the API response loads.
+  // Shopify truncates percentage allocations to whole cents per unit before
+  // multiplying by quantity: FOQUZ20 on 19,99 € => 3,99 € off => 16,00 €.
+  const localDiscountAmount = items.reduce((sum, item) => {
+    const unitDiscount = Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
+    return sum + unitDiscount * item.qty;
+  }, 0);
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   const discountedTotal =
     discountCode && shopifyDiscountedSubtotal !== null
