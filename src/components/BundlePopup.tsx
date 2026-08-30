@@ -11,7 +11,7 @@ const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
 const BundlePopup = () => {
   const [visible, setVisible] = useState(false);
-  const { addToCart, popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp, applyManualDiscountCode } = useCart();
+  const { addToCart, popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp } = useCart();
   const shownRef = useRef(false);
   useLockBodyScroll(visible);
 

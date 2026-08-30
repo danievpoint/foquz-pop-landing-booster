@@ -26,7 +26,7 @@ allProducts.forEach((p) => {
 const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const { addToCart, isOpen: cartOpen, applyManualDiscountCode } = useCart();
+  const { addToCart, isOpen: cartOpen } = useCart();
   useLockBodyScroll(visible && !dismissed && !cartOpen);
 
   useEffect(() => {
