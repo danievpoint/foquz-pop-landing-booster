@@ -125,24 +125,31 @@ serve(async (req) => {
     const searchData = await searchRes.json();
 
     if (searchData.customers && searchData.customers.length > 0) {
-      const customerId = searchData.customers[0].id;
-      const updateUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers/${customerId}.json`;
-      await fetch(updateUrl, {
-        method: "PUT",
-        headers: {
-          "X-Shopify-Access-Token": accessToken,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          customer: {
-            id: customerId,
-            email_marketing_consent: {
-              state: "subscribed",
-              opt_in_level: "single_opt_in",
-            },
+      const customer = searchData.customers[0];
+      const currentState = customer.email_marketing_consent?.state;
+
+      // Never downgrade an already confirmed subscriber back to pending
+      if (currentState !== "subscribed") {
+        const updateUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers/${customer.id}.json`;
+        await fetch(updateUrl, {
+          method: "PUT",
+          headers: {
+            "X-Shopify-Access-Token": accessToken,
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            customer: {
+              id: customer.id,
+              email_marketing_consent: {
+                // Double opt-in: Shopify sends the confirmation email,
+                // the customer only becomes "subscribed" after clicking it.
+                state: "pending",
+                opt_in_level: "confirmed_opt_in",
+              },
+            },
+          }),
+        });
+      }
     } else {
       const createUrl = `https://${storeDomain}/admin/api/${SHOPIFY_API_VERSION}/customers.json`;
       const createRes = await fetch(createUrl, {
@@ -155,8 +162,8 @@ serve(async (req) => {
           customer: {
             email: trimmedEmail,
             email_marketing_consent: {
-              state: "subscribed",
-              opt_in_level: "single_opt_in",
+              state: "pending",
+              opt_in_level: "confirmed_opt_in",
             },
             tags: "newsletter",
           },
@@ -168,6 +175,7 @@ serve(async (req) => {
         console.error("Shopify create customer error:", createData.errors);
       }
     }
+
 
     // Return a uniform response to prevent subscriber enumeration
     return new Response(JSON.stringify({ success: true }), {
