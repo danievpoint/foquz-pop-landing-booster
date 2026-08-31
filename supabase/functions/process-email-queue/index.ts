@@ -104,7 +104,10 @@ Deno.serve(async (req) => {
   // callers can trigger queue processing.
   const token = authHeader.slice('Bearer '.length).trim()
   const claims = parseJwtClaims(token)
-  if (claims?.role !== 'service_role') {
+  // Legacy service-role JWTs carry role=service_role; the new-style secret keys
+  // (sb_secret_...) are opaque, so compare them against the configured key.
+  const isServiceRole = claims?.role === 'service_role' || token === supabaseServiceKey
+  if (!isServiceRole) {
     return new Response(
       JSON.stringify({ error: 'Forbidden' }),
       { status: 403, headers: { 'Content-Type': 'application/json' } }
