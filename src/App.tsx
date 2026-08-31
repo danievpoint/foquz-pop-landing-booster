@@ -25,6 +25,8 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DiscountRedirect from "./pages/DiscountRedirect";
 import ShopifyRedirectRoute from "./pages/ShopifyRedirectRoute";
+import NewsletterConfirmed from "./pages/NewsletterConfirmed";
+import Unsubscribe from "./pages/Unsubscribe";
 
 
 const queryClient = new QueryClient();
@@ -58,6 +60,8 @@ const App = () => {
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
+                <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />
+                <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="*" element={<ShopifyRedirectRoute />} />
               </Routes>
             </BrowserRouter>

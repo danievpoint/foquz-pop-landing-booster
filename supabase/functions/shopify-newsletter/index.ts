@@ -97,18 +97,64 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { error: dbError } = await supabaseAdmin
-      .from("newsletter_subscribers")
-      .insert({ email: trimmedEmail });
+    // Generate a fresh double opt-in token (valid 7 days)
+    const tokenBytes = new Uint8Array(32);
+    crypto.getRandomValues(tokenBytes);
+    const confirmToken = Array.from(tokenBytes)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    const isAlreadySubscribed = dbError?.code === "23505";
-    
-    if (dbError && !isAlreadySubscribed) {
-      console.error("DB insert error:", dbError);
-      return new Response(JSON.stringify({ error: "Subscription failed" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    const { data: existing } = await supabaseAdmin
+      .from("newsletter_subscribers")
+      .select("id, confirmed")
+      .eq("email", trimmedEmail)
+      .maybeSingle();
+
+    const alreadyConfirmed = Boolean(existing?.confirmed);
+
+    if (existing) {
+      if (!alreadyConfirmed) {
+        await supabaseAdmin
+          .from("newsletter_subscribers")
+          .update({ confirm_token: confirmToken, confirm_token_expires_at: expiresAt })
+          .eq("id", existing.id);
+      }
+    } else {
+      const { error: dbError } = await supabaseAdmin
+        .from("newsletter_subscribers")
+        .insert({
+          email: trimmedEmail,
+          confirmed: false,
+          confirm_token: confirmToken,
+          confirm_token_expires_at: expiresAt,
+        });
+
+      if (dbError && dbError.code !== "23505") {
+        console.error("DB insert error:", dbError);
+        return new Response(JSON.stringify({ error: "Subscription failed" }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // Send our own double opt-in confirmation email (Shopify does not send one
+    // for customers created through the Admin API).
+    if (!alreadyConfirmed) {
+      const confirmUrl = `${supabaseUrl}/functions/v1/newsletter-confirm?token=${confirmToken}`;
+      const { error: mailError } = await supabaseAdmin.functions.invoke(
+        "send-transactional-email",
+        {
+          body: {
+            templateName: "newsletter-confirm",
+            recipientEmail: trimmedEmail,
+            idempotencyKey: `nl-confirm-${confirmToken}`,
+            templateData: { confirmUrl },
+          },
+        },
+      );
+      if (mailError) console.error("Confirm mail error:", mailError);
     }
 
     // Sync with Shopify
