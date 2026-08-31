@@ -142,7 +142,7 @@ const NewsletterSection = () => {
                 <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                   {alreadySubscribed
                     ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
-                    : <>Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!<br /><br /><span className="text-xs">Wir haben dir eine E-Mail geschickt: Bitte bestätige darin deine Anmeldung, damit du unseren Newsletter erhältst.</span></>
+                    : <>Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> ist direkt aktiv und wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!<br /><br /><span className="text-xs">Wir haben dir eine E-Mail geschickt: Bitte bestätige darin deine Anmeldung, damit wir dir den Newsletter schicken dürfen.</span></>
                   }
                 </p>
 
