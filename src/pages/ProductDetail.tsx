@@ -267,6 +267,131 @@ const VARIANT_ORDER = ["peach-party", "lemon-breezy", "thai-style"];
 
 const comicCard = "border-[3px] border-black rounded-2xl shadow-[6px_6px_0px_0px_#000]";
 
+const HOW_TO_STEPS = [
+  { title: "DOSE AUF", text: "Deckel abdrehen, Dose kurz offen lassen." },
+  { title: "KURZ RIECHEN", text: "Dose unter die Nase halten und tief durchatmen. Nicht schnupfen, nur riechen." },
+  { title: "WOLKE 7", text: "Frische sitzt, Dose zu, weiter geht's." },
+];
+
+const CLAIM_POINTS = [
+  "Echte Kräuter statt Chemie",
+  "Kein Nikotin, kein Koffein",
+  "Wird gerochen, nicht geschnupft",
+  "Frei verkäufliches Lifestyle-Produkt",
+  "Deutsche Marke",
+];
+
+const PRODUCT_FAQ_QUESTIONS = [
+  "Wofür ist FOQUZ?",
+  "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
+  "Ist FOQUZ legal?",
+  "Wie schnell wird meine Bestellung geliefert?",
+];
+
+const SectionHeading = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="text-2xl md:text-4xl font-black uppercase text-black mb-6 inline-block relative">
+    <span className="relative z-10">{children}</span>
+    <span className="absolute left-0 right-0 bottom-0 h-2 md:h-3 z-0" style={{ backgroundColor: YELLOW }} />
+  </h2>
+);
+
+const ProductFaq = () => {
+  const [open, setOpen] = useState<string | null>(null);
+  const items = faqs.filter((f) => PRODUCT_FAQ_QUESTIONS.includes(f.q));
+
+  return (
+    <div className="space-y-3">
+      {items.map((faq) => {
+        const isOpen = open === faq.q;
+        return (
+          <div key={faq.q} className={`bg-white text-black overflow-hidden ${comicCard}`}>
+            <button
+              type="button"
+              onClick={() => setOpen(isOpen ? null : faq.q)}
+              aria-expanded={isOpen}
+              className="w-full flex items-center justify-between gap-4 text-left p-4 md:p-5"
+            >
+              <span className="font-black text-sm md:text-base leading-snug">{faq.q}</span>
+              <span
+                className="w-7 h-7 rounded-full border-[3px] border-black flex items-center justify-center shrink-0"
+                style={{ backgroundColor: YELLOW }}
+              >
+                <Plus
+                  className={`w-4 h-4 text-black transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
+                  strokeWidth={4}
+                />
+              </span>
+            </button>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <p className="px-4 md:px-5 pb-4 md:pb-5 text-sm md:text-base font-medium text-black/70 leading-relaxed">
+                    {faq.a}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+      <div className="pt-2">
+        <Link to="/faq" className="font-black uppercase text-sm underline underline-offset-4 text-black">
+          ALLE FAQ-FRAGEN
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const CrossSellCard = ({
+  p,
+  addToCart,
+  isAvailable,
+}: {
+  p: typeof allProducts[0];
+  addToCart: AddToCart;
+  isAvailable: (name: string) => boolean | null;
+}) => (
+  <div className={`bg-white text-black overflow-hidden flex flex-col ${comicCard}`}>
+    <Link to={`/produkt/${p.handle}`} className="block">
+      <img src={p.image} alt={p.name} className="w-full aspect-square object-cover border-b-[3px] border-black" />
+      <div className="p-3">
+        <h3 className="font-black uppercase text-sm mb-1">{p.name}</h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-black text-base">{p.price}</span>
+          {p.originalPrice && (
+            <span className="line-through text-xs text-black/50 font-semibold">{p.originalPrice}</span>
+          )}
+          {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
+        </div>
+      </div>
+    </Link>
+    <div className="px-3 pb-3 mt-auto">
+      <button
+        type="button"
+        onClick={() =>
+          addToCart(1, {
+            id: p.isBundle ? "starter-bundle" : p.name,
+            name: p.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : p.name,
+            price: p.numericPrice,
+            image: p.image,
+          })
+        }
+        className="comic-btn w-full text-[11px] !py-2 !px-3 font-black"
+        style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
+      >
+        IN DEN WARENKORB
+      </button>
+    </div>
+  </div>
+);
+
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
   const navigate = useNavigate();
