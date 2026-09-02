@@ -68,6 +68,14 @@ export async function fetchProductsAvailability(): Promise<ProductAvailability[]
   }
 }
 
+// Numerische Shopify-PRODUKT-IDs (nicht Varianten) – u.a. für Loox
+export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
+  "peach-party": "10276794335574",
+  "thai-style": "10276796301654",
+  "lemon-breezy": "10276796399958",
+  "starter-bundle": "10276796498262",
+};
+
 // Map local cart item IDs to Shopify ProductVariant GIDs
 export const VARIANT_GID_BY_ID: Record<string, string> = {
   // Product names (used in ProductGrid/ProductDetail)
