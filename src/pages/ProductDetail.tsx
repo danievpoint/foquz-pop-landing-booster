@@ -15,8 +15,10 @@ import MarqueeBar from "@/components/MarqueeBar";
 import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check, Plus } from "lucide-react";
+import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
+import lifestyleHowto from "@/assets/lifestyle-howto.png";
+
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
 import LooxReviews from "@/components/LooxReviews";
@@ -30,6 +32,9 @@ allProducts.forEach((p) => {
 
 const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
+// Bewertungen zählen shopweit: überall dieselbe Referenz-Produkt-ID fürs Aggregat
+const LOOX_SHOP_AGGREGATE_ID = "10276796498262";
+
 
 const formatPrice = (value: number) =>
   `${value.toFixed(2).replace(".", ",")}€`;
@@ -281,12 +286,30 @@ const CLAIM_POINTS = [
   "Deutsche Marke",
 ];
 
+const COMPARISON_ROWS = [
+  ["Anwendung", "Wird gerochen, nicht geschnupft", "Wird traditionell geschnupft"],
+  ["Nikotin", "Ohne Nikotin", "Ohne Nikotin"],
+  ["Duft", "3 Sorten, fruchtig bis kräuterfrisch", "Meist klassisch Menthol und Kampfer"],
+  ["Etikett", "Zutaten auf Deutsch ausgewiesen", "Etikett oft nur auf Thai oder Englisch"],
+  ["Marke", "Deutsche Marke, FOQUZ GmbH in Bayern", "Importware, meist ohne Ansprechpartner in Deutschland"],
+  ["Versand", "DHL nach DE, AT und CH, 2 bis 5 Werktage", "Import, oft lange Lieferzeit"],
+  ["Rücksendung", "14 Tage Widerrufsrecht", "Bei Import häufig schwierig"],
+  ["Support", "Deutscher Support unter info@foquz.de", "Meist kein deutscher Support"],
+];
+
+const LIFESTYLE_POINTS = [
+  "In drei Sekunden erledigt",
+  "Passt in jede Hosentasche",
+  "Ohne Nikotin, ohne Koffein",
+];
+
 const PRODUCT_FAQ_QUESTIONS = [
   "Wofür ist FOQUZ?",
   "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
   "Ist FOQUZ legal?",
   "Wie schnell wird meine Bestellung geliefert?",
 ];
+
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
   <h2 className="text-2xl md:text-4xl font-black uppercase text-black mb-6 inline-block relative">
@@ -732,7 +755,7 @@ const ProductDetail = () => {
               {product.desc}
             </p>
 
-            {looxProductId && <LooxRating productId={looxProductId} className="mt-3" />}
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
 
             <div className="flex flex-wrap gap-2 mt-5">
               {trustPills.map((pill) => (
@@ -868,6 +891,17 @@ const ProductDetail = () => {
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
 
+            {/* Lieferzeit */}
+            <div className="flex items-center gap-2.5 mt-4 mb-1">
+              <Truck className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} />
+              <span className="font-black uppercase text-sm lg:text-base text-black">AUF LAGER</span>
+              <span className="text-sm lg:text-base font-semibold text-black">
+                in 2 bis 5 Werktagen bei dir
+              </span>
+            </div>
+
+
+
 
             {/* CTA */}
             <div ref={ctaRef} className="mt-3">
@@ -979,7 +1013,100 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
+        <div className={`bg-white text-black ${comicCard} overflow-hidden`}>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left">
+              <thead>
+                <tr className="border-b-[3px] border-black">
+                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">Merkmal</th>
+                  <th
+                    className="p-3 md:p-4 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    FOQUZ
+                  </th>
+                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">
+                    Klassische Schnupfdose aus Thailand
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON_ROWS.map(([feature, foquz, other]) => (
+                  <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
+                    <td className="p-3 md:p-4 text-sm font-black">{feature}</td>
+                    <td
+                      className="p-3 md:p-4 text-sm font-semibold border-x-[3px] border-black"
+                      style={{ backgroundColor: YELLOW }}
+                    >
+                      <span className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
+                        <span>{foquz}</span>
+                      </span>
+                    </td>
+                    <td className="p-3 md:p-4 text-sm font-semibold text-black/70">
+                      <span className="flex items-start gap-2">
+                        <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
+                        <span>{other}</span>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="mt-3 text-xs font-medium text-black/50">
+          Vergleich mit typischen importierten Schnupfdosen. Angebote einzelner Anbieter können abweichen.
+        </p>
+      </section>
+
+      {/* ---------- 3c) BILD + TEXT ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
+          <img
+            src={lifestyleHowto}
+            alt="FOQUZ Riechdose im Alltag"
+            loading="lazy"
+            decoding="async"
+            className={`w-full object-cover rounded-2xl ${comicCard}`}
+          />
+          <div>
+            <p
+              className="inline-block text-[11px] md:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border-[3px] border-black mb-4"
+              style={{ backgroundColor: YELLOW }}
+            >
+              FÜR ZWISCHENDURCH
+            </p>
+            <h2 className="text-2xl md:text-4xl font-black uppercase leading-tight mb-4">
+              DER MOMENT, IN DEM DIE NASE WIEDER AUFGEHT
+            </h2>
+            <p className="text-sm md:text-base font-medium text-black/75 leading-relaxed mb-5">
+              Dose auf, kurz riechen, tief durchatmen. Kein Kaffee, kein Energy Drink, kein Nikotin.
+              Passt in die Hosentasche und ist in drei Sekunden erledigt, egal ob am Schreibtisch,
+              im Gym oder unterwegs.
+            </p>
+            <ul className="space-y-2.5">
+              {LIFESTYLE_POINTS.map((p) => (
+                <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold">
+                  <span
+                    className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                  </span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- 4) Lila Claim-Block ---------- */}
+
       <section className="w-full border-y-[3px] border-black py-12 md:py-16" style={{ backgroundColor: "#75559f" }}>
         <div className="container mx-auto px-4 text-white">
           <p className="text-xs md:text-sm font-black uppercase tracking-widest text-white/70 mb-3">
