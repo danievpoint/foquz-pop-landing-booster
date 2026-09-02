@@ -281,12 +281,30 @@ const CLAIM_POINTS = [
   "Deutsche Marke",
 ];
 
+const COMPARISON_ROWS = [
+  ["Anwendung", "Wird gerochen, nicht geschnupft", "Wird traditionell geschnupft"],
+  ["Nikotin", "Ohne Nikotin", "Ohne Nikotin"],
+  ["Duft", "3 Sorten, fruchtig bis kräuterfrisch", "Meist klassisch Menthol und Kampfer"],
+  ["Etikett", "Zutaten auf Deutsch ausgewiesen", "Etikett oft nur auf Thai oder Englisch"],
+  ["Marke", "Deutsche Marke, FOQUZ GmbH in Bayern", "Importware, meist ohne Ansprechpartner in Deutschland"],
+  ["Versand", "DHL nach DE, AT und CH, 2 bis 5 Werktage", "Import, oft lange Lieferzeit"],
+  ["Rücksendung", "14 Tage Widerrufsrecht", "Bei Import häufig schwierig"],
+  ["Support", "Deutscher Support unter info@foquz.de", "Meist kein deutscher Support"],
+];
+
+const LIFESTYLE_POINTS = [
+  "In drei Sekunden erledigt",
+  "Passt in jede Hosentasche",
+  "Ohne Nikotin, ohne Koffein",
+];
+
 const PRODUCT_FAQ_QUESTIONS = [
   "Wofür ist FOQUZ?",
   "Kann ich FOQUZ bei Asthma, Allergien oder Überempfindlichkeit verwenden?",
   "Ist FOQUZ legal?",
   "Wie schnell wird meine Bestellung geliefert?",
 ];
+
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
   <h2 className="text-2xl md:text-4xl font-black uppercase text-black mb-6 inline-block relative">
