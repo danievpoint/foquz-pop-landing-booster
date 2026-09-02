@@ -752,7 +752,7 @@ const ProductDetail = () => {
               {product.desc}
             </p>
 
-            {looxProductId && <LooxRating productId={looxProductId} className="mt-3" />}
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
 
             <div className="flex flex-wrap gap-2 mt-5">
               {trustPills.map((pill) => (
