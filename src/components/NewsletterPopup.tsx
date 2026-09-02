@@ -9,6 +9,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotWatermelon from "@/assets/mascot-watermelon.png";
 
+export const NEWSLETTER_POPUP_ENABLED = false;
+
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
