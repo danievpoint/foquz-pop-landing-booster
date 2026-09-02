@@ -315,6 +315,21 @@ const ProductDetail = () => {
     };
   }, [handle]);
 
+  // Klaviyo "Viewed Product"
+  useEffect(() => {
+    if (!product) return;
+    trackViewedProduct({
+      id: product.isBundle ? "starter-bundle" : product.name,
+      name: product.name,
+      image: product.image,
+      price: product.numericPrice,
+      url: `/produkt/${product.handle}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.handle]);
+
+
+
 
   if (!product) {
     return (
