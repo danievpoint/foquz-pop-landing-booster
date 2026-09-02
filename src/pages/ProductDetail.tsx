@@ -15,6 +15,7 @@ import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, type ShopifyImage } from "@/lib/shopify";
+import { trackViewedProduct } from "@/lib/klaviyo";
 
 
 // Preload all product images on module load
