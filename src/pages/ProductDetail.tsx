@@ -780,12 +780,13 @@ const ProductDetail = () => {
             <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
 
             <div className="flex flex-wrap gap-2 mt-5">
-              {trustPills.map((pill) => (
+              {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
-                  key={pill}
-                  className="text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
+                  key={label}
+                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
                 >
-                  {pill}
+                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                  <span>{label}</span>
                 </span>
               ))}
             </div>
