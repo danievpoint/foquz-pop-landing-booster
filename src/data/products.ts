@@ -93,6 +93,14 @@ export const bundleProduct: Product = {
   originalPrice: "22,47€",
   numericPrice: 19.98,
   desc: "Alle 3 Sorten in einer Box.",
+  longDesc: {
+    heading: "Eine Box. Voller Fokus.",
+    paragraphs: [
+      "Teste alle unsere 3 Sorten in einer Box.",
+      "Alle Sorten testen. Exklusive Box. Inklusive limitiertem Sticker-Set & Nasenstrips.",
+    ],
+  },
+
   image: foquzBox,
   color: "#75559f",
   isBundle: true,
