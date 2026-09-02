@@ -17,7 +17,6 @@ import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
-import lifestyleHowto from "@/assets/lifestyle-howto.png";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
@@ -34,6 +33,9 @@ const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
 // Bewertungen zählen shopweit: überall dieselbe Referenz-Produkt-ID fürs Aggregat
 const LOOX_SHOP_AGGREGATE_ID = "10276796498262";
+// Echtes Anwendungsfoto (Mensch mit Dose) aus der Shopify-Galerie
+const LIFESTYLE_FALLBACK_PHOTO =
+  "https://cdn.shopify.com/s/files/1/0745/0431/6438/files/foquz_product_image_thai_anwendung.jpg?v=1788078644";
 
 
 const formatPrice = (value: number) =>
@@ -541,6 +543,11 @@ const ProductDetail = () => {
   const selectedPrice = selectedProduct.numericPrice;
 
   const looxProductId = SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle];
+
+  // Echtes Anwendungsfoto der jeweiligen Sorte, sonst Fallback
+  const lifestylePhoto =
+    galleryImages.find((img) => img.url.toLowerCase().includes("anwendung"))?.url ??
+    LIFESTYLE_FALLBACK_PHOTO;
 
   const handleAddToCart = () => {
     if (option === "bundle") {
