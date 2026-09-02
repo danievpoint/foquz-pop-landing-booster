@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
-import MarqueeBar from "@/components/MarqueeBar";
 import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
@@ -633,9 +632,7 @@ const ProductDetail = () => {
       />
       <Navbar />
 
-      <div className="pt-[6.5rem] md:pt-32">
-        <MarqueeBar />
-      </div>
+      <div className="pt-[6.5rem] md:pt-32" />
 
       <div className="container mx-auto px-4 pt-4">
         <Link

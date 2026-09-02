@@ -21,6 +21,7 @@ import Faq from "./pages/Faq";
 import ProductDetail from "./pages/ProductDetail";
 
 import ScrollToHash from "./components/ScrollToHash";
+import GlobalMarquee from "./components/GlobalMarquee";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -43,6 +44,7 @@ const App = () => {
             <BrowserRouter>
                 <ScrollToHash />
                 <AnalyticsTracker />
+                <GlobalMarquee />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/discount/:code" element={<DiscountRedirect />} />
