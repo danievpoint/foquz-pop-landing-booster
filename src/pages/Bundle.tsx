@@ -12,6 +12,7 @@ const Bundle = () => {
       <SeoHead
         title="FOQUZ Power Bundle – Alle 3 Sorten in einer Box"
         description="Teste alle 3 FOQUZ Sorten in einer limitierten Box. Inklusive Sticker-Set & Nasenstrips."
+        path="/bundle"
       />
       <Navbar />
       <main>

@@ -61,6 +61,7 @@ const App = () => {
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
+                <Route path="/bundle" element={<Bundle />} />
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />
                 <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="*" element={<ShopifyRedirectRoute />} />
