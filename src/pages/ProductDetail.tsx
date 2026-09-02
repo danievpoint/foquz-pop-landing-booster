@@ -452,16 +452,41 @@ const ProductDetail = () => {
   }, [product?.handle]);
 
   // Sticky Bottom-Bar erst zeigen, wenn Haupt-CTA aus dem Viewport ist
+  // und wieder ausblenden, sobald der Footer sichtbar wird.
   useEffect(() => {
     const el = ctaRef.current;
     if (!el) return;
+    let ctaOut = false;
+    let footerIn = false;
+    const apply = () => setShowStickyBar(ctaOut && !footerIn);
+
     const obs = new IntersectionObserver(
-      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      ([entry]) => {
+        ctaOut = !entry.isIntersecting;
+        apply();
+      },
       { threshold: 0 }
     );
     obs.observe(el);
-    return () => obs.disconnect();
+
+    const footerEl = footerSentinelRef.current;
+    const footerObs = footerEl
+      ? new IntersectionObserver(
+          ([entry]) => {
+            footerIn = entry.isIntersecting;
+            apply();
+          },
+          { threshold: 0 }
+        )
+      : null;
+    if (footerEl && footerObs) footerObs.observe(footerEl);
+
+    return () => {
+      obs.disconnect();
+      footerObs?.disconnect();
+    };
   }, [product?.handle]);
+
 
   const slides = useMemo(() => {
     if (!product) return [] as { url: string; alt: string; shopify: boolean }[];
