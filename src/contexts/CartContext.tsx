@@ -282,6 +282,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items]);
 
 
+  // Klaviyo "Added to Cart" – mit dem Warenkorb NACH dem Hinzufügen.
+  useEffect(() => {
+    const added = pendingKlaviyoAdd.current;
+    if (!added || addToCartTimestamp === 0) return;
+    pendingKlaviyoAdd.current = null;
+    trackAddedToCart(added, items);
+  }, [addToCartTimestamp, items]);
+
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
