@@ -1049,7 +1049,9 @@ const ProductDetail = () => {
       </section>
 
 
+      <div ref={footerSentinelRef} aria-hidden className="h-px" />
       <Footer />
+
 
       {/* Sticky Bottom-Bar (mobil) */}
       <AnimatePresence>
