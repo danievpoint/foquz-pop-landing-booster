@@ -593,6 +593,8 @@ const ProductDetail = () => {
               ))}
             </div>
 
+            {!product.isBundle && (
+            <>
             {/* Sorte wählen */}
             <div className="mt-7">
               <h2 className="text-base lg:text-lg font-black uppercase mb-3">SORTE WÄHLEN</h2>
@@ -689,6 +691,8 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
+            </>
+            )}
 
             <div className="flex items-center gap-2 mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
@@ -730,7 +734,150 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {looxProductId && <LooxReviews productId={looxProductId} />}
+      {/* ---------- 1) WAS IST ... ---------- */}
+      {product.longDesc && (
+        <section className="container mx-auto px-4 pb-12 md:pb-16">
+          <SectionHeading>WAS IST {product.name}</SectionHeading>
+          <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
+            <h3 className="font-black uppercase text-lg md:text-xl mb-4">{product.longDesc.heading}</h3>
+            <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+              {product.longDesc.paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- 2) SO GEHT'S ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <SectionHeading>SO GEHT'S</SectionHeading>
+        <div className="grid md:grid-cols-3 gap-5">
+          {HOW_TO_STEPS.map((step, i) => (
+            <div key={step.title} className={`bg-white text-black p-5 md:p-6 ${comicCard}`}>
+              <span
+                className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center font-black text-lg mb-4"
+                style={{ backgroundColor: YELLOW }}
+              >
+                {i + 1}
+              </span>
+              <h3 className="font-black uppercase text-base md:text-lg mb-2">{step.title}</h3>
+              <p className="text-sm font-medium text-black/70 leading-relaxed">{step.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------- 3) WAS DRIN IST ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <SectionHeading>WAS DRIN IST</SectionHeading>
+        <p className="text-sm md:text-base font-bold text-black/70 mb-5 -mt-3">
+          Echte Kräuter, echtes Menthol. Ohne Nikotin, ohne Koffein.
+        </p>
+        <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {product.ingredients.map((ing) => (
+              <div
+                key={ing}
+                className="flex items-center gap-2.5 border-[3px] border-black rounded-xl px-3 py-2.5 bg-white"
+              >
+                <span
+                  className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                </span>
+                <span className="text-sm font-bold">{ing}</span>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-px border-[3px] border-black rounded-2xl overflow-hidden"
+            style={{ backgroundColor: "#000" }}
+          >
+            {trustPills.map((spec) => (
+              <div
+                key={spec}
+                className="py-4 px-2 text-center text-[11px] md:text-xs font-black uppercase"
+                style={{ backgroundColor: YELLOW }}
+              >
+                {spec}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- 4) Lila Claim-Block ---------- */}
+      <section className="w-full border-y-[3px] border-black py-12 md:py-16" style={{ backgroundColor: "#75559f" }}>
+        <div className="container mx-auto px-4 text-white">
+          <p className="text-xs md:text-sm font-black uppercase tracking-widest text-white/70 mb-3">
+            KURZ RIECHEN, AB AUF WOLKE 7
+          </p>
+          <h2 className="text-2xl md:text-5xl font-black uppercase leading-tight mb-7">
+            KEIN NIKOTIN. KEIN KOFFEIN. KEIN KATER.
+          </h2>
+          <ul className="grid sm:grid-cols-2 gap-3 max-w-3xl">
+            {CLAIM_POINTS.map((p) => (
+              <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold">
+                <span
+                  className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                </span>
+                <span>{p}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ---------- 5) ECHTE STIMMEN ---------- */}
+      {looxProductId && (
+        <section className="container mx-auto px-4 py-12 md:py-16">
+          <SectionHeading>ECHTE STIMMEN</SectionHeading>
+          <div className={`bg-white text-black p-2 md:p-4 ${comicCard}`}>
+            <LooxReviews productId={looxProductId} />
+          </div>
+        </section>
+      )}
+
+      {/* ---------- 6) Gelber Block ---------- */}
+      <section className="w-full border-y-[3px] border-black py-12 md:py-16" style={{ backgroundColor: YELLOW }}>
+        <div className="container mx-auto px-4 text-black text-center">
+          <p className="text-xs md:text-sm font-black uppercase tracking-widest text-black/60 mb-3">
+            DEUTSCHE MARKE
+          </p>
+          <h2 className="text-2xl md:text-5xl font-black uppercase leading-tight mb-4">
+            DIE ORIGINAL FOQUZ RIECHDOSE
+          </h2>
+          <p className="text-sm md:text-lg font-bold max-w-2xl mx-auto text-black/75">
+            Die Original Foquz Riechdose aus Deutschland. 100 Prozent aromatisch, 100 Prozent legal,
+            100 Prozent Wolke 7.
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- 7) HÄUFIGE FRAGEN ---------- */}
+      <section className="container mx-auto px-4 py-12 md:py-16">
+        <SectionHeading>HÄUFIGE FRAGEN</SectionHeading>
+        <ProductFaq />
+      </section>
+
+      {/* ---------- 8) ENTDECKE AUCH ---------- */}
+      <section className="container mx-auto px-4 pb-14 md:pb-20">
+        <SectionHeading>ENTDECKE AUCH</SectionHeading>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {allProducts
+            .filter((p) => p.handle !== product.handle)
+            .map((p) => (
+              <CrossSellCard key={p.handle} p={p} addToCart={addToCart} isAvailable={isAvailable} />
+            ))}
+        </div>
+      </section>
+
 
       <Footer />
 
