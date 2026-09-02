@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { klaviyoIdentify } from "@/lib/klaviyo";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -150,6 +151,7 @@ const NewsletterPopup = () => {
     setConsentError(false);
 
     setLoading(true);
+    klaviyoIdentify({ $email: email.trim().toLowerCase() });
     try {
       const { data, error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
         body: { email: email.trim().toLowerCase() },

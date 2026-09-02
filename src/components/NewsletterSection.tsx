@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { klaviyoIdentify } from "@/lib/klaviyo";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PartyPopper } from "lucide-react";
@@ -26,6 +27,7 @@ const NewsletterSection = () => {
     }
 
     setLoading(true);
+    klaviyoIdentify({ $email: email.trim().toLowerCase() });
     try {
       const { data, error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
         body: { email: email.trim().toLowerCase() },

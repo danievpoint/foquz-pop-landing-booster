@@ -15,6 +15,7 @@ import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, type ShopifyImage } from "@/lib/shopify";
+import { trackViewedProduct } from "@/lib/klaviyo";
 
 
 // Preload all product images on module load
@@ -314,6 +315,21 @@ const ProductDetail = () => {
       cancelled = true;
     };
   }, [handle]);
+
+  // Klaviyo "Viewed Product"
+  useEffect(() => {
+    if (!product) return;
+    trackViewedProduct({
+      id: product.isBundle ? "starter-bundle" : product.name,
+      name: product.name,
+      image: product.image,
+      price: product.numericPrice,
+      url: `/produkt/${product.handle}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.handle]);
+
+
 
 
   if (!product) {

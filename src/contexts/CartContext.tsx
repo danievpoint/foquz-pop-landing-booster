@@ -3,6 +3,7 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
+import { trackAddedToCart } from "@/lib/klaviyo";
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 
@@ -222,6 +223,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setManualDiscountCode(null);
   }, []);
 
+  const pendingKlaviyoAdd = useRef<CartItem | null>(null);
+
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
     // Gratis-Zugaben können nicht direkt gekauft werden.
@@ -234,6 +237,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return [...prev, { ...p, qty }];
     });
 
+    pendingKlaviyoAdd.current = { ...p, qty };
     setLastAddedProductId(p.id);
     setAddToCartTimestamp(Date.now());
 
@@ -277,6 +281,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [items]);
 
+
+  // Klaviyo "Added to Cart" – mit dem Warenkorb NACH dem Hinzufügen.
+  useEffect(() => {
+    const added = pendingKlaviyoAdd.current;
+    if (!added || addToCartTimestamp === 0) return;
+    pendingKlaviyoAdd.current = null;
+    trackAddedToCart(added, items);
+  }, [addToCartTimestamp, items]);
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
