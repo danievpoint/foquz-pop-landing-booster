@@ -1038,6 +1038,15 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* ---------- 9) ECHTE STIMMEN ---------- */}
+      {looxProductId && (
+        <section className="container mx-auto px-4 py-12 md:py-16">
+          <SectionHeading>ECHTE STIMMEN</SectionHeading>
+          <div className={`bg-white text-black p-2 md:p-4 ${comicCard}`}>
+            <LooxReviews productId={looxProductId} />
+          </div>
+        </section>
+      )}
 
       <div ref={footerSentinelRef} aria-hidden className="h-px" />
       <Footer />
