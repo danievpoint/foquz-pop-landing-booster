@@ -888,6 +888,17 @@ const ProductDetail = () => {
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
 
+            {/* Lieferzeit */}
+            <div className="flex items-center gap-2.5 mt-4 mb-1">
+              <Truck className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} />
+              <span className="font-black uppercase text-sm lg:text-base text-black">AUF LAGER</span>
+              <span className="text-sm lg:text-base font-semibold text-black">
+                in 2 bis 5 Werktagen bei dir
+              </span>
+            </div>
+
+
+
 
             {/* CTA */}
             <div ref={ctaRef} className="mt-3">
