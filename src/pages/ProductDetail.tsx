@@ -407,6 +407,8 @@ const ProductDetail = () => {
   const [showStickyBar, setShowStickyBar] = useState(false);
 
   const ctaRef = useRef<HTMLDivElement>(null);
+  const footerSentinelRef = useRef<HTMLDivElement>(null);
+
   const mobileTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -452,16 +454,41 @@ const ProductDetail = () => {
   }, [product?.handle]);
 
   // Sticky Bottom-Bar erst zeigen, wenn Haupt-CTA aus dem Viewport ist
+  // und wieder ausblenden, sobald der Footer sichtbar wird.
   useEffect(() => {
     const el = ctaRef.current;
     if (!el) return;
+    let ctaOut = false;
+    let footerIn = false;
+    const apply = () => setShowStickyBar(ctaOut && !footerIn);
+
     const obs = new IntersectionObserver(
-      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      ([entry]) => {
+        ctaOut = !entry.isIntersecting;
+        apply();
+      },
       { threshold: 0 }
     );
     obs.observe(el);
-    return () => obs.disconnect();
+
+    const footerEl = footerSentinelRef.current;
+    const footerObs = footerEl
+      ? new IntersectionObserver(
+          ([entry]) => {
+            footerIn = entry.isIntersecting;
+            apply();
+          },
+          { threshold: 0 }
+        )
+      : null;
+    if (footerEl && footerObs) footerObs.observe(footerEl);
+
+    return () => {
+      obs.disconnect();
+      footerObs?.disconnect();
+    };
   }, [product?.handle]);
+
 
   const slides = useMemo(() => {
     if (!product) return [] as { url: string; alt: string; shopify: boolean }[];
@@ -819,10 +846,28 @@ const ProductDetail = () => {
             </>
             )}
 
+            {product.isBundle && (
+              <div className="flex flex-wrap items-baseline gap-2.5 mt-6">
+                <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
+                {bundleProduct.originalPrice && (
+                  <span className="text-base line-through text-black/50 font-semibold">
+                    {bundleProduct.originalPrice}
+                  </span>
+                )}
+                <span
+                  className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  11 % SPAREN
+                </span>
+              </div>
+            )}
+
             <div className="flex items-center gap-2 mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
+
 
             {/* CTA */}
             <div ref={ctaRef} className="mt-3">
@@ -864,8 +909,8 @@ const ProductDetail = () => {
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <h3 className="font-black uppercase text-lg md:text-xl mb-4">{product.longDesc.heading}</h3>
             <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+
               {product.longDesc.paragraphs.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
@@ -1004,7 +1049,9 @@ const ProductDetail = () => {
       </section>
 
 
+      <div ref={footerSentinelRef} aria-hidden className="h-px" />
       <Footer />
+
 
       {/* Sticky Bottom-Bar (mobil) */}
       <AnimatePresence>

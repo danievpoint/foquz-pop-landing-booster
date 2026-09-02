@@ -19,11 +19,13 @@ const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
     setHasContent(false);
 
     const check = () => {
-      if (el.innerHTML.trim().length > 0) setHasContent(true);
+      // Nur anzeigen, wenn Loox echte Sterne gerendert hat (SVG/Icon),
+      // nicht bei leerem Markup oder blosser Zahl wie " (1)".
+      const hasStars = !!el.querySelector('svg, img, .loox-icon, [class*="star"]');
+      setHasContent(hasStars);
     };
-
     const observer = new MutationObserver(check);
-    observer.observe(el, { childList: true, subtree: true });
+    observer.observe(el, { childList: true, subtree: true, attributes: true });
 
     const t = setTimeout(() => {
       try {
@@ -35,10 +37,14 @@ const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
       check();
     }, 150);
 
+    const t2 = setTimeout(check, 2500);
+
     return () => {
       observer.disconnect();
       clearTimeout(t);
+      clearTimeout(t2);
     };
+
   }, [productId]);
 
   return (
