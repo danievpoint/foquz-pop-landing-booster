@@ -32,6 +32,9 @@ allProducts.forEach((p) => {
 
 const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
+// Bewertungen zählen shopweit: überall dieselbe Referenz-Produkt-ID fürs Aggregat
+const LOOX_SHOP_AGGREGATE_ID = "10276796498262";
+
 
 const formatPrice = (value: number) =>
   `${value.toFixed(2).replace(".", ",")}€`;
