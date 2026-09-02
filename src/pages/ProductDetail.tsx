@@ -1,7 +1,7 @@
-import { useParams, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { allProducts } from "@/data/products";
+import { allProducts, products, bundleProduct } from "@/data/products";
 import { faqs } from "@/data/faqs";
 import type { CartItem } from "@/contexts/CartContext";
 import { useCart } from "@/contexts/CartContext";
@@ -11,8 +11,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
+import MarqueeBar from "@/components/MarqueeBar";
+import LooxRating from "@/components/LooxRating";
+import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag } from "lucide-react";
+import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
@@ -24,6 +27,12 @@ allProducts.forEach((p) => {
   const img = new Image();
   img.src = p.image;
 });
+
+const PAGE_BG = "#C9E9FD";
+const YELLOW = "#FFD11A";
+
+const formatPrice = (value: number) =>
+  `${value.toFixed(2).replace(".", ",")}€`;
 
 const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
@@ -84,16 +93,18 @@ const BundleBanner = () => {
               <strong>Spare 11%</strong> gegenüber dem Einzelkauf und teste alle unsere 3 Sorten in einer Box.
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-white font-black text-2xl md:text-3xl">19,98€</span>
-              <span className="text-white/50 line-through text-base md:text-lg">22,47€</span>
+              <span className="text-white font-black text-2xl md:text-3xl">{bundleProduct.price}</span>
+              {bundleProduct.originalPrice && (
+                <span className="text-white/50 line-through text-base md:text-lg">{bundleProduct.originalPrice}</span>
+              )}
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: 19.98, image: foquzBox });
+                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: bundleProduct.numericPrice, image: foquzBox });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
-              style={{ backgroundColor: "#ffd618", color: "#000" }}
+              style={{ backgroundColor: YELLOW, color: "#000" }}
             >
               <ShoppingBag className="w-5 h-5" />
               BUNDLE SICHERN
@@ -108,47 +119,12 @@ const BundleBanner = () => {
 
 type AddToCart = (qty?: number, product?: Omit<CartItem, "qty">) => void;
 
-const OtherProductCard = ({ p, addToCart, isAvailable }: { p: typeof allProducts[0]; addToCart: AddToCart; isAvailable: (name: string) => boolean | null }) => (
-  <div
-    className={`group rounded-xl overflow-hidden border-2 border-foreground/5 hover:border-foreground/20 transition-all duration-300`}
-    style={p.isBundle ? { backgroundColor: "#75559f" } : { backgroundColor: "#fff", color: "#000" }}
-  >
-    <Link to={`/produkt/${p.handle}`}>
-      <div className="overflow-hidden">
-        <img src={p.image} alt={p.name} className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" />
-      </div>
-      <div className="p-2.5 pb-1">
-        <h3 className={`font-extrabold text-xs mb-0.5 ${p.isBundle ? "text-white" : ""}`}>{p.name}</h3>
-        <div className="flex items-center gap-1.5">
-          <span className={`font-black text-sm ${p.isBundle ? "text-white" : ""}`}>{p.price}</span>
-          {p.originalPrice && (
-            <span className={`line-through text-[10px] ${p.isBundle ? "text-white/60" : "text-muted-foreground/50"}`}>{p.originalPrice}</span>
-          )}
-          {!p.isBundle && <StockBadge available={isAvailable(p.name)} />}
-        </div>
-      </div>
-    </Link>
-    <div className="px-2.5 pb-2.5">
-      <button
-        onClick={() =>
-          addToCart(1, {
-            id: p.isBundle ? "starter-bundle" : p.name,
-            name: p.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : p.name,
-            price: p.numericPrice,
-            image: p.image,
-          })
-        }
-        className="comic-btn w-full text-[9px] !py-1 !px-2 font-black"
-        style={{ backgroundColor: p.isBundle ? "#ffd618" : p.color, color: "#000" }}
-      >
-        IN DEN WARENKORB
-      </button>
-    </div>
-  </div>
-);
-
 type AccordionKey = "description" | "ingredients" | "usage" | "faq";
 
+/**
+ * Bleibt erhalten für ProductGrid und wird in Schritt 2 als eigene
+ * Sektionen unterhalb der Kaufbox wieder eingebaut.
+ */
 export const AccordionSections = ({
   product,
   isBundlePage,
@@ -221,7 +197,7 @@ export const AccordionSections = ({
             <li key={ing} className="flex items-center gap-2">
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
-                style={{ backgroundColor: "#ffd618", color: "#000" }}
+                style={{ backgroundColor: YELLOW, color: "#000" }}
               >
                 ✓
               </span>
@@ -268,7 +244,7 @@ export const AccordionSections = ({
               <Link to="/faq">
                 <button
                   className="comic-btn w-full text-sm py-2.5 px-6 font-black mt-2"
-                  style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
+                  style={{ backgroundColor: product.isBundle ? YELLOW : product.color, color: "#000" }}
                 >
                   ALLE FAQ-FRAGEN
                 </button>
@@ -281,22 +257,38 @@ export const AccordionSections = ({
   );
 };
 
-const ProductDetail = () => {
+const VARIANT_SUBTITLES: Record<string, string> = {
+  "peach-party": "Pfirsich & Kräuter",
+  "lemon-breezy": "Zitrone & Kräuter",
+  "thai-style": "Kräuter & Menthol",
+};
 
+const VARIANT_ORDER = ["peach-party", "lemon-breezy", "thai-style"];
+
+const comicCard = "border-[3px] border-black rounded-2xl shadow-[6px_6px_0px_0px_#000]";
+
+const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
 
   const product = allProducts.find((p) => p.handle === handle);
-  const otherProducts = allProducts.filter((p) => p.handle !== handle);
 
   const [galleryImages, setGalleryImages] = useState<ShopifyImage[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [option, setOption] = useState<"single" | "bundle">("single");
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImage(null);
     setGalleryImages([]);
+    setActiveSlide(0);
     if (!handle) return;
     let cancelled = false;
     fetchProductGalleryImages(handle).then((imgs) => {
@@ -317,6 +309,10 @@ const ProductDetail = () => {
     };
   }, [handle]);
 
+  useEffect(() => {
+    setOption(product?.isBundle ? "bundle" : "single");
+  }, [product?.handle, product?.isBundle]);
+
   // Klaviyo "Viewed Product"
   useEffect(() => {
     if (!product) return;
@@ -330,8 +326,26 @@ const ProductDetail = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.handle]);
 
+  // Sticky Bottom-Bar erst zeigen, wenn Haupt-CTA aus dem Viewport ist
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [product?.handle]);
 
-
+  const slides = useMemo(() => {
+    if (!product) return [] as { url: string; alt: string; shopify: boolean }[];
+    const base = [{ url: product.videoPoster ?? product.image, alt: product.name, shopify: false }];
+    return [
+      ...base,
+      ...galleryImages.map((img) => ({ url: img.url, alt: img.altText ?? product.name, shopify: true })),
+    ];
+  }, [product, galleryImages]);
 
   if (!product) {
     return (
@@ -344,7 +358,32 @@ const ProductDetail = () => {
     );
   }
 
-  const isBundlePage = !!product?.isBundle;
+  const singleProduct = product.isBundle
+    ? products.find((p) => p.handle === "peach-party") ?? products[0]
+    : product;
+
+  const selectedProduct = option === "bundle" ? bundleProduct : singleProduct;
+  const selectedPrice = selectedProduct.numericPrice;
+
+  const looxProductId = SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle];
+
+  const handleAddToCart = () => {
+    if (option === "bundle") {
+      addToCart(1, {
+        id: "starter-bundle",
+        name: "FOQUZ Power Bundle (3 Sorten)",
+        price: bundleProduct.numericPrice,
+        image: bundleProduct.image,
+      });
+      return;
+    }
+    addToCart(1, {
+      id: singleProduct.name,
+      name: singleProduct.name,
+      price: singleProduct.numericPrice,
+      image: singleProduct.image,
+    });
+  };
 
   const productLd = {
     "@context": "https://schema.org",
@@ -362,8 +401,32 @@ const ProductDetail = () => {
     },
   };
 
+  const onMobileScroll = () => {
+    const el = mobileTrackRef.current;
+    if (!el) return;
+    const idx = Math.round(el.scrollLeft / el.clientWidth);
+    setActiveSlide(idx);
+  };
+
+  const goToSlide = (i: number) => {
+    const el = mobileTrackRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
+
+  const trustPills = ["OHNE NIKOTIN", "OHNE KOFFEIN", "ECHTE KRÄUTER", "DEUTSCHE MARKE"];
+  const trustList = [
+    "Versand mit DHL nach DE, AT und CH",
+    "14 Tage Widerrufsrecht",
+    "Sichere Zahlung mit PayPal, Klarna und Kreditkarte",
+  ];
+
+  const variants = VARIANT_ORDER.map((h) => products.find((p) => p.handle === h)).filter(
+    (p): p is typeof products[0] => !!p
+  );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: PAGE_BG }}>
       <SeoHead
         title={`${product.name} – FOQUZ`}
         description={product.desc.replace(/\n/g, " ").slice(0, 155)}
@@ -373,170 +436,332 @@ const ProductDetail = () => {
       />
       <Navbar />
 
-      {/* Purple wrapper for bundle page */}
-      <div style={isBundlePage ? { backgroundColor: "#75559f", color: "#fff" } : undefined}>
-      {/* Back link */}
-      <div className="container mx-auto px-4 pt-[6.5rem] md:pt-32">
+      <div className="pt-[6.5rem] md:pt-32">
+        <MarqueeBar />
+      </div>
+
+      <div className="container mx-auto px-4 pt-4">
         <Link
           to="/#sorten"
-          className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors mb-3 md:mb-6 ${isBundlePage ? "text-white/60 hover:text-white" : "text-muted-foreground hover:text-foreground"}`}
+          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-4"
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
         </Link>
       </div>
 
-      {/* Product detail */}
-      <section className="container mx-auto px-4 pb-8 lg:pb-24">
-        <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-start">
-          {/* Image — sticky on desktop */}
-          <div className="w-[85%] md:w-[65%] lg:w-full mx-auto lg:mx-0 lg:self-start">
-            <div className="rounded-2xl overflow-hidden">
-              {selectedImage ? (
-                <img
-                  src={shopifyImageUrl(selectedImage, 1000)}
-                  srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
-                  sizes="(min-width: 1024px) 600px, 90vw"
-                  alt={product.name}
-                  loading="eager"
-                  decoding="async"
-                  className="w-full aspect-square object-cover"
-                />
-
-              ) : product.video ? (
-                <AutoVideo
-                  src={product.video}
-                  poster={product.videoPoster ?? product.image}
-                  className="w-full aspect-square object-cover"
-                />
-              ) : (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  loading="eager"
-                  decoding="async"
-                  className="w-full aspect-square object-cover"
-                />
-              )}
-            </div>
-
-            {galleryImages.length > 0 && (
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedImage(null)}
-                  className={`rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === null ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100"}`}
-                  aria-label={`${product.name} Hauptansicht`}
-                >
-                  <img src={product.videoPoster ?? product.image} alt={product.name} className="w-full aspect-square object-cover" />
-                </button>
-                {galleryImages.map((img) => (
-                  <button
-                    key={img.url}
-                    type="button"
-                    onClick={() => setSelectedImage(img.url)}
-                    className={`rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === img.url ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100"}`}
-                    aria-label={img.altText ?? `${product.name} Bild`}
-                  >
-                    <img src={shopifyImageUrl(img.url, 200)} alt={img.altText ?? product.name} loading="lazy" decoding="async" className="w-full aspect-square object-cover" />
-                  </button>
+      <section className="container mx-auto px-4 pb-16 lg:pb-24">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-start">
+          {/* ---------- Galerie ---------- */}
+          <div className="lg:sticky lg:top-28">
+            {/* Mobil: swipebar */}
+            <div className="lg:hidden">
+              <div
+                ref={mobileTrackRef}
+                onScroll={onMobileScroll}
+                className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
+                style={{ scrollbarWidth: "none" }}
+              >
+                {slides.map((s, i) => (
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center">
+                    {i === 0 && product.video && !s.shopify ? (
+                      <AutoVideo
+                        src={product.video}
+                        poster={product.videoPoster ?? product.image}
+                        className="w-full aspect-square object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={s.shopify ? shopifyImageUrl(s.url, 900) : s.url}
+                        srcSet={s.shopify ? shopifyImageSrcSet(s.url, [600, 800, 1200]) : undefined}
+                        sizes="90vw"
+                        alt={s.alt}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="w-full aspect-square object-cover"
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
-            )}
+              {slides.length > 1 && (
+                <div className="flex justify-center gap-2 mt-3">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      aria-label={`Bild ${i + 1}`}
+                      onClick={() => goToSlide(i)}
+                      className={`h-2.5 rounded-full border-2 border-black transition-all ${
+                        activeSlide === i ? "w-6" : "w-2.5"
+                      }`}
+                      style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Desktop: Hauptbild + Thumbnails */}
+            <div className="hidden lg:block">
+              <div className={`bg-white overflow-hidden ${comicCard}`}>
+                {selectedImage ? (
+                  <img
+                    src={shopifyImageUrl(selectedImage, 1000)}
+                    srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
+                    sizes="600px"
+                    alt={product.name}
+                    loading="eager"
+                    decoding="async"
+                    className="w-full aspect-square object-cover"
+                  />
+                ) : product.video ? (
+                  <AutoVideo
+                    src={product.video}
+                    poster={product.videoPoster ?? product.image}
+                    className="w-full aspect-square object-cover"
+                  />
+                ) : (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    loading="eager"
+                    decoding="async"
+                    className="w-full aspect-square object-cover"
+                  />
+                )}
+              </div>
+
+              {galleryImages.length > 0 && (
+                <div className="mt-4 grid grid-cols-4 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedImage(null)}
+                    className={`rounded-xl overflow-hidden bg-white border-[3px] transition-all ${
+                      selectedImage === null
+                        ? "border-black shadow-[4px_4px_0px_0px_#000]"
+                        : "border-black/30 hover:border-black"
+                    }`}
+                    aria-label={`${product.name} Hauptansicht`}
+                  >
+                    <img src={product.videoPoster ?? product.image} alt={product.name} className="w-full aspect-square object-cover" />
+                  </button>
+                  {galleryImages.map((img) => (
+                    <button
+                      key={img.url}
+                      type="button"
+                      onClick={() => setSelectedImage(img.url)}
+                      className={`rounded-xl overflow-hidden bg-white border-[3px] transition-all ${
+                        selectedImage === img.url
+                          ? "border-black shadow-[4px_4px_0px_0px_#000]"
+                          : "border-black/30 hover:border-black"
+                      }`}
+                      aria-label={img.altText ?? `${product.name} Bild`}
+                    >
+                      <img src={shopifyImageUrl(img.url, 200)} alt={img.altText ?? product.name} loading="lazy" decoding="async" className="w-full aspect-square object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
+          {/* ---------- Kaufbox ---------- */}
+          <div className={`bg-white text-black p-5 md:p-7 ${comicCard}`}>
+            <h1 className="text-3xl lg:text-5xl font-black uppercase leading-none inline-block relative">
+              <span className="relative z-10">{product.name}</span>
+              <span
+                className="absolute left-0 right-0 bottom-0 h-2 lg:h-3 z-0"
+                style={{ backgroundColor: YELLOW }}
+              />
+            </h1>
 
-          {/* Info + Entdecke auch on desktop */}
-          <div className="py-0 lg:py-4">
-            <h1 className="text-2xl lg:text-5xl font-extrabold mb-1 lg:mb-2">{product.name}</h1>
-            <div className={`text-sm lg:text-lg mb-3 lg:mb-6 leading-snug ${isBundlePage ? "text-white/90" : "text-muted-foreground"}`}>
-              {product.isBundle ? (
-                <p>Alle 3 Sorten in einer Box.</p>
-              ) : (
-                <p className="whitespace-pre-line">{product.desc}</p>
-              )}
-            </div>
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-4">
+              {product.desc}
+            </p>
 
-            <div className="flex items-center gap-3 mb-0.5 lg:mb-1">
-              <span className="text-2xl lg:text-4xl font-black">{product.price}</span>
-              {product.originalPrice && (
-                <span className={`text-base lg:text-lg line-through ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>{product.originalPrice}</span>
-              )}
-              <StockBadge available={isAvailable(product.name)} variant={isBundlePage ? "light" : "dark"} />
-            </div>
-            <span className={`text-[10px] lg:text-xs mb-3 lg:mb-4 block ${isBundlePage ? "text-white/50" : "text-muted-foreground"}`}>inkl. MwSt.</span>
+            {looxProductId && <LooxRating productId={looxProductId} className="mt-3" />}
 
-            {/* Product benefits icons */}
-            <div className="grid grid-cols-2 gap-2 mb-5 lg:mb-8">
-              {[
-                { icon: Ban, label: "Ohne Nikotin" },
-                { icon: ZapOff, label: "Ohne Koffein" },
-                { icon: Leaf, label: "Mit echten Kräutern" },
-                { icon: Flag, label: "Deutsche Marke" },
-              ].map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className={`flex items-center gap-2 text-xs lg:text-sm font-bold ${isBundlePage ? "text-white" : "text-foreground"}`}
+            <div className="flex flex-wrap gap-2 mt-5">
+              {trustPills.map((pill) => (
+                <span
+                  key={pill}
+                  className="text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
                 >
-                  <Icon className="w-4 h-4 lg:w-5 lg:h-5 shrink-0" />
-                  <span>{label}</span>
-                </div>
+                  {pill}
+                </span>
               ))}
             </div>
 
-            <button
-              onClick={() =>
-                addToCart(1, {
-                  id: product.isBundle ? "starter-bundle" : product.name,
-                  name: product.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : product.name,
-                  price: product.numericPrice,
-                  image: product.image,
-                })
-              }
-              className="comic-btn text-xs lg:text-base py-2.5 px-8 lg:py-3 lg:px-10 font-black mb-5 lg:mb-8"
-              style={{ backgroundColor: product.isBundle ? "#ffd618" : product.color, color: "#000" }}
-            >
-              {product.isBundle ? "BUNDLE SICHERN" : "IN DEN WARENKORB"}
-            </button>
-
-            {/* Collapsible sections: Was steckt drin, Anwendung, FAQ */}
-            <AccordionSections product={product} isBundlePage={isBundlePage} />
-
-
-
-            {/* Entdecke auch – inline on desktop */}
-            <div className="hidden lg:block pt-6 mt-8">
-              <h3 className="font-extrabold text-lg mb-4">ENTDECKE AUCH</h3>
-              <div className="grid grid-cols-3 gap-4">
-                {otherProducts.map((p) => (
-                  <OtherProductCard key={p.handle} p={p} addToCart={addToCart} isAvailable={isAvailable} />
-                ))}
+            {/* Sorte wählen */}
+            <div className="mt-7">
+              <h2 className="text-base lg:text-lg font-black uppercase mb-3">SORTE WÄHLEN</h2>
+              <div className="space-y-2.5">
+                {variants.map((v) => {
+                  const active = v.handle === (product.isBundle ? undefined : product.handle);
+                  return (
+                    <button
+                      key={v.handle}
+                      type="button"
+                      onClick={() => navigate(`/produkt/${v.handle}`)}
+                      className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-all ${
+                        active ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                      }`}
+                      style={active ? { backgroundColor: YELLOW } : undefined}
+                    >
+                      <img src={v.image} alt={v.name} className="w-12 h-12 rounded-xl object-cover border-2 border-black bg-white" />
+                      <span className="flex-1 min-w-0">
+                        <span className="block font-black uppercase text-sm">{v.name}</span>
+                        <span className="block text-xs text-black/60 font-semibold">
+                          {VARIANT_SUBTITLES[v.handle]}
+                        </span>
+                      </span>
+                      <span
+                        className={`w-5 h-5 rounded-full border-[3px] border-black shrink-0 ${
+                          active ? "bg-black" : "bg-white"
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
               </div>
+            </div>
+
+            {/* Menge wählen */}
+            <div className="mt-7">
+              <h2 className="text-base lg:text-lg font-black uppercase mb-1">MENGE WÄHLEN</h2>
+              <p className="text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
+
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => setOption("single")}
+                  className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
+                    option === "single" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  }`}
+                  style={option === "single" ? { backgroundColor: YELLOW } : undefined}
+                >
+                  <span>
+                    <span className="block font-black uppercase text-sm">1 DOSE</span>
+                    <span className="block text-xs text-black/60 font-semibold">Zum Reinschnuppern</span>
+                  </span>
+                  <span className="text-right shrink-0">
+                    <span className="block font-black text-lg">{formatPrice(singleProduct.numericPrice)}</span>
+                    <span className="block text-[10px] text-black/60 font-semibold">
+                      {formatPrice(singleProduct.numericPrice)} pro Dose
+                    </span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setOption("bundle")}
+                  className={`relative w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
+                    option === "bundle" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  }`}
+                  style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
+                >
+                  <span
+                    className="absolute -top-3 right-3 text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    BELIEBT
+                  </span>
+                  <span>
+                    <span className="block font-black uppercase text-sm">3 DOSEN – POWER BUNDLE</span>
+                    <span className="block text-xs text-black/60 font-semibold">
+                      Alle 3 Sorten in einer Box, 11 % sparen
+                    </span>
+                  </span>
+                  <span className="text-right shrink-0">
+                    <span className="flex items-baseline gap-1.5 justify-end">
+                      <span className="font-black text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
+                      {bundleProduct.originalPrice && (
+                        <span className="text-xs line-through text-black/50 font-semibold">
+                          {bundleProduct.originalPrice}
+                        </span>
+                      )}
+                    </span>
+                    <span className="block text-[10px] text-black/60 font-semibold">
+                      {formatPrice(bundleProduct.numericPrice / 3)} pro Dose
+                    </span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mt-5">
+              <StockBadge available={isAvailable(selectedProduct.name)} />
+              <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
+            </div>
+
+            {/* CTA */}
+            <div ref={ctaRef} className="mt-3">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="comic-btn w-full text-base lg:text-lg py-4 font-black flex items-center justify-center gap-2"
+                style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                IN DEN WARENKORB – {formatPrice(selectedPrice)}
+              </button>
+            </div>
+
+            {/* Trust-Liste */}
+            <ul className="mt-6 space-y-2.5">
+              {trustList.map((t) => (
+                <li key={t} className="flex items-start gap-2.5 text-sm font-semibold">
+                  <span
+                    className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                  </span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 pt-5 border-t-[3px] border-black/10">
+              <PaymentLogos compact />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Other products – mobile/tablet only */}
-      <section id="entdecke-mobile" className="lg:hidden py-4 md:pb-16" style={isBundlePage ? { backgroundColor: "#75559f" } : undefined}>
-        <div className="container mx-auto px-4">
-          <h2 className="text-xl font-extrabold text-center mb-4">ENTDECKE AUCH</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
-            {otherProducts.map((p, i) => (
-              <div key={p.handle} className={otherProducts.length % 2 !== 0 && i === otherProducts.length - 1 ? "col-span-2 sm:col-span-1 max-w-[50%] sm:max-w-full mx-auto" : ""}>
-                <OtherProductCard p={p} addToCart={addToCart} isAvailable={isAvailable} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      </div>{/* end purple wrapper */}
-
-      {SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle] && (
-        <LooxReviews productId={SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle]} />
-      )}
+      {looxProductId && <LooxReviews productId={looxProductId} />}
 
       <Footer />
+
+      {/* Sticky Bottom-Bar (mobil) */}
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed bottom-0 left-0 right-0 z-[9000] bg-white border-t-[3px] border-black px-4 py-3 flex items-center gap-3"
+            style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+          >
+            <div className="shrink-0">
+              <div className="text-[10px] font-bold uppercase text-black/50 leading-none">
+                {option === "bundle" ? "Power Bundle" : "1 Dose"}
+              </div>
+              <div className="font-black text-lg leading-tight">{formatPrice(selectedPrice)}</div>
+            </div>
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="comic-btn flex-1 text-sm py-3 px-4 font-black"
+              style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
+            >
+              IN DEN WARENKORB
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Bundle suggestion banner - only on non-bundle pages */}
       {!product?.isBundle && <BundleBanner />}
