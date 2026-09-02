@@ -1013,7 +1013,100 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
+        <div className={`bg-white text-black ${comicCard} overflow-hidden`}>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left">
+              <thead>
+                <tr className="border-b-[3px] border-black">
+                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">Merkmal</th>
+                  <th
+                    className="p-3 md:p-4 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    FOQUZ
+                  </th>
+                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">
+                    Klassische Schnupfdose aus Thailand
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON_ROWS.map(([feature, foquz, other]) => (
+                  <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
+                    <td className="p-3 md:p-4 text-sm font-black">{feature}</td>
+                    <td
+                      className="p-3 md:p-4 text-sm font-semibold border-x-[3px] border-black"
+                      style={{ backgroundColor: YELLOW }}
+                    >
+                      <span className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
+                        <span>{foquz}</span>
+                      </span>
+                    </td>
+                    <td className="p-3 md:p-4 text-sm font-semibold text-black/70">
+                      <span className="flex items-start gap-2">
+                        <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
+                        <span>{other}</span>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="mt-3 text-xs font-medium text-black/50">
+          Vergleich mit typischen importierten Schnupfdosen. Angebote einzelner Anbieter können abweichen.
+        </p>
+      </section>
+
+      {/* ---------- 3c) BILD + TEXT ---------- */}
+      <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
+          <img
+            src={lifestyleHowto}
+            alt="FOQUZ Riechdose im Alltag"
+            loading="lazy"
+            decoding="async"
+            className={`w-full object-cover rounded-2xl ${comicCard}`}
+          />
+          <div>
+            <p
+              className="inline-block text-[11px] md:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border-[3px] border-black mb-4"
+              style={{ backgroundColor: YELLOW }}
+            >
+              FÜR ZWISCHENDURCH
+            </p>
+            <h2 className="text-2xl md:text-4xl font-black uppercase leading-tight mb-4">
+              DER MOMENT, IN DEM DIE NASE WIEDER AUFGEHT
+            </h2>
+            <p className="text-sm md:text-base font-medium text-black/75 leading-relaxed mb-5">
+              Dose auf, kurz riechen, tief durchatmen. Kein Kaffee, kein Energy Drink, kein Nikotin.
+              Passt in die Hosentasche und ist in drei Sekunden erledigt, egal ob am Schreibtisch,
+              im Gym oder unterwegs.
+            </p>
+            <ul className="space-y-2.5">
+              {LIFESTYLE_POINTS.map((p) => (
+                <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold">
+                  <span
+                    className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                  </span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- 4) Lila Claim-Block ---------- */}
+
       <section className="w-full border-y-[3px] border-black py-12 md:py-16" style={{ backgroundColor: "#75559f" }}>
         <div className="container mx-auto px-4 text-white">
           <p className="text-xs md:text-sm font-black uppercase tracking-widest text-white/70 mb-3">
