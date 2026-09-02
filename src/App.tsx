@@ -19,7 +19,7 @@ import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
 import Faq from "./pages/Faq";
 import ProductDetail from "./pages/ProductDetail";
-import Bundle from "./pages/Bundle";
+
 import ScrollToHash from "./components/ScrollToHash";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import Auth from "./pages/Auth";
@@ -61,7 +61,7 @@ const App = () => {
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
-                <Route path="/bundle" element={<Bundle />} />
+                
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />
                 <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="*" element={<ShopifyRedirectRoute />} />
