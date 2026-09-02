@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
-import MarqueeBar from "@/components/MarqueeBar";
 import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
@@ -633,9 +632,7 @@ const ProductDetail = () => {
       />
       <Navbar />
 
-      <div className="pt-[6.5rem] md:pt-32">
-        <MarqueeBar />
-      </div>
+      <div className="pt-[6.5rem] md:pt-32" />
 
       <div className="container mx-auto px-4 pt-4">
         <Link
@@ -694,6 +691,32 @@ const ProductDetail = () => {
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
+                  ))}
+                </div>
+              )}
+
+              {slides.length > 1 && (
+                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                  {slides.map((s, i) => (
+                    <button
+                      key={`thumb-${s.url}-${i}`}
+                      type="button"
+                      aria-label={`Vorschaubild ${i + 1}`}
+                      onClick={() => goToSlide(i)}
+                      className="shrink-0 w-[74px] h-[74px] rounded-lg overflow-hidden bg-white transition-all"
+                      style={{
+                        border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
+                        boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
+                      }}
+                    >
+                      <img
+                        src={s.shopify ? shopifyImageUrl(s.url, 200) : s.url}
+                        alt={s.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
                   ))}
                 </div>
               )}

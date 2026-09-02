@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import MarqueeBanner from "@/components/MarqueeBanner";
 import HeroSection from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
 import CookieBanner from "@/components/CookieBanner";
@@ -21,7 +20,6 @@ const Index = () => {
   return (
     <>
         <div className="min-h-screen">
-        <MarqueeBanner />
         <Navbar />
         <HeroSection />
         <ProductGrid />
