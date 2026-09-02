@@ -1004,17 +1004,7 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* ---------- 5) ECHTE STIMMEN ---------- */}
-      {looxProductId && (
-        <section className="container mx-auto px-4 py-12 md:py-16">
-          <SectionHeading>ECHTE STIMMEN</SectionHeading>
-          <div className={`bg-white text-black p-2 md:p-4 ${comicCard}`}>
-            <LooxReviews productId={looxProductId} />
-          </div>
-        </section>
-      )}
-
-      {/* ---------- 6) Gelber Block ---------- */}
+      {/* ---------- 5) Gelber Block ---------- */}
       <section className="w-full border-y-[3px] border-black py-12 md:py-16" style={{ backgroundColor: YELLOW }}>
         <div className="container mx-auto px-4 text-black text-center">
           <p className="text-xs md:text-sm font-black uppercase tracking-widest text-black/60 mb-3">
@@ -1048,6 +1038,15 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* ---------- 9) ECHTE STIMMEN ---------- */}
+      {looxProductId && (
+        <section className="container mx-auto px-4 py-12 md:py-16">
+          <SectionHeading>ECHTE STIMMEN</SectionHeading>
+          <div className={`bg-white text-black p-2 md:p-4 ${comicCard}`}>
+            <LooxReviews productId={looxProductId} />
+          </div>
+        </section>
+      )}
 
       <div ref={footerSentinelRef} aria-hidden className="h-px" />
       <Footer />
