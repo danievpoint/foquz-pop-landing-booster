@@ -15,7 +15,7 @@ import MarqueeBar from "@/components/MarqueeBar";
 import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, Coffee, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
+import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, Coffee, Leaf, Flag, Check, Plus, Truck, Timer, Wind } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
@@ -783,7 +783,8 @@ const ProductDetail = () => {
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
-                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
+                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase text-black px-3 py-1.5 rounded-full border-[3px] border-black"
+                  style={{ backgroundColor: YELLOW }}
                 >
                   <Icon className="w-4 h-4 text-black" strokeWidth={2} />
                   <span>{label}</span>
@@ -940,9 +941,9 @@ const ProductDetail = () => {
             </div>
 
             {/* Trust-Liste */}
-            <ul className="mt-6 space-y-2.5">
+            <ul className="mt-6 space-y-3">
               {trustList.map((t) => (
-                <li key={t} className="flex items-start gap-2.5 text-sm font-semibold">
+                <li key={t} className="flex items-start gap-2.5 text-sm font-semibold leading-relaxed">
                   <span
                     className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
                     style={{ backgroundColor: YELLOW }}
@@ -966,11 +967,38 @@ const ProductDetail = () => {
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-6 lg:gap-10 items-start">
+              <div>
+                <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3">
+                  {product.name}
+                </h3>
+                <div className="space-y-4 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+                  {product.longDesc.paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              </div>
 
-              {product.longDesc.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
+                {[
+                  { icon: Timer, label: "3 Sekunden" },
+                  { icon: Wind, label: "Nur riechen" },
+                  { icon: Ban, label: "Ohne Nikotin" },
+                ].map(({ icon: Icon, label }) => (
+                  <div
+                    key={label}
+                    className="flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-3 text-center lg:text-left border-[3px] border-black rounded-2xl px-3 py-3"
+                  >
+                    <span
+                      className="w-9 h-9 rounded-full border-[3px] border-black flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: YELLOW }}
+                    >
+                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -988,7 +1016,7 @@ const ProductDetail = () => {
               >
                 {i + 1}
               </span>
-              <h3 className="font-black uppercase text-base md:text-lg mb-2">{step.title}</h3>
+              <h3 className="font-black uppercase text-base md:text-lg mb-2.5 leading-snug">{step.title}</h3>
               <p className="text-sm font-medium text-black/70 leading-relaxed">{step.text}</p>
             </div>
           ))}
@@ -1002,20 +1030,20 @@ const ProductDetail = () => {
           Echte Kräuter, echtes Menthol. Ohne Nikotin, ohne Koffein.
         </p>
         <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="flex flex-wrap gap-2 md:gap-2.5">
             {product.ingredients.map((ing) => (
-              <div
+              <span
                 key={ing}
-                className="flex items-center gap-2.5 border-[3px] border-black rounded-xl px-3 py-2.5 bg-white"
+                className="inline-flex items-center gap-1.5 border-[3px] border-black rounded-full px-2.5 py-1.5 bg-white"
               >
                 <span
-                  className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0"
+                  className="w-4 h-4 rounded-full border-2 border-black flex items-center justify-center shrink-0"
                   style={{ backgroundColor: YELLOW }}
                 >
-                  <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                  <Check className="w-2.5 h-2.5 text-black" strokeWidth={4} />
                 </span>
-                <span className="text-sm font-bold">{ing}</span>
-              </div>
+                <span className="text-xs md:text-sm font-bold leading-none">{ing}</span>
+              </span>
             ))}
           </div>
 
@@ -1039,47 +1067,74 @@ const ProductDetail = () => {
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
       <section className="container mx-auto px-4 pb-12 md:pb-16">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
-        <div className={`bg-white text-black ${comicCard} overflow-hidden`}>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left">
-              <thead>
-                <tr className="border-b-[3px] border-black">
-                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">Merkmal</th>
-                  <th
-                    className="p-3 md:p-4 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
+        {/* Mobil: gestapelte Karten */}
+        <div className="lg:hidden space-y-3">
+          {COMPARISON_ROWS.map(([feature, foquz, other]) => (
+            <div key={feature} className={`bg-white text-black p-4 ${comicCard}`}>
+              <p className="text-xs font-black uppercase tracking-wide mb-3">{feature}</p>
+              <div className="space-y-2.5">
+                <div
+                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-3 py-2.5"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
+                  <span className="text-sm font-semibold leading-relaxed">
+                    <span className="block text-[11px] font-black uppercase mb-1">FOQUZ</span>
+                    {foquz}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-3 py-2.5 bg-white">
+                  <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-2" />
+                  <span className="text-sm font-semibold text-black/70 leading-relaxed">
+                    <span className="block text-[11px] font-black uppercase text-black mb-1">Thailand-Dose</span>
+                    {other}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: klassische Tabelle */}
+        <div className={`hidden lg:block bg-white text-black ${comicCard} overflow-hidden`}>
+          <table className="w-full border-collapse text-left">
+            <thead>
+              <tr className="border-b-[3px] border-black">
+                <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">Merkmal</th>
+                <th
+                  className="p-3 md:p-4 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  FOQUZ
+                </th>
+                <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">
+                  Klassische Schnupfdose aus Thailand
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARISON_ROWS.map(([feature, foquz, other]) => (
+                <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
+                  <td className="p-3 md:p-4 text-sm font-black leading-relaxed">{feature}</td>
+                  <td
+                    className="p-3 md:p-4 text-sm font-semibold border-x-[3px] border-black leading-relaxed"
                     style={{ backgroundColor: YELLOW }}
                   >
-                    FOQUZ
-                  </th>
-                  <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">
-                    Klassische Schnupfdose aus Thailand
-                  </th>
+                    <span className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
+                      <span>{foquz}</span>
+                    </span>
+                  </td>
+                  <td className="p-3 md:p-4 text-sm font-semibold text-black/70 leading-relaxed">
+                    <span className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
+                      <span>{other}</span>
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-                  <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
-                    <td className="p-3 md:p-4 text-sm font-black">{feature}</td>
-                    <td
-                      className="p-3 md:p-4 text-sm font-semibold border-x-[3px] border-black"
-                      style={{ backgroundColor: YELLOW }}
-                    >
-                      <span className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                        <span>{foquz}</span>
-                      </span>
-                    </td>
-                    <td className="p-3 md:p-4 text-sm font-semibold text-black/70">
-                      <span className="flex items-start gap-2">
-                        <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                        <span>{other}</span>
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
         <p className="mt-3 text-xs font-medium text-black/50">
           Vergleich mit typischen importierten Schnupfdosen. Angebote einzelner Anbieter können abweichen.
@@ -1116,9 +1171,9 @@ const ProductDetail = () => {
               Passt in die Hosentasche und ist in drei Sekunden erledigt, egal ob am Schreibtisch,
               im Gym oder unterwegs.
             </p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {LIFESTYLE_POINTS.map((p) => (
-                <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold">
+                <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold leading-relaxed">
                   <span
                     className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
                     style={{ backgroundColor: YELLOW }}
@@ -1143,9 +1198,9 @@ const ProductDetail = () => {
           <h2 className="text-2xl md:text-5xl font-black uppercase leading-tight mb-7">
             KEIN NIKOTIN. KEIN KOFFEIN. KEIN KATER.
           </h2>
-          <ul className="grid sm:grid-cols-2 gap-3 max-w-3xl">
+          <ul className="grid sm:grid-cols-2 gap-3.5 max-w-3xl">
             {CLAIM_POINTS.map((p) => (
-              <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold">
+              <li key={p} className="flex items-start gap-2.5 text-sm md:text-base font-bold leading-relaxed">
                 <span
                   className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
                   style={{ backgroundColor: YELLOW }}
