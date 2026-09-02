@@ -17,7 +17,6 @@ import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
-import lifestyleHowto from "@/assets/lifestyle-howto.png";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
@@ -34,6 +33,9 @@ const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
 // Bewertungen zählen shopweit: überall dieselbe Referenz-Produkt-ID fürs Aggregat
 const LOOX_SHOP_AGGREGATE_ID = "10276796498262";
+// Echtes Anwendungsfoto (Mensch mit Dose) aus der Shopify-Galerie
+const LIFESTYLE_FALLBACK_PHOTO =
+  "https://cdn.shopify.com/s/files/1/1012/7609/0710/files/foquz_product_image_thai_anwendung.jpg?v=1788078644";
 
 
 const formatPrice = (value: number) =>
@@ -541,6 +543,11 @@ const ProductDetail = () => {
   const selectedPrice = selectedProduct.numericPrice;
 
   const looxProductId = SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle];
+
+  // Echtes Anwendungsfoto der jeweiligen Sorte, sonst Fallback
+  const lifestylePhoto =
+    galleryImages.find((img) => img.url.toLowerCase().includes("anwendung"))?.url ??
+    LIFESTYLE_FALLBACK_PHOTO;
 
   const handleAddToCart = () => {
     if (option === "bundle") {
@@ -1066,13 +1073,18 @@ const ProductDetail = () => {
       {/* ---------- 3c) BILD + TEXT ---------- */}
       <section className="container mx-auto px-4 pb-12 md:pb-16">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
-          <img
-            src={lifestyleHowto}
-            alt="FOQUZ Riechdose im Alltag"
-            loading="lazy"
-            decoding="async"
-            className={`w-full object-cover rounded-2xl ${comicCard}`}
-          />
+          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard}`}>
+            <img
+              src={shopifyImageUrl(lifestylePhoto, 900)}
+              srcSet={shopifyImageSrcSet(lifestylePhoto, [600, 900, 1200])}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              alt="Person hält die FOQUZ Riechdose an die Nase"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
           <div>
             <p
               className="inline-block text-[11px] md:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border-[3px] border-black mb-4"
