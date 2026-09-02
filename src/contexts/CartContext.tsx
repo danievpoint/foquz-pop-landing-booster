@@ -223,20 +223,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setManualDiscountCode(null);
   }, []);
 
+  const pendingKlaviyoAdd = useRef<CartItem | null>(null);
+
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
     // Gratis-Zugaben können nicht direkt gekauft werden.
     if (isGiftItem(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
-      const next = existing
-        ? prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + qty } : i))
-        : [...prev, { ...p, qty }];
-      // Klaviyo: kompletter Warenkorb NACH dem Hinzufügen
-      trackAddedToCart({ ...p, qty }, next);
-      return next;
+      if (existing) {
+        return prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + qty } : i));
+      }
+      return [...prev, { ...p, qty }];
     });
 
+    pendingKlaviyoAdd.current = { ...p, qty };
     setLastAddedProductId(p.id);
     setAddToCartTimestamp(Date.now());
 
