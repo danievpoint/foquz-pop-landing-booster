@@ -35,7 +35,7 @@ const YELLOW = "#FFD11A";
 const LOOX_SHOP_AGGREGATE_ID = "10276796498262";
 // Echtes Anwendungsfoto (Mensch mit Dose) aus der Shopify-Galerie
 const LIFESTYLE_FALLBACK_PHOTO =
-  "https://cdn.shopify.com/s/files/1/0745/0431/6438/files/foquz_product_image_thai_anwendung.jpg?v=1788078644";
+  "https://cdn.shopify.com/s/files/1/1012/7609/0710/files/foquz_product_image_thai_anwendung.jpg?v=1788078644";
 
 
 const formatPrice = (value: number) =>
