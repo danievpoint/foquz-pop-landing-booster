@@ -19,11 +19,12 @@ const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
     setHasContent(false);
 
     const check = () => {
-      if (el.innerHTML.trim().length > 0) setHasContent(true);
+      // Nur anzeigen, wenn Loox echte Sterne gerendert hat (SVG/Icon),
+      // nicht bei leerem Markup oder blosser Zahl wie " (1)".
+      const hasStars = !!el.querySelector('svg, img, .loox-icon, [class*="star"]');
+      setHasContent(hasStars);
     };
 
-    const observer = new MutationObserver(check);
-    observer.observe(el, { childList: true, subtree: true });
 
     const t = setTimeout(() => {
       try {
