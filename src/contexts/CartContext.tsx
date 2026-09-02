@@ -228,10 +228,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (isGiftItem(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
-      if (existing) {
-        return prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + qty } : i));
-      }
-      return [...prev, { ...p, qty }];
+      const next = existing
+        ? prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + qty } : i))
+        : [...prev, { ...p, qty }];
+      // Klaviyo: kompletter Warenkorb NACH dem Hinzufügen
+      trackAddedToCart({ ...p, qty }, next);
+      return next;
     });
 
     setLastAddedProductId(p.id);
