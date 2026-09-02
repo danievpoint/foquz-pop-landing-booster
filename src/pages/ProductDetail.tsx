@@ -15,7 +15,7 @@ import MarqueeBar from "@/components/MarqueeBar";
 import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
+import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, Coffee, Leaf, Flag, Check, Plus, Truck } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
@@ -28,6 +28,15 @@ allProducts.forEach((p) => {
   const img = new Image();
   img.src = p.image;
 });
+
+const CoffeeOffIcon = ({ className, strokeWidth = 2 }: { className?: string; strokeWidth?: number }) => (
+  <span className={`relative inline-flex items-center justify-center ${className ?? ""}`}>
+    <Coffee className="w-full h-full" strokeWidth={strokeWidth} />
+    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <span className="w-[130%] h-[2px] bg-current rotate-45" />
+    </span>
+  </span>
+);
 
 const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
@@ -597,6 +606,12 @@ const ProductDetail = () => {
   };
 
   const trustPills = ["OHNE NIKOTIN", "OHNE KOFFEIN", "ECHTE KRÄUTER", "DEUTSCHE MARKE"];
+  const trustPillsWithIcons = [
+    { label: "OHNE NIKOTIN", icon: Ban },
+    { label: "OHNE KOFFEIN", icon: CoffeeOffIcon },
+    { label: "ECHTE KRÄUTER", icon: Leaf },
+    { label: "DEUTSCHE MARKE", icon: Flag },
+  ];
   const trustList = [
     "Versand mit DHL nach DE, AT und CH",
     "14 Tage Widerrufsrecht",
@@ -765,12 +780,13 @@ const ProductDetail = () => {
             <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
 
             <div className="flex flex-wrap gap-2 mt-5">
-              {trustPills.map((pill) => (
+              {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
-                  key={pill}
-                  className="text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
+                  key={label}
+                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase px-3 py-1.5 rounded-full border-[3px] border-black bg-white"
                 >
-                  {pill}
+                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                  <span>{label}</span>
                 </span>
               ))}
             </div>
