@@ -950,7 +950,7 @@ const ProductDetail = () => {
                   >
                     <Check className="w-3 h-3 text-black" strokeWidth={4} />
                   </span>
-                  <span>{t}</span>
+                  <span className="leading-relaxed">{t}</span>
                 </li>
               ))}
             </ul>
@@ -1122,13 +1122,13 @@ const ProductDetail = () => {
                   >
                     <span className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                      <span>{foquz}</span>
+                      <span className="leading-relaxed">{foquz}</span>
                     </span>
                   </td>
                   <td className="p-3 md:p-4 text-sm font-semibold text-black/70 leading-relaxed">
                     <span className="flex items-start gap-2">
                       <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                      <span>{other}</span>
+                      <span className="leading-relaxed">{other}</span>
                     </span>
                   </td>
                 </tr>
@@ -1180,7 +1180,7 @@ const ProductDetail = () => {
                   >
                     <Check className="w-3 h-3 text-black" strokeWidth={4} />
                   </span>
-                  <span>{p}</span>
+                  <span className="leading-relaxed">{p}</span>
                 </li>
               ))}
             </ul>
@@ -1207,7 +1207,7 @@ const ProductDetail = () => {
                 >
                   <Check className="w-3 h-3 text-black" strokeWidth={4} />
                 </span>
-                <span>{p}</span>
+                <span className="leading-relaxed">{p}</span>
               </li>
             ))}
           </ul>
