@@ -19,6 +19,7 @@ import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
 import Faq from "./pages/Faq";
 import ProductDetail from "./pages/ProductDetail";
+import Bundle from "./pages/Bundle";
 import ScrollToHash from "./components/ScrollToHash";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import Auth from "./pages/Auth";
