@@ -819,10 +819,28 @@ const ProductDetail = () => {
             </>
             )}
 
+            {product.isBundle && (
+              <div className="flex flex-wrap items-baseline gap-2.5 mt-6">
+                <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
+                {bundleProduct.originalPrice && (
+                  <span className="text-base line-through text-black/50 font-semibold">
+                    {bundleProduct.originalPrice}
+                  </span>
+                )}
+                <span
+                  className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
+                  style={{ backgroundColor: YELLOW }}
+                >
+                  11 % SPAREN
+                </span>
+              </div>
+            )}
+
             <div className="flex items-center gap-2 mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
+
 
             {/* CTA */}
             <div ref={ctaRef} className="mt-3">
