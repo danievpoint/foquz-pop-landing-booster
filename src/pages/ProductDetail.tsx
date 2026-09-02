@@ -407,6 +407,8 @@ const ProductDetail = () => {
   const [showStickyBar, setShowStickyBar] = useState(false);
 
   const ctaRef = useRef<HTMLDivElement>(null);
+  const footerSentinelRef = useRef<HTMLDivElement>(null);
+
   const mobileTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
