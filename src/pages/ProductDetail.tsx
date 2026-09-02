@@ -606,6 +606,12 @@ const ProductDetail = () => {
   };
 
   const trustPills = ["OHNE NIKOTIN", "OHNE KOFFEIN", "ECHTE KRÄUTER", "DEUTSCHE MARKE"];
+  const trustPillsWithIcons = [
+    { label: "OHNE NIKOTIN", icon: Ban },
+    { label: "OHNE KOFFEIN", icon: CoffeeOffIcon },
+    { label: "ECHTE KRÄUTER", icon: Leaf },
+    { label: "DEUTSCHE MARKE", icon: Flag },
+  ];
   const trustList = [
     "Versand mit DHL nach DE, AT und CH",
     "14 Tage Widerrufsrecht",
