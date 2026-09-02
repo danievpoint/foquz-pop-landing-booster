@@ -864,8 +864,8 @@ const ProductDetail = () => {
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <h3 className="font-black uppercase text-lg md:text-xl mb-4">{product.longDesc.heading}</h3>
             <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+
               {product.longDesc.paragraphs.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
