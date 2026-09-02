@@ -29,6 +29,15 @@ allProducts.forEach((p) => {
   img.src = p.image;
 });
 
+const CoffeeOffIcon = ({ className, strokeWidth = 2 }: { className?: string; strokeWidth?: number }) => (
+  <span className={`relative inline-flex items-center justify-center ${className ?? ""}`}>
+    <Coffee className="w-full h-full" strokeWidth={strokeWidth} />
+    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <span className="w-[130%] h-[2px] bg-current rotate-45" />
+    </span>
+  </span>
+);
+
 const PAGE_BG = "#C9E9FD";
 const YELLOW = "#FFD11A";
 // Bewertungen zählen shopweit: überall dieselbe Referenz-Produkt-ID fürs Aggregat
