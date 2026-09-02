@@ -694,6 +694,32 @@ const ProductDetail = () => {
                   ))}
                 </div>
               )}
+
+              {slides.length > 1 && (
+                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                  {slides.map((s, i) => (
+                    <button
+                      key={`thumb-${s.url}-${i}`}
+                      type="button"
+                      aria-label={`Vorschaubild ${i + 1}`}
+                      onClick={() => goToSlide(i)}
+                      className="shrink-0 w-[74px] h-[74px] rounded-lg overflow-hidden bg-white transition-all"
+                      style={{
+                        border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
+                        boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
+                      }}
+                    >
+                      <img
+                        src={s.shopify ? shopifyImageUrl(s.url, 200) : s.url}
+                        alt={s.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Desktop: Hauptbild + Thumbnails */}
