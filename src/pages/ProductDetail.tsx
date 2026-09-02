@@ -14,8 +14,9 @@ import AutoVideo from "@/components/AutoVideo";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, ZapOff, Leaf, Flag } from "lucide-react";
 import foquzBox from "@/assets/foquz-box.png";
-import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, type ShopifyImage } from "@/lib/shopify";
+import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
+import LooxReviews from "@/components/LooxReviews";
 
 
 // Preload all product images on module load
@@ -530,6 +531,10 @@ const ProductDetail = () => {
         </div>
       </section>
       </div>{/* end purple wrapper */}
+
+      {SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle] && (
+        <LooxReviews productId={SHOPIFY_PRODUCT_ID_BY_HANDLE[product.handle]} />
+      )}
 
       <Footer />
 
