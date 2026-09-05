@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { sendTemplateEmail } from "../_shared/transactional-email-templates/send-email.ts";
 
 const SHOPIFY_API_VERSION = "2025-07";
 
@@ -143,18 +144,27 @@ serve(async (req) => {
     // for customers created through the Admin API).
     if (!alreadyConfirmed) {
       const confirmUrl = `${supabaseUrl}/functions/v1/newsletter-confirm?token=${confirmToken}`;
-      const { error: mailError } = await supabaseAdmin.functions.invoke(
-        "send-transactional-email",
-        {
-          body: {
-            templateName: "newsletter-confirm",
-            recipientEmail: trimmedEmail,
-            idempotencyKey: `nl-confirm-${confirmToken}`,
-            templateData: { confirmUrl },
-          },
-        },
-      );
-      if (mailError) console.error("Confirm mail error:", mailError);
+      try {
+        const result = await sendTemplateEmail("newsletter-confirm", trimmedEmail, {
+          templateData: { confirmUrl },
+          idempotencyKey: `nl-confirm-${confirmToken}`,
+        });
+        const { error: logError } = await supabaseAdmin.from("email_send_log").insert({
+          template_name: "newsletter-confirm",
+          recipient_email: trimmedEmail,
+          status: result.sent ? "sent" : "suppressed",
+        });
+        if (logError) console.error("Email log error:", logError.code, logError.message);
+      } catch (mailError) {
+        console.error("Confirm mail error:", mailError);
+        const { error: logError } = await supabaseAdmin.from("email_send_log").insert({
+          template_name: "newsletter-confirm",
+          recipient_email: trimmedEmail,
+          status: "failed",
+          error_message: mailError instanceof Error ? mailError.message : String(mailError),
+        });
+        if (logError) console.error("Email log error:", logError.code, logError.message);
+      }
     }
 
     // Sync with Shopify
