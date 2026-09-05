@@ -21,12 +21,12 @@ const PaymentLogos = ({ compact = false }: { compact?: boolean }) => {
             key={label}
             aria-label={label}
             title={label}
-            className="flex items-center justify-center h-7 md:h-8 shrink-0 overflow-hidden"
+            className="flex items-center justify-center h-5 md:h-8 shrink-0 overflow-hidden"
           >
             <img
               src={src}
               alt={label}
-              className="h-5 md:h-6 w-auto max-w-[52px] object-contain"
+              className="h-3.5 md:h-6 w-auto max-w-[40px] md:max-w-[52px] object-contain"
             />
           </div>
         ))}
