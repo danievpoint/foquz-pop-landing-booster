@@ -91,7 +91,7 @@ const NewsletterSection = () => {
               {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
-          <label className="flex items-start gap-2 text-xs text-primary-foreground/80 max-w-md mx-auto text-left nl-fine cursor-pointer">
+          <label className="flex items-start gap-2 font-barlow text-xs text-primary-foreground/80 max-w-md mx-auto text-left leading-snug nl-fine cursor-pointer">
             <input
               type="checkbox"
               checked={consent}
@@ -100,7 +100,9 @@ const NewsletterSection = () => {
               required
             />
             <span>
-              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Details: <a href="/datenschutz" className="underline text-white">Datenschutzerklärung</a>.
+              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Es gelten unsere{" "}
+              <a href="/agb" className="underline" style={{ color: "#f07e26" }}>AGB</a>{" "}und die{" "}
+              <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>.
             </span>
           </label>
         </div>
