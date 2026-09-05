@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { sendTemplateEmail } from "../_shared/transactional-email-templates/send-email.ts";
 
 const SHOPIFY_API_VERSION = "2025-07";
 
