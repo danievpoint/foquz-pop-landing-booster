@@ -989,20 +989,20 @@ const ProductDetail = () => {
       {product.longDesc && (
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
-          <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <div className="grid lg:grid-cols-[minmax(0,1fr)_280px] gap-6 lg:gap-10 items-start">
+          <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
               <div>
-                <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3">
+                <h3 className="text-lg md:text-xl font-black uppercase leading-tight mb-2">
                   {product.name}
                 </h3>
-                <div className="space-y-4 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+                <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
                   {product.longDesc.paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
+              <div className="grid grid-cols-3 lg:grid-cols-1 gap-2.5">
                 {[
                   { icon: Timer, label: "3 Sekunden", sub: "schneller Kick" },
                   { icon: Wind, label: "Nur riechen", sub: "kein Schnupfen" },
@@ -1010,13 +1010,13 @@ const ProductDetail = () => {
                 ].map(({ icon: Icon, label, sub }) => (
                   <div
                     key={label}
-                    className="flex flex-col items-center text-center gap-2 border-[3px] border-black rounded-2xl px-3 py-4"
+                    className="flex flex-col items-center text-center gap-1.5 border-[3px] border-black rounded-2xl px-2.5 py-3"
                     style={{ backgroundColor: YELLOW }}
                   >
                     <span
-                      className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
+                      className="w-10 h-10 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
                     >
-                      <Icon className="w-5 h-5 text-black" strokeWidth={2.5} />
+                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
                     </span>
                     <div>
                       <span className="block text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
@@ -1093,24 +1093,24 @@ const ProductDetail = () => {
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
       <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
-        <div className="space-y-2.5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-2">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-            <div key={feature} className={`bg-white text-black p-3 ${comicCard}`}>
-              <p className="text-[11px] font-black uppercase tracking-wide mb-2">{feature}</p>
-              <div className="grid md:grid-cols-2 gap-2">
+            <div key={feature} className={`bg-white text-black p-2.5 ${comicCard}`}>
+              <p className="text-[11px] font-black uppercase tracking-wide mb-1.5">{feature}</p>
+              <div className="grid md:grid-cols-2 gap-1.5">
                 <div
-                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2"
+                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2 py-1.5"
                   style={{ backgroundColor: YELLOW }}
                 >
                   <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                  <span className="text-[13px] font-semibold leading-snug">
+                  <span className="text-xs font-semibold leading-snug">
                     <span className="block text-[10px] font-black uppercase mb-0.5">FOQUZ</span>
                     {foquz}
                   </span>
                 </div>
-                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2 bg-white">
+                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2 py-1.5 bg-white">
                   <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                  <span className="text-[13px] font-semibold text-black/70 leading-snug">
+                  <span className="text-xs font-semibold text-black/70 leading-snug">
                     <span className="block text-[10px] font-black uppercase text-black mb-0.5">Thailand-Dose</span>
                     {other}
                   </span>
