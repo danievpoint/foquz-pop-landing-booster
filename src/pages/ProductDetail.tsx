@@ -990,7 +990,7 @@ const ProductDetail = () => {
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-6 lg:gap-10 items-start">
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_280px] gap-6 lg:gap-10 items-start">
               <div>
                 <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3">
                   {product.name}
@@ -1004,21 +1004,24 @@ const ProductDetail = () => {
 
               <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
                 {[
-                  { icon: Timer, label: "3 Sekunden" },
-                  { icon: Wind, label: "Nur riechen" },
-                  { icon: Ban, label: "Ohne Nikotin" },
-                ].map(({ icon: Icon, label }) => (
+                  { icon: Timer, label: "3 Sekunden", sub: "schneller Kick" },
+                  { icon: Wind, label: "Nur riechen", sub: "kein Schnupfen" },
+                  { icon: Ban, label: "Ohne Nikotin", sub: "keine Sucht" },
+                ].map(({ icon: Icon, label, sub }) => (
                   <div
                     key={label}
-                    className="flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-3 text-center lg:text-left border-[3px] border-black rounded-2xl px-3 py-3"
+                    className="flex flex-col items-center text-center gap-2 border-[3px] border-black rounded-2xl px-3 py-4"
+                    style={{ backgroundColor: YELLOW }}
                   >
                     <span
-                      className="w-9 h-9 rounded-full border-[3px] border-black flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: YELLOW }}
+                      className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
                     >
-                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
+                      <Icon className="w-5 h-5 text-black" strokeWidth={2.5} />
                     </span>
-                    <span className="text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
+                    <div>
+                      <span className="block text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
+                      <span className="block text-[10px] md:text-xs font-bold text-black/70 leading-snug">{sub}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1070,17 +1073,17 @@ const ProductDetail = () => {
             ))}
           </div>
 
-          <div
-            className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-px border-[3px] border-black rounded-2xl overflow-hidden"
-            style={{ backgroundColor: "#000" }}
-          >
-            {trustPills.map((spec) => (
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {trustPillsWithIcons.map(({ label, icon: Icon }) => (
               <div
-                key={spec}
-                className="py-4 px-2 text-center text-[11px] md:text-xs font-black uppercase"
+                key={label}
+                className="flex items-center gap-2.5 border-[3px] border-black rounded-2xl px-3 py-3"
                 style={{ backgroundColor: YELLOW }}
               >
-                {spec}
+                <span className="w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white">
+                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                </span>
+                <span className="text-[11px] md:text-xs font-black uppercase leading-tight">{label}</span>
               </div>
             ))}
           </div>
@@ -1090,12 +1093,11 @@ const ProductDetail = () => {
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
       <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
-        {/* Mobil: gestapelte Karten */}
-        <div className="lg:hidden space-y-2.5">
+        <div className="space-y-2.5">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
             <div key={feature} className={`bg-white text-black p-3 ${comicCard}`}>
               <p className="text-[11px] font-black uppercase tracking-wide mb-2">{feature}</p>
-              <div className="space-y-2">
+              <div className="grid md:grid-cols-2 gap-2">
                 <div
                   className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2"
                   style={{ backgroundColor: YELLOW }}
@@ -1117,48 +1119,6 @@ const ProductDetail = () => {
             </div>
           ))}
         </div>
-
-        {/* Desktop: klassische Tabelle */}
-        <div className={`hidden lg:block bg-white text-black ${comicCard} overflow-hidden`}>
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr className="border-b-[3px] border-black">
-                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">Merkmal</th>
-                <th
-                  className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
-                  style={{ backgroundColor: YELLOW }}
-                >
-                  FOQUZ
-                </th>
-                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">
-                  Klassische Schnupfdose aus Thailand
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-                <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
-                  <td className="p-2.5 md:p-3 text-sm font-black leading-snug">{feature}</td>
-                  <td
-                    className="p-2.5 md:p-3 text-sm font-semibold border-x-[3px] border-black leading-snug"
-                    style={{ backgroundColor: YELLOW }}
-                  >
-                    <span className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                      <span className="leading-relaxed">{foquz}</span>
-                    </span>
-                  </td>
-                  <td className="p-2.5 md:p-3 text-sm font-semibold text-black/70 leading-snug">
-                    <span className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                      <span className="leading-relaxed">{other}</span>
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
         <p className="mt-3 text-xs font-medium text-black/50">
           Vergleich mit typischen importierten Schnupfdosen. Angebote einzelner Anbieter können abweichen.
         </p>
@@ -1167,7 +1127,7 @@ const ProductDetail = () => {
       {/* ---------- 3c) BILD + TEXT ---------- */}
       <section className="container mx-auto px-4 pb-12 md:pb-16">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
-          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard} bg-white`}>
+          <div className={`w-full aspect-square overflow-hidden rounded-2xl ${comicCard}`}>
             <img
               src={shopifyImageUrl(lifestylePhoto, 900)}
               srcSet={shopifyImageSrcSet(lifestylePhoto, [600, 900, 1200])}
@@ -1175,7 +1135,7 @@ const ProductDetail = () => {
               alt="Person hält die FOQUZ Riechdose an die Nase"
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
           </div>
 
