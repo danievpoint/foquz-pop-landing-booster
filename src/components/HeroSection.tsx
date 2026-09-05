@@ -176,7 +176,7 @@ const HeroSection = () => {
               loading="eager"
               decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-top"
-              style={{ transform: "translateX(3%) scale(0.92)", transformOrigin: "top center" }}
+              style={{ transform: "translateY(1.5%) scale(0.92)", transformOrigin: "top right" }}
             />
 
             {/* Layer 2: Clouds overlay */}
