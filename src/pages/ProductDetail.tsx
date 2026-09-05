@@ -856,13 +856,13 @@ const ProductDetail = () => {
             {/* Menge wählen */}
             <div className="mt-2 md:mt-7">
               <h2 className="text-sm lg:text-lg font-black uppercase mb-0.5">MENGE WÄHLEN</h2>
-              <p className="text-[11px] md:text-xs font-bold text-black/60 uppercase mb-1 md:mb-3">Mehr Dosen, mehr Wolke 7</p>
+              <p className="hidden md:block text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
 
               <div className="grid grid-cols-2 gap-2 md:grid-cols-1 md:space-y-3">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
-                  className={`flex flex-col md:flex-row md:items-center md:justify-between gap-1 p-2 md:p-2.5 rounded-xl md:rounded-2xl text-left transition-all ${
+                  className={`flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
                     option === "single" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "single" ? { backgroundColor: YELLOW } : undefined}
@@ -882,13 +882,13 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={() => setOption("bundle")}
-                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-1 p-2 md:p-2.5 rounded-xl md:rounded-2xl text-left transition-all ${
+                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
                     option === "bundle" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
                 >
                   <span
-                    className="absolute -top-2 right-1.5 text-[9px] md:text-[10px] font-black uppercase px-1.5 md:px-2 py-0.5 rounded-full border-[2px] border-black"
+                    className="absolute -top-2 right-1 text-[9px] md:text-[10px] font-black uppercase px-1.5 md:px-2 py-0.5 rounded-full border-[2px] border-black"
                     style={{ backgroundColor: YELLOW }}
                   >
                     BELIEBT
