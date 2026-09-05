@@ -856,23 +856,23 @@ const ProductDetail = () => {
             {/* Menge wählen */}
             <div className="mt-4 md:mt-7">
               <h2 className="text-base lg:text-lg font-black uppercase mb-1">MENGE WÄHLEN</h2>
-              <p className="text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
+              <p className="text-xs font-bold text-black/60 uppercase mb-2 md:mb-3">Mehr Dosen, mehr Wolke 7</p>
 
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
-                  className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
-                    option === "single" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  className={`w-full flex items-center justify-between gap-3 p-2.5 rounded-2xl text-left transition-all ${
+                    option === "single" ? "border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "single" ? { backgroundColor: YELLOW } : undefined}
                 >
                   <span>
-                    <span className="block font-black uppercase text-sm">1 DOSE</span>
-                    <span className="block text-xs text-black/60 font-semibold">Zum Reinschnuppern</span>
+                    <span className="block font-black uppercase text-xs md:text-sm">1 DOSE</span>
+                    <span className="block text-[11px] text-black/60 font-semibold">Zum Reinschnuppern</span>
                   </span>
                   <span className="text-right shrink-0">
-                    <span className="block font-black text-lg">{formatPrice(singleProduct.numericPrice)}</span>
+                    <span className="block font-black text-base md:text-lg">{formatPrice(singleProduct.numericPrice)}</span>
                     <span className="block text-[10px] text-black/60 font-semibold">
                       {formatPrice(singleProduct.numericPrice)} pro Dose
                     </span>
@@ -882,26 +882,26 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={() => setOption("bundle")}
-                  className={`relative w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
-                    option === "bundle" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  className={`relative w-full flex items-center justify-between gap-3 p-2.5 rounded-2xl text-left transition-all ${
+                    option === "bundle" ? "border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
                 >
                   <span
-                    className="absolute -top-3 right-3 text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
+                    className="absolute -top-2.5 right-2.5 text-[10px] font-black uppercase px-2 py-0.5 rounded-full border-[2px] border-black"
                     style={{ backgroundColor: YELLOW }}
                   >
                     BELIEBT
                   </span>
                   <span>
-                    <span className="block font-black uppercase text-sm">3 DOSEN – POWER BUNDLE</span>
-                    <span className="block text-xs text-black/60 font-semibold">
+                    <span className="block font-black uppercase text-xs md:text-sm">3 DOSEN – POWER BUNDLE</span>
+                    <span className="block text-[11px] text-black/60 font-semibold">
                       Alle 3 Sorten in einer Box, 11 % sparen
                     </span>
                   </span>
                   <span className="text-right shrink-0">
                     <span className="flex items-baseline gap-1.5 justify-end">
-                      <span className="font-black text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
+                      <span className="font-black text-base md:text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
                       {bundleProduct.originalPrice && (
                         <span className="text-xs line-through text-black/50 font-semibold">
                           {bundleProduct.originalPrice}
