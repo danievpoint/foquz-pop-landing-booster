@@ -140,10 +140,10 @@ const NewsletterSection = () => {
                   <PartyPopper className="w-8 h-8 text-accent" />
                 </div>
 
-                <h3 className="text-2xl font-extrabold mb-2">
+                <h3 className="font-barlow text-2xl font-black uppercase tracking-tight mb-2">
                   {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                <p className="font-barlow text-muted-foreground text-sm mb-6 leading-relaxed">
                   {alreadySubscribed
                     ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
                     : <>Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> ist direkt aktiv und wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!<br /><br /><span className="text-xs">Wir haben dir eine E-Mail geschickt: Bitte bestätige darin deine Anmeldung, damit wir dir den Newsletter schicken dürfen.</span></>
