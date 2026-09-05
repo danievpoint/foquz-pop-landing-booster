@@ -1102,7 +1102,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
-      <section className="container mx-auto px-4 pb-8 md:pb-12">
+      <section className="container mx-auto px-4 pb-10 md:pb-14 mt-1">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
         <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-2">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
