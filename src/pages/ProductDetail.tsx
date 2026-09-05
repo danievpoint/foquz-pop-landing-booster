@@ -1028,19 +1028,19 @@ const ProductDetail = () => {
       )}
 
       {/* ---------- 2) SO GEHT'S ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>SO GEHT'S</SectionHeading>
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-3 md:gap-4">
           {HOW_TO_STEPS.map((step, i) => (
-            <div key={step.title} className={`bg-white text-black p-5 md:p-6 ${comicCard}`}>
+            <div key={step.title} className={`bg-white text-black p-4 md:p-5 ${comicCard}`}>
               <span
-                className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center font-black text-lg mb-4"
+                className="w-9 h-9 rounded-full border-[3px] border-black flex items-center justify-center font-black text-base mb-2.5"
                 style={{ backgroundColor: YELLOW }}
               >
                 {i + 1}
               </span>
-              <h3 className="font-black uppercase text-base md:text-lg mb-2.5 leading-snug">{step.title}</h3>
-              <p className="text-sm font-medium text-black/70 leading-relaxed">{step.text}</p>
+              <h3 className="font-black uppercase text-sm md:text-base mb-1.5 leading-snug">{step.title}</h3>
+              <p className="text-[13px] md:text-sm font-medium text-black/70 leading-relaxed">{step.text}</p>
             </div>
           ))}
         </div>
@@ -1088,28 +1088,28 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
         {/* Mobil: gestapelte Karten */}
-        <div className="lg:hidden space-y-3">
+        <div className="lg:hidden space-y-2.5">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-            <div key={feature} className={`bg-white text-black p-4 ${comicCard}`}>
-              <p className="text-xs font-black uppercase tracking-wide mb-3">{feature}</p>
-              <div className="space-y-2.5">
+            <div key={feature} className={`bg-white text-black p-3 ${comicCard}`}>
+              <p className="text-[11px] font-black uppercase tracking-wide mb-2">{feature}</p>
+              <div className="space-y-2">
                 <div
-                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-3 py-2.5"
+                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2"
                   style={{ backgroundColor: YELLOW }}
                 >
                   <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                  <span className="text-sm font-semibold leading-relaxed">
-                    <span className="block text-[11px] font-black uppercase mb-1">FOQUZ</span>
+                  <span className="text-[13px] font-semibold leading-snug">
+                    <span className="block text-[10px] font-black uppercase mb-0.5">FOQUZ</span>
                     {foquz}
                   </span>
                 </div>
-                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-3 py-2.5 bg-white">
-                  <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-2" />
-                  <span className="text-sm font-semibold text-black/70 leading-relaxed">
-                    <span className="block text-[11px] font-black uppercase text-black mb-1">Thailand-Dose</span>
+                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2 bg-white">
+                  <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
+                  <span className="text-[13px] font-semibold text-black/70 leading-snug">
+                    <span className="block text-[10px] font-black uppercase text-black mb-0.5">Thailand-Dose</span>
                     {other}
                   </span>
                 </div>
@@ -1123,14 +1123,14 @@ const ProductDetail = () => {
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b-[3px] border-black">
-                <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">Merkmal</th>
+                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">Merkmal</th>
                 <th
-                  className="p-3 md:p-4 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
+                  className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
                   style={{ backgroundColor: YELLOW }}
                 >
                   FOQUZ
                 </th>
-                <th className="p-3 md:p-4 text-xs md:text-sm font-black uppercase">
+                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">
                   Klassische Schnupfdose aus Thailand
                 </th>
               </tr>
@@ -1138,9 +1138,9 @@ const ProductDetail = () => {
             <tbody>
               {COMPARISON_ROWS.map(([feature, foquz, other]) => (
                 <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
-                  <td className="p-3 md:p-4 text-sm font-black leading-relaxed">{feature}</td>
+                  <td className="p-2.5 md:p-3 text-sm font-black leading-snug">{feature}</td>
                   <td
-                    className="p-3 md:p-4 text-sm font-semibold border-x-[3px] border-black leading-relaxed"
+                    className="p-2.5 md:p-3 text-sm font-semibold border-x-[3px] border-black leading-snug"
                     style={{ backgroundColor: YELLOW }}
                   >
                     <span className="flex items-start gap-2">
@@ -1148,7 +1148,7 @@ const ProductDetail = () => {
                       <span className="leading-relaxed">{foquz}</span>
                     </span>
                   </td>
-                  <td className="p-3 md:p-4 text-sm font-semibold text-black/70 leading-relaxed">
+                  <td className="p-2.5 md:p-3 text-sm font-semibold text-black/70 leading-snug">
                     <span className="flex items-start gap-2">
                       <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
                       <span className="leading-relaxed">{other}</span>
