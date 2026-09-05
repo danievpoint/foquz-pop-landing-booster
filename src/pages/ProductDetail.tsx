@@ -637,14 +637,14 @@ const ProductDetail = () => {
       <div className="container mx-auto px-4 pt-2">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-2"
+          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-1 md:mb-2"
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
         </Link>
       </div>
 
-      <section className="container mx-auto px-4 pb-16 lg:pb-24">
+      <section className="container mx-auto px-4 pb-2 md:pb-6 lg:pb-24">
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ---------- Galerie ---------- */}
           <div className="min-w-0 lg:sticky lg:top-28">
@@ -654,15 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none" }}
+                style={{ scrollbarWidth: "none", maxHeight: "11vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center">
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "11vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
-                        className="w-full aspect-square object-cover"
+                        className="w-full h-full object-cover"
+                        style={{ maxHeight: "11vh" }}
                       />
                     ) : (
                       <img
@@ -672,22 +673,23 @@ const ProductDetail = () => {
                         alt={s.alt}
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
-                        className="w-full aspect-square object-cover"
+                        className="w-full h-full object-cover"
+                        style={{ maxHeight: "11vh" }}
                       />
                     )}
                   </div>
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-2 mt-3">
+                <div className="flex justify-center gap-1.5 mt-1">
                   {slides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       aria-label={`Bild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className={`h-2.5 rounded-full border-2 border-black transition-all ${
-                        activeSlide === i ? "w-6" : "w-2.5"
+                      className={`h-1.5 rounded-full border-2 border-black transition-all ${
+                        activeSlide === i ? "w-4" : "w-1.5"
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
@@ -696,16 +698,16 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                <div className="mt-1 hidden md:flex gap-1.5 overflow-x-auto scrollbar-hide">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-[74px] h-[74px] rounded-lg overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-white transition-all"
                       style={{
-                        border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
+                        border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
                       }}
                     >
@@ -787,29 +789,29 @@ const ProductDetail = () => {
           </div>
 
           {/* ---------- Kaufbox ---------- */}
-          <div className={`min-w-0 bg-white text-black p-5 md:p-7 ${comicCard}`}>
-            <h1 className="block w-full text-2xl sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
+          <div className={`min-w-0 bg-white text-black p-2 md:p-7 ${comicCard}`}>
+            <h1 className="block w-full text-[1.375rem] sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
-                className="absolute left-0 right-0 bottom-0 h-2 lg:h-3 z-0"
+                className="absolute left-0 right-0 bottom-0 h-1 lg:h-3 z-0"
                 style={{ backgroundColor: YELLOW }}
               />
             </h1>
 
-            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-4">
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-1 md:mt-4 leading-snug md:leading-normal">
               {product.desc}
             </p>
 
-            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-1 md:mt-3" />
 
-            <div className="flex flex-wrap gap-2 mt-5">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2 md:mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
-                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase text-black px-3 py-1.5 rounded-full border-[3px] border-black"
+                  className="flex items-center gap-1 text-[9px] md:text-[10px] lg:text-xs font-black uppercase text-black px-2 md:px-3 py-1 md:py-1.5 rounded-full border-[2px] md:border-[3px] border-black"
                   style={{ backgroundColor: YELLOW }}
                 >
-                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                  <Icon className="w-3 h-3 md:w-4 md:h-4 text-black" strokeWidth={2} />
                   <span>{label}</span>
                 </span>
               ))}
@@ -818,9 +820,9 @@ const ProductDetail = () => {
             {!product.isBundle && (
             <>
             {/* Sorte wählen */}
-            <div className="mt-7">
-              <h2 className="text-base lg:text-lg font-black uppercase mb-3">SORTE WÄHLEN</h2>
-              <div className="space-y-2.5">
+            <div className="mt-2 md:mt-7">
+              <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide md:block md:space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
                   return (
@@ -828,20 +830,20 @@ const ProductDetail = () => {
                       key={v.handle}
                       type="button"
                       onClick={() => navigate(`/produkt/${v.handle}`)}
-                      className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-all ${
-                        active ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                      className={`shrink-0 flex flex-col items-center gap-0.5 p-1 md:p-2 rounded-lg md:rounded-2xl text-center transition-all md:w-full md:flex-row md:gap-2 md:text-left ${
+                        active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
                       style={active ? { backgroundColor: YELLOW } : undefined}
                     >
-                      <img src={v.image} alt={v.name} className="w-12 h-12 rounded-xl object-cover border-2 border-black bg-white" />
-                      <span className="flex-1 min-w-0">
-                        <span className="block font-black uppercase text-sm">{v.name}</span>
-                        <span className="block text-xs text-black/60 font-semibold">
+                      <img src={v.image} alt={v.name} className="w-8 h-8 md:w-10 md:h-10 rounded-md md:rounded-lg object-cover border-2 border-black bg-white" />
+                      <span className="min-w-0">
+                        <span className="block font-black uppercase text-[9px] md:text-sm whitespace-nowrap">{v.name}</span>
+                        <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
                           {VARIANT_SUBTITLES[v.handle]}
                         </span>
                       </span>
                       <span
-                        className={`w-5 h-5 rounded-full border-[3px] border-black shrink-0 ${
+                        className={`hidden md:block w-3.5 h-3.5 md:w-4 md:h-4 rounded-full border-[2px] border-black shrink-0 ${
                           active ? "bg-black" : "bg-white"
                         }`}
                       />
@@ -852,26 +854,26 @@ const ProductDetail = () => {
             </div>
 
             {/* Menge wählen */}
-            <div className="mt-7">
-              <h2 className="text-base lg:text-lg font-black uppercase mb-1">MENGE WÄHLEN</h2>
-              <p className="text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
+            <div className="mt-2 md:mt-7">
+              <h2 className="text-sm lg:text-lg font-black uppercase mb-0.5">MENGE WÄHLEN</h2>
+              <p className="hidden md:block text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 md:grid-cols-1 md:space-y-3">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
-                  className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
-                    option === "single" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  className={`flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
+                    option === "single" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "single" ? { backgroundColor: YELLOW } : undefined}
                 >
                   <span>
-                    <span className="block font-black uppercase text-sm">1 DOSE</span>
-                    <span className="block text-xs text-black/60 font-semibold">Zum Reinschnuppern</span>
+                    <span className="block font-black uppercase text-[11px] md:text-sm">1 DOSE</span>
+                    <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">Zum Reinschnuppern</span>
                   </span>
-                  <span className="text-right shrink-0">
-                    <span className="block font-black text-lg">{formatPrice(singleProduct.numericPrice)}</span>
-                    <span className="block text-[10px] text-black/60 font-semibold">
+                  <span className="md:text-right shrink-0">
+                    <span className="block font-black text-sm md:text-lg">{formatPrice(singleProduct.numericPrice)}</span>
+                    <span className="block text-[9px] md:text-[10px] text-black/60 font-semibold">
                       {formatPrice(singleProduct.numericPrice)} pro Dose
                     </span>
                   </span>
@@ -880,33 +882,33 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={() => setOption("bundle")}
-                  className={`relative w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left transition-all ${
-                    option === "bundle" ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
+                    option === "bundle" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
                 >
                   <span
-                    className="absolute -top-3 right-3 text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
+                    className="absolute -top-2 right-1 text-[9px] md:text-[10px] font-black uppercase px-1.5 md:px-2 py-0.5 rounded-full border-[2px] border-black"
                     style={{ backgroundColor: YELLOW }}
                   >
                     BELIEBT
                   </span>
                   <span>
-                    <span className="block font-black uppercase text-sm">3 DOSEN – POWER BUNDLE</span>
-                    <span className="block text-xs text-black/60 font-semibold">
-                      Alle 3 Sorten in einer Box, 11 % sparen
+                    <span className="block font-black uppercase text-[11px] md:text-sm">3 DOSEN</span>
+                    <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
+                      Alle 3 Sorten, 11 % sparen
                     </span>
                   </span>
-                  <span className="text-right shrink-0">
-                    <span className="flex items-baseline gap-1.5 justify-end">
-                      <span className="font-black text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
+                  <span className="md:text-right shrink-0">
+                    <span className="flex items-baseline gap-1 md:justify-end">
+                      <span className="font-black text-sm md:text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
                       {bundleProduct.originalPrice && (
-                        <span className="text-xs line-through text-black/50 font-semibold">
+                        <span className="text-[10px] md:text-xs line-through text-black/50 font-semibold">
                           {bundleProduct.originalPrice}
                         </span>
                       )}
                     </span>
-                    <span className="block text-[10px] text-black/60 font-semibold">
+                    <span className="block text-[9px] md:text-[10px] text-black/60 font-semibold">
                       {formatPrice(bundleProduct.numericPrice / 3)} pro Dose
                     </span>
                   </span>
@@ -917,7 +919,7 @@ const ProductDetail = () => {
             )}
 
             {product.isBundle && (
-              <div className="flex flex-wrap items-baseline gap-2.5 mt-6">
+              <div className="flex flex-wrap items-baseline gap-2.5 mt-4 md:mt-6">
                 <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
                 {bundleProduct.originalPrice && (
                   <span className="text-base line-through text-black/50 font-semibold">
@@ -933,25 +935,54 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="flex items-center gap-2 mt-5">
+            <div className="flex items-center gap-2 mt-2 md:mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
 
             {/* Lieferzeit */}
-            <div className="flex items-center gap-2.5 mt-4 mb-1">
-              <Truck className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} />
-              <span className="font-black uppercase text-sm lg:text-base text-black">AUF LAGER</span>
-              <span className="text-sm lg:text-base font-semibold text-black">
+            <div className="flex items-center gap-2.5 mt-2 md:mt-4 mb-1">
+              <Truck className="w-4 h-4 md:w-5 md:h-5 text-black shrink-0" strokeWidth={2.5} />
+              <span className="font-black uppercase text-xs md:text-sm lg:text-base text-black">AUF LAGER</span>
+              <span className="text-xs md:text-sm lg:text-base font-semibold text-black">
                 in 2 bis 5 Werktagen bei dir
               </span>
             </div>
 
+            {/* CTA – Mobil direkt sichtbar (Referenz für Sticky-Bar) */}
+            <div ref={ctaRef} className="mt-2 md:hidden">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="comic-btn w-full text-base py-3 font-black flex items-center justify-center gap-2"
+                style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                IN DEN WARENKORB – {formatPrice(selectedPrice)}
+              </button>
+            </div>
 
+            {/* Trust-Liste – Mobil horizontal/kompakt */}
+            <ul className="hidden md:mt-6 md:flex md:flex-col md:gap-0 md:space-y-3">
+              {trustList.map((t) => (
+                <li key={t} className="flex items-center gap-1 text-[10px] md:text-sm font-semibold leading-tight md:leading-relaxed md:items-start shrink-0">
+                  <span
+                    className="w-3.5 h-3.5 md:w-5 md:h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 md:mt-0.5"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    <Check className="w-2 h-2 md:w-3 md:h-3 text-black" strokeWidth={4} />
+                  </span>
+                  <span className="leading-tight md:leading-relaxed whitespace-nowrap">{t}</span>
+                </li>
+              ))}
+            </ul>
 
+            <div className="hidden md:block mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
+              <PaymentLogos compact />
+            </div>
 
-            {/* CTA */}
-            <div ref={ctaRef} className="mt-3">
+            {/* CTA – Desktop */}
+            <div className="hidden md:block mt-2 md:mt-3">
               <button
                 type="button"
                 onClick={handleAddToCart}
@@ -962,32 +993,13 @@ const ProductDetail = () => {
                 IN DEN WARENKORB – {formatPrice(selectedPrice)}
               </button>
             </div>
-
-            {/* Trust-Liste */}
-            <ul className="mt-6 space-y-3">
-              {trustList.map((t) => (
-                <li key={t} className="flex items-start gap-2.5 text-sm font-semibold leading-relaxed">
-                  <span
-                    className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ backgroundColor: YELLOW }}
-                  >
-                    <Check className="w-3 h-3 text-black" strokeWidth={4} />
-                  </span>
-                  <span className="leading-relaxed">{t}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-5 pt-5 border-t-[3px] border-black/10">
-              <PaymentLogos compact />
-            </div>
           </div>
         </div>
       </section>
 
       {/* ---------- 1) WAS IST ... ---------- */}
       {product.longDesc && (
-        <section className="container mx-auto px-4 pb-12 md:pb-16">
+        <section className="container mx-auto px-4 -mt-8 md:mt-0 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
             <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
