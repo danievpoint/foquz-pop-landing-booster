@@ -976,7 +976,7 @@ const ProductDetail = () => {
               ))}
             </ul>
 
-            <div className="mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
+            <div className="mt-3 pt-3 md:mt-6 md:pt-6">
               <PaymentLogos compact size="md" />
             </div>
 
