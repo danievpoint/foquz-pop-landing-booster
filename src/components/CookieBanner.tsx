@@ -9,6 +9,7 @@ import {
 } from "@/lib/consent";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotLemon from "@/assets/mascot-lemon.png";
+import { heroReadyPromise } from "@/components/HeroSection";
 
 type View = "hidden" | "banner" | "settings";
 
@@ -37,8 +38,18 @@ const CookieBanner = () => {
   useEffect(() => {
     const current = readConsent();
     if (!current) {
-      const t = setTimeout(() => setView("banner"), 800);
-      return () => clearTimeout(t);
+      // Erst zeigen, wenn die Seite (Hero-Bilder + Schriften) fertig geladen ist,
+      // damit das Banner nicht vor dem Rest der Seite erscheint.
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let cancelled = false;
+      heroReadyPromise.then(() => {
+        if (cancelled) return;
+        timer = setTimeout(() => setView("banner"), 800);
+      });
+      return () => {
+        cancelled = true;
+        if (timer) clearTimeout(timer);
+      };
     }
     setAnalytics(current.analytics);
     setMarketing(current.marketing);
