@@ -322,7 +322,7 @@ const PRODUCT_FAQ_QUESTIONS = [
 
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-2xl md:text-4xl font-black uppercase text-black mb-6 inline-block relative">
+  <h2 className="block w-full text-[1.35rem] md:text-4xl font-black uppercase text-black leading-tight mb-5 md:mb-6 relative break-words">
     <span className="relative z-10">{children}</span>
     <span className="absolute left-0 right-0 bottom-0 h-2 md:h-3 z-0" style={{ backgroundColor: YELLOW }} />
   </h2>
@@ -820,7 +820,7 @@ const ProductDetail = () => {
             {/* Sorte wählen */}
             <div className="mt-2 md:mt-7">
               <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
-              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide md:block md:space-y-2">
+              <div className="flex flex-col gap-2 md:block md:space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
                   return (
@@ -828,20 +828,20 @@ const ProductDetail = () => {
                       key={v.handle}
                       type="button"
                       onClick={() => navigate(`/produkt/${v.handle}`)}
-                      className={`shrink-0 flex flex-col items-center gap-0.5 p-1 md:p-2 rounded-lg md:rounded-2xl text-center transition-all md:w-full md:flex-row md:gap-2 md:text-left ${
+                      className={`w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 ${
                         active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
                       style={active ? { backgroundColor: YELLOW } : undefined}
                     >
-                      <img src={v.image} alt={v.name} className="w-8 h-8 md:w-10 md:h-10 rounded-md md:rounded-lg object-cover border-2 border-black bg-white" />
-                      <span className="min-w-0">
-                        <span className="block font-black uppercase text-[9px] md:text-sm whitespace-nowrap">{v.name}</span>
-                        <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
+                      <img src={v.image} alt={v.name} className="w-12 h-12 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white shrink-0" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-black uppercase text-sm whitespace-normal leading-tight">{v.name}</span>
+                        <span className="block text-[11px] text-black/60 font-semibold leading-snug mt-0.5">
                           {VARIANT_SUBTITLES[v.handle]}
                         </span>
                       </span>
                       <span
-                        className={`hidden md:block w-3.5 h-3.5 md:w-4 md:h-4 rounded-full border-[2px] border-black shrink-0 ${
+                        className={`block w-4 h-4 rounded-full border-[2px] border-black shrink-0 ${
                           active ? "bg-black" : "bg-white"
                         }`}
                       />
@@ -997,7 +997,7 @@ const ProductDetail = () => {
 
       {/* ---------- 1) WAS IST ... ---------- */}
       {product.longDesc && (
-        <section className="container mx-auto px-4 -mt-8 md:mt-0 pb-12 md:pb-16">
+        <section className="container mx-auto px-4 mt-8 md:mt-0 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
             <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
@@ -1012,7 +1012,7 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 lg:grid-cols-1 gap-2.5">
+              <div className="grid grid-cols-1 gap-2.5">
                 {[
                   { icon: Timer, label: "3 Sekunden", sub: "schneller Kick" },
                   { icon: Wind, label: "Nur riechen", sub: "kein Schnupfen" },
@@ -1020,17 +1020,17 @@ const ProductDetail = () => {
                 ].map(({ icon: Icon, label, sub }) => (
                   <div
                     key={label}
-                    className="flex flex-col items-center text-center gap-1.5 border-[3px] border-black rounded-2xl px-2.5 py-3"
+                    className="flex items-center text-left gap-3 border-[3px] border-black rounded-2xl px-3 py-3"
                     style={{ backgroundColor: YELLOW }}
                   >
                     <span
-                      className="w-10 h-10 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
+                      className="w-12 h-12 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
                     >
-                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
+                      <Icon className="w-6 h-6 text-black" strokeWidth={2.5} />
                     </span>
                     <div>
-                      <span className="block text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
-                      <span className="block text-[10px] md:text-xs font-bold text-black/70 leading-snug">{sub}</span>
+                      <span className="block text-sm font-black uppercase leading-snug">{label}</span>
+                      <span className="block text-xs font-bold text-black/70 leading-snug">{sub}</span>
                     </div>
                   </div>
                 ))}
