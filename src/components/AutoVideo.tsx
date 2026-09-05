@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, VideoHTMLAttributes } from "react";
+import { useEffect, useRef, useCallback, useState, VideoHTMLAttributes } from "react";
 
 type Props = VideoHTMLAttributes<HTMLVideoElement> & {
   src: string;
@@ -19,6 +19,7 @@ type Props = VideoHTMLAttributes<HTMLVideoElement> & {
 const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...rest }: Props) => {
   const ref = useRef<HTMLVideoElement>(null);
   const gated = play !== undefined;
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Ref callback runs synchronously the first time the element exists,
   // BEFORE the browser starts loading the src, so iOS sees the muted +
@@ -114,6 +115,8 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       controlsList="nodownload nofullscreen noremoteplayback"
       preload={preload ?? "auto"}
       onContextMenu={(e) => e.preventDefault()}
+      onPlaying={() => setIsPlaying(true)}
+      onPause={() => setIsPlaying(false)}
       onEnded={onEnded}
       className={poster ? "absolute inset-0 w-full h-full object-cover" : className}
       {...rest}
@@ -127,15 +130,18 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
   // seinen ersten Frame malen kann.
   return (
     <div className={`relative ${className ?? ""}`}>
+      {videoEl}
+      {/* Poster liegt ueber dem Video, solange es nicht laeuft: verhindert das
+          weisse Aufblitzen UND das native iOS-Play-Symbol (z.B. Stromsparmodus). */}
       <img
         src={poster}
         alt=""
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover"
+        style={{ opacity: isPlaying ? 0 : 1 }}
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-200"
       />
-      {videoEl}
     </div>
   );
 
