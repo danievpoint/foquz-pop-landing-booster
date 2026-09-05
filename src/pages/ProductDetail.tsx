@@ -1167,7 +1167,7 @@ const ProductDetail = () => {
       {/* ---------- 3c) BILD + TEXT ---------- */}
       <section className="container mx-auto px-4 pb-12 md:pb-16">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
-          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard}`}>
+          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard} bg-white`}>
             <img
               src={shopifyImageUrl(lifestylePhoto, 900)}
               srcSet={shopifyImageSrcSet(lifestylePhoto, [600, 900, 1200])}
@@ -1175,7 +1175,7 @@ const ProductDetail = () => {
               alt="Person hält die FOQUZ Riechdose an die Nase"
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
 
