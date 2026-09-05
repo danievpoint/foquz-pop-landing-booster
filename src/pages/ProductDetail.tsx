@@ -1061,7 +1061,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3) WAS DRIN IST ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-14 md:pb-20 mt-1">
         <SectionHeading>WAS DRIN IST</SectionHeading>
         <p className="text-sm md:text-base font-bold text-black/70 mb-5 -mt-3">
           Echte Kräuter, echtes Menthol. Ohne Nikotin, ohne Koffein.
