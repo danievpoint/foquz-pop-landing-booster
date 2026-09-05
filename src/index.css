@@ -242,7 +242,10 @@ section[id] {
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ---- Klaviyo Newsletter-Popup an das FOQUZ-Design angleichen ---- */
-.foquz-klaviyo-form {
+/* Die Selektoren greifen direkt am Klaviyo-Markup, damit das Layout schon
+   beim ersten Paint stimmt (kein Flackern, bevor JS Klassen ergänzt). */
+.foquz-klaviyo-form,
+form[class*="klaviyo-form"] {
   width: min(940px, calc(100vw - 48px)) !important;
   max-width: 940px !important;
   padding: 24px !important;
@@ -251,7 +254,8 @@ section[id] {
   align-items: stretch !important;
 }
 
-.foquz-klaviyo-form > div:first-child {
+.foquz-klaviyo-form > div:first-child,
+form[class*="klaviyo-form"] > div:first-child {
   width: 48% !important;
   min-width: 48% !important;
   margin: -24px 0 -24px -24px !important;
@@ -268,6 +272,7 @@ section[id] {
   width: 100% !important;
   max-width: none !important;
 }
+
 
 .foquz-klaviyo-dismiss-hidden {
   display: none !important;
