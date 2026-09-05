@@ -40,7 +40,7 @@ const heroFontsPromise: Promise<unknown> =
       ]).catch(() => undefined)
     : Promise.resolve();
 
-const heroReadyPromise = Promise.all([heroImagePromise, heroFontsPromise]);
+export const heroReadyPromise = Promise.all([heroImagePromise, heroFontsPromise]);
 
 export const useHeroReady = () => {
   const [ready, setReady] = useState(false);

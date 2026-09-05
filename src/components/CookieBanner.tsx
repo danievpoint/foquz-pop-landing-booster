@@ -9,6 +9,7 @@ import {
 } from "@/lib/consent";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotLemon from "@/assets/mascot-lemon.png";
+import { heroReadyPromise } from "@/components/HeroSection";
 
 type View = "hidden" | "banner" | "settings";
 
