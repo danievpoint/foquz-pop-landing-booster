@@ -698,14 +698,14 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-1 flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+                <div className="mt-1 flex gap-1.5 overflow-x-auto scrollbar-hide">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-9 h-9 rounded-md overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
