@@ -242,7 +242,10 @@ section[id] {
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ---- Klaviyo Newsletter-Popup an das FOQUZ-Design angleichen ---- */
-.foquz-klaviyo-form {
+/* Die Selektoren greifen direkt am Klaviyo-Markup, damit das Layout schon
+   beim ersten Paint stimmt (kein Flackern, bevor JS Klassen ergänzt). */
+.foquz-klaviyo-form,
+form[class*="klaviyo-form"] {
   width: min(940px, calc(100vw - 48px)) !important;
   max-width: 940px !important;
   padding: 24px !important;
@@ -251,7 +254,8 @@ section[id] {
   align-items: stretch !important;
 }
 
-.foquz-klaviyo-form > div:first-child {
+.foquz-klaviyo-form > div:first-child,
+form[class*="klaviyo-form"] > div:first-child {
   width: 48% !important;
   min-width: 48% !important;
   margin: -24px 0 -24px -24px !important;
@@ -268,6 +272,7 @@ section[id] {
   width: 100% !important;
   max-width: none !important;
 }
+
 
 .foquz-klaviyo-dismiss-hidden {
   display: none !important;
@@ -328,16 +333,19 @@ section[id] {
     transform: none !important;
   }
 
-  .foquz-klaviyo-form {
+  .foquz-klaviyo-form,
+  form[class*="klaviyo-form"] {
     width: calc(100vw - 28px) !important;
     max-width: 360px !important;
     max-height: calc(100dvh - 28px) !important;
     padding: 0 16px 16px !important;
     flex-direction: column !important;
     overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
-  .foquz-klaviyo-form > div:first-child {
+  .foquz-klaviyo-form > div:first-child,
+  form[class*="klaviyo-form"] > div:first-child {
     width: calc(100% + 32px) !important;
     min-width: 0 !important;
     min-height: 0 !important;
@@ -346,6 +354,7 @@ section[id] {
     border-radius: 0 !important;
     flex: 0 0 auto !important;
   }
+
 
   .foquz-klaviyo-content {
     width: 100% !important;
