@@ -127,9 +127,6 @@ const HeroSection = () => {
 
         {/* === DESKTOP (lg+) — only animation removed === */}
         <div className="hidden lg:block">
-          {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
-          <div className="relative" style={{ height: "100px" }} aria-hidden="true" />
-
           <div
             className="relative w-full overflow-hidden -mt-[2px]"
             style={{
@@ -137,7 +134,7 @@ const HeroSection = () => {
               containerType: "inline-size",
             }}
           >
-            <HeroPromoBanner className="absolute left-0 right-0 top-0 lg:top-5" />
+            <HeroPromoBanner className="absolute left-0 right-0 top-[100px]" />
 
             <style>{`
               .hero-title {
@@ -179,7 +176,7 @@ const HeroSection = () => {
               loading="eager"
               decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-top"
-              style={{ transform: "scale(0.92)", transformOrigin: "top center" }}
+              style={{ transform: "translateX(3%) scale(0.92)", transformOrigin: "top center" }}
             />
 
             {/* Layer 2: Clouds overlay */}
@@ -194,7 +191,7 @@ const HeroSection = () => {
 
             {/* Layer 3: Text + CTAs */}
             <div className="absolute inset-0 z-10">
-              <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
+              <div className="h-full flex items-center" style={{ paddingTop: "100px", paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
                   <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
