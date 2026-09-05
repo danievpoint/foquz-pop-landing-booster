@@ -219,6 +219,12 @@ const NewsletterPopup = () => {
                   <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight mb-2">
                     250€ GEWINNEN + 10% RABATT
                   </h3>
+                  {!success && (
+                    <div className="inline-flex items-center gap-1.5 mx-auto mb-3 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-black comic-shadow">
+                      <Clock className="w-3.5 h-3.5" />
+                      NOCH {formatTime(timeLeft)} MINUTEN
+                    </div>
+                  )}
                   <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                     Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen. Zusätzlich bekommst du direkt <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung geschenkt.
                   </p>
