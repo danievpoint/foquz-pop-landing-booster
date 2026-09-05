@@ -964,7 +964,7 @@ const ProductDetail = () => {
 
             {/* Trust-Liste – Mobil horizontal/kompakt */}
             <ul className="mt-2 md:mt-6 flex flex-nowrap md:flex-col gap-x-2 md:gap-0 md:space-y-3 overflow-x-auto scrollbar-hide">
-              {trustList.map((t) => (
+              {trustList.slice(0, 2).map((t) => (
                 <li key={t} className="flex items-center gap-1 text-[10px] md:text-sm font-semibold leading-tight md:leading-relaxed md:items-start shrink-0">
                   <span
                     className="w-3.5 h-3.5 md:w-5 md:h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 md:mt-0.5"
