@@ -1042,7 +1042,7 @@ const ProductDetail = () => {
       )}
 
       {/* ---------- 2) SO GEHT'S ---------- */}
-      <section className="container mx-auto px-4 pb-8 md:pb-12">
+      <section className="container mx-auto px-4 pb-10 md:pb-14 mt-1">
         <SectionHeading>SO GEHT'S</SectionHeading>
         <div className="grid md:grid-cols-3 gap-3 md:gap-4">
           {HOW_TO_STEPS.map((step, i) => (
