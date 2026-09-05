@@ -100,7 +100,7 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
     }
   }, [play, gated, src]);
 
-  return (
+  const videoEl = (
     <video
       ref={setRef}
       src={src}
@@ -112,13 +112,33 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       controls={false}
       disablePictureInPicture
       controlsList="nodownload nofullscreen noremoteplayback"
-      preload={preload ?? "metadata"}
+      preload={preload ?? "auto"}
       onContextMenu={(e) => e.preventDefault()}
       onEnded={onEnded}
-      className={className}
+      className={poster ? "absolute inset-0 w-full h-full object-cover" : className}
       {...rest}
     />
   );
+
+  if (!poster) return videoEl;
+
+  // Poster zusätzlich als eigenes <img> darunter legen: es lädt sofort (eager,
+  // hohe Priorität) und verhindert das kurze weiße Aufblitzen, bevor das Video
+  // seinen ersten Frame malen kann.
+  return (
+    <div className={`relative ${className ?? ""}`}>
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      {videoEl}
+    </div>
+  );
+
 };
 
 export default AutoVideo;
