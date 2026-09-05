@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles } from "lucide-react";
+import { X, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { klaviyoIdentify } from "@/lib/klaviyo";
 import { useCart } from "@/contexts/CartContext";
@@ -17,6 +17,7 @@ export const NEWSLETTER_POPUP_ENABLED = true;
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 // Einheitliche Anzeigezeit (nach vollständigem Laden der Seite)
 const POPUP_DELAY_MS = 10000;
+const TIMER_DURATION_S = 5 * 60;
 // Falls Bild/Fonts auf schwachen Verbindungen haengen: spaetestens danach starten.
 const READY_FALLBACK_MS = 3000;
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
@@ -47,6 +48,7 @@ const NewsletterPopup = () => {
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
   const [shake, setShake] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(TIMER_DURATION_S);
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
@@ -54,6 +56,27 @@ const NewsletterPopup = () => {
   const mounted = useRef(false);
   const openedAt = useRef(0);
   useLockBodyScroll(visible);
+
+  const formatTime = useCallback((seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    setTimeLeft(TIMER_DURATION_S);
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [visible]);
 
   useEffect(() => {
     mounted.current = true;
@@ -196,6 +219,10 @@ const NewsletterPopup = () => {
                   <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight mb-2">
                     250€ GEWINNEN + 10% RABATT
                   </h3>
+                  <div className="inline-flex items-center gap-1.5 mx-auto mb-3 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-black comic-shadow">
+                    <Clock className="w-3.5 h-3.5" />
+                    {timeLeft === 0 ? "JETZT SICHERN" : `NOCH ${formatTime(timeLeft)} MINUTEN`}
+                  </div>
                   <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                     Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen. Zusätzlich bekommst du direkt <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung geschenkt.
                   </p>
