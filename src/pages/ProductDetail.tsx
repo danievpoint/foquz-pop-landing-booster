@@ -724,7 +724,7 @@ const ProductDetail = () => {
 
             {/* Desktop: Hauptbild + Thumbnails */}
             <div className="hidden lg:block">
-              <div className={`bg-white overflow-hidden ${comicCard} max-h-[62vh] aspect-square mx-auto`}>
+              <div className={`bg-white overflow-hidden ${comicCard} max-h-[68vh] aspect-square mx-auto`}>
                 {selectedImage ? (
                   <img
                     src={shopifyImageUrl(selectedImage, 1000)}
@@ -753,7 +753,7 @@ const ProductDetail = () => {
               </div>
 
               {galleryImages.length > 0 && (
-                <div className="mt-2 grid grid-cols-4 gap-3 mx-auto" style={{ maxWidth: "min(100%, 62vh)" }}>
+                <div className="mt-2 grid grid-cols-4 gap-3 mx-auto" style={{ maxWidth: "min(100%, 68vh)" }}>
                   <button
                     type="button"
                     onClick={() => setSelectedImage(null)}
@@ -788,7 +788,7 @@ const ProductDetail = () => {
 
           {/* ---------- Kaufbox ---------- */}
           <div className={`min-w-0 bg-white text-black p-5 md:p-7 ${comicCard}`}>
-            <h1 className="block w-full text-2xl sm:text-3xl lg:text-5xl font-black uppercase leading-tight relative break-words">
+            <h1 className="block w-full text-2xl sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
                 className="absolute left-0 right-0 bottom-0 h-2 lg:h-3 z-0"
@@ -1167,7 +1167,7 @@ const ProductDetail = () => {
       {/* ---------- 3c) BILD + TEXT ---------- */}
       <section className="container mx-auto px-4 pb-12 md:pb-16">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
-          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard}`}>
+          <div className={`w-full aspect-[4/3] overflow-hidden rounded-2xl ${comicCard} bg-white`}>
             <img
               src={shopifyImageUrl(lifestylePhoto, 900)}
               srcSet={shopifyImageSrcSet(lifestylePhoto, [600, 900, 1200])}
@@ -1175,7 +1175,7 @@ const ProductDetail = () => {
               alt="Person hält die FOQUZ Riechdose an die Nase"
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
 
