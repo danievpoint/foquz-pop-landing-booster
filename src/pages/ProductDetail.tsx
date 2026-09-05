@@ -793,25 +793,25 @@ const ProductDetail = () => {
             <h1 className="block w-full text-2xl sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
-                className="absolute left-0 right-0 bottom-0 h-2 lg:h-3 z-0"
+                className="absolute left-0 right-0 bottom-0 h-1.5 lg:h-3 z-0"
                 style={{ backgroundColor: YELLOW }}
               />
             </h1>
 
-            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-2 md:mt-4">
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-1.5 md:mt-4 leading-snug md:leading-normal">
               {product.desc}
             </p>
 
-            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-2 md:mt-3" />
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-1.5 md:mt-3" />
 
-            <div className="flex flex-wrap gap-2 mt-3 md:mt-5">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2.5 md:mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
-                  className="flex items-center gap-1.5 text-[10px] lg:text-xs font-black uppercase text-black px-3 py-1.5 rounded-full border-[3px] border-black"
+                  className="flex items-center gap-1 text-[9px] md:text-[10px] lg:text-xs font-black uppercase text-black px-2 md:px-3 py-1 md:py-1.5 rounded-full border-[2px] md:border-[3px] border-black"
                   style={{ backgroundColor: YELLOW }}
                 >
-                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                  <Icon className="w-3 h-3 md:w-4 md:h-4 text-black" strokeWidth={2} />
                   <span>{label}</span>
                 </span>
               ))}
