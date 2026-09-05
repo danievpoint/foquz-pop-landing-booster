@@ -790,21 +790,21 @@ const ProductDetail = () => {
 
           {/* ---------- Kaufbox ---------- */}
           <div className={`min-w-0 bg-white text-black p-3 md:p-7 ${comicCard}`}>
-            <h1 className="block w-full text-2xl sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
+            <h1 className="block w-full text-[1.375rem] sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
-                className="absolute left-0 right-0 bottom-0 h-1.5 lg:h-3 z-0"
+                className="absolute left-0 right-0 bottom-0 h-1 lg:h-3 z-0"
                 style={{ backgroundColor: YELLOW }}
               />
             </h1>
 
-            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-1.5 md:mt-4 leading-snug md:leading-normal">
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-1 md:mt-4 leading-snug md:leading-normal">
               {product.desc}
             </p>
 
-            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-1.5 md:mt-3" />
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-1 md:mt-3" />
 
-            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2.5 md:mt-5">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2 md:mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
