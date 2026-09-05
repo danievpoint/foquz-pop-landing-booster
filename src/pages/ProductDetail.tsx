@@ -854,7 +854,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Menge wählen */}
-            <div className="mt-7">
+            <div className="mt-4 md:mt-7">
               <h2 className="text-base lg:text-lg font-black uppercase mb-1">MENGE WÄHLEN</h2>
               <p className="text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
 
