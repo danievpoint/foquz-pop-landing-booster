@@ -125,27 +125,18 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* === DESKTOP (lg+) — unchanged from today's version === */}
+        {/* === DESKTOP (lg+) === */}
         <div className="hidden lg:block">
-          {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
-          <div className="relative" style={{ height: "100px" }} aria-hidden="true" />
-
           <div
-            className="relative w-full overflow-hidden -mt-[2px]"
+            className="relative w-full overflow-hidden"
             style={{
               aspectRatio: "1920 / 772",
               containerType: "inline-size",
             }}
           >
-            <HeroPromoBanner className="absolute left-0 right-0 top-0 lg:top-5" />
-
-
+            <HeroPromoBanner className="absolute left-0 right-0 top-[100px]" />
 
             <style>{`
-              @keyframes hero-float {
-                0%, 100% { transform: translateY(-6px); }
-                50% { transform: translateY(6px); }
-              }
               .hero-title {
                 display: flex;
                 flex-direction: column;
@@ -177,14 +168,14 @@ const HeroSection = () => {
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
 
-            {/* Layer 1: Foreground PNG (floats gently) */}
+            {/* Layer 1: Foreground PNG */}
             <img
               src={heroBgDesktop}
               alt=""
               aria-hidden="true"
               loading="eager"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-top animate-[hero-float_3.4s_ease-in-out_infinite]"
+              className="absolute inset-0 w-full h-full object-cover object-top"
               style={{ transform: "scale(0.92)", transformOrigin: "top center" }}
             />
 
@@ -200,7 +191,7 @@ const HeroSection = () => {
 
             {/* Layer 3: Text + CTAs */}
             <div className="absolute inset-0 z-10">
-              <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
+              <div className="h-full flex items-center" style={{ paddingBottom: "15%", paddingTop: "100px" }}>
                 <div style={{ paddingLeft: "4%" }}>
                   <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
