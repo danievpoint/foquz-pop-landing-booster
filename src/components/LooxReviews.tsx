@@ -4,16 +4,12 @@ interface LooxReviewsProps {
   productId: string;
 }
 
-interface LooxWindow {
-  LOOX?: {
-    showReviewForm?: (productId: string) => void;
-  };
-}
-
 /**
  * Loox-Bewertungen (Aggregat über alle Shop-Bewertungen).
  * Pro Seite existiert immer nur EIN #looxReviews Element.
- * Bei Client-Side-Routing wird das Widget neu initialisiert.
+ * Bewertungen können ausschließlich über die Loox-Einladungsmail nach
+ * einer echten Bestellung abgegeben werden – deshalb gibt es hier
+ * bewusst keinen "Bewertung schreiben"-Button.
  */
 const LooxReviews = ({ productId }: LooxReviewsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,24 +29,6 @@ const LooxReviews = ({ productId }: LooxReviewsProps) => {
     }, 100);
     return () => clearTimeout(t);
   }, [productId]);
-
-  const handleWriteReview = () => {
-    try {
-      const loox = (window as unknown as LooxWindow).LOOX;
-      if (loox?.showReviewForm) {
-        loox.showReviewForm(productId);
-        return;
-      }
-    } catch {
-      /* noop */
-    }
-    // Fallback für Adblocker / nicht geladenes Widget
-    window.open(
-      `https://loox.io/widget/CB2AJBwsHX/ugc/review-form?productId=${encodeURIComponent(productId)}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
 
   return (
     <section className="w-full py-12 md:py-16">
