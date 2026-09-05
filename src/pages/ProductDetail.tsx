@@ -644,7 +644,7 @@ const ProductDetail = () => {
         </Link>
       </div>
 
-      <section className="container mx-auto px-4 pb-6 lg:pb-24">
+      <section className="container mx-auto px-4 pb-2 md:pb-6 lg:pb-24">
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ---------- Galerie ---------- */}
           <div className="min-w-0 lg:sticky lg:top-28">
