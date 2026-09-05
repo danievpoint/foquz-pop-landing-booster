@@ -804,7 +804,7 @@ const ProductDetail = () => {
 
             <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-2 md:mt-3" />
 
-            <div className="flex flex-wrap gap-2 mt-5">
+            <div className="flex flex-wrap gap-2 mt-3 md:mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
@@ -820,7 +820,7 @@ const ProductDetail = () => {
             {!product.isBundle && (
             <>
             {/* Sorte wählen */}
-            <div className="mt-7">
+            <div className="mt-4 md:mt-7">
               <h2 className="text-base lg:text-lg font-black uppercase mb-3">SORTE WÄHLEN</h2>
               <div className="space-y-2.5">
                 {variants.map((v) => {
