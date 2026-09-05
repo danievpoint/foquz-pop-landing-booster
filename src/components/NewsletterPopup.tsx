@@ -10,10 +10,13 @@ import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotWatermelon from "@/assets/mascot-watermelon.png";
+import { heroReadyPromise } from "@/components/HeroSection";
 
 export const NEWSLETTER_POPUP_ENABLED = false;
 
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
+// Einheitliche Anzeigezeit (nach vollständigem Laden der Seite)
+const POPUP_DELAY_MS = 25000;
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
 
 const preloadImage = (src: string) =>
