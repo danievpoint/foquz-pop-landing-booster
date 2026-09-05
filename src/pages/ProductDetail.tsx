@@ -1136,7 +1136,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3c) BILD + TEXT ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-14 md:pb-20 mt-1">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
           <div className={`w-full aspect-square overflow-hidden rounded-2xl ${comicCard}`}>
             <img
