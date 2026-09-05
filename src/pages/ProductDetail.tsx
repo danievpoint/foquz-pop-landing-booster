@@ -653,17 +653,16 @@ const ProductDetail = () => {
               <div
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
-                className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "38vh" }}
+                className={`flex aspect-square overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
+                style={{ scrollbarWidth: "none" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "38vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full h-full snap-center">
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "38vh" }}
                       />
                     ) : (
                       <img
@@ -674,7 +673,6 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "38vh" }}
                       />
                     )}
                   </div>
@@ -698,7 +696,7 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-1 hidden md:flex gap-1.5 overflow-x-auto scrollbar-hide">
+                <div className="mt-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
