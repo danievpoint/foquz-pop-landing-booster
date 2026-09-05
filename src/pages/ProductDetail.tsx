@@ -949,8 +949,8 @@ const ProductDetail = () => {
               </span>
             </div>
 
-            {/* CTA – Mobil direkt sichtbar */}
-            <div className="mt-3 md:hidden">
+            {/* CTA – Mobil direkt sichtbar (Referenz für Sticky-Bar) */}
+            <div ref={ctaRef} className="mt-3 md:hidden">
               <button
                 type="button"
                 onClick={handleAddToCart}
@@ -981,8 +981,8 @@ const ProductDetail = () => {
               <PaymentLogos compact />
             </div>
 
-            {/* CTA – Desktop + Referenz für Sticky-Bar */}
-            <div ref={ctaRef} className="hidden md:block mt-2 md:mt-3">
+            {/* CTA – Desktop */}
+            <div className="hidden md:block mt-2 md:mt-3">
               <button
                 type="button"
                 onClick={handleAddToCart}
