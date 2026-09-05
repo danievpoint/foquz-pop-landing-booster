@@ -125,16 +125,19 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* === DESKTOP (lg+) === */}
+        {/* === DESKTOP (lg+) — only animation removed === */}
         <div className="hidden lg:block">
+          {/* Spacer: MarqueeBanner(28px) + Navbar(~72px) */}
+          <div className="relative" style={{ height: "100px" }} aria-hidden="true" />
+
           <div
-            className="relative w-full overflow-hidden"
+            className="relative w-full overflow-hidden -mt-[2px]"
             style={{
               aspectRatio: "1920 / 772",
               containerType: "inline-size",
             }}
           >
-            <HeroPromoBanner className="absolute left-0 right-0 top-[100px]" />
+            <HeroPromoBanner className="absolute left-0 right-0 top-0 lg:top-5" />
 
             <style>{`
               .hero-title {
@@ -191,7 +194,7 @@ const HeroSection = () => {
 
             {/* Layer 3: Text + CTAs */}
             <div className="absolute inset-0 z-10">
-              <div className="h-full flex items-center" style={{ paddingBottom: "15%", paddingTop: "100px" }}>
+              <div className="h-full flex items-center" style={{ paddingBottom: "15%" }}>
                 <div style={{ paddingLeft: "4%" }}>
                   <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
                     <span className="block">KURZ RIECHEN.</span>
