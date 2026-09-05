@@ -19,6 +19,14 @@ const KlaviyoFormPolish = () => {
         if (!form.querySelector("input[type='email']")) return;
 
         form.classList.add(FORM_CLASS);
+        let popupParent: HTMLElement | null = form.parentElement;
+        while (popupParent && popupParent !== document.body) {
+          if (window.getComputedStyle(popupParent).transform !== "none") {
+            popupParent.classList.add("foquz-klaviyo-scale-reset");
+            break;
+          }
+          popupParent = popupParent.parentElement;
+        }
         const columns = Array.from(form.children).filter(
           (child): child is HTMLElement => child instanceof HTMLElement && child.tagName === "DIV",
         );

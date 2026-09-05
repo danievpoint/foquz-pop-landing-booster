@@ -322,6 +322,10 @@ section[id] {
 }
 
 @media (max-width: 767px) {
+  .foquz-klaviyo-scale-reset {
+    transform: none !important;
+  }
+
   .foquz-klaviyo-form {
     width: calc(100vw - 28px) !important;
     max-width: 360px !important;
