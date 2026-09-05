@@ -632,12 +632,12 @@ const ProductDetail = () => {
       />
       <Navbar />
 
-      <div className="pt-[6.5rem] md:pt-32" />
+      <div className="pt-16 md:pt-20" />
 
-      <div className="container mx-auto px-4 pt-4">
+      <div className="container mx-auto px-4 pt-2">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-4"
+          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-2"
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
@@ -645,7 +645,7 @@ const ProductDetail = () => {
       </div>
 
       <section className="container mx-auto px-4 pb-16 lg:pb-24">
-        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-14 items-start">
+        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ---------- Galerie ---------- */}
           <div className="min-w-0 lg:sticky lg:top-28">
             {/* Mobil: swipebar */}
