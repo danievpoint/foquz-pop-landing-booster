@@ -963,21 +963,21 @@ const ProductDetail = () => {
             </div>
 
             {/* Trust-Liste – Mobil horizontal/kompakt */}
-            <ul className="mt-3 md:mt-6 flex flex-wrap md:flex-col gap-2 md:gap-0 md:space-y-3">
+            <ul className="mt-2 md:mt-6 flex flex-wrap md:flex-col gap-x-3 gap-y-1 md:gap-0 md:space-y-3">
               {trustList.map((t) => (
-                <li key={t} className="flex items-center gap-2 text-xs md:text-sm font-semibold leading-snug md:leading-relaxed md:items-start">
+                <li key={t} className="flex items-center gap-1.5 text-[10px] md:text-sm font-semibold leading-tight md:leading-relaxed md:items-start">
                   <span
-                    className="w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 md:mt-0.5"
+                    className="w-3.5 h-3.5 md:w-5 md:h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 md:mt-0.5"
                     style={{ backgroundColor: YELLOW }}
                   >
-                    <Check className="w-2.5 h-2.5 md:w-3 md:h-3 text-black" strokeWidth={4} />
+                    <Check className="w-2 h-2 md:w-3 md:h-3 text-black" strokeWidth={4} />
                   </span>
-                  <span className="leading-snug md:leading-relaxed">{t}</span>
+                  <span className="leading-tight md:leading-relaxed">{t}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-3 pt-3 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
+            <div className="mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
               <PaymentLogos compact />
             </div>
 
