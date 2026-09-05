@@ -919,7 +919,7 @@ const ProductDetail = () => {
             )}
 
             {product.isBundle && (
-              <div className="flex flex-wrap items-baseline gap-2.5 mt-6">
+              <div className="flex flex-wrap items-baseline gap-2.5 mt-4 md:mt-6">
                 <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
                 {bundleProduct.originalPrice && (
                   <span className="text-base line-through text-black/50 font-semibold">
@@ -935,13 +935,13 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="flex items-center gap-2 mt-5">
+            <div className="flex items-center gap-2 mt-3 md:mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
 
             {/* Lieferzeit */}
-            <div className="flex items-center gap-2.5 mt-4 mb-1">
+            <div className="flex items-center gap-2.5 mt-3 md:mt-4 mb-1">
               <Truck className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} />
               <span className="font-black uppercase text-sm lg:text-base text-black">AUF LAGER</span>
               <span className="text-sm lg:text-base font-semibold text-black">
@@ -953,7 +953,7 @@ const ProductDetail = () => {
 
 
             {/* CTA */}
-            <div ref={ctaRef} className="mt-3">
+            <div ref={ctaRef} className="mt-2 md:mt-3">
               <button
                 type="button"
                 onClick={handleAddToCart}
@@ -966,7 +966,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Trust-Liste */}
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-4 md:mt-6 space-y-3">
               {trustList.map((t) => (
                 <li key={t} className="flex items-start gap-2.5 text-sm font-semibold leading-relaxed">
                   <span
@@ -980,7 +980,7 @@ const ProductDetail = () => {
               ))}
             </ul>
 
-            <div className="mt-5 pt-5 border-t-[3px] border-black/10">
+            <div className="mt-4 pt-4 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
               <PaymentLogos compact />
             </div>
           </div>
