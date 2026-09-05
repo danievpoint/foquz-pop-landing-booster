@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 
 import HeroPromoBanner from "@/components/HeroPromoBanner";
+import { scrollToSection } from "@/lib/scrollToSection";
 import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
 import heroGuyJarsAsset from "@/assets/hero-guy-jars.png.asset.json";
 import heroClouds from "@/assets/hero-clouds.svg";
@@ -106,12 +107,14 @@ const HeroSection = () => {
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                   <a
                     href="#bundle"
+                    onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
                     className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
                   >
                     POWER-BUNDLE HOLEN
                   </a>
                   <a
                     href="#sorten"
+                    onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
                     className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
                   >
                     EINZELN KAUFEN
@@ -209,12 +212,14 @@ const HeroSection = () => {
                   <div className="flex flex-row hero-btn-row">
                     <a
                       href="#bundle"
+                    onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
                       className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
                     >
                       POWER-BUNDLE HOLEN
                     </a>
                     <a
                       href="#sorten"
+                    onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
                       className="comic-btn hero-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
                     >
                       EINZELN KAUFEN
