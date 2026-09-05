@@ -854,11 +854,11 @@ const ProductDetail = () => {
             </div>
 
             {/* Menge wählen */}
-            <div className="mt-3 md:mt-7">
+            <div className="mt-2.5 md:mt-7">
               <h2 className="text-sm lg:text-lg font-black uppercase mb-0.5">MENGE WÄHLEN</h2>
-              <p className="text-[11px] md:text-xs font-bold text-black/60 uppercase mb-1.5 md:mb-3">Mehr Dosen, mehr Wolke 7</p>
+              <p className="text-[11px] md:text-xs font-bold text-black/60 uppercase mb-1 md:mb-3">Mehr Dosen, mehr Wolke 7</p>
 
-              <div className="space-y-1.5 md:space-y-3">
+              <div className="space-y-1 md:space-y-3">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
