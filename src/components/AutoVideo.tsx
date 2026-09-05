@@ -115,7 +115,7 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       preload={preload ?? "auto"}
       onContextMenu={(e) => e.preventDefault()}
       onEnded={onEnded}
-      className={className}
+      className={poster ? "absolute inset-0 w-full h-full object-cover" : className}
       {...rest}
     />
   );
@@ -133,13 +133,12 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        // @ts-expect-error fetchpriority is valid HTML
-        fetchpriority="high"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="relative w-full h-full">{videoEl}</div>
+      {videoEl}
     </div>
   );
+
 };
 
 export default AutoVideo;
