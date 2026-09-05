@@ -305,20 +305,22 @@ section[id] {
 
 .foquz-klaviyo-legal {
   font-family: "Barlow", ui-sans-serif, system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.45;
   text-align: center;
-  color: rgba(0, 0, 0, 0.65);
-  padding: 12px 8px 0;
+  color: #000;
+  padding: 14px 8px 0;
   width: 100%;
   flex: 0 0 auto;
 }
 
 .foquz-klaviyo-legal a {
-  font-weight: 800;
-  color: hsl(var(--foquz-peach));
+  font-weight: 900;
+  color: #000;
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 767px) {
@@ -352,7 +354,7 @@ section[id] {
   }
 
   .foquz-klaviyo-legal {
-    font-size: 10px;
+    font-size: 11px;
     padding: 9px 4px 0;
   }
 }

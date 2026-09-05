@@ -44,7 +44,7 @@ const KlaviyoFormPolish = () => {
         const legal = document.createElement("div");
         legal.className = LEGAL_CLASS;
         legal.innerHTML =
-          'Mit der Anmeldung stimmst du unseren <a href="/agb" target="_blank" rel="noopener">AGB</a> und der <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerkl\u00e4rung</a> zu. Abmeldung jederzeit m\u00f6glich.';
+          'Mit deiner Anmeldung akzeptierst du unsere <a href="/agb" target="_blank" rel="noopener noreferrer">AGB</a> und <a href="/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzerkl\u00e4rung</a>. Abmeldung jederzeit m\u00f6glich.';
         content.appendChild(legal);
       });
     };
