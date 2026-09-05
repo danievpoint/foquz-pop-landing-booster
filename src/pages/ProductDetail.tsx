@@ -724,22 +724,22 @@ const ProductDetail = () => {
 
             {/* Desktop: Hauptbild + Thumbnails */}
             <div className="hidden lg:block">
-              <div className={`bg-white overflow-hidden ${comicCard}`}>
+              <div className={`bg-white overflow-hidden ${comicCard} max-h-[480px] aspect-square mx-auto`}>
                 {selectedImage ? (
                   <img
                     src={shopifyImageUrl(selectedImage, 1000)}
                     srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
-                    sizes="600px"
+                    sizes="480px"
                     alt={product.name}
                     loading="eager"
                     decoding="async"
-                    className="w-full aspect-square object-cover"
+                    className="w-full h-full object-cover"
                   />
                 ) : product.video ? (
                   <AutoVideo
                     src={product.video}
                     poster={product.videoPoster ?? product.image}
-                    className="w-full aspect-square object-cover"
+                    className="w-full h-full object-cover"
                   />
                 ) : (
                   <img
@@ -747,13 +747,13 @@ const ProductDetail = () => {
                     alt={product.name}
                     loading="eager"
                     decoding="async"
-                    className="w-full aspect-square object-cover"
+                    className="w-full h-full object-cover"
                   />
                 )}
               </div>
 
               {galleryImages.length > 0 && (
-                <div className="mt-4 grid grid-cols-4 gap-3">
+                <div className="mt-3 grid grid-cols-4 gap-3 max-w-[480px] mx-auto">
                   <button
                     type="button"
                     onClick={() => setSelectedImage(null)}
