@@ -87,6 +87,16 @@
 html {
   /* Navbar ~68px mobile / ~72px desktop + 12px Puffer */
   scroll-padding-top: calc(var(--safe-area-top) + var(--marquee-height) + 84px) !important;
+  /* iOS: verhindert das sporadische Auto-Vergrößern von Text (Seite wirkt "herangezoomt") */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* iOS Safari zoomt beim Fokussieren automatisch rein, wenn Felder < 16px sind */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
 }
 
 section[id] {

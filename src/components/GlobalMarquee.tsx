@@ -38,7 +38,7 @@ const GlobalMarquee = () => {
   }, []);
 
   return (
-    <div ref={ref} className="relative z-[10001]" style={{ paddingTop: "var(--safe-area-top)" }}>
+    <div ref={ref} className="relative z-[9998]" style={{ paddingTop: "var(--safe-area-top)" }}>
       <MarqueeBar />
     </div>
   );

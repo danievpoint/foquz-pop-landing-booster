@@ -91,7 +91,7 @@ const NewsletterSection = () => {
               {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
-          <label className="flex items-start gap-2 text-xs text-primary-foreground/80 max-w-md mx-auto text-left nl-fine cursor-pointer">
+          <label className="flex items-start gap-2 font-barlow text-xs text-primary-foreground/80 max-w-md mx-auto text-left leading-snug nl-fine cursor-pointer">
             <input
               type="checkbox"
               checked={consent}
@@ -100,7 +100,9 @@ const NewsletterSection = () => {
               required
             />
             <span>
-              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Details: <a href="/datenschutz" className="underline text-white">Datenschutzerklärung</a>.
+              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Es gelten unsere{" "}
+              <a href="/agb" className="underline" style={{ color: "#f07e26" }}>AGB</a>{" "}und die{" "}
+              <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>.
             </span>
           </label>
         </div>
@@ -138,10 +140,10 @@ const NewsletterSection = () => {
                   <PartyPopper className="w-8 h-8 text-accent" />
                 </div>
 
-                <h3 className="text-2xl font-extrabold mb-2">
+                <h3 className="font-barlow text-2xl font-black uppercase tracking-tight mb-2">
                   {alreadySubscribed ? "Du bist bereits dabei! 💪" : "10% RABATT AKTIVIERT! 🎉"}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                <p className="font-barlow text-muted-foreground text-sm mb-6 leading-relaxed">
                   {alreadySubscribed
                     ? "Diese E-Mail ist schon für unseren Newsletter angemeldet."
                     : <>Dein Newsletter-Rabatt von <strong className="text-foreground">10%</strong> ist direkt aktiv und wird automatisch bei deiner Bestellung angewendet. Schau einfach in den Warenkorb!<br /><br /><span className="text-xs">Wir haben dir eine E-Mail geschickt: Bitte bestätige darin deine Anmeldung, damit wir dir den Newsletter schicken dürfen.</span></>
