@@ -654,16 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "32vh" }}
+                style={{ scrollbarWidth: "none", maxHeight: "28vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "32vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "28vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "32vh" }}
+                        style={{ maxHeight: "28vh" }}
                       />
                     ) : (
                       <img
@@ -674,14 +674,14 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "32vh" }}
+                        style={{ maxHeight: "28vh" }}
                       />
                     )}
                   </div>
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-2 mt-2">
+                <div className="flex justify-center gap-2 mt-1.5">
                   {slides.map((_, i) => (
                     <button
                       key={i}
@@ -698,7 +698,7 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-2 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                <div className="mt-1.5 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
