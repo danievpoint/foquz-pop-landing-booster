@@ -679,15 +679,15 @@ const ProductDetail = () => {
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-1.5 mt-1">
+                <div className="flex justify-center items-center gap-2 mt-3 py-1">
                   {slides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       aria-label={`Bild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className={`h-1.5 rounded-full border-2 border-black transition-all ${
-                        activeSlide === i ? "w-4" : "w-1.5"
+                      className={`h-2.5 rounded-full border-2 border-black transition-all shrink-0 ${
+                        activeSlide === i ? "w-6" : "w-2.5"
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
@@ -696,14 +696,14 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
+                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-12 h-12 rounded-md overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
@@ -720,6 +720,7 @@ const ProductDetail = () => {
                   ))}
                 </div>
               )}
+
             </div>
 
             {/* Desktop: Hauptbild + Thumbnails */}
