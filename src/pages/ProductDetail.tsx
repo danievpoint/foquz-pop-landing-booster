@@ -798,11 +798,11 @@ const ProductDetail = () => {
               />
             </h1>
 
-            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-4">
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-2 md:mt-4">
               {product.desc}
             </p>
 
-            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3" />
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-2 md:mt-3" />
 
             <div className="flex flex-wrap gap-2 mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
