@@ -949,11 +949,40 @@ const ProductDetail = () => {
               </span>
             </div>
 
+            {/* CTA – Mobil direkt sichtbar */}
+            <div className="mt-3 md:hidden">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="comic-btn w-full text-base py-3.5 font-black flex items-center justify-center gap-2"
+                style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                IN DEN WARENKORB – {formatPrice(selectedPrice)}
+              </button>
+            </div>
 
+            {/* Trust-Liste – Mobil horizontal/kompakt */}
+            <ul className="mt-3 md:mt-6 flex flex-wrap md:flex-col gap-2 md:gap-0 md:space-y-3">
+              {trustList.map((t) => (
+                <li key={t} className="flex items-center gap-2 text-xs md:text-sm font-semibold leading-snug md:leading-relaxed md:items-start">
+                  <span
+                    className="w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 md:mt-0.5"
+                    style={{ backgroundColor: YELLOW }}
+                  >
+                    <Check className="w-2.5 h-2.5 md:w-3 md:h-3 text-black" strokeWidth={4} />
+                  </span>
+                  <span className="leading-snug md:leading-relaxed">{t}</span>
+                </li>
+              ))}
+            </ul>
 
+            <div className="mt-3 pt-3 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
+              <PaymentLogos compact />
+            </div>
 
-            {/* CTA */}
-            <div ref={ctaRef} className="mt-2 md:mt-3">
+            {/* CTA – Desktop + Referenz für Sticky-Bar */}
+            <div ref={ctaRef} className="hidden md:block mt-2 md:mt-3">
               <button
                 type="button"
                 onClick={handleAddToCart}
@@ -963,25 +992,6 @@ const ProductDetail = () => {
                 <ShoppingBag className="w-5 h-5" />
                 IN DEN WARENKORB – {formatPrice(selectedPrice)}
               </button>
-            </div>
-
-            {/* Trust-Liste */}
-            <ul className="mt-4 md:mt-6 space-y-3">
-              {trustList.map((t) => (
-                <li key={t} className="flex items-start gap-2.5 text-sm font-semibold leading-relaxed">
-                  <span
-                    className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ backgroundColor: YELLOW }}
-                  >
-                    <Check className="w-3 h-3 text-black" strokeWidth={4} />
-                  </span>
-                  <span className="leading-relaxed">{t}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-4 pt-4 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
-              <PaymentLogos compact />
             </div>
           </div>
         </div>
