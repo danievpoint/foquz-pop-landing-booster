@@ -1005,7 +1005,7 @@ const ProductDetail = () => {
                 <h3 className="text-lg md:text-xl font-black uppercase leading-tight mb-2">
                   {product.name}
                 </h3>
-                <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+                <div className="space-y-4 text-sm md:text-base font-medium text-black/75 leading-[1.55] md:leading-relaxed">
                   {product.longDesc.paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
