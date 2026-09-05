@@ -820,7 +820,7 @@ const ProductDetail = () => {
             {!product.isBundle && (
             <>
             {/* Sorte wählen */}
-            <div className="mt-2.5 md:mt-7">
+            <div className="mt-2 md:mt-7">
               <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
               <div className="flex gap-1.5 overflow-x-auto scrollbar-hide md:block md:space-y-2">
                 {variants.map((v) => {
@@ -830,14 +830,14 @@ const ProductDetail = () => {
                       key={v.handle}
                       type="button"
                       onClick={() => navigate(`/produkt/${v.handle}`)}
-                      className={`shrink-0 flex flex-col items-center gap-1 p-1.5 md:p-2 rounded-xl md:rounded-2xl text-center transition-all md:w-full md:flex-row md:gap-2 md:text-left ${
+                      className={`shrink-0 flex flex-col items-center gap-0.5 p-1 md:p-2 rounded-lg md:rounded-2xl text-center transition-all md:w-full md:flex-row md:gap-2 md:text-left ${
                         active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
                       style={active ? { backgroundColor: YELLOW } : undefined}
                     >
-                      <img src={v.image} alt={v.name} className="w-10 h-10 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white" />
+                      <img src={v.image} alt={v.name} className="w-8 h-8 md:w-10 md:h-10 rounded-md md:rounded-lg object-cover border-2 border-black bg-white" />
                       <span className="min-w-0">
-                        <span className="block font-black uppercase text-[10px] md:text-sm whitespace-nowrap">{v.name}</span>
+                        <span className="block font-black uppercase text-[9px] md:text-sm whitespace-nowrap">{v.name}</span>
                         <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
                           {VARIANT_SUBTITLES[v.handle]}
                         </span>
