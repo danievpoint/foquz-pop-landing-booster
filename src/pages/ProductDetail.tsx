@@ -954,7 +954,7 @@ const ProductDetail = () => {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="comic-btn w-full text-base py-3.5 font-black flex items-center justify-center gap-2"
+                className="comic-btn w-full text-base py-3 font-black flex items-center justify-center gap-2"
                 style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
               >
                 <ShoppingBag className="w-5 h-5" />
