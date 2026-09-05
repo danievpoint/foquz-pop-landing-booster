@@ -820,9 +820,9 @@ const ProductDetail = () => {
             {!product.isBundle && (
             <>
             {/* Sorte wählen */}
-            <div className="mt-3 md:mt-7">
-              <h2 className="text-sm lg:text-lg font-black uppercase mb-1.5 md:mb-3">SORTE WÄHLEN</h2>
-              <div className="space-y-1.5 md:space-y-2">
+            <div className="mt-2.5 md:mt-7">
+              <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
+              <div className="space-y-1 md:space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
                   return (
