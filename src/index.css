@@ -253,9 +253,22 @@ section[id] {
 /* ---- iOS Safari: Browser-eigenes Play-Symbol auf Autoplay-Videos ausblenden ---- */
 video::-webkit-media-controls-start-playback-button,
 video::-webkit-media-controls-play-button,
-video::-webkit-media-controls {
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls,
+*::-webkit-media-controls-start-playback-button,
+*::-webkit-media-controls-play-button,
+*::-webkit-media-controls-overlay-play-button,
+*::-webkit-media-controls-panel,
+*::-webkit-media-controls {
   display: none !important;
   -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
 }
 
 video {
