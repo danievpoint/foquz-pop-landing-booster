@@ -999,7 +999,7 @@ const ProductDetail = () => {
 
       {/* ---------- 1) WAS IST ... ---------- */}
       {product.longDesc && (
-        <section className="container mx-auto px-4 -mt-10 md:mt-0 pb-12 md:pb-16">
+        <section className="container mx-auto px-4 -mt-8 md:mt-0 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
             <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
