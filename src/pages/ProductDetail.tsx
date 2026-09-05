@@ -657,12 +657,12 @@ const ProductDetail = () => {
                 style={{ scrollbarWidth: "none" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center">
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center max-h-[48vh]">
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
-                        className="w-full aspect-square object-cover"
+                        className="w-full h-full max-h-[48vh] object-cover"
                       />
                     ) : (
                       <img
@@ -672,22 +672,22 @@ const ProductDetail = () => {
                         alt={s.alt}
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
-                        className="w-full aspect-square object-cover"
+                        className="w-full h-full max-h-[48vh] object-cover"
                       />
                     )}
                   </div>
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-2 mt-3">
+                <div className="flex justify-center gap-2 mt-2">
                   {slides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       aria-label={`Bild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className={`h-2.5 rounded-full border-2 border-black transition-all ${
-                        activeSlide === i ? "w-6" : "w-2.5"
+                      className={`h-2 rounded-full border-2 border-black transition-all ${
+                        activeSlide === i ? "w-5" : "w-2"
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
@@ -696,14 +696,14 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                <div className="mt-2 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-[74px] h-[74px] rounded-lg overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
