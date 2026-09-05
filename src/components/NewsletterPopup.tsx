@@ -48,6 +48,7 @@ const NewsletterPopup = () => {
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
   const [shake, setShake] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(TIMER_DURATION_S);
   const { activateNewsletterDiscount, items, popupOpen, setPopupOpen } = useCart();
   const isMobile = useIsMobile();
   const triggered = useRef(false);
@@ -55,6 +56,27 @@ const NewsletterPopup = () => {
   const mounted = useRef(false);
   const openedAt = useRef(0);
   useLockBodyScroll(visible);
+
+  const formatTime = useCallback((seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    setTimeLeft(TIMER_DURATION_S);
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [visible]);
 
   useEffect(() => {
     mounted.current = true;
