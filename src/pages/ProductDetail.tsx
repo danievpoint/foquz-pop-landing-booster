@@ -632,19 +632,19 @@ const ProductDetail = () => {
       />
       <Navbar />
 
-      <div className="pt-16 md:pt-20" />
+      <div className="pt-20 md:pt-20" />
 
-      <div className="container mx-auto px-4 pt-2">
+      <div className="container mx-auto px-4 pt-4 md:pt-2">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-1 md:mb-2"
+          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-3 md:mb-2"
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
         </Link>
       </div>
 
-      <section className="container mx-auto px-4 pb-2 md:pb-6 lg:pb-24">
+      <section className="container mx-auto px-4 pb-5 md:pb-6 lg:pb-24">
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ---------- Galerie ---------- */}
           <div className="min-w-0 lg:sticky lg:top-28">
@@ -977,7 +977,7 @@ const ProductDetail = () => {
             </ul>
 
             <div className="mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
-              <PaymentLogos compact />
+              <PaymentLogos compact size="md" />
             </div>
 
             {/* CTA – Desktop */}
@@ -998,7 +998,7 @@ const ProductDetail = () => {
 
       {/* ---------- 1) WAS IST ... ---------- */}
       {product.longDesc && (
-        <section className="container mx-auto px-4 mt-8 md:mt-0 pb-12 md:pb-16">
+        <section className="container mx-auto px-4 mt-10 md:mt-0 pb-14 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
             <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
@@ -1042,7 +1042,7 @@ const ProductDetail = () => {
       )}
 
       {/* ---------- 2) SO GEHT'S ---------- */}
-      <section className="container mx-auto px-4 pb-8 md:pb-12">
+      <section className="container mx-auto px-4 pb-10 md:pb-14 mt-1">
         <SectionHeading>SO GEHT'S</SectionHeading>
         <div className="grid md:grid-cols-3 gap-3 md:gap-4">
           {HOW_TO_STEPS.map((step, i) => (
@@ -1061,7 +1061,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3) WAS DRIN IST ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-14 md:pb-20 mt-1">
         <SectionHeading>WAS DRIN IST</SectionHeading>
         <p className="text-sm md:text-base font-bold text-black/70 mb-5 -mt-3">
           Echte Kräuter, echtes Menthol. Ohne Nikotin, ohne Koffein.
@@ -1102,7 +1102,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
-      <section className="container mx-auto px-4 pb-8 md:pb-12">
+      <section className="container mx-auto px-4 pb-10 md:pb-14 mt-1">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
         <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-2">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
@@ -1136,7 +1136,7 @@ const ProductDetail = () => {
       </section>
 
       {/* ---------- 3c) BILD + TEXT ---------- */}
-      <section className="container mx-auto px-4 pb-12 md:pb-16">
+      <section className="container mx-auto px-4 pb-14 md:pb-20 mt-1">
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
           <div className={`w-full aspect-square overflow-hidden rounded-2xl ${comicCard}`}>
             <img
