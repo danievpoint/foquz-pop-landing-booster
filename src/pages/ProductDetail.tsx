@@ -705,7 +705,7 @@ const ProductDetail = () => {
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-10 h-10 rounded-md overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-9 h-9 rounded-md overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
