@@ -724,7 +724,7 @@ const ProductDetail = () => {
 
             {/* Desktop: Hauptbild + Thumbnails */}
             <div className="hidden lg:block">
-              <div className={`bg-white overflow-hidden ${comicCard} max-h-[62vh] aspect-square mx-auto`}>
+              <div className={`bg-white overflow-hidden ${comicCard} max-h-[68vh] aspect-square mx-auto`}>
                 {selectedImage ? (
                   <img
                     src={shopifyImageUrl(selectedImage, 1000)}
@@ -753,7 +753,7 @@ const ProductDetail = () => {
               </div>
 
               {galleryImages.length > 0 && (
-                <div className="mt-2 grid grid-cols-4 gap-3 mx-auto" style={{ maxWidth: "min(100%, 62vh)" }}>
+                <div className="mt-2 grid grid-cols-4 gap-3 mx-auto" style={{ maxWidth: "min(100%, 68vh)" }}>
                   <button
                     type="button"
                     onClick={() => setSelectedImage(null)}
