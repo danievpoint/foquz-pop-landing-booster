@@ -654,16 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "28vh" }}
+                style={{ scrollbarWidth: "none", maxHeight: "24vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "28vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "24vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "28vh" }}
+                        style={{ maxHeight: "24vh" }}
                       />
                     ) : (
                       <img
@@ -674,22 +674,22 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "28vh" }}
+                        style={{ maxHeight: "24vh" }}
                       />
                     )}
                   </div>
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-2 mt-1.5">
+                <div className="flex justify-center gap-1.5 mt-1">
                   {slides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       aria-label={`Bild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className={`h-2 rounded-full border-2 border-black transition-all ${
-                        activeSlide === i ? "w-5" : "w-2"
+                      className={`h-1.5 rounded-full border-2 border-black transition-all ${
+                        activeSlide === i ? "w-4" : "w-1.5"
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
@@ -698,16 +698,16 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-1.5 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                <div className="mt-1 flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-10 h-10 rounded-md overflow-hidden bg-white transition-all"
                       style={{
-                        border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
+                        border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
                       }}
                     >
