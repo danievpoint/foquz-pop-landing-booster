@@ -645,9 +645,9 @@ const ProductDetail = () => {
       </div>
 
       <section className="container mx-auto px-4 pb-16 lg:pb-24">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-start">
+        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-14 items-start">
           {/* ---------- Galerie ---------- */}
-          <div className="lg:sticky lg:top-28">
+          <div className="min-w-0 lg:sticky lg:top-28">
             {/* Mobil: swipebar */}
             <div className="lg:hidden">
               <div
@@ -787,8 +787,8 @@ const ProductDetail = () => {
           </div>
 
           {/* ---------- Kaufbox ---------- */}
-          <div className={`bg-white text-black p-5 md:p-7 ${comicCard}`}>
-            <h1 className="text-3xl lg:text-5xl font-black uppercase leading-none inline-block relative">
+          <div className={`min-w-0 bg-white text-black p-5 md:p-7 ${comicCard}`}>
+            <h1 className="block w-full text-2xl sm:text-3xl lg:text-5xl font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
                 className="absolute left-0 right-0 bottom-0 h-2 lg:h-3 z-0"

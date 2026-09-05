@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -193,9 +194,9 @@ const NewsletterPopup = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="fixed inset-0 z-[10006] flex items-center justify-center p-4 pointer-events-none"
+            className="fixed inset-0 z-[10006] flex items-center justify-center px-4 py-5 pointer-events-none"
           >
-            <div className="relative w-full max-w-sm rounded-3xl p-8 shadow-2xl border-2 border-foreground/10 bg-card text-center pointer-events-auto">
+            <div className="relative w-[calc(100vw-2rem)] max-w-[22rem] max-h-[calc(100dvh-2.5rem)] overflow-y-auto rounded-2xl border-[3px] border-foreground bg-card px-5 py-6 sm:p-7 text-center pointer-events-auto comic-shadow font-barlow">
               <button
                 onClick={dismiss}
                 className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
@@ -205,11 +206,11 @@ const NewsletterPopup = () => {
 
               {!success ? (
                 <>
-                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
-                  <h3 className="font-barlow text-2xl font-black uppercase tracking-tight mb-1">
+                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-2 drop-shadow-lg" />
+                  <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight mb-2">
                     250€ GEWINNEN + 10% RABATT
                   </h3>
-                  <p className="font-barlow text-muted-foreground text-sm mb-5 leading-relaxed">
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                     Melde dich für unseren Newsletter an und nimm bis Ende des Jahres am Gewinnspiel teil. Deine Chance: <strong className="text-foreground">250 €</strong> gewinnen. Zusätzlich bekommst du direkt <strong className="text-foreground">10% Rabatt</strong> auf deine erste Bestellung geschenkt.
                   </p>
                   <motion.div
@@ -226,7 +227,7 @@ const NewsletterPopup = () => {
                         className="h-12 bg-muted text-foreground border-none rounded-full px-5 text-base"
                         required
                       />
-                    <label className={`flex items-start gap-2 text-[11px] text-muted-foreground text-left leading-snug cursor-pointer rounded-xl p-2 transition-colors ${consentError ? "bg-destructive/10 border border-destructive/30" : ""}`}>
+                    <label className={`flex items-start gap-2 text-xs text-muted-foreground text-left leading-relaxed cursor-pointer rounded-lg p-2.5 transition-colors ${consentError ? "bg-destructive/10 border border-destructive/30" : "bg-muted/50 border border-foreground/15"}`}>
                       <input
                         type="checkbox"
                         checked={consent}
@@ -238,9 +239,10 @@ const NewsletterPopup = () => {
                         required
                       />
                       <span>
-                        Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Teilnahme am Gewinnspiel verarbeitet wird. Widerruf jederzeit möglich (Abmeldelink in jeder E-Mail). Es gelten unsere{" "}
-                        <a href="/agb" className="underline" style={{ color: "#f07e26" }}>AGB</a>{" "}und die{" "}
-                        <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>.
+                        Mit der Anmeldung erklärst du dich mit unseren{" "}
+                        <a href="/agb" className="font-bold text-foquz-peach underline underline-offset-2">AGB</a>{" "}und unserer{" "}
+                        <a href="/datenschutz" className="font-bold text-foquz-peach underline underline-offset-2">Datenschutzerklärung</a>{" "}
+                        einverstanden. Kein Spam · Jederzeit kündbar.
                       </span>
                     </label>
                     {consentError && (
@@ -252,34 +254,34 @@ const NewsletterPopup = () => {
                         Bitte setze den Haken, damit wir deine Gewinnspiel-Teilnahme bestätigen können.
                       </motion.p>
                     )}
-                    <button
+                    <Button
                       type="submit"
                       disabled={loading}
-                      className="comic-btn text-sm py-3 px-8 font-black bg-primary text-primary-foreground w-full"
+                      className="comic-btn h-auto w-full bg-secondary text-secondary-foreground py-3 px-5 text-sm font-black"
                     >
                       {loading ? "..." : "TEILNEHMEN & 10% SPAREN"}
-                    </button>
+                    </Button>
                   </form>
                   </motion.div>
                 </>
               ) : (
                 <>
-                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-32 h-32 mx-auto mb-3 drop-shadow-lg" />
-                  <h3 className="font-barlow text-2xl font-black uppercase tracking-tight mb-2">
+                  <img src={mascotWatermelon} alt="FOQUZ Mascot" className="w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-2 drop-shadow-lg" />
+                  <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight mb-2">
                     {alreadySubscribed ? "Du bist bereits dabei! 💪" : "DU NIMMST TEIL! 🎉"}
                   </h3>
-                  <p className="font-barlow text-muted-foreground text-sm mb-6 leading-relaxed">
+                  <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                     {alreadySubscribed
                       ? "Diese E-Mail ist schon für unseren Newsletter angemeldet. Dein 10% Rabattcode ist aktiv und wird im Warenkorb angewendet."
                       : "Vielen Dank! Du bist jetzt für das Gewinnspiel eingetragen und dein 10% Rabattcode ist direkt aktiv. Bitte bestätige noch kurz deine Anmeldung über den Link in unserer E-Mail, damit wir dir den Newsletter schicken dürfen."
                     }
                   </p>
-                  <button
+                  <Button
                     onClick={dismiss}
-                    className="comic-btn text-sm py-2.5 px-8 font-black bg-secondary text-secondary-foreground"
+                    className="comic-btn h-auto bg-secondary text-secondary-foreground py-2.5 px-8 text-sm font-black"
                   >
                     WEITER SHOPPEN
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
