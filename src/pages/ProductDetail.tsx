@@ -822,7 +822,7 @@ const ProductDetail = () => {
             {/* Sorte wählen */}
             <div className="mt-2.5 md:mt-7">
               <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
-              <div className="space-y-1 md:space-y-2">
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide md:block md:space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
                   return (
@@ -830,20 +830,20 @@ const ProductDetail = () => {
                       key={v.handle}
                       type="button"
                       onClick={() => navigate(`/produkt/${v.handle}`)}
-                      className={`w-full flex items-center gap-2 p-1.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all ${
+                      className={`shrink-0 flex flex-col items-center gap-1 p-1.5 md:p-2 rounded-xl md:rounded-2xl text-center transition-all md:w-full md:flex-row md:gap-2 md:text-left ${
                         active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
                       style={active ? { backgroundColor: YELLOW } : undefined}
                     >
-                      <img src={v.image} alt={v.name} className="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white" />
-                      <span className="flex-1 min-w-0">
-                        <span className="block font-black uppercase text-[11px] md:text-sm">{v.name}</span>
-                        <span className="block text-[10px] md:text-[11px] text-black/60 font-semibold">
+                      <img src={v.image} alt={v.name} className="w-10 h-10 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white" />
+                      <span className="min-w-0">
+                        <span className="block font-black uppercase text-[10px] md:text-sm whitespace-nowrap">{v.name}</span>
+                        <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
                           {VARIANT_SUBTITLES[v.handle]}
                         </span>
                       </span>
                       <span
-                        className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-full border-[2px] border-black shrink-0 ${
+                        className={`hidden md:block w-3.5 h-3.5 md:w-4 md:h-4 rounded-full border-[2px] border-black shrink-0 ${
                           active ? "bg-black" : "bg-white"
                         }`}
                       />
