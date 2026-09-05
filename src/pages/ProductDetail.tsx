@@ -789,7 +789,7 @@ const ProductDetail = () => {
           </div>
 
           {/* ---------- Kaufbox ---------- */}
-          <div className={`min-w-0 bg-white text-black p-3 md:p-7 ${comicCard}`}>
+          <div className={`min-w-0 bg-white text-black p-2 md:p-7 ${comicCard}`}>
             <h1 className="block w-full text-[1.375rem] sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
