@@ -821,8 +821,8 @@ const ProductDetail = () => {
             <>
             {/* Sorte wählen */}
             <div className="mt-4 md:mt-7">
-              <h2 className="text-base lg:text-lg font-black uppercase mb-3">SORTE WÄHLEN</h2>
-              <div className="space-y-2.5">
+              <h2 className="text-base lg:text-lg font-black uppercase mb-2 md:mb-3">SORTE WÄHLEN</h2>
+              <div className="space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
                   return (
@@ -830,20 +830,20 @@ const ProductDetail = () => {
                       key={v.handle}
                       type="button"
                       onClick={() => navigate(`/produkt/${v.handle}`)}
-                      className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-all ${
-                        active ? "border-[4px] border-black" : "border-[3px] border-black/30 hover:border-black bg-white"
+                      className={`w-full flex items-center gap-2.5 p-2 rounded-2xl text-left transition-all ${
+                        active ? "border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
                       style={active ? { backgroundColor: YELLOW } : undefined}
                     >
-                      <img src={v.image} alt={v.name} className="w-12 h-12 rounded-xl object-cover border-2 border-black bg-white" />
+                      <img src={v.image} alt={v.name} className="w-10 h-10 rounded-lg object-cover border-2 border-black bg-white" />
                       <span className="flex-1 min-w-0">
-                        <span className="block font-black uppercase text-sm">{v.name}</span>
-                        <span className="block text-xs text-black/60 font-semibold">
+                        <span className="block font-black uppercase text-xs md:text-sm">{v.name}</span>
+                        <span className="block text-[11px] text-black/60 font-semibold">
                           {VARIANT_SUBTITLES[v.handle]}
                         </span>
                       </span>
                       <span
-                        className={`w-5 h-5 rounded-full border-[3px] border-black shrink-0 ${
+                        className={`w-4 h-4 rounded-full border-[2px] border-black shrink-0 ${
                           active ? "bg-black" : "bg-white"
                         }`}
                       />
