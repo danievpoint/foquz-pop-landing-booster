@@ -654,16 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "40vh" }}
+                style={{ scrollbarWidth: "none", maxHeight: "32vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "40vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "32vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "40vh" }}
+                        style={{ maxHeight: "32vh" }}
                       />
                     ) : (
                       <img
@@ -674,7 +674,7 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "40vh" }}
+                        style={{ maxHeight: "32vh" }}
                       />
                     )}
                   </div>
@@ -705,7 +705,7 @@ const ProductDetail = () => {
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `3px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
