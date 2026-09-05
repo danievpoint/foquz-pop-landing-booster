@@ -679,15 +679,15 @@ const ProductDetail = () => {
                 ))}
               </div>
               {slides.length > 1 && (
-                <div className="flex justify-center gap-1.5 mt-1">
+                <div className="flex justify-center items-center gap-2 mt-3 py-1">
                   {slides.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       aria-label={`Bild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className={`h-1.5 rounded-full border-2 border-black transition-all ${
-                        activeSlide === i ? "w-4" : "w-1.5"
+                      className={`h-2.5 rounded-full border-2 border-black transition-all shrink-0 ${
+                        activeSlide === i ? "w-6" : "w-2.5"
                       }`}
                       style={{ backgroundColor: activeSlide === i ? YELLOW : "#fff" }}
                     />
@@ -696,14 +696,14 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
+                <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
                       type="button"
                       aria-label={`Vorschaubild ${i + 1}`}
                       onClick={() => goToSlide(i)}
-                      className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-white transition-all"
+                      className="shrink-0 w-12 h-12 rounded-md overflow-hidden bg-white transition-all"
                       style={{
                         border: activeSlide === i ? `2px solid ${YELLOW}` : "2px solid #000",
                         boxShadow: activeSlide === i ? "2px 2px 0 0 #000" : "none",
@@ -720,6 +720,7 @@ const ProductDetail = () => {
                   ))}
                 </div>
               )}
+
             </div>
 
             {/* Desktop: Hauptbild + Thumbnails */}
@@ -796,13 +797,13 @@ const ProductDetail = () => {
               />
             </h1>
 
-            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-1 md:mt-4 leading-snug md:leading-normal">
+            <p className="whitespace-pre-line text-sm lg:text-base font-semibold text-black/70 mt-3 md:mt-4 leading-relaxed">
               {product.desc}
             </p>
 
-            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-1 md:mt-3" />
+            <LooxRating productId={LOOX_SHOP_AGGREGATE_ID} className="mt-3 md:mt-3" />
 
-            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2 md:mt-5">
+            <div className="flex flex-wrap gap-2 md:gap-2 mt-4 md:mt-5">
               {trustPillsWithIcons.map(({ label, icon: Icon }) => (
                 <span
                   key={label}
@@ -818,8 +819,8 @@ const ProductDetail = () => {
             {!product.isBundle && (
             <>
             {/* Sorte wählen */}
-            <div className="mt-2 md:mt-7">
-              <h2 className="text-sm lg:text-lg font-black uppercase mb-1 md:mb-3">SORTE WÄHLEN</h2>
+            <div className="mt-6 md:mt-7">
+              <h2 className="text-sm lg:text-lg font-black uppercase mb-2.5 md:mb-3">SORTE WÄHLEN</h2>
               <div className="flex flex-col gap-2 md:block md:space-y-2">
                 {variants.map((v) => {
                   const active = v.handle === (product.isBundle ? undefined : product.handle);
@@ -852,15 +853,15 @@ const ProductDetail = () => {
             </div>
 
             {/* Menge wählen */}
-            <div className="mt-2 md:mt-7">
-              <h2 className="text-sm lg:text-lg font-black uppercase mb-0.5">MENGE WÄHLEN</h2>
+            <div className="mt-6 md:mt-7">
+              <h2 className="text-sm lg:text-lg font-black uppercase mb-2.5 md:mb-0.5">MENGE WÄHLEN</h2>
               <p className="hidden md:block text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
 
-              <div className="grid grid-cols-2 gap-2 md:grid-cols-1 md:space-y-3">
+              <div className="grid grid-cols-2 gap-3 mt-3 md:mt-0 md:grid-cols-1 md:space-y-3">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
-                  className={`flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
+                  className={`flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-2.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
                     option === "single" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "single" ? { backgroundColor: YELLOW } : undefined}
@@ -880,7 +881,7 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={() => setOption("bundle")}
-                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-1.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
+                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-2.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
                     option === "bundle" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                   }`}
                   style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
