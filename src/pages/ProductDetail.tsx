@@ -935,22 +935,22 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="flex items-center gap-2 mt-3 md:mt-5">
+            <div className="flex items-center gap-2 mt-2 md:mt-5">
               <StockBadge available={isAvailable(selectedProduct.name)} />
               <span className="text-[11px] text-black/50 font-semibold">inkl. MwSt.</span>
             </div>
 
             {/* Lieferzeit */}
-            <div className="flex items-center gap-2.5 mt-3 md:mt-4 mb-1">
-              <Truck className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} />
-              <span className="font-black uppercase text-sm lg:text-base text-black">AUF LAGER</span>
-              <span className="text-sm lg:text-base font-semibold text-black">
+            <div className="flex items-center gap-2.5 mt-2 md:mt-4 mb-1">
+              <Truck className="w-4 h-4 md:w-5 md:h-5 text-black shrink-0" strokeWidth={2.5} />
+              <span className="font-black uppercase text-xs md:text-sm lg:text-base text-black">AUF LAGER</span>
+              <span className="text-xs md:text-sm lg:text-base font-semibold text-black">
                 in 2 bis 5 Werktagen bei dir
               </span>
             </div>
 
             {/* CTA – Mobil direkt sichtbar (Referenz für Sticky-Bar) */}
-            <div ref={ctaRef} className="mt-3 md:hidden">
+            <div ref={ctaRef} className="mt-2 md:hidden">
               <button
                 type="button"
                 onClick={handleAddToCart}
