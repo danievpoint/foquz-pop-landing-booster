@@ -654,16 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "12vh" }}
+                style={{ scrollbarWidth: "none", maxHeight: "10vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "12vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "10vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "12vh" }}
+                        style={{ maxHeight: "10vh" }}
                       />
                     ) : (
                       <img
@@ -674,7 +674,7 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "12vh" }}
+                        style={{ maxHeight: "10vh" }}
                       />
                     )}
                   </div>
