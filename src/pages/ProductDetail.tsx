@@ -724,12 +724,12 @@ const ProductDetail = () => {
 
             {/* Desktop: Hauptbild + Thumbnails */}
             <div className="hidden lg:block">
-              <div className={`bg-white overflow-hidden ${comicCard} max-h-[480px] aspect-square mx-auto`}>
+              <div className={`bg-white overflow-hidden ${comicCard} max-h-[62vh] aspect-square mx-auto`}>
                 {selectedImage ? (
                   <img
                     src={shopifyImageUrl(selectedImage, 1000)}
                     srcSet={shopifyImageSrcSet(selectedImage, [600, 800, 1200])}
-                    sizes="480px"
+                    sizes="(max-width: 1280px) 45vw, 600px"
                     alt={product.name}
                     loading="eager"
                     decoding="async"
@@ -753,7 +753,7 @@ const ProductDetail = () => {
               </div>
 
               {galleryImages.length > 0 && (
-                <div className="mt-3 grid grid-cols-4 gap-3 max-w-[480px] mx-auto">
+                <div className="mt-2 grid grid-cols-4 gap-3 mx-auto" style={{ maxWidth: "min(100%, 62vh)" }}>
                   <button
                     type="button"
                     onClick={() => setSelectedImage(null)}
