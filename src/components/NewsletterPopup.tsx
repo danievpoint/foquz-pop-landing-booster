@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles } from "lucide-react";
+import { X, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { klaviyoIdentify } from "@/lib/klaviyo";
 import { useCart } from "@/contexts/CartContext";
@@ -17,6 +17,7 @@ export const NEWSLETTER_POPUP_ENABLED = true;
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 // Einheitliche Anzeigezeit (nach vollständigem Laden der Seite)
 const POPUP_DELAY_MS = 10000;
+const TIMER_DURATION_S = 5 * 60;
 // Falls Bild/Fonts auf schwachen Verbindungen haengen: spaetestens danach starten.
 const READY_FALLBACK_MS = 3000;
 const BUNDLE_SHOWN_KEY = "foquz_bundle_popup_shown_at";
