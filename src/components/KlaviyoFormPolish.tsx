@@ -7,21 +7,37 @@ import { useEffect } from "react";
  *  - Rechtlicher Hinweis mit Links zu AGB und Datenschutzerklärung
  * Beides funktioniert auf Desktop und Mobil, unabhängig vom Formularlayout.
  */
-const LEGAL_ID = "foquz-klaviyo-legal";
+const LEGAL_CLASS = "foquz-klaviyo-legal";
+const FORM_CLASS = "foquz-klaviyo-form";
+const CONTENT_CLASS = "foquz-klaviyo-content";
 
 const KlaviyoFormPolish = () => {
   useEffect(() => {
     const addLegal = () => {
-      const forms = document.querySelectorAll<HTMLElement>("[class*='klaviyo-form']");
+      const forms = document.querySelectorAll<HTMLFormElement>("form[class*='klaviyo-form']");
       forms.forEach((form) => {
-        if (!form.querySelector("form") && !form.querySelector("input[type='email']")) return;
-        if (form.querySelector(`#${LEGAL_ID}`)) return;
-        const el = document.createElement("div");
-        el.id = LEGAL_ID;
-        el.className = "foquz-klaviyo-legal";
-        el.innerHTML =
+        if (!form.querySelector("input[type='email']")) return;
+
+        form.classList.add(FORM_CLASS);
+        const columns = Array.from(form.children).filter(
+          (child): child is HTMLElement => child instanceof HTMLElement && child.tagName === "DIV",
+        );
+        const content = columns.find((column) => column.querySelector("input[type='email']"));
+        content?.classList.add(CONTENT_CLASS);
+
+        form.querySelectorAll<HTMLButtonElement>("button").forEach((button) => {
+          if (button.textContent?.trim().toLocaleLowerCase("de-DE") === "nein danke") {
+            const row = button.closest<HTMLElement>("[data-testid='form-row']");
+            (row ?? button).classList.add("foquz-klaviyo-dismiss-hidden");
+          }
+        });
+
+        if (!content || content.querySelector(`.${LEGAL_CLASS}`)) return;
+        const legal = document.createElement("div");
+        legal.className = LEGAL_CLASS;
+        legal.innerHTML =
           'Mit der Anmeldung stimmst du unseren <a href="/agb" target="_blank" rel="noopener">AGB</a> und der <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerkl\u00e4rung</a> zu. Abmeldung jederzeit m\u00f6glich.';
-        form.appendChild(el);
+        content.appendChild(legal);
       });
     };
 
