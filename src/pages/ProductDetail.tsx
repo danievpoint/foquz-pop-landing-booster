@@ -1093,24 +1093,24 @@ const ProductDetail = () => {
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
       <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
-        <div className="space-y-2.5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-2">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-            <div key={feature} className={`bg-white text-black p-3 ${comicCard}`}>
-              <p className="text-[11px] font-black uppercase tracking-wide mb-2">{feature}</p>
-              <div className="grid md:grid-cols-2 gap-2">
+            <div key={feature} className={`bg-white text-black p-2.5 ${comicCard}`}>
+              <p className="text-[11px] font-black uppercase tracking-wide mb-1.5">{feature}</p>
+              <div className="grid md:grid-cols-2 gap-1.5">
                 <div
-                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2"
+                  className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2 py-1.5"
                   style={{ backgroundColor: YELLOW }}
                 >
                   <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                  <span className="text-[13px] font-semibold leading-snug">
+                  <span className="text-xs font-semibold leading-snug">
                     <span className="block text-[10px] font-black uppercase mb-0.5">FOQUZ</span>
                     {foquz}
                   </span>
                 </div>
-                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2 bg-white">
+                <div className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2 py-1.5 bg-white">
                   <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                  <span className="text-[13px] font-semibold text-black/70 leading-snug">
+                  <span className="text-xs font-semibold text-black/70 leading-snug">
                     <span className="block text-[10px] font-black uppercase text-black mb-0.5">Thailand-Dose</span>
                     {other}
                   </span>
