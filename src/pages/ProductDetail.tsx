@@ -698,7 +698,7 @@ const ProductDetail = () => {
               )}
 
               {slides.length > 1 && (
-                <div className="mt-1 flex gap-1.5 overflow-x-auto scrollbar-hide">
+                <div className="mt-1 hidden md:flex gap-1.5 overflow-x-auto scrollbar-hide">
                   {slides.map((s, i) => (
                     <button
                       key={`thumb-${s.url}-${i}`}
