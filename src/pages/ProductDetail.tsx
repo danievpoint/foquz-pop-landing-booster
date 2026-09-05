@@ -990,7 +990,7 @@ const ProductDetail = () => {
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
           <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-6 lg:gap-10 items-start">
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_280px] gap-6 lg:gap-10 items-start">
               <div>
                 <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3">
                   {product.name}
@@ -1004,21 +1004,24 @@ const ProductDetail = () => {
 
               <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
                 {[
-                  { icon: Timer, label: "3 Sekunden" },
-                  { icon: Wind, label: "Nur riechen" },
-                  { icon: Ban, label: "Ohne Nikotin" },
-                ].map(({ icon: Icon, label }) => (
+                  { icon: Timer, label: "3 Sekunden", sub: "schneller Kick" },
+                  { icon: Wind, label: "Nur riechen", sub: "kein Schnupfen" },
+                  { icon: Ban, label: "Ohne Nikotin", sub: "keine Sucht" },
+                ].map(({ icon: Icon, label, sub }) => (
                   <div
                     key={label}
-                    className="flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-3 text-center lg:text-left border-[3px] border-black rounded-2xl px-3 py-3"
+                    className="flex flex-col items-center text-center gap-2 border-[3px] border-black rounded-2xl px-3 py-4"
+                    style={{ backgroundColor: YELLOW }}
                   >
                     <span
-                      className="w-9 h-9 rounded-full border-[3px] border-black flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: YELLOW }}
+                      className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
                     >
-                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
+                      <Icon className="w-5 h-5 text-black" strokeWidth={2.5} />
                     </span>
-                    <span className="text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
+                    <div>
+                      <span className="block text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
+                      <span className="block text-[10px] md:text-xs font-bold text-black/70 leading-snug">{sub}</span>
+                    </div>
                   </div>
                 ))}
               </div>
