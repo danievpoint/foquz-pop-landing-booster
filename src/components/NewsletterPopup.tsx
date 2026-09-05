@@ -86,47 +86,23 @@ const NewsletterPopup = () => {
     setPopupOpen(true);
   }, [canShow, setPopupOpen]);
 
-  // Desktop: Exit Intent (erst nach 8s scharf, damit kein Fehlauslöser beim Laden)
+  // Einheitlich auf Desktop & Mobil: fester Timer, gestartet erst wenn die Seite geladen ist.
   useEffect(() => {
-    if (isMobile) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
 
-    let armed = false;
-    const armTimer = setTimeout(() => {
-      armed = true;
-    }, 8000);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let cancelled = false;
 
-    const handler = (e: MouseEvent) => {
-      if (!armed) return;
-      if (e.clientY < 0) trigger();
-    };
-    document.documentElement.addEventListener("mouseleave", handler);
-    return () => {
-      clearTimeout(armTimer);
-      document.documentElement.removeEventListener("mouseleave", handler);
-    };
-  }, [isMobile, items.length, popupOpen, trigger]);
-
-  // Mobile: 25s timer OR 55% scroll
-  useEffect(() => {
-    if (!isMobile) return;
-    if (sessionStorage.getItem(STORAGE_KEY)) return;
-
-    const timer = setTimeout(() => trigger(), 25000);
-
-    const scrollHandler = () => {
-      const docHeight = document.documentElement.scrollHeight;
-      const viewportHeight = window.innerHeight;
-      const scrolled = window.scrollY / (docHeight - viewportHeight);
-      if (scrolled >= 0.55) trigger();
-    };
-    window.addEventListener("scroll", scrollHandler, { passive: true });
+    heroReadyPromise.then(() => {
+      if (cancelled) return;
+      timer = setTimeout(() => trigger(), POPUP_DELAY_MS);
+    });
 
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", scrollHandler);
+      cancelled = true;
+      if (timer) clearTimeout(timer);
     };
-  }, [isMobile, items.length, popupOpen, trigger]);
+  }, [trigger]);
 
   const dismiss = () => {
     setVisible(false);
