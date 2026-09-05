@@ -654,16 +654,16 @@ const ProductDetail = () => {
                 ref={mobileTrackRef}
                 onScroll={onMobileScroll}
                 className={`flex overflow-x-auto snap-x snap-mandatory bg-white overflow-hidden ${comicCard}`}
-                style={{ scrollbarWidth: "none", maxHeight: "11vh" }}
+                style={{ scrollbarWidth: "none", maxHeight: "38vh" }}
               >
                 {slides.map((s, i) => (
-                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "11vh" }}>
+                  <div key={`${s.url}-${i}`} className="min-w-full snap-center" style={{ maxHeight: "38vh" }}>
                     {i === 0 && product.video && !s.shopify ? (
                       <AutoVideo
                         src={product.video}
                         poster={product.videoPoster ?? product.image}
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "11vh" }}
+                        style={{ maxHeight: "38vh" }}
                       />
                     ) : (
                       <img
@@ -674,7 +674,7 @@ const ProductDetail = () => {
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
                         className="w-full h-full object-cover"
-                        style={{ maxHeight: "11vh" }}
+                        style={{ maxHeight: "38vh" }}
                       />
                     )}
                   </div>
@@ -789,7 +789,7 @@ const ProductDetail = () => {
           </div>
 
           {/* ---------- Kaufbox ---------- */}
-          <div className={`min-w-0 bg-white text-black p-2 md:p-7 ${comicCard}`}>
+          <div className={`min-w-0 bg-white text-black p-4 md:p-7 ${comicCard}`}>
             <h1 className="block w-full text-[1.375rem] sm:text-3xl lg:text-[2.75rem] font-black uppercase leading-tight relative break-words">
               <span className="relative z-10">{product.name}</span>
               <span
@@ -977,7 +977,7 @@ const ProductDetail = () => {
               ))}
             </ul>
 
-            <div className="hidden md:block mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
+            <div className="mt-2 pt-2 md:mt-5 md:pt-5 border-t-[3px] border-black/10">
               <PaymentLogos compact />
             </div>
 
