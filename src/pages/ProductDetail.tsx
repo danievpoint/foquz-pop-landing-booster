@@ -982,7 +982,7 @@ const ProductDetail = () => {
             </div>
 
             {/* CTA – Desktop */}
-            <div className="mt-2 md:mt-3">
+            <div className="hidden md:block mt-2 md:mt-3">
               <button
                 type="button"
                 onClick={handleAddToCart}
