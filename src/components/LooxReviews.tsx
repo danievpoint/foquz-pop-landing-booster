@@ -58,16 +58,6 @@ const LooxReviews = ({ productId }: LooxReviewsProps) => {
         <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
           DAS SAGEN UNSERE KUNDEN
         </h2>
-        <div className="flex justify-center mb-6 md:mb-8">
-          <button
-            type="button"
-            onClick={handleWriteReview}
-            className="comic-btn text-sm md:text-base px-8 py-3 md:px-10 md:py-4"
-            style={{ backgroundColor: "#FFD11A", color: "#000", borderWidth: 3 }}
-          >
-            BEWERTUNG SCHREIBEN
-          </button>
-        </div>
         <div
           key={productId}
           ref={containerRef}
