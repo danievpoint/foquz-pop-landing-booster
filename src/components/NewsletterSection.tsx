@@ -91,7 +91,7 @@ const NewsletterSection = () => {
               {loading ? "..." : "JOIN THE CLOUD"}
             </Button>
           </form>
-          <label className="flex items-start gap-2 font-barlow text-xs text-primary-foreground/80 max-w-md mx-auto text-left leading-snug nl-fine cursor-pointer">
+          <label className="flex items-start gap-2 font-barlow text-xs text-primary-foreground max-w-md mx-auto text-left leading-relaxed nl-fine cursor-pointer">
             <input
               type="checkbox"
               checked={consent}
@@ -100,9 +100,10 @@ const NewsletterSection = () => {
               required
             />
             <span>
-              Ich willige ein, dass meine E-Mail-Adresse zum Versand des Newsletters und zur Bereitstellung des Rabattcodes verarbeitet wird. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Abmeldelink in jeder E-Mail). Es gelten unsere{" "}
-              <a href="/agb" className="underline" style={{ color: "#f07e26" }}>AGB</a>{" "}und die{" "}
-              <a href="/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>.
+              Mit der Anmeldung erklärst du dich mit unseren{" "}
+              <a href="/agb" className="font-bold text-secondary underline underline-offset-2">AGB</a>{" "}und unserer{" "}
+              <a href="/datenschutz" className="font-bold text-secondary underline underline-offset-2">Datenschutzerklärung</a>{" "}
+              einverstanden. Kein Spam · Jederzeit kündbar.
             </span>
           </label>
         </div>
@@ -124,9 +125,9 @@ const NewsletterSection = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="fixed inset-0 z-[10004] flex items-center justify-center p-4 pointer-events-none"
+              className="fixed inset-0 z-[10004] flex items-center justify-center px-4 py-5 pointer-events-none"
             >
-              <div className="relative w-full max-w-sm rounded-3xl p-8 shadow-2xl border-2 border-foreground/10 bg-card text-center pointer-events-auto">
+              <div className="relative w-[calc(100vw-2rem)] max-w-[22rem] max-h-[calc(100dvh-2.5rem)] overflow-y-auto rounded-2xl border-[3px] border-foreground bg-card px-5 py-6 sm:p-7 text-center pointer-events-auto comic-shadow font-barlow">
                 <button
                   type="button"
                   aria-label="Popup schließen"
@@ -151,12 +152,12 @@ const NewsletterSection = () => {
                 </p>
 
 
-                <button
+                <Button
                   onClick={() => setShowPopup(false)}
-                  className="comic-btn text-sm py-2.5 px-8 font-black bg-secondary text-secondary-foreground"
+                  className="comic-btn h-auto bg-secondary text-secondary-foreground py-2.5 px-8 text-sm font-black"
                 >
                   WEITER SHOPPEN
-                </button>
+                </Button>
               </div>
             </motion.div>
           </>
