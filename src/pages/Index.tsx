@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
 import CookieBanner from "@/components/CookieBanner";
-import NewsletterPopup, { NEWSLETTER_POPUP_ENABLED } from "@/components/NewsletterPopup";
 
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
@@ -46,7 +45,6 @@ const Index = () => {
         </Suspense>
       </div>
       <CookieBanner />
-      {NEWSLETTER_POPUP_ENABLED && <NewsletterPopup />}
     </>
   );
 };
