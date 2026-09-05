@@ -989,20 +989,20 @@ const ProductDetail = () => {
       {product.longDesc && (
         <section className="container mx-auto px-4 pb-12 md:pb-16">
           <SectionHeading>WAS IST {product.name}</SectionHeading>
-          <div className={`bg-white text-black p-5 md:p-8 ${comicCard}`}>
-            <div className="grid lg:grid-cols-[minmax(0,1fr)_280px] gap-6 lg:gap-10 items-start">
+          <div className={`bg-white text-black p-4 md:p-6 ${comicCard}`}>
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-4 lg:gap-6 items-start">
               <div>
-                <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3">
+                <h3 className="text-lg md:text-xl font-black uppercase leading-tight mb-2">
                   {product.name}
                 </h3>
-                <div className="space-y-4 text-sm md:text-base font-medium text-black/75 leading-relaxed">
+                <div className="space-y-3 text-sm md:text-base font-medium text-black/75 leading-relaxed">
                   {product.longDesc.paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
+              <div className="grid grid-cols-3 lg:grid-cols-1 gap-2.5">
                 {[
                   { icon: Timer, label: "3 Sekunden", sub: "schneller Kick" },
                   { icon: Wind, label: "Nur riechen", sub: "kein Schnupfen" },
@@ -1010,13 +1010,13 @@ const ProductDetail = () => {
                 ].map(({ icon: Icon, label, sub }) => (
                   <div
                     key={label}
-                    className="flex flex-col items-center text-center gap-2 border-[3px] border-black rounded-2xl px-3 py-4"
+                    className="flex flex-col items-center text-center gap-1.5 border-[3px] border-black rounded-2xl px-2.5 py-3"
                     style={{ backgroundColor: YELLOW }}
                   >
                     <span
-                      className="w-11 h-11 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
+                      className="w-10 h-10 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white"
                     >
-                      <Icon className="w-5 h-5 text-black" strokeWidth={2.5} />
+                      <Icon className="w-4 h-4 text-black" strokeWidth={2.5} />
                     </span>
                     <div>
                       <span className="block text-xs md:text-sm font-black uppercase leading-snug">{label}</span>
