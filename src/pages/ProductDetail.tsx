@@ -637,14 +637,14 @@ const ProductDetail = () => {
       <div className="container mx-auto px-4 pt-2">
         <Link
           to="/#sorten"
-          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-2"
+          className="inline-flex items-center gap-1 text-sm font-bold text-black/70 hover:text-black transition-colors mb-1 md:mb-2"
         >
           <ChevronLeft className="w-4 h-4" />
           Alle Sorten
         </Link>
       </div>
 
-      <section className="container mx-auto px-4 pb-16 lg:pb-24">
+      <section className="container mx-auto px-4 pb-6 lg:pb-24">
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ---------- Galerie ---------- */}
           <div className="min-w-0 lg:sticky lg:top-28">
