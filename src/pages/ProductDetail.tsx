@@ -1093,12 +1093,11 @@ const ProductDetail = () => {
       {/* ---------- 3b) VERGLEICHSTABELLE ---------- */}
       <section className="container mx-auto px-4 pb-8 md:pb-12">
         <SectionHeading>FOQUZ ODER THAILAND-DOSE?</SectionHeading>
-        {/* Mobil: gestapelte Karten */}
-        <div className="lg:hidden space-y-2.5">
+        <div className="space-y-2.5">
           {COMPARISON_ROWS.map(([feature, foquz, other]) => (
             <div key={feature} className={`bg-white text-black p-3 ${comicCard}`}>
               <p className="text-[11px] font-black uppercase tracking-wide mb-2">{feature}</p>
-              <div className="space-y-2">
+              <div className="grid md:grid-cols-2 gap-2">
                 <div
                   className="flex items-start gap-2 border-[3px] border-black rounded-xl px-2.5 py-2"
                   style={{ backgroundColor: YELLOW }}
@@ -1119,48 +1118,6 @@ const ProductDetail = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Desktop: klassische Tabelle */}
-        <div className={`hidden lg:block bg-white text-black ${comicCard} overflow-hidden`}>
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr className="border-b-[3px] border-black">
-                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">Merkmal</th>
-                <th
-                  className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase border-x-[3px] border-black"
-                  style={{ backgroundColor: YELLOW }}
-                >
-                  FOQUZ
-                </th>
-                <th className="p-2.5 md:p-3 text-xs md:text-sm font-black uppercase">
-                  Klassische Schnupfdose aus Thailand
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARISON_ROWS.map(([feature, foquz, other]) => (
-                <tr key={feature} className="border-b-[3px] border-black/10 last:border-b-0 align-top">
-                  <td className="p-2.5 md:p-3 text-sm font-black leading-snug">{feature}</td>
-                  <td
-                    className="p-2.5 md:p-3 text-sm font-semibold border-x-[3px] border-black leading-snug"
-                    style={{ backgroundColor: YELLOW }}
-                  >
-                    <span className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-green-700 shrink-0 mt-0.5" strokeWidth={4} />
-                      <span className="leading-relaxed">{foquz}</span>
-                    </span>
-                  </td>
-                  <td className="p-2.5 md:p-3 text-sm font-semibold text-black/70 leading-snug">
-                    <span className="flex items-start gap-2">
-                      <span className="w-2 h-2 rounded-full bg-black/30 shrink-0 mt-1.5" />
-                      <span className="leading-relaxed">{other}</span>
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
         <p className="mt-3 text-xs font-medium text-black/50">
           Vergleich mit typischen importierten Schnupfdosen. Angebote einzelner Anbieter können abweichen.
