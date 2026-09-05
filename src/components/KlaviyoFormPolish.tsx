@@ -5,28 +5,37 @@ import { useEffect } from "react";
  * Skript). Diese Komponente passt es an das FOQUZ-Design an:
  *  - Buttons im Comic-Style (Barlow Black, schwarzer Rahmen + Schatten)
  *  - Rechtlicher Hinweis mit Links zu AGB und Datenschutzerklärung
- * Beides funktioniert auf Desktop und Mobil, unabhängig vom Formularlayout.
+ * Das Grundlayout kommt aus index.css und greift direkt am Klaviyo-Markup,
+ * damit beim Laden nichts kurz "springt".
  */
 const LEGAL_CLASS = "foquz-klaviyo-legal";
 const FORM_CLASS = "foquz-klaviyo-form";
 const CONTENT_CLASS = "foquz-klaviyo-content";
+const SCALE_RESET_CLASS = "foquz-klaviyo-scale-reset";
 
 const KlaviyoFormPolish = () => {
   useEffect(() => {
-    const addLegal = () => {
+    let frame = 0;
+    let running = false;
+
+    const polish = () => {
       const forms = document.querySelectorAll<HTMLFormElement>("form[class*='klaviyo-form']");
       forms.forEach((form) => {
         if (!form.querySelector("input[type='email']")) return;
 
         form.classList.add(FORM_CLASS);
-        let popupParent: HTMLElement | null = form.parentElement;
-        while (popupParent && popupParent !== document.body) {
-          if (window.getComputedStyle(popupParent).transform !== "none") {
-            popupParent.classList.add("foquz-klaviyo-scale-reset");
+
+        // Klaviyo skaliert das Popup auf Mobil per transform – einmal neutralisieren.
+        let parent: HTMLElement | null = form.parentElement;
+        while (parent && parent !== document.body) {
+          if (parent.classList.contains(SCALE_RESET_CLASS)) break;
+          if (window.getComputedStyle(parent).transform !== "none") {
+            parent.classList.add(SCALE_RESET_CLASS);
             break;
           }
-          popupParent = popupParent.parentElement;
+          parent = parent.parentElement;
         }
+
         const columns = Array.from(form.children).filter(
           (child): child is HTMLElement => child instanceof HTMLElement && child.tagName === "DIV",
         );
@@ -49,10 +58,32 @@ const KlaviyoFormPolish = () => {
       });
     };
 
-    addLegal();
-    const observer = new MutationObserver(addLegal);
+    // Eigene DOM-Schreibvorgänge dürfen den Observer nicht erneut auslösen
+    // (das führte auf Mobil zu Layout-Flackern beim Laden).
+    const schedule = () => {
+      if (running || frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        running = true;
+        observer.disconnect();
+        try {
+          polish();
+        } finally {
+          running = false;
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+      });
+    };
+
+    const observer = new MutationObserver(schedule);
+
+    polish();
     observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, []);
 
   return null;
