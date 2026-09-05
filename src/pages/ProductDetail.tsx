@@ -1073,17 +1073,17 @@ const ProductDetail = () => {
             ))}
           </div>
 
-          <div
-            className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-px border-[3px] border-black rounded-2xl overflow-hidden"
-            style={{ backgroundColor: "#000" }}
-          >
-            {trustPills.map((spec) => (
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {trustPillsWithIcons.map(({ label, icon: Icon }) => (
               <div
-                key={spec}
-                className="py-4 px-2 text-center text-[11px] md:text-xs font-black uppercase"
+                key={label}
+                className="flex items-center gap-2.5 border-[3px] border-black rounded-2xl px-3 py-3"
                 style={{ backgroundColor: YELLOW }}
               >
-                {spec}
+                <span className="w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center shrink-0 bg-white">
+                  <Icon className="w-4 h-4 text-black" strokeWidth={2} />
+                </span>
+                <span className="text-[11px] md:text-xs font-black uppercase leading-tight">{label}</span>
               </div>
             ))}
           </div>
