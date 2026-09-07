@@ -29,7 +29,7 @@ import DiscountRedirect from "./pages/DiscountRedirect";
 import ShopifyRedirectRoute from "./pages/ShopifyRedirectRoute";
 import NewsletterConfirmed from "./pages/NewsletterConfirmed";
 import Unsubscribe from "./pages/Unsubscribe";
-import KlaviyoFormPolish from "./components/KlaviyoFormPolish";
+
 
 
 const queryClient = new QueryClient();
@@ -41,7 +41,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <KlaviyoFormPolish />
+          
           <PullToRefresh>
             <BrowserRouter>
                 <ScrollToHash />

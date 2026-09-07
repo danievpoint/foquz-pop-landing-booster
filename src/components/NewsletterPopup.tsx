@@ -12,7 +12,8 @@ import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotWatermelon from "@/assets/mascot-watermelon.png";
 import { heroReadyPromise } from "@/components/HeroSection";
 
-export const NEWSLETTER_POPUP_ENABLED = true;
+// Deaktiviert: Die Newsletter-Anmeldung läuft jetzt über das Klaviyo-Popup.
+export const NEWSLETTER_POPUP_ENABLED = false;
 
 const STORAGE_KEY = "foquz_nl_popup_dismissed";
 // Einheitliche Anzeigezeit (nach vollständigem Laden der Seite)
