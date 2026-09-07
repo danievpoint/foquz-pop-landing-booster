@@ -241,14 +241,7 @@ section[id] {
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ---- Klaviyo Popups vollständig ausblenden ---- */
-/* Das Gewinnspiel-Popup überlagerte den Warenkorb-Button auf Produktseiten. */
-[class*="klaviyo-form"],
-[data-testid="POPUP"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+/* Klaviyo-Popups sind freigeschaltet (eigenes Newsletter-Popup ist deaktiviert). */
 
 /* ---- iOS Safari: Browser-eigenes Play-Symbol auf Autoplay-Videos ausblenden ---- */
 video::-webkit-media-controls-start-playback-button,
