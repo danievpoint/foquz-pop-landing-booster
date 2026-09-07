@@ -23,6 +23,7 @@ import ProductDetail from "./pages/ProductDetail";
 import ScrollToHash from "./components/ScrollToHash";
 import GlobalMarquee from "./components/GlobalMarquee";
 import AnalyticsTracker from "./components/AnalyticsTracker";
+import KlaviyoNewsletterBridge from "./components/KlaviyoNewsletterBridge";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DiscountRedirect from "./pages/DiscountRedirect";
