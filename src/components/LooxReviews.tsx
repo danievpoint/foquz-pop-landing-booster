@@ -36,11 +36,12 @@ const LooxReviews = ({ productId }: LooxReviewsProps) => {
         <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
           DAS SAGEN UNSERE KUNDEN
         </h2>
+        {/* Kein data-product-id: so zeigt Loox ALLE Shop-Bewertungen (Aggregat),
+            nicht nur die des aktuellen Produkts. */}
         <div
           key={productId}
           ref={containerRef}
           id="looxReviews"
-          data-product-id={productId}
           data-loox-aggregate
           data-write-btn="false"
         />
