@@ -49,7 +49,7 @@ const LIFESTYLE_FALLBACK_PHOTO =
 const formatPrice = (value: number) =>
   `${value.toFixed(2).replace(".", ",")}€`;
 
-const BundleBanner = () => {
+export const BundleBanner = () => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const { addToCart, isOpen: cartOpen } = useCart();
@@ -93,6 +93,7 @@ const BundleBanner = () => {
             style={{ backgroundColor: "#75559f" }}
           >
             <button
+              aria-label="Bundle-Angebot schließen"
               onClick={() => setDismissed(true)}
               className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors"
             >
