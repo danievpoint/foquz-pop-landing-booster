@@ -18,6 +18,7 @@ import B2BAnfragen from "./pages/B2BAnfragen";
 import Anleitung from "./pages/Anleitung";
 import HelpCenter from "./pages/HelpCenter";
 import Faq from "./pages/Faq";
+import PeachParty from "./pages/PeachParty";
 import ProductDetail from "./pages/ProductDetail";
 
 import ScrollToHash from "./components/ScrollToHash";
@@ -66,6 +67,8 @@ const App = () => {
                 <Route path="/anleitung" element={<Anleitung />} />
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
+                <Route path="/produkt/peach-party" element={<PeachParty />} />
+                <Route path="/produkte/peach-party" element={<PeachParty />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
                 
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />

@@ -268,3 +268,26 @@ video {
   -webkit-tap-highlight-color: transparent;
 }
 
+
+/* Concept typography is scoped to the product content; shared shop UI keeps its styles. */
+@layer base {
+  .peach-party-design { line-height: 1.5; letter-spacing: 0; }
+  :where(.peach-party-design) :is(h1, h2, h3, h4, h5, h6) { line-height: .95; letter-spacing: 0; }
+  :where(.peach-party-design) :is(p, li) { line-height: 1.5; letter-spacing: 0; }
+  :where(.peach-party-design) :is(span, a) { line-height: inherit; }
+  :where(.peach-party-design) :is(button, a, span) { letter-spacing: 0; }
+}
+@layer components {
+  .peach-party-design .comic-btn { letter-spacing: 0; line-height: 1; }
+  .peach-party-design button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+}
+@layer utilities {
+  .peach-party-design .section-title { @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .peach-party-design *, .peach-party-design *::before, .peach-party-design *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

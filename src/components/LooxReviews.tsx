@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 interface LooxReviewsProps {
   productId: string;
+  embedded?: boolean;
 }
 
 /**
@@ -11,7 +12,7 @@ interface LooxReviewsProps {
  * einer echten Bestellung abgegeben werden – deshalb gibt es hier
  * bewusst keinen "Bewertung schreiben"-Button.
  */
-const LooxReviews = ({ productId }: LooxReviewsProps) => {
+const LooxReviews = ({ productId, embedded = false }: LooxReviewsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,11 +32,11 @@ const LooxReviews = ({ productId }: LooxReviewsProps) => {
   }, [productId]);
 
   return (
-    <section className="w-full py-12 md:py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
+    <section className={embedded ? "w-full" : "w-full py-12 md:py-16"}>
+      <div className={embedded ? "w-full" : "container mx-auto px-4"}>
+        {!embedded && <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
           DAS SAGEN UNSERE KUNDEN
-        </h2>
+        </h2>}
         {/* Kein data-product-id: so zeigt Loox ALLE Shop-Bewertungen (Aggregat),
             nicht nur die des aktuellen Produkts. */}
         <div
