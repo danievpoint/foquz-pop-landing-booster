@@ -1286,8 +1286,8 @@ const ProductDetail = () => {
         )}
       </AnimatePresence>
 
-      {/* Bundle suggestion banner - only on non-bundle pages */}
-      {!product?.isBundle && <BundleBanner />}
+      {/* Bundle-Popup auf Produktseiten deaktiviert */}
+
     </div>
   );
 };
