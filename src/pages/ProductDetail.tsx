@@ -19,6 +19,7 @@ import foquzBox from "@/assets/foquz-box.png";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
+import { metaViewContent } from "@/lib/metaPixel";
 import LooxReviews from "@/components/LooxReviews";
 
 
@@ -482,6 +483,11 @@ const ProductDetail = () => {
       image: product.image,
       price: product.numericPrice,
       url: `/produkt/${product.handle}`,
+    });
+    metaViewContent({
+      id: product.handle,
+      name: product.name,
+      price: product.numericPrice,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.handle]);
