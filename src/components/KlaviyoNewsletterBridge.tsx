@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { klaviyoIdentify } from "@/lib/klaviyo";
+import { metaLead } from "@/lib/metaPixel";
 import { toast } from "@/hooks/use-toast";
 
 /**
@@ -34,6 +35,7 @@ const KlaviyoNewsletterBridge = () => {
 
       const email = findEmail(detail?.metaData);
       if (email) klaviyoIdentify({ $email: email });
+      metaLead("Klaviyo-Popup");
 
       activateNewsletterDiscount();
 

@@ -18,6 +18,7 @@ import { useCart, isGiftItem, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten, allProducts } from "@/data/products";
 import { Link } from "react-router-dom";
+import { metaInitiateCheckout } from "@/lib/metaPixel";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
 import payVisa from "@/assets/payment/visa.svg";
@@ -655,7 +656,18 @@ const CartDrawer = () => {
                     href={checkoutUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
+                    onClick={() => {
+                      sessionStorage.setItem("foquz_checkout_pending", "1");
+                      metaInitiateCheckout({
+                        contents: items.map((i) => ({
+                          id: i.id,
+                          quantity: i.qty,
+                          item_price: i.price,
+                        })),
+                        value: discountedTotal + shippingCost,
+                        numItems: items.reduce((s, i) => s + i.qty, 0),
+                      });
+                    }}
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>ZUR KASSE</span>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { klaviyoIdentify } from "@/lib/klaviyo";
+import { metaLead } from "@/lib/metaPixel";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -163,6 +164,7 @@ const NewsletterPopup = () => {
 
     setLoading(true);
     klaviyoIdentify({ $email: email.trim().toLowerCase() });
+    metaLead("Newsletter-Popup");
     try {
       const { data, error: fnError } = await supabase.functions.invoke("shopify-newsletter", {
         body: { email: email.trim().toLowerCase() },
