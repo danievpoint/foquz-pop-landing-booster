@@ -317,6 +317,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     .filter((i) => SINGLE_CAN_IDS.includes(i.id))
     .reduce((s, i) => s + i.qty, 0);
   const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
+  freeCanEligibleRef.current = freeCanEligible;
   const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
   const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
 
