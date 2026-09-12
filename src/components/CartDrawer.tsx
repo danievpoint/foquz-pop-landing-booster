@@ -14,7 +14,7 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart, isGiftItem, isFreeCanItem, type CartItem } from "@/contexts/CartContext";
+import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten, allProducts } from "@/data/products";
 import { Link } from "react-router-dom";
@@ -114,7 +114,11 @@ const CartDrawer = () => {
   const hasBundle = items.some((i) => i.id === BUNDLE_ID);
   const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
   const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
+  const paidSingleCanQty = items
+    .filter((i) => SINGLE_CAN_IDS.includes(i.id))
+    .reduce((s, i) => s + i.qty, 0);
   const showBundleUpsell = !hasBundle && singlesCount > 0;
+  const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
   const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_LIST_PRICE).toFixed(2).replace(".", ",");
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
@@ -314,6 +318,29 @@ const CartDrawer = () => {
                   </div>
 
                   <div className="border-t-2 border-foreground/80" />
+
+                  {/* 3-für-2 Teaser: noch eine Dose fehlt */}
+                  {showThreeForTwoTeaser && (
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-3 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                    >
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#ffd618] border-2 border-foreground flex items-center justify-center shrink-0">
+                        <Sparkles size={20} className="sm:hidden" />
+                        <Sparkles size={22} className="hidden sm:block" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-black text-sm sm:text-base uppercase leading-tight">
+                          Noch 1 Dose hinzufügen
+                        </p>
+                        <p className="text-xs sm:text-sm text-muted-foreground font-bold leading-snug mt-0.5">
+                          …und die 3. Dose bekommst du gratis. 3 für 2!
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
 
                   {/* Items */}
                   <div className="space-y-3 sm:space-y-4">
