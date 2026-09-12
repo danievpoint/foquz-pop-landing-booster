@@ -459,7 +459,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
 
-          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
+          // Bei kombinierten Codes lässt sich nicht zuordnen, welcher Code
+          // abgelehnt wurde – dann bleibt der manuelle Code erhalten.
+          if (
+            checkoutDiscountCodes.length === 1 &&
+            !result.discountApplicable &&
+            manualDiscountCode === discountCode
+          ) {
             localStorage.removeItem(MANUAL_CODE_KEY);
             setPendingDiscountCode(null);
             setManualDiscountCode(null);
