@@ -33,6 +33,11 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   activateNewsletterDiscount: () => void;
+  /** Aktion "3 für 2": Warenkorb enthält mindestens 2 bezahlte Einzeldosen. */
+  freeCanEligible: boolean;
+  /** Name der gewählten Gratis-Sorte (oder null, solange nichts gewählt ist). */
+  freeCanFlavor: string | null;
+  chooseFreeCan: (flavor: { name: string; image: string }) => void;
   popupOpen: boolean;
   setPopupOpen: (v: boolean) => void;
   lastAddedProductId: string | null;
