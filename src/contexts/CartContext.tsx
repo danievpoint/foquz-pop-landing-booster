@@ -216,6 +216,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       toast.error("Die 3-für-2-Aktion wird automatisch angewendet, sobald 2 Dosen im Warenkorb liegen.");
       return;
     }
+    // Während die 3-für-2-Aktion greift, ist kein anderer Code kombinierbar.
+    if (freeCanEligibleRef.current) {
+      toast.error("Mit der 3-für-2-Aktion sind keine weiteren Rabattcodes kombinierbar.");
+      return;
+    }
     localStorage.setItem(MANUAL_CODE_KEY, normalized);
     setPendingDiscountCode(normalized);
     setManualDiscountCode(normalized);
