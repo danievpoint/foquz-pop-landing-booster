@@ -299,6 +299,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [items]);
 
+  // ---- Aktion "3 FÜR 2" ----
+  const paidCanQty = items
+    .filter((i) => SINGLE_CAN_IDS.includes(i.id))
+    .reduce((s, i) => s + i.qty, 0);
+  const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
+  const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
+  const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
+
+  const chooseFreeCan = useCallback((flavor: { name: string; image: string }) => {
+    setItems((prev) => [
+      ...prev.filter((i) => !isFreeCanItem(i.id)),
+      {
+        id: `${FREE_CAN_PREFIX}${flavor.name}`,
+        name: `${flavor.name} (gratis)`,
+        price: 0,
+        image: flavor.image,
+        qty: 1,
+      },
+    ]);
+  }, []);
+
+  // Gratis-Dose entfernen, sobald die Bedingung (2 bezahlte Dosen) entfällt.
+  useEffect(() => {
+    if (freeCanEligible || !freeCanItem) return;
+    setItems((prev) => prev.filter((i) => !isFreeCanItem(i.id)));
+  }, [freeCanEligible, freeCanItem]);
+
 
   // Klaviyo "Added to Cart" – mit dem Warenkorb NACH dem Hinzufügen.
   useEffect(() => {
