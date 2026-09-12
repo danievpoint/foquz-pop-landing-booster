@@ -246,12 +246,15 @@ const ProductGrid = () => {
 
   const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
     const el = carouselRef.current;
+    console.log('scrollToSlide', index, 'el', !!el);
     if (!el) return;
     const slide = el.querySelector(`[data-slide-index="${index}"]`);
+    console.log('slide', !!slide, 'offsetLeft', (slide as HTMLElement)?.offsetLeft, 'offsetWidth', (slide as HTMLElement)?.offsetWidth, 'clientWidth', el.clientWidth);
     if (!slide) return;
     const containerWidth = el.clientWidth;
     const slideWidth = (slide as HTMLElement).offsetWidth;
     const scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+    console.log('scrollTo target', scrollLeft);
     el.scrollTo({ left: scrollLeft, behavior });
   }, []);
 
