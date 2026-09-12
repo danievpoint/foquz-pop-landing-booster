@@ -346,6 +346,7 @@ const ProductGrid = () => {
 
     const io = new IntersectionObserver(
       (entries) => {
+        if (isResettingRef.current) return;
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
