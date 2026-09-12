@@ -33,6 +33,11 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   activateNewsletterDiscount: () => void;
+  /** Aktion "3 für 2": Warenkorb enthält mindestens 2 bezahlte Einzeldosen. */
+  freeCanEligible: boolean;
+  /** Name der gewählten Gratis-Sorte (oder null, solange nichts gewählt ist). */
+  freeCanFlavor: string | null;
+  chooseFreeCan: (flavor: { name: string; image: string }) => void;
   popupOpen: boolean;
   setPopupOpen: (v: boolean) => void;
   lastAddedProductId: string | null;
@@ -60,6 +65,9 @@ const CartContext = createContext<CartContextType>({
   removeFromCart: () => {},
   updateQty: () => {},
   activateNewsletterDiscount: () => {},
+  freeCanEligible: false,
+  freeCanFlavor: null,
+  chooseFreeCan: () => {},
   popupOpen: false,
   setPopupOpen: () => {},
   lastAddedProductId: null,
@@ -90,6 +98,16 @@ export const GIFT_ITEMS: Omit<CartItem, "qty">[] = [
 export const GIFT_ITEM_IDS = GIFT_ITEMS.map((g) => g.id);
 export const isGiftItem = (id: string) => GIFTS_ENABLED && GIFT_ITEM_IDS.includes(id);
 const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
+
+// ---- Kampagne "3 FÜR 2": ab 2 Einzeldosen ist die dritte Dose gratis. ----
+// FEATURE-FLAG: auf `false` setzen, um die Aktion zu beenden.
+export const THREE_FOR_TWO_ENABLED = true;
+export const THREE_FOR_TWO_CODE = "3FUER2";
+// Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
+export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"];
+const FREE_CAN_PREFIX = "free:";
+export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
+export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
 
 
 // Known discount codes and their percentage values.
@@ -281,6 +299,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [items]);
 
+  // ---- Aktion "3 FÜR 2" ----
+  const paidCanQty = items
+    .filter((i) => SINGLE_CAN_IDS.includes(i.id))
+    .reduce((s, i) => s + i.qty, 0);
+  const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
+  const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
+  const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
+
+  const chooseFreeCan = useCallback((flavor: { name: string; image: string }) => {
+    setItems((prev) => [
+      ...prev.filter((i) => !isFreeCanItem(i.id)),
+      {
+        id: `${FREE_CAN_PREFIX}${flavor.name}`,
+        name: `${flavor.name} (gratis)`,
+        price: 0,
+        image: flavor.image,
+        qty: 1,
+      },
+    ]);
+  }, []);
+
+  // Gratis-Dose entfernen, sobald die Bedingung (2 bezahlte Dosen) entfällt.
+  useEffect(() => {
+    if (freeCanEligible || !freeCanItem) return;
+    setItems((prev) => prev.filter((i) => !isFreeCanItem(i.id)));
+  }, [freeCanEligible, freeCanItem]);
+
 
   // Klaviyo "Added to Cart" – mit dem Warenkorb NACH dem Hinzufügen.
   useEffect(() => {
@@ -324,6 +369,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
+  // Liegt eine Gratis-Dose im Warenkorb, MUSS der 3-für-2-Code an Shopify
+  // gehen – sonst würde die dritte Dose im Checkout berechnet.
+  // Andere Codes sind in diesem Fall nicht kombinierbar.
+  if (freeCanItem) {
+    discountCode = THREE_FOR_TWO_CODE;
+    activeDiscountPercent = 0;
+  }
+
+
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
   // Falls back to a Shopify-compatible preview while the API response loads.
   // Shopify kürzt Prozent-Rabatte pro Einheit auf ganze Cent ab.
@@ -346,7 +400,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const getCheckoutLines = useCallback(() => {
     return items
       .map((i) => {
-        const variantId = VARIANT_GID_BY_ID[i.id];
+        // Die Gratis-Dose geht als normale Variante nach Shopify; der
+        // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.
+        const lookupId = isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id;
+        const variantId = VARIANT_GID_BY_ID[lookupId];
         if (!variantId) {
           console.warn(`No Shopify variant mapped for cart item id "${i.id}"`);
           return null;
@@ -484,6 +541,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
+      freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
     }}>
