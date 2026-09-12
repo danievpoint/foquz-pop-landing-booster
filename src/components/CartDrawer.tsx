@@ -439,6 +439,54 @@ const CartDrawer = () => {
                     })}
                   </div>
 
+                  {/* 3 FÜR 2 – Auswahl der Gratis-Dose */}
+                  {freeCanEligible && (
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/25"
+                    >
+                      <p className="font-black text-sm sm:text-base uppercase leading-tight">
+                        {freeCanFlavor ? "Deine 3. Dose ist gratis" : "Deine 3. Dose ist gratis – wähle deine Sorte"}
+                      </p>
+                      <div className="mt-3 grid grid-cols-3 gap-2">
+                        {allSorten.map((p) => {
+                          const selected = freeCanFlavor === p.name;
+                          return (
+                            <button
+                              key={p.handle}
+                              type="button"
+                              onClick={() => chooseFreeCan({ name: p.name, image: p.image })}
+                              className={`flex flex-col items-center gap-1 rounded-lg border-2 p-2 transition-colors ${
+                                selected
+                                  ? "border-foreground bg-background"
+                                  : "border-foreground/30 bg-background/60 hover:border-foreground/70"
+                              }`}
+                              aria-pressed={selected}
+                            >
+                              <img
+                                src={p.image}
+                                alt={p.name}
+                                width={64}
+                                height={64}
+                                className="w-12 h-12 sm:w-14 sm:h-14 object-contain"
+                              />
+                              <span className="text-[10px] sm:text-[11px] font-black uppercase leading-tight text-center">
+                                {p.name}
+                              </span>
+                              {selected && (
+                                <span className="text-[10px] font-black uppercase text-green-700 flex items-center gap-1">
+                                  <Check size={12} /> Gratis
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+
                   {/* Bundle upsell */}
                   {showBundleUpsell && (
                     <motion.div
