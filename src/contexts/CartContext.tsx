@@ -541,6 +541,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
+      freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
     }}>
