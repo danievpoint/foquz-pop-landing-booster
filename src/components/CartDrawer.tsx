@@ -316,7 +316,8 @@ const CartDrawer = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
                       const isBundleItem = item.id === BUNDLE_ID;
-                      const isGift = isGiftItem(item.id);
+                      const isFreeCan = isFreeCanItem(item.id);
+                      const isGift = isGiftItem(item.id) || isFreeCan;
                       const hasDiscount = hasAppliedDiscount && !isGift;
                       const finalPrice = hasDiscount
                         ? item.price * discountRatio
