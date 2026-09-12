@@ -379,7 +379,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // nicht angewendet. Bei nur 1 Dose oder beim Power Bundle bleiben alle
   // anderen aktiven Codes gültig.
   if (freeCanEligible) {
-    discountCode = THREE_FOR_TWO_CODE;
+    // Code erst an Shopify schicken, wenn die Gratis-Dose wirklich im
+    // Warenkorb liegt – sonst würde er eine bezahlte Dose rabattieren.
+    discountCode = freeCanItem ? THREE_FOR_TWO_CODE : null;
     activeDiscountPercent = 0;
   }
 
