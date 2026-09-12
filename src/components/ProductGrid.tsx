@@ -231,14 +231,20 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  // Unendliches Loop-Karussell: letztes Produkt als Klon vorne, erstes Produkt als Klon hinten.
+  // Unendliches Loop-Karussell: zwei Klone auf jeder Seite, damit links und rechts
+  // immer ein Nachbarprodukt angeschnitten sichtbar ist – auch direkt nach dem Loop-Sprung.
+  const CLONES = 2;
   const extendedProducts = useMemo(
-    () => [products[products.length - 1], ...products, products[0]],
+    () => [
+      ...products.slice(products.length - CLONES),
+      ...products,
+      ...products.slice(0, CLONES),
+    ],
     []
   );
   // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
   const startRealIndex = Math.floor((products.length - 1) / 2);
-  const startExtendedIndex = startRealIndex + 1;
+  const startExtendedIndex = startRealIndex + CLONES;
   const [extendedActiveIndex, setExtendedActiveIndex] = useState(startExtendedIndex);
   const activeIndexRef = useRef(extendedActiveIndex);
   const [direction, setDirection] = useState(1);
@@ -249,10 +255,8 @@ const ProductGrid = () => {
   useLockBodyScroll(Boolean(infoProduct));
 
   const getRealIndex = useCallback((extendedIndex: number) => {
-    if (extendedIndex === 0) return products.length - 1;
-    if (extendedIndex === extendedProducts.length - 1) return 0;
-    return extendedIndex - 1;
-  }, [extendedProducts.length]);
+    return ((extendedIndex - CLONES) % products.length + products.length) % products.length;
+  }, []);
 
   const realActiveIndex = getRealIndex(extendedActiveIndex);
 
@@ -276,7 +280,7 @@ const ProductGrid = () => {
   const goToReal = useCallback((realIndex: number) => {
     setDirection(realIndex > realActiveIndex ? 1 : -1);
     setAutoPlay(false);
-    const extendedIndex = realIndex + 1;
+    const extendedIndex = realIndex + CLONES;
     setExtendedActiveIndex(extendedIndex);
     scrollToExtended(extendedIndex);
   }, [realActiveIndex, scrollToExtended]);
@@ -301,31 +305,27 @@ const ProductGrid = () => {
     });
   }, [extendedProducts.length, scrollToExtended]);
 
+  const isCloneIndex = useCallback(
+    (index: number) => index < CLONES || index >= products.length + CLONES,
+    []
+  );
+
   // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
   const resetFromClone = useCallback((cloneIndex: number) => {
     const el = carouselRef.current;
     if (!el) return;
+    if (!isCloneIndex(cloneIndex)) return;
+    const target = cloneIndex < CLONES
+      ? cloneIndex + products.length
+      : cloneIndex - products.length;
+    const slide = el.querySelector(`[data-slide-index="${target}"]`) as HTMLElement | null;
+    if (!slide) return;
     isResettingRef.current = true;
-    if (cloneIndex === 0) {
-      const target = extendedProducts.length - 2;
-      const slide = el.querySelector(`[data-slide-index="${target}"]`);
-      if (slide) {
-        const containerWidth = el.clientWidth;
-        const slideWidth = (slide as HTMLElement).offsetWidth;
-        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
-        setExtendedActiveIndex(target);
-      }
-    } else if (cloneIndex === extendedProducts.length - 1) {
-      const slide = el.querySelector(`[data-slide-index="1"]`);
-      if (slide) {
-        const containerWidth = el.clientWidth;
-        const slideWidth = (slide as HTMLElement).offsetWidth;
-        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
-        setExtendedActiveIndex(1);
-      }
-    }
+    const containerWidth = el.clientWidth;
+    el.scrollLeft = slide.offsetLeft - (containerWidth - slide.offsetWidth) / 2;
+    setExtendedActiveIndex(target);
     setTimeout(() => { isResettingRef.current = false; }, 50);
-  }, [extendedProducts.length]);
+  }, [isCloneIndex]);
 
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
@@ -344,7 +344,7 @@ const ProductGrid = () => {
           const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
           if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
             setExtendedActiveIndex(idx);
-            if (idx === 0 || idx === extendedProducts.length - 1) {
+            if (isCloneIndex(idx)) {
               setTimeout(() => resetFromClone(idx), 350);
             }
           }
@@ -355,7 +355,7 @@ const ProductGrid = () => {
 
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, [extendedProducts.length, resetFromClone]);
+  }, [extendedProducts.length, resetFromClone, isCloneIndex]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
