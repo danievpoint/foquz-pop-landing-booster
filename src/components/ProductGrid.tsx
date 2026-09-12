@@ -280,7 +280,7 @@ const ProductGrid = () => {
   const goToReal = useCallback((realIndex: number) => {
     setDirection(realIndex > realActiveIndex ? 1 : -1);
     setAutoPlay(false);
-    const extendedIndex = realIndex + 1;
+    const extendedIndex = realIndex + CLONES;
     setExtendedActiveIndex(extendedIndex);
     scrollToExtended(extendedIndex);
   }, [realActiveIndex, scrollToExtended]);
