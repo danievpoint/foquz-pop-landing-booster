@@ -1291,16 +1291,18 @@ const ProductDetail = () => {
       <Footer />
 
 
-      {/* Sticky Bottom-Bar (mobil) */}
-      <AnimatePresence>
-        {showStickyBar && (
-          <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            exit={{ y: 100 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed bottom-0 left-0 right-0 z-[9000] bg-white border-t-[3px] border-black px-4 py-3 flex items-center gap-3"
-            style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+      {/* Sticky Bottom-Bar (mobil) – reines CSS, damit die Leiste auf iOS
+          nicht nachzieht oder flackert. */}
+      <div
+            aria-hidden={!showStickyBar}
+            className={`lg:hidden fixed bottom-0 left-0 right-0 z-[9000] bg-white border-t-[3px] border-black px-4 py-3 flex items-center gap-3 transition-transform duration-200 ease-out ${
+              showStickyBar ? "translate-y-0" : "translate-y-full pointer-events-none"
+            }`}
+            style={{
+              paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))",
+              willChange: "transform",
+              backfaceVisibility: "hidden",
+            }}
           >
             <div className="shrink-0">
               <div className="text-[10px] font-bold uppercase text-black/50 leading-none">
@@ -1316,9 +1318,7 @@ const ProductDetail = () => {
             >
               IN DEN WARENKORB
             </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
       {/* Bundle-Popup auf Produktseiten deaktiviert */}
 
