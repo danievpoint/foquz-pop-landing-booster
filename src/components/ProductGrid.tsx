@@ -236,30 +236,12 @@ const ProductGrid = () => {
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const skipScrollOnMount = useRef(true);
   useLockBodyScroll(Boolean(infoProduct));
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
-
-  // Auto-advance only for products without video; video products advance via onended
-  useEffect(() => {
-    if (!autoPlay) return;
-    const currentProduct = products[activeIndex];
-    if (currentProduct.video) return; // video drives its own advancement
-    const timer = setTimeout(() => {
-      setDirection(1);
-      setActiveIndex((prev) => {
-        const next = (prev + 1) % products.length;
-        return next;
-      });
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [autoPlay, activeIndex]);
-
-  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows)
-  useEffect(() => {
-    scrollToSlide(activeIndex, 'smooth');
   }, [activeIndex]);
 
   const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
@@ -300,8 +282,6 @@ const ProductGrid = () => {
     });
   }, [scrollToSlide]);
 
-  const carouselRef = useRef<HTMLDivElement>(null);
-
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
     const el = carouselRef.current;
@@ -328,6 +308,27 @@ const ProductGrid = () => {
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
   }, []);
+
+  // Auto-advance only for products without video; video products advance via onended
+  useEffect(() => {
+    if (!autoPlay) return;
+    const currentProduct = products[activeIndex];
+    if (currentProduct.video) return; // video drives its own advancement
+    const timer = setTimeout(() => {
+      setDirection(1);
+      setActiveIndex((prev) => (prev + 1) % products.length);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [autoPlay, activeIndex]);
+
+  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows), but not on mount
+  useEffect(() => {
+    if (skipScrollOnMount.current) {
+      skipScrollOnMount.current = false;
+      return;
+    }
+    scrollToSlide(activeIndex, 'smooth');
+  }, [activeIndex, scrollToSlide]);
 
   return (
     <>
