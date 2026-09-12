@@ -1318,9 +1318,7 @@ const ProductDetail = () => {
             >
               IN DEN WARENKORB
             </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
       {/* Bundle-Popup auf Produktseiten deaktiviert */}
 
