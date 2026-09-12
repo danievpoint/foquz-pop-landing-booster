@@ -75,6 +75,9 @@ const CartDrawer = () => {
     isCheckingOut,
     checkoutUrl,
     addToCart,
+    freeCanEligible,
+    freeCanFlavor,
+    chooseFreeCan,
   } = useCart();
 
   const [codeInput, setCodeInput] = useState("");
