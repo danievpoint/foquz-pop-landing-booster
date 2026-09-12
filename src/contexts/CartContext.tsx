@@ -226,7 +226,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // cartDiscountCodesUpdate instead of recreating the cart.
     const cartId = shopifyCartIdRef.current;
     if (cartId) {
-      void applyDiscountCodeToCart(cartId, [normalized])
+      const codes = hasFreeCanRef.current
+        ? [THREE_FOR_TWO_CODE, normalized]
+        : [normalized];
+      void applyDiscountCodeToCart(cartId, codes)
         .then((result) => {
           if (!result) return;
           setCheckoutUrl(result.url);
