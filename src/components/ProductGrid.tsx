@@ -231,20 +231,18 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  // Unendliches Loop-Karussell: zwei Klone auf jeder Seite, damit links und rechts
-  // immer ein Nachbarprodukt angeschnitten sichtbar ist – auch direkt nach dem Loop-Sprung.
-  const CLONES = 2;
+  // Fünf vollständige Produktreihen geben dem nativen Swipe genug Puffer.
+  // Nach jeder Bewegung wird unsichtbar in die mittlere Reihe zurückgesetzt.
+  // Dadurch kann keine Sorte am echten Anfang/Ende des Scrollbereichs landen.
+  const COPY_COUNT = 5;
+  const CENTER_COPY = 2;
   const extendedProducts = useMemo(
-    () => [
-      ...products.slice(products.length - CLONES),
-      ...products,
-      ...products.slice(0, CLONES),
-    ],
+    () => Array.from({ length: COPY_COUNT }, () => products).flat(),
     []
   );
   // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
   const startRealIndex = Math.floor((products.length - 1) / 2);
-  const startExtendedIndex = startRealIndex + CLONES;
+  const startExtendedIndex = CENTER_COPY * products.length + startRealIndex;
   const [extendedActiveIndex, setExtendedActiveIndex] = useState(startExtendedIndex);
   const activeIndexRef = useRef(extendedActiveIndex);
   const [direction, setDirection] = useState(1);
@@ -252,10 +250,11 @@ const ProductGrid = () => {
   const [autoPlay, setAutoPlay] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
   const isResettingRef = useRef(false);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useLockBodyScroll(Boolean(infoProduct));
 
   const getRealIndex = useCallback((extendedIndex: number) => {
-    return ((extendedIndex - CLONES) % products.length + products.length) % products.length;
+    return ((extendedIndex % products.length) + products.length) % products.length;
   }, []);
 
   const realActiveIndex = getRealIndex(extendedActiveIndex);
@@ -280,7 +279,7 @@ const ProductGrid = () => {
   const goToReal = useCallback((realIndex: number) => {
     setDirection(realIndex > realActiveIndex ? 1 : -1);
     setAutoPlay(false);
-    const extendedIndex = realIndex + CLONES;
+    const extendedIndex = CENTER_COPY * products.length + realIndex;
     setExtendedActiveIndex(extendedIndex);
     scrollToExtended(extendedIndex);
   }, [realActiveIndex, scrollToExtended]);
@@ -289,7 +288,7 @@ const ProductGrid = () => {
     setAutoPlay(false);
     setDirection(1);
     setExtendedActiveIndex((prev) => {
-      const next = (prev + 1) % extendedProducts.length;
+      const next = Math.min(prev + 1, extendedProducts.length - 2);
       scrollToExtended(next);
       return next;
     });
@@ -299,25 +298,23 @@ const ProductGrid = () => {
     setAutoPlay(false);
     setDirection(-1);
     setExtendedActiveIndex((prev) => {
-      const next = (prev - 1 + extendedProducts.length) % extendedProducts.length;
+      const next = Math.max(prev - 1, 1);
       scrollToExtended(next);
       return next;
     });
   }, [extendedProducts.length, scrollToExtended]);
 
-  const isCloneIndex = useCallback(
-    (index: number) => index < CLONES || index >= products.length + CLONES,
-    []
-  );
+  const isCloneIndex = useCallback((index: number) => {
+    const centerStart = CENTER_COPY * products.length;
+    return index < centerStart || index >= centerStart + products.length;
+  }, []);
 
   // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
   const resetFromClone = useCallback((cloneIndex: number) => {
     const el = carouselRef.current;
     if (!el) return;
     if (!isCloneIndex(cloneIndex)) return;
-    const target = cloneIndex < CLONES
-      ? cloneIndex + products.length
-      : cloneIndex - products.length;
+    const target = CENTER_COPY * products.length + getRealIndex(cloneIndex);
     const slide = el.querySelector(`[data-slide-index="${target}"]`) as HTMLElement | null;
     if (!slide) return;
     isResettingRef.current = true;
@@ -325,7 +322,19 @@ const ProductGrid = () => {
     el.scrollLeft = slide.offsetLeft - (containerWidth - slide.offsetWidth) / 2;
     setExtendedActiveIndex(target);
     setTimeout(() => { isResettingRef.current = false; }, 50);
-  }, [isCloneIndex]);
+  }, [getRealIndex, isCloneIndex]);
+
+  const handleCarouselScroll = useCallback(() => {
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    resetTimerRef.current = setTimeout(() => {
+      const current = activeIndexRef.current;
+      if (isCloneIndex(current)) resetFromClone(current);
+    }, 120);
+  }, [isCloneIndex, resetFromClone]);
+
+  useEffect(() => () => {
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+  }, []);
 
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
@@ -344,9 +353,6 @@ const ProductGrid = () => {
           const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
           if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
             setExtendedActiveIndex(idx);
-            if (isCloneIndex(idx)) {
-              setTimeout(() => resetFromClone(idx), 350);
-            }
           }
         }
       },
@@ -355,7 +361,7 @@ const ProductGrid = () => {
 
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, [extendedProducts.length, resetFromClone, isCloneIndex]);
+  }, [extendedProducts.length]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
@@ -365,7 +371,7 @@ const ProductGrid = () => {
     const timer = setTimeout(() => {
       setDirection(1);
       setExtendedActiveIndex((prev) => {
-        const next = (prev + 1) % extendedProducts.length;
+        const next = Math.min(prev + 1, extendedProducts.length - 2);
         scrollToExtended(next);
         return next;
       });
@@ -462,6 +468,7 @@ const ProductGrid = () => {
           <div className="lg:hidden mt-3 w-screen relative left-1/2 -translate-x-1/2">
             <div
               ref={carouselRef}
+              onScroll={handleCarouselScroll}
               className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
               style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {extendedProducts.map((p, i) => (
