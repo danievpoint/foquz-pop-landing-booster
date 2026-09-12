@@ -263,10 +263,12 @@ const ProductGrid = () => {
   }, [activeIndex, scrollToSlide]);
 
   const goNext = useCallback(() => {
+    console.log('goNext called');
     setAutoPlay(false);
     setDirection(1);
     setActiveIndex((prev) => {
       const next = (prev + 1) % products.length;
+      console.log('goNext setActiveIndex prev', prev, 'next', next);
       scrollToSlide(next);
       return next;
     });
