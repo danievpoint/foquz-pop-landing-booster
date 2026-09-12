@@ -374,10 +374,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // Liegt eine Gratis-Dose im Warenkorb, MUSS der 3-für-2-Code an Shopify
-  // gehen – sonst würde die dritte Dose im Checkout berechnet.
-  // Andere Codes sind in diesem Fall nicht kombinierbar.
-  if (freeCanItem) {
+  // Sobald 2 bezahlte Einzeldosen im Warenkorb liegen, gilt AUSSCHLIESSLICH
+  // die 3-für-2-Aktion. Andere Codes (manuell oder automatisch) werden dann
+  // nicht angewendet. Bei nur 1 Dose oder beim Power Bundle bleiben alle
+  // anderen aktiven Codes gültig.
+  if (freeCanEligible) {
     discountCode = THREE_FOR_TWO_CODE;
     activeDiscountPercent = 0;
   }
