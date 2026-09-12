@@ -344,7 +344,7 @@ const ProductGrid = () => {
           const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
           if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
             setExtendedActiveIndex(idx);
-            if (idx === 0 || idx === extendedProducts.length - 1) {
+            if (isCloneIndex(idx)) {
               setTimeout(() => resetFromClone(idx), 350);
             }
           }
