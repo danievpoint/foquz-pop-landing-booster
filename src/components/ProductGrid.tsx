@@ -413,13 +413,13 @@ const ProductGrid = () => {
           <div className="lg:hidden mt-3">
             <div
               ref={carouselRef}
-              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
               style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {products.map((p, i) => (
                 <div
                   key={p.name}
                   data-slide-index={i}
-                  className="w-[82vw] shrink-0 snap-center px-[1.5vw] first:pl-[9vw] last:pr-[9vw]">
+                  className="w-[72vw] shrink-0 snap-center">
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
                       <MobileVideoWithPoster
