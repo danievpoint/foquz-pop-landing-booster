@@ -231,22 +231,36 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
+  // Unendliches Loop-Karussell: letztes Produkt als Klon vorne, erstes Produkt als Klon hinten.
+  const extendedProducts = useMemo(
+    () => [products[products.length - 1], ...products, products[0]],
+    []
+  );
   // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
-  const startIndex = Math.floor((products.length - 1) / 2);
-  const [activeIndex, setActiveIndex] = useState(startIndex);
-  const activeIndexRef = useRef(activeIndex);
+  const startRealIndex = Math.floor((products.length - 1) / 2);
+  const startExtendedIndex = startRealIndex + 1;
+  const [extendedActiveIndex, setExtendedActiveIndex] = useState(startExtendedIndex);
+  const activeIndexRef = useRef(extendedActiveIndex);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const skipScrollOnMount = useRef(false);
+  const isResettingRef = useRef(false);
   useLockBodyScroll(Boolean(infoProduct));
 
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+  const getRealIndex = useCallback((extendedIndex: number) => {
+    if (extendedIndex === 0) return products.length - 1;
+    if (extendedIndex === extendedProducts.length - 1) return 0;
+    return extendedIndex - 1;
+  }, [extendedProducts.length]);
 
-  const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'auto') => {
+  const realActiveIndex = getRealIndex(extendedActiveIndex);
+
+  useEffect(() => {
+    activeIndexRef.current = extendedActiveIndex;
+  }, [extendedActiveIndex]);
+
+  const scrollToExtended = useCallback((index: number, behavior: ScrollBehavior = 'auto') => {
     const el = carouselRef.current;
     if (!el) return;
     const slide = el.querySelector(`[data-slide-index="${index}"]`);
@@ -254,7 +268,9 @@ const ProductGrid = () => {
     const containerWidth = el.clientWidth;
     const slideWidth = (slide as HTMLElement).offsetWidth;
     const scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+    isResettingRef.current = true;
     el.scrollTo({ left: scrollLeft, behavior });
+    setTimeout(() => { isResettingRef.current = false; }, 50);
   }, []);
 
   const goTo = useCallback((index: number) => {
