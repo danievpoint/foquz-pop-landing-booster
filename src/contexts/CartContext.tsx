@@ -194,6 +194,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
   const shopifyCartIdRef = useRef<string | null>(null);
+  // Liegt eine Gratis-Dose im Warenkorb? Wird für die Code-Kombination gebraucht.
+  const hasFreeCanRef = useRef(false);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
