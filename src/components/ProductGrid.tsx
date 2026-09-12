@@ -251,77 +251,77 @@ const ProductGrid = () => {
     return () => clearTimeout(timer);
   }, [autoPlay, activeIndex]);
 
+  const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const slide = el.querySelector(`[data-slide-index="${index}"]`);
+    if (!slide) return;
+    const containerWidth = el.clientWidth;
+    const slideWidth = (slide as HTMLElement).offsetWidth;
+    const scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+    el.scrollTo({ left: scrollLeft, behavior });
+  }, []);
+
   const goTo = useCallback((index: number) => {
     setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
     setAutoPlay(false);
-  }, [activeIndex]);
+    scrollToSlide(index);
+  }, [activeIndex, scrollToSlide]);
 
   const goNext = useCallback(() => {
     setAutoPlay(false);
     setDirection(1);
-    setActiveIndex((prev) => (prev + 1) % products.length);
-  }, []);
+    setActiveIndex((prev) => {
+      const next = (prev + 1) % products.length;
+      scrollToSlide(next);
+      return next;
+    });
+  }, [scrollToSlide]);
 
   const goPrev = useCallback(() => {
     setAutoPlay(false);
     setDirection(-1);
-    setActiveIndex((prev) => (prev - 1 + products.length) % products.length);
-  }, []);
+    setActiveIndex((prev) => {
+      const next = (prev - 1 + products.length) % products.length;
+      scrollToSlide(next);
+      return next;
+    });
+  }, [scrollToSlide]);
 
-  const touchStartY = useRef(0);
-  const touchStartTime = useRef(0);
-  const isSwiping = useRef(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
+  // Update active index based on which slide is centered while scrolling
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
 
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
-      touchEndX.current = e.touches[0].clientX;
-      touchStartTime.current = Date.now();
-      isSwiping.current = false;
-    };
+    const slides = Array.from(el.querySelectorAll('[data-slide-index]')) as HTMLElement[];
+    if (slides.length === 0) return;
 
-    const onTouchMove = (e: TouchEvent) => {
-      touchEndX.current = e.touches[0].clientX;
-      const dx = Math.abs(touchEndX.current - touchStartX.current);
-      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-      if (!isSwiping.current && dy > 10) {
-        // User is scrolling vertically — don't interfere
-        return;
-      }
-      if (dx > dy && dx > 15) {
-        isSwiping.current = true;
-        e.preventDefault();
-      }
-    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible.length > 0) {
+          const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
+          if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
+            setActiveIndex(idx);
+          }
+        }
+      },
+      { root: el, threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
 
-    const onTouchEnd = () => {
-      if (!isSwiping.current) return;
-      const diff = touchStartX.current - touchEndX.current;
-      const elapsed = Date.now() - touchStartTime.current;
-      const velocity = Math.abs(diff) / elapsed;
-      // Trigger on short fast swipes (velocity) or longer drags (distance)
-      if (Math.abs(diff) > 30 || velocity > 0.3) {
-        if (diff > 0) goNext();else
-        goPrev();
-      }
-    };
+    slides.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
 
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchmove', onTouchMove);
-      el.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [goNext, goPrev]);
+  const activeIndexRef = useRef(activeIndex);
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   return (
     <>
