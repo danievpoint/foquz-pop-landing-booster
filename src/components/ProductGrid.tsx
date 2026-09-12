@@ -402,54 +402,58 @@ const ProductGrid = () => {
             </p>
           </div>
 
-          {/* Mobile: carousel */}
+          {/* Mobile: peeking carousel */}
           <div className="lg:hidden mt-3">
             <div
               ref={carouselRef}
-              className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y' }}>
-              
-              <div className="flex flex-col items-center w-full">
-                <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block relative" style={{ backgroundColor: products[activeIndex].color + '22' }}>
-                  {products[activeIndex].video ? (
-                    <MobileVideoWithPoster
-                      key={`slide-${activeIndex}`}
-                      src={products[activeIndex].video!}
-                      poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                      alt={products[activeIndex].name}
-                    />
-                  ) : (
-                    <img
-                      src={products[activeIndex].image}
-                      alt={products[activeIndex].name}
-                      className="relative w-full aspect-square object-cover" />
-                  )}
-                </Link>
-
-                <div className="py-1 text-center flex flex-col items-center">
-                  <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                    {products[activeIndex].name}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+              style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {products.map((p, i) => (
+                <div
+                  key={p.name}
+                  data-slide-index={i}
+                  className="w-[82vw] shrink-0 snap-center px-[1.5vw] first:pl-[9vw] last:pr-[9vw]">
+                  <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
+                    {p.video ? (
+                      <MobileVideoWithPoster
+                        key={`slide-${i}`}
+                        src={p.video}
+                        poster={p.videoPoster ?? p.image}
+                        alt={p.name}
+                      />
+                    ) : (
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="relative w-full aspect-square object-cover" />
+                    )}
                   </Link>
-                  <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
-                  <div className="flex items-center justify-center gap-2 mb-0.5">
-                    <span className="text-xl font-black">{products[activeIndex].price}</span>
-                    <StockBadge available={isAvailable(products[activeIndex].name)} />
-                  </div>
-                  <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
-                  <div className="flex items-center justify-center gap-3">
-                    <button
-                      onClick={() => {
-                        setAutoPlay(false);
-                        const p = products[activeIndex];
-                        addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
-                      }}
-                      className="comic-btn text-black text-xs py-2 px-5"
-                      style={{ backgroundColor: products[activeIndex].color }}>
-                      IN DEN WARENKORB
-                    </button>
-                    <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
-                  </div>
                 </div>
+              ))}
+            </div>
+
+            <div className="py-1 text-center flex flex-col items-center">
+              <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                {products[activeIndex].name}
+              </Link>
+              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
+              <div className="flex items-center justify-center gap-2 mb-0.5">
+                <span className="text-xl font-black">{products[activeIndex].price}</span>
+                <StockBadge available={isAvailable(products[activeIndex].name)} />
+              </div>
+              <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  onClick={() => {
+                    setAutoPlay(false);
+                    const p = products[activeIndex];
+                    addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
+                  }}
+                  className="comic-btn text-black text-xs py-2 px-5"
+                  style={{ backgroundColor: products[activeIndex].color }}>
+                  IN DEN WARENKORB
+                </button>
+                <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
               </div>
             </div>
 
