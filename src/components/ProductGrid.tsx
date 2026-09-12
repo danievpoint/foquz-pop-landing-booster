@@ -327,42 +327,25 @@ const ProductGrid = () => {
   const handleCarouselScroll = useCallback(() => {
     if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
     resetTimerRef.current = setTimeout(() => {
-      const current = activeIndexRef.current;
-      if (isCloneIndex(current)) resetFromClone(current);
+      const el = carouselRef.current;
+      if (!el || isResettingRef.current) return;
+      const center = el.scrollLeft + el.clientWidth / 2;
+      const slides = Array.from(el.querySelectorAll('[data-slide-index]')) as HTMLElement[];
+      const nearest = slides.reduce((best, slide) => {
+        const distance = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - center);
+        return distance < best.distance
+          ? { index: Number(slide.dataset.slideIndex), distance }
+          : best;
+      }, { index: activeIndexRef.current, distance: Number.POSITIVE_INFINITY });
+      activeIndexRef.current = nearest.index;
+      setExtendedActiveIndex(nearest.index);
+      if (isCloneIndex(nearest.index)) resetFromClone(nearest.index);
     }, 120);
   }, [isCloneIndex, resetFromClone]);
 
   useEffect(() => () => {
     if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
   }, []);
-
-  // Update active index based on which slide is centered while scrolling
-  useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-
-    const slides = Array.from(el.querySelectorAll('[data-slide-index]')) as HTMLElement[];
-    if (slides.length === 0) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (isResettingRef.current) return;
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) {
-          const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
-          if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
-            setExtendedActiveIndex(idx);
-          }
-        }
-      },
-      { root: el, threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-
-    slides.forEach((s) => io.observe(s));
-    return () => io.disconnect();
-  }, [extendedProducts.length]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
