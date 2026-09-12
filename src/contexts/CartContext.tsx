@@ -194,6 +194,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
   const shopifyCartIdRef = useRef<string | null>(null);
+  // Liegt eine Gratis-Dose im Warenkorb? Wird für die Code-Kombination gebraucht.
+  const hasFreeCanRef = useRef(false);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
@@ -224,7 +226,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // cartDiscountCodesUpdate instead of recreating the cart.
     const cartId = shopifyCartIdRef.current;
     if (cartId) {
-      void applyDiscountCodeToCart(cartId, [normalized])
+      const codes = hasFreeCanRef.current
+        ? [THREE_FOR_TWO_CODE, normalized]
+        : [normalized];
+      void applyDiscountCodeToCart(cartId, codes)
         .then((result) => {
           if (!result) return;
           setCheckoutUrl(result.url);
@@ -311,6 +316,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
   const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
   const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
+  hasFreeCanRef.current = !!freeCanItem;
 
   const chooseFreeCan = useCallback((flavor: { name: string; image: string }) => {
     setItems((prev) => [
@@ -374,13 +380,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // Liegt eine Gratis-Dose im Warenkorb, MUSS der 3-für-2-Code an Shopify
-  // gehen – sonst würde die dritte Dose im Checkout berechnet.
-  // Andere Codes sind in diesem Fall nicht kombinierbar.
-  if (freeCanItem) {
-    discountCode = THREE_FOR_TWO_CODE;
-    activeDiscountPercent = 0;
-  }
+  // Liegt eine Gratis-Dose im Warenkorb, geht der 3-für-2-Code IMMER an
+  // Shopify – sonst würde die dritte Dose im Checkout berechnet. Er ist
+  // zusätzlich mit einem weiteren Rabattcode kombinierbar.
+  const checkoutDiscountCodes = [
+    ...(freeCanItem ? [THREE_FOR_TWO_CODE] : []),
+    ...(discountCode && discountCode !== THREE_FOR_TWO_CODE ? [discountCode] : []),
+  ];
+  const checkoutDiscountKey = checkoutDiscountCodes.join(",");
 
 
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
@@ -394,10 +401,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   const discountedTotal =
-    discountCode && shopifyDiscountedSubtotal !== null
+    checkoutDiscountCodes.length > 0 && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
+  if (checkoutDiscountCodes.length > 0 && shopifyDiscountedSubtotal !== null && total > 0) {
     activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
   }
 
@@ -450,7 +457,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsCheckingOut(true);
     setCheckoutUrl(null);
 
-    createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
+    createShopifyCheckout(lines, checkoutDiscountCodes.length > 0 ? checkoutDiscountCodes : undefined)
       .then((result) => {
         if (cancelled) return;
         if (result) {
@@ -458,7 +465,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
 
-          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
+          // Bei kombinierten Codes lässt sich nicht zuordnen, welcher Code
+          // abgelehnt wurde – dann bleibt der manuelle Code erhalten.
+          if (
+            checkoutDiscountCodes.length === 1 &&
+            !result.discountApplicable &&
+            manualDiscountCode === discountCode
+          ) {
             localStorage.removeItem(MANUAL_CODE_KEY);
             setPendingDiscountCode(null);
             setManualDiscountCode(null);
@@ -483,7 +496,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, checkoutDiscountKey, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
     if (items.length === 0 || isCheckingOut) return;
