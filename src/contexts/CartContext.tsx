@@ -203,6 +203,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setHasNewsletterDiscount(true);
   }, []);
 
+  // Wird weiter unten bei jedem Render aktualisiert.
+  const freeCanEligibleRef = useRef(false);
+
   const [manualDiscountCode, setManualDiscountCode] = useState<string | null>(() => {
     // A code coming from /discount/:code wins over a previously stored one.
     return getPendingDiscountCode() ?? localStorage.getItem(MANUAL_CODE_KEY);
