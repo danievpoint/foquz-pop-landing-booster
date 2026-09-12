@@ -355,7 +355,7 @@ const ProductGrid = () => {
 
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, [extendedProducts.length, resetFromClone]);
+  }, [extendedProducts.length, resetFromClone, isCloneIndex]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
