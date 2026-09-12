@@ -231,14 +231,20 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  // Unendliches Loop-Karussell: letztes Produkt als Klon vorne, erstes Produkt als Klon hinten.
+  // Unendliches Loop-Karussell: zwei Klone auf jeder Seite, damit links und rechts
+  // immer ein Nachbarprodukt angeschnitten sichtbar ist – auch direkt nach dem Loop-Sprung.
+  const CLONES = 2;
   const extendedProducts = useMemo(
-    () => [products[products.length - 1], ...products, products[0]],
+    () => [
+      ...products.slice(products.length - CLONES),
+      ...products,
+      ...products.slice(0, CLONES),
+    ],
     []
   );
   // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
   const startRealIndex = Math.floor((products.length - 1) / 2);
-  const startExtendedIndex = startRealIndex + 1;
+  const startExtendedIndex = startRealIndex + CLONES;
   const [extendedActiveIndex, setExtendedActiveIndex] = useState(startExtendedIndex);
   const activeIndexRef = useRef(extendedActiveIndex);
   const [direction, setDirection] = useState(1);
@@ -249,10 +255,8 @@ const ProductGrid = () => {
   useLockBodyScroll(Boolean(infoProduct));
 
   const getRealIndex = useCallback((extendedIndex: number) => {
-    if (extendedIndex === 0) return products.length - 1;
-    if (extendedIndex === extendedProducts.length - 1) return 0;
-    return extendedIndex - 1;
-  }, [extendedProducts.length]);
+    return ((extendedIndex - CLONES) % products.length + products.length) % products.length;
+  }, []);
 
   const realActiveIndex = getRealIndex(extendedActiveIndex);
 
