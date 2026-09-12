@@ -464,15 +464,15 @@ const ProductGrid = () => {
               ref={carouselRef}
               className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
               style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {products.map((p, i) => (
+              {extendedProducts.map((p, i) => (
                 <div
-                  key={p.name}
+                  key={`${p.name}-${i}`}
                   data-slide-index={i}
                   className="w-[72vw] shrink-0 snap-center">
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
                       <MobileVideoWithPoster
-                        key={`slide-${i}`}
+                        key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
                         alt={p.name}
@@ -489,27 +489,27 @@ const ProductGrid = () => {
             </div>
 
             <div className="py-1 text-center flex flex-col items-center">
-              <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                {products[activeIndex].name}
+              <Link to={`/produkt/${products[realActiveIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                {products[realActiveIndex].name}
               </Link>
-              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
+              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[realActiveIndex].desc}</p>
               <div className="flex items-center justify-center gap-2 mb-0.5">
-                <span className="text-xl font-black">{products[activeIndex].price}</span>
-                <StockBadge available={isAvailable(products[activeIndex].name)} />
+                <span className="text-xl font-black">{products[realActiveIndex].price}</span>
+                <StockBadge available={isAvailable(products[realActiveIndex].name)} />
               </div>
               <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
               <div className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => {
                     setAutoPlay(false);
-                    const p = products[activeIndex];
+                    const p = products[realActiveIndex];
                     addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
                   }}
                   className="comic-btn text-black text-xs py-2 px-5"
-                  style={{ backgroundColor: products[activeIndex].color }}>
+                  style={{ backgroundColor: products[realActiveIndex].color }}>
                   IN DEN WARENKORB
                 </button>
-                <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
+                <InfoButton onClick={() => setInfoProduct(products[realActiveIndex])} />
               </div>
             </div>
 
@@ -523,10 +523,10 @@ const ProductGrid = () => {
                 <button
                   key={i}
                   aria-label={`Gehe zu Produkt ${i + 1}`}
-                  aria-current={i === activeIndex ? "true" : undefined}
-                  onClick={() => goTo(i)}
+                  aria-current={i === realActiveIndex ? "true" : undefined}
+                  onClick={() => goToReal(i)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
+                  i === realActiveIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
                   } />
                 )}
               </div>
