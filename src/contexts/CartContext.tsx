@@ -211,6 +211,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const applyManualDiscountCode = useCallback((code: string) => {
     const normalized = code.trim().toUpperCase();
     if (!normalized) return;
+    // Der Aktionscode wird ausschließlich automatisch gesetzt (Gratis-Dose).
+    if (normalized === THREE_FOR_TWO_CODE) {
+      toast.error("Die 3-für-2-Aktion wird automatisch angewendet, sobald 2 Dosen im Warenkorb liegen.");
+      return;
+    }
     localStorage.setItem(MANUAL_CODE_KEY, normalized);
     setPendingDiscountCode(normalized);
     setManualDiscountCode(normalized);
