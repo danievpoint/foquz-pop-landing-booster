@@ -203,6 +203,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setHasNewsletterDiscount(true);
   }, []);
 
+  // Wird weiter unten bei jedem Render aktualisiert.
+  const freeCanEligibleRef = useRef(false);
+
   const [manualDiscountCode, setManualDiscountCode] = useState<string | null>(() => {
     // A code coming from /discount/:code wins over a previously stored one.
     return getPendingDiscountCode() ?? localStorage.getItem(MANUAL_CODE_KEY);
@@ -214,6 +217,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Der Aktionscode wird ausschließlich automatisch gesetzt (Gratis-Dose).
     if (normalized === THREE_FOR_TWO_CODE) {
       toast.error("Die 3-für-2-Aktion wird automatisch angewendet, sobald 2 Dosen im Warenkorb liegen.");
+      return;
+    }
+    // Während die 3-für-2-Aktion greift, ist kein anderer Code kombinierbar.
+    if (freeCanEligibleRef.current) {
+      toast.error("Mit der 3-für-2-Aktion sind keine weiteren Rabattcodes kombinierbar.");
       return;
     }
     localStorage.setItem(MANUAL_CODE_KEY, normalized);
@@ -309,6 +317,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     .filter((i) => SINGLE_CAN_IDS.includes(i.id))
     .reduce((s, i) => s + i.qty, 0);
   const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
+  freeCanEligibleRef.current = freeCanEligible;
   const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
   const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
 
@@ -374,11 +383,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
-  // Liegt eine Gratis-Dose im Warenkorb, MUSS der 3-für-2-Code an Shopify
-  // gehen – sonst würde die dritte Dose im Checkout berechnet.
-  // Andere Codes sind in diesem Fall nicht kombinierbar.
-  if (freeCanItem) {
-    discountCode = THREE_FOR_TWO_CODE;
+  // Sobald 2 bezahlte Einzeldosen im Warenkorb liegen, gilt AUSSCHLIESSLICH
+  // die 3-für-2-Aktion. Andere Codes (manuell oder automatisch) werden dann
+  // nicht angewendet. Bei nur 1 Dose oder beim Power Bundle bleiben alle
+  // anderen aktiven Codes gültig.
+  if (freeCanEligible) {
+    // Code erst an Shopify schicken, wenn die Gratis-Dose wirklich im
+    // Warenkorb liegt – sonst würde er eine bezahlte Dose rabattieren.
+    discountCode = freeCanItem ? THREE_FOR_TWO_CODE : null;
     activeDiscountPercent = 0;
   }
 
