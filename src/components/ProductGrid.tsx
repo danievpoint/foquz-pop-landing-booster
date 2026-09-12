@@ -410,7 +410,7 @@ const ProductGrid = () => {
           </div>
 
           {/* Mobile: peeking carousel */}
-          <div className="lg:hidden mt-3">
+          <div className="lg:hidden mt-3 w-screen relative left-1/2 -translate-x-1/2">
             <div
               ref={carouselRef}
               className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
