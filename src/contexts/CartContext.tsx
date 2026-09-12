@@ -400,7 +400,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const getCheckoutLines = useCallback(() => {
     return items
       .map((i) => {
-        const variantId = VARIANT_GID_BY_ID[i.id];
+        // Die Gratis-Dose geht als normale Variante nach Shopify; der
+        // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.
+        const lookupId = isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id;
+        const variantId = VARIANT_GID_BY_ID[lookupId];
         if (!variantId) {
           console.warn(`No Shopify variant mapped for cart item id "${i.id}"`);
           return null;
