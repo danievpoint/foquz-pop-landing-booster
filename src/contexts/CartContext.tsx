@@ -395,10 +395,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   const discountedTotal =
-    discountCode && shopifyDiscountedSubtotal !== null
+    checkoutDiscountCodes.length > 0 && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
+  if (checkoutDiscountCodes.length > 0 && shopifyDiscountedSubtotal !== null && total > 0) {
     activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
   }
 
