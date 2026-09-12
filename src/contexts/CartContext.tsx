@@ -91,6 +91,16 @@ export const GIFT_ITEM_IDS = GIFT_ITEMS.map((g) => g.id);
 export const isGiftItem = (id: string) => GIFTS_ENABLED && GIFT_ITEM_IDS.includes(id);
 const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
 
+// ---- Kampagne "3 FÜR 2": ab 2 Einzeldosen ist die dritte Dose gratis. ----
+// FEATURE-FLAG: auf `false` setzen, um die Aktion zu beenden.
+export const THREE_FOR_TWO_ENABLED = true;
+export const THREE_FOR_TWO_CODE = "3FUER2";
+// Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
+export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"];
+const FREE_CAN_PREFIX = "free:";
+export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
+export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
+
 
 // Known discount codes and their percentage values.
 // Used so we can locally pick the highest-value code and preview the total.
