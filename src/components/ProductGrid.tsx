@@ -305,31 +305,27 @@ const ProductGrid = () => {
     });
   }, [extendedProducts.length, scrollToExtended]);
 
+  const isCloneIndex = useCallback(
+    (index: number) => index < CLONES || index >= products.length + CLONES,
+    []
+  );
+
   // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
   const resetFromClone = useCallback((cloneIndex: number) => {
     const el = carouselRef.current;
     if (!el) return;
+    if (!isCloneIndex(cloneIndex)) return;
+    const target = cloneIndex < CLONES
+      ? cloneIndex + products.length
+      : cloneIndex - products.length;
+    const slide = el.querySelector(`[data-slide-index="${target}"]`) as HTMLElement | null;
+    if (!slide) return;
     isResettingRef.current = true;
-    if (cloneIndex === 0) {
-      const target = extendedProducts.length - 2;
-      const slide = el.querySelector(`[data-slide-index="${target}"]`);
-      if (slide) {
-        const containerWidth = el.clientWidth;
-        const slideWidth = (slide as HTMLElement).offsetWidth;
-        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
-        setExtendedActiveIndex(target);
-      }
-    } else if (cloneIndex === extendedProducts.length - 1) {
-      const slide = el.querySelector(`[data-slide-index="1"]`);
-      if (slide) {
-        const containerWidth = el.clientWidth;
-        const slideWidth = (slide as HTMLElement).offsetWidth;
-        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
-        setExtendedActiveIndex(1);
-      }
-    }
+    const containerWidth = el.clientWidth;
+    el.scrollLeft = slide.offsetLeft - (containerWidth - slide.offsetWidth) / 2;
+    setExtendedActiveIndex(target);
     setTimeout(() => { isResettingRef.current = false; }, 50);
-  }, [extendedProducts.length]);
+  }, [isCloneIndex]);
 
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
