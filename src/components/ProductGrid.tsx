@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -231,22 +231,36 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
+  // Unendliches Loop-Karussell: letztes Produkt als Klon vorne, erstes Produkt als Klon hinten.
+  const extendedProducts = useMemo(
+    () => [products[products.length - 1], ...products, products[0]],
+    []
+  );
   // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
-  const startIndex = Math.floor((products.length - 1) / 2);
-  const [activeIndex, setActiveIndex] = useState(startIndex);
-  const activeIndexRef = useRef(activeIndex);
+  const startRealIndex = Math.floor((products.length - 1) / 2);
+  const startExtendedIndex = startRealIndex + 1;
+  const [extendedActiveIndex, setExtendedActiveIndex] = useState(startExtendedIndex);
+  const activeIndexRef = useRef(extendedActiveIndex);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const skipScrollOnMount = useRef(false);
+  const isResettingRef = useRef(false);
   useLockBodyScroll(Boolean(infoProduct));
 
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+  const getRealIndex = useCallback((extendedIndex: number) => {
+    if (extendedIndex === 0) return products.length - 1;
+    if (extendedIndex === extendedProducts.length - 1) return 0;
+    return extendedIndex - 1;
+  }, [extendedProducts.length]);
 
-  const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'auto') => {
+  const realActiveIndex = getRealIndex(extendedActiveIndex);
+
+  useEffect(() => {
+    activeIndexRef.current = extendedActiveIndex;
+  }, [extendedActiveIndex]);
+
+  const scrollToExtended = useCallback((index: number, behavior: ScrollBehavior = 'auto') => {
     const el = carouselRef.current;
     if (!el) return;
     const slide = el.querySelector(`[data-slide-index="${index}"]`);
@@ -254,35 +268,64 @@ const ProductGrid = () => {
     const containerWidth = el.clientWidth;
     const slideWidth = (slide as HTMLElement).offsetWidth;
     const scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+    isResettingRef.current = true;
     el.scrollTo({ left: scrollLeft, behavior });
+    setTimeout(() => { isResettingRef.current = false; }, 50);
   }, []);
 
-  const goTo = useCallback((index: number) => {
-    setDirection(index > activeIndex ? 1 : -1);
-    setActiveIndex(index);
+  const goToReal = useCallback((realIndex: number) => {
+    setDirection(realIndex > realActiveIndex ? 1 : -1);
     setAutoPlay(false);
-    scrollToSlide(index);
-  }, [activeIndex, scrollToSlide]);
+    const extendedIndex = realIndex + 1;
+    setExtendedActiveIndex(extendedIndex);
+    scrollToExtended(extendedIndex);
+  }, [realActiveIndex, scrollToExtended]);
 
   const goNext = useCallback(() => {
     setAutoPlay(false);
     setDirection(1);
-    setActiveIndex((prev) => {
-      const next = (prev + 1) % products.length;
-      scrollToSlide(next);
+    setExtendedActiveIndex((prev) => {
+      const next = (prev + 1) % extendedProducts.length;
+      scrollToExtended(next);
       return next;
     });
-  }, [scrollToSlide]);
+  }, [extendedProducts.length, scrollToExtended]);
 
   const goPrev = useCallback(() => {
     setAutoPlay(false);
     setDirection(-1);
-    setActiveIndex((prev) => {
-      const next = (prev - 1 + products.length) % products.length;
-      scrollToSlide(next);
+    setExtendedActiveIndex((prev) => {
+      const next = (prev - 1 + extendedProducts.length) % extendedProducts.length;
+      scrollToExtended(next);
       return next;
     });
-  }, [scrollToSlide]);
+  }, [extendedProducts.length, scrollToExtended]);
+
+  // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
+  const resetFromClone = useCallback((cloneIndex: number) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    isResettingRef.current = true;
+    if (cloneIndex === 0) {
+      const target = extendedProducts.length - 2;
+      const slide = el.querySelector(`[data-slide-index="${target}"]`);
+      if (slide) {
+        const containerWidth = el.clientWidth;
+        const slideWidth = (slide as HTMLElement).offsetWidth;
+        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+        setExtendedActiveIndex(target);
+      }
+    } else if (cloneIndex === extendedProducts.length - 1) {
+      const slide = el.querySelector(`[data-slide-index="1"]`);
+      if (slide) {
+        const containerWidth = el.clientWidth;
+        const slideWidth = (slide as HTMLElement).offsetWidth;
+        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+        setExtendedActiveIndex(1);
+      }
+    }
+    setTimeout(() => { isResettingRef.current = false; }, 50);
+  }, [extendedProducts.length]);
 
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
@@ -300,7 +343,10 @@ const ProductGrid = () => {
         if (visible.length > 0) {
           const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
           if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
-            setActiveIndex(idx);
+            setExtendedActiveIndex(idx);
+            if (idx === 0 || idx === extendedProducts.length - 1) {
+              setTimeout(() => resetFromClone(idx), 350);
+            }
           }
         }
       },
@@ -309,28 +355,29 @@ const ProductGrid = () => {
 
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, []);
+  }, [extendedProducts.length, resetFromClone]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
     if (!autoPlay) return;
-    const currentProduct = products[activeIndex];
+    const currentProduct = products[realActiveIndex];
     if (currentProduct.video) return; // video drives its own advancement
     const timer = setTimeout(() => {
       setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % products.length);
+      setExtendedActiveIndex((prev) => {
+        const next = (prev + 1) % extendedProducts.length;
+        scrollToExtended(next);
+        return next;
+      });
     }, 4000);
     return () => clearTimeout(timer);
-  }, [autoPlay, activeIndex]);
+  }, [autoPlay, realActiveIndex, extendedProducts.length, scrollToExtended]);
 
-  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows), but not on mount
+  // Scroll carousel when extendedActiveIndex changes, unless we are resetting from a clone
   useEffect(() => {
-    if (skipScrollOnMount.current) {
-      skipScrollOnMount.current = false;
-      return;
-    }
-    scrollToSlide(activeIndex, 'auto');
-  }, [activeIndex, scrollToSlide]);
+    if (isResettingRef.current) return;
+    scrollToExtended(extendedActiveIndex, 'auto');
+  }, [extendedActiveIndex, scrollToExtended]);
 
   return (
     <>
@@ -417,15 +464,15 @@ const ProductGrid = () => {
               ref={carouselRef}
               className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
               style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {products.map((p, i) => (
+              {extendedProducts.map((p, i) => (
                 <div
-                  key={p.name}
+                  key={`${p.name}-${i}`}
                   data-slide-index={i}
                   className="w-[72vw] shrink-0 snap-center">
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
                       <MobileVideoWithPoster
-                        key={`slide-${i}`}
+                        key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
                         alt={p.name}
@@ -442,27 +489,27 @@ const ProductGrid = () => {
             </div>
 
             <div className="py-1 text-center flex flex-col items-center">
-              <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                {products[activeIndex].name}
+              <Link to={`/produkt/${products[realActiveIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                {products[realActiveIndex].name}
               </Link>
-              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
+              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[realActiveIndex].desc}</p>
               <div className="flex items-center justify-center gap-2 mb-0.5">
-                <span className="text-xl font-black">{products[activeIndex].price}</span>
-                <StockBadge available={isAvailable(products[activeIndex].name)} />
+                <span className="text-xl font-black">{products[realActiveIndex].price}</span>
+                <StockBadge available={isAvailable(products[realActiveIndex].name)} />
               </div>
               <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
               <div className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => {
                     setAutoPlay(false);
-                    const p = products[activeIndex];
+                    const p = products[realActiveIndex];
                     addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
                   }}
                   className="comic-btn text-black text-xs py-2 px-5"
-                  style={{ backgroundColor: products[activeIndex].color }}>
+                  style={{ backgroundColor: products[realActiveIndex].color }}>
                   IN DEN WARENKORB
                 </button>
-                <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
+                <InfoButton onClick={() => setInfoProduct(products[realActiveIndex])} />
               </div>
             </div>
 
@@ -476,10 +523,10 @@ const ProductGrid = () => {
                 <button
                   key={i}
                   aria-label={`Gehe zu Produkt ${i + 1}`}
-                  aria-current={i === activeIndex ? "true" : undefined}
-                  onClick={() => goTo(i)}
+                  aria-current={i === realActiveIndex ? "true" : undefined}
+                  onClick={() => goToReal(i)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  i === activeIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
+                  i === realActiveIndex ? "bg-foreground scale-125" : "bg-foreground/30"}`
                   } />
                 )}
               </div>
