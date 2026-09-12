@@ -319,6 +319,29 @@ const CartDrawer = () => {
 
                   <div className="border-t-2 border-foreground/80" />
 
+                  {/* 3-für-2 Teaser: noch eine Dose fehlt */}
+                  {showThreeForTwoTeaser && (
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-3 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                    >
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#ffd618] border-2 border-foreground flex items-center justify-center shrink-0">
+                        <Sparkles size={20} className="sm:hidden" />
+                        <Sparkles size={22} className="hidden sm:block" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-black text-sm sm:text-base uppercase leading-tight">
+                          Noch 1 Dose hinzufügen
+                        </p>
+                        <p className="text-xs sm:text-sm text-muted-foreground font-bold leading-snug mt-0.5">
+                          …und die 3. Dose bekommst du gratis. 3 für 2!
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+
                   {/* Items */}
                   <div className="space-y-3 sm:space-y-4">
                     {items.map((item) => {
