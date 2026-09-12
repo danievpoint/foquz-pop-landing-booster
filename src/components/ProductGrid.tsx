@@ -232,12 +232,82 @@ const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(activeIndex);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const skipScrollOnMount = useRef(true);
   useLockBodyScroll(Boolean(infoProduct));
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'auto') => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const slide = el.querySelector(`[data-slide-index="${index}"]`);
+    if (!slide) return;
+    const containerWidth = el.clientWidth;
+    const slideWidth = (slide as HTMLElement).offsetWidth;
+    const scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+    el.scrollTo({ left: scrollLeft, behavior });
+  }, []);
+
+  const goTo = useCallback((index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveIndex(index);
+    setAutoPlay(false);
+    scrollToSlide(index);
+  }, [activeIndex, scrollToSlide]);
+
+  const goNext = useCallback(() => {
+    setAutoPlay(false);
+    setDirection(1);
+    setActiveIndex((prev) => {
+      const next = (prev + 1) % products.length;
+      scrollToSlide(next);
+      return next;
+    });
+  }, [scrollToSlide]);
+
+  const goPrev = useCallback(() => {
+    setAutoPlay(false);
+    setDirection(-1);
+    setActiveIndex((prev) => {
+      const next = (prev - 1 + products.length) % products.length;
+      scrollToSlide(next);
+      return next;
+    });
+  }, [scrollToSlide]);
+
+  // Update active index based on which slide is centered while scrolling
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    const slides = Array.from(el.querySelectorAll('[data-slide-index]')) as HTMLElement[];
+    if (slides.length === 0) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible.length > 0) {
+          const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
+          if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
+            setActiveIndex(idx);
+          }
+        }
+      },
+      { root: el, threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    slides.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
@@ -251,77 +321,14 @@ const ProductGrid = () => {
     return () => clearTimeout(timer);
   }, [autoPlay, activeIndex]);
 
-  const goTo = useCallback((index: number) => {
-    setDirection(index > activeIndex ? 1 : -1);
-    setActiveIndex(index);
-    setAutoPlay(false);
-  }, [activeIndex]);
-
-  const goNext = useCallback(() => {
-    setAutoPlay(false);
-    setDirection(1);
-    setActiveIndex((prev) => (prev + 1) % products.length);
-  }, []);
-
-  const goPrev = useCallback(() => {
-    setAutoPlay(false);
-    setDirection(-1);
-    setActiveIndex((prev) => (prev - 1 + products.length) % products.length);
-  }, []);
-
-  const touchStartY = useRef(0);
-  const touchStartTime = useRef(0);
-  const isSwiping = useRef(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
-
+  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows), but not on mount
   useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
-      touchEndX.current = e.touches[0].clientX;
-      touchStartTime.current = Date.now();
-      isSwiping.current = false;
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      touchEndX.current = e.touches[0].clientX;
-      const dx = Math.abs(touchEndX.current - touchStartX.current);
-      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-      if (!isSwiping.current && dy > 10) {
-        // User is scrolling vertically — don't interfere
-        return;
-      }
-      if (dx > dy && dx > 15) {
-        isSwiping.current = true;
-        e.preventDefault();
-      }
-    };
-
-    const onTouchEnd = () => {
-      if (!isSwiping.current) return;
-      const diff = touchStartX.current - touchEndX.current;
-      const elapsed = Date.now() - touchStartTime.current;
-      const velocity = Math.abs(diff) / elapsed;
-      // Trigger on short fast swipes (velocity) or longer drags (distance)
-      if (Math.abs(diff) > 30 || velocity > 0.3) {
-        if (diff > 0) goNext();else
-        goPrev();
-      }
-    };
-
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchmove', onTouchMove);
-      el.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [goNext, goPrev]);
+    if (skipScrollOnMount.current) {
+      skipScrollOnMount.current = false;
+      return;
+    }
+    scrollToSlide(activeIndex, 'auto');
+  }, [activeIndex, scrollToSlide]);
 
   return (
     <>
@@ -402,54 +409,58 @@ const ProductGrid = () => {
             </p>
           </div>
 
-          {/* Mobile: carousel */}
-          <div className="lg:hidden mt-3">
+          {/* Mobile: peeking carousel */}
+          <div className="lg:hidden mt-3 w-screen relative left-1/2 -translate-x-1/2">
             <div
               ref={carouselRef}
-              className="relative overflow-hidden"
-              style={{ minHeight: 380, touchAction: 'pan-y' }}>
-              
-              <div className="flex flex-col items-center w-full">
-                <Link to={`/produkt/${products[activeIndex].handle}`} className="rounded-2xl overflow-hidden mb-1 w-full max-w-lg mx-auto block relative" style={{ backgroundColor: products[activeIndex].color + '22' }}>
-                  {products[activeIndex].video ? (
-                    <MobileVideoWithPoster
-                      key={`slide-${activeIndex}`}
-                      src={products[activeIndex].video!}
-                      poster={products[activeIndex].videoPoster ?? products[activeIndex].image}
-                      alt={products[activeIndex].name}
-                    />
-                  ) : (
-                    <img
-                      src={products[activeIndex].image}
-                      alt={products[activeIndex].name}
-                      className="relative w-full aspect-square object-cover" />
-                  )}
-                </Link>
-
-                <div className="py-1 text-center flex flex-col items-center">
-                  <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
-                    {products[activeIndex].name}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
+              style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {products.map((p, i) => (
+                <div
+                  key={p.name}
+                  data-slide-index={i}
+                  className="w-[72vw] shrink-0 snap-center">
+                  <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
+                    {p.video ? (
+                      <MobileVideoWithPoster
+                        key={`slide-${i}`}
+                        src={p.video}
+                        poster={p.videoPoster ?? p.image}
+                        alt={p.name}
+                      />
+                    ) : (
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="relative w-full aspect-square object-cover" />
+                    )}
                   </Link>
-                  <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
-                  <div className="flex items-center justify-center gap-2 mb-0.5">
-                    <span className="text-xl font-black">{products[activeIndex].price}</span>
-                    <StockBadge available={isAvailable(products[activeIndex].name)} />
-                  </div>
-                  <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
-                  <div className="flex items-center justify-center gap-3">
-                    <button
-                      onClick={() => {
-                        setAutoPlay(false);
-                        const p = products[activeIndex];
-                        addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
-                      }}
-                      className="comic-btn text-black text-xs py-2 px-5"
-                      style={{ backgroundColor: products[activeIndex].color }}>
-                      IN DEN WARENKORB
-                    </button>
-                    <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
-                  </div>
                 </div>
+              ))}
+            </div>
+
+            <div className="py-1 text-center flex flex-col items-center">
+              <Link to={`/produkt/${products[activeIndex].handle}`} className="text-base font-extrabold mb-0 block hover:opacity-70 transition-opacity">
+                {products[activeIndex].name}
+              </Link>
+              <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[activeIndex].desc}</p>
+              <div className="flex items-center justify-center gap-2 mb-0.5">
+                <span className="text-xl font-black">{products[activeIndex].price}</span>
+                <StockBadge available={isAvailable(products[activeIndex].name)} />
+              </div>
+              <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  onClick={() => {
+                    setAutoPlay(false);
+                    const p = products[activeIndex];
+                    addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
+                  }}
+                  className="comic-btn text-black text-xs py-2 px-5"
+                  style={{ backgroundColor: products[activeIndex].color }}>
+                  IN DEN WARENKORB
+                </button>
+                <InfoButton onClick={() => setInfoProduct(products[activeIndex])} />
               </div>
             </div>
 
