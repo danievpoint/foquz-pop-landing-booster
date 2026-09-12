@@ -231,13 +231,15 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  const [activeIndex, setActiveIndex] = useState(0);
+  // Karussell startet mittig, damit links und rechts jeweils ein Produkt angeschnitten sichtbar ist.
+  const startIndex = Math.floor((products.length - 1) / 2);
+  const [activeIndex, setActiveIndex] = useState(startIndex);
   const activeIndexRef = useRef(activeIndex);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const skipScrollOnMount = useRef(true);
+  const skipScrollOnMount = useRef(false);
   useLockBodyScroll(Boolean(infoProduct));
 
   useEffect(() => {
