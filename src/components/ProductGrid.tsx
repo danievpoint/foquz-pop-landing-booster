@@ -327,7 +327,7 @@ const ProductGrid = () => {
       skipScrollOnMount.current = false;
       return;
     }
-    scrollToSlide(activeIndex, 'smooth');
+    scrollToSlide(activeIndex, 'auto');
   }, [activeIndex, scrollToSlide]);
 
   return (
