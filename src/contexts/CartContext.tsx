@@ -369,6 +369,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     activeDiscountPercent = bestAuto.pct;
   }
 
+  // Liegt eine Gratis-Dose im Warenkorb, MUSS der 3-für-2-Code an Shopify
+  // gehen – sonst würde die dritte Dose im Checkout berechnet.
+  // Andere Codes sind in diesem Fall nicht kombinierbar.
+  if (freeCanItem) {
+    discountCode = THREE_FOR_TWO_CODE;
+    activeDiscountPercent = 0;
+  }
+
+
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
   // Falls back to a Shopify-compatible preview while the API response loads.
   // Shopify kürzt Prozent-Rabatte pro Einheit auf ganze Cent ab.
