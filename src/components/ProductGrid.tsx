@@ -273,32 +273,59 @@ const ProductGrid = () => {
     setTimeout(() => { isResettingRef.current = false; }, 50);
   }, []);
 
-  const goTo = useCallback((index: number) => {
-    setDirection(index > activeIndex ? 1 : -1);
-    setActiveIndex(index);
+  const goToReal = useCallback((realIndex: number) => {
+    setDirection(realIndex > realActiveIndex ? 1 : -1);
     setAutoPlay(false);
-    scrollToSlide(index);
-  }, [activeIndex, scrollToSlide]);
+    const extendedIndex = realIndex + 1;
+    setExtendedActiveIndex(extendedIndex);
+    scrollToExtended(extendedIndex);
+  }, [realActiveIndex, scrollToExtended]);
 
   const goNext = useCallback(() => {
     setAutoPlay(false);
     setDirection(1);
-    setActiveIndex((prev) => {
-      const next = (prev + 1) % products.length;
-      scrollToSlide(next);
+    setExtendedActiveIndex((prev) => {
+      const next = (prev + 1) % extendedProducts.length;
+      scrollToExtended(next);
       return next;
     });
-  }, [scrollToSlide]);
+  }, [extendedProducts.length, scrollToExtended]);
 
   const goPrev = useCallback(() => {
     setAutoPlay(false);
     setDirection(-1);
-    setActiveIndex((prev) => {
-      const next = (prev - 1 + products.length) % products.length;
-      scrollToSlide(next);
+    setExtendedActiveIndex((prev) => {
+      const next = (prev - 1 + extendedProducts.length) % extendedProducts.length;
+      scrollToExtended(next);
       return next;
     });
-  }, [scrollToSlide]);
+  }, [extendedProducts.length, scrollToExtended]);
+
+  // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
+  const resetFromClone = useCallback((cloneIndex: number) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    isResettingRef.current = true;
+    if (cloneIndex === 0) {
+      const target = extendedProducts.length - 2;
+      const slide = el.querySelector(`[data-slide-index="${target}"]`);
+      if (slide) {
+        const containerWidth = el.clientWidth;
+        const slideWidth = (slide as HTMLElement).offsetWidth;
+        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+        setExtendedActiveIndex(target);
+      }
+    } else if (cloneIndex === extendedProducts.length - 1) {
+      const slide = el.querySelector(`[data-slide-index="1"]`);
+      if (slide) {
+        const containerWidth = el.clientWidth;
+        const slideWidth = (slide as HTMLElement).offsetWidth;
+        el.scrollLeft = (slide as HTMLElement).offsetLeft - (containerWidth - slideWidth) / 2;
+        setExtendedActiveIndex(1);
+      }
+    }
+    setTimeout(() => { isResettingRef.current = false; }, 50);
+  }, [extendedProducts.length]);
 
   // Update active index based on which slide is centered while scrolling
   useEffect(() => {
@@ -316,7 +343,10 @@ const ProductGrid = () => {
         if (visible.length > 0) {
           const idx = Number((visible[0].target as HTMLElement).dataset.slideIndex);
           if (!Number.isNaN(idx) && idx !== activeIndexRef.current) {
-            setActiveIndex(idx);
+            setExtendedActiveIndex(idx);
+            if (idx === 0 || idx === extendedProducts.length - 1) {
+              setTimeout(() => resetFromClone(idx), 350);
+            }
           }
         }
       },
@@ -325,28 +355,29 @@ const ProductGrid = () => {
 
     slides.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, []);
+  }, [extendedProducts.length, resetFromClone]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
     if (!autoPlay) return;
-    const currentProduct = products[activeIndex];
+    const currentProduct = products[realActiveIndex];
     if (currentProduct.video) return; // video drives its own advancement
     const timer = setTimeout(() => {
       setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % products.length);
+      setExtendedActiveIndex((prev) => {
+        const next = (prev + 1) % extendedProducts.length;
+        scrollToExtended(next);
+        return next;
+      });
     }, 4000);
     return () => clearTimeout(timer);
-  }, [autoPlay, activeIndex]);
+  }, [autoPlay, realActiveIndex, extendedProducts.length, scrollToExtended]);
 
-  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows), but not on mount
+  // Scroll carousel when extendedActiveIndex changes, unless we are resetting from a clone
   useEffect(() => {
-    if (skipScrollOnMount.current) {
-      skipScrollOnMount.current = false;
-      return;
-    }
-    scrollToSlide(activeIndex, 'auto');
-  }, [activeIndex, scrollToSlide]);
+    if (isResettingRef.current) return;
+    scrollToExtended(extendedActiveIndex, 'auto');
+  }, [extendedActiveIndex, scrollToExtended]);
 
   return (
     <>
