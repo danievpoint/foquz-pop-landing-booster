@@ -854,11 +854,12 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={() => navigate(`/produkt/${bundleProduct.handle}`)}
-                  className="relative w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 border-[3px] border-black bg-white hover:-translate-y-0.5"
+                  className="relative w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 border-[3px] border-black hover:-translate-y-0.5"
+                  style={{ backgroundColor: "#75559f" }}
                 >
                   <span
                     className="absolute -top-2 right-2 text-[9px] md:text-[10px] font-black uppercase px-1.5 md:px-2 py-0.5 rounded-full border-[2px] border-black"
-                    style={{ backgroundColor: YELLOW }}
+                    style={{ backgroundColor: YELLOW, color: "#000" }}
                   >
                     BELIEBT
                   </span>
@@ -868,17 +869,17 @@ const ProductDetail = () => {
                     className="w-12 h-12 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white shrink-0"
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block font-black uppercase text-sm whitespace-normal leading-tight">
+                    <span className="block font-black uppercase text-sm whitespace-normal leading-tight text-white">
                       {bundleProduct.name}
                     </span>
-                    <span className="block text-[11px] text-black/60 font-semibold leading-snug mt-0.5">
+                    <span className="block text-[11px] text-white/80 font-semibold leading-snug mt-0.5">
                       Alle 3 Sorten, 11 % sparen
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block font-black text-sm">{formatPrice(bundleProduct.numericPrice)}</span>
+                    <span className="block font-black text-sm text-white">{formatPrice(bundleProduct.numericPrice)}</span>
                     {bundleProduct.originalPrice && (
-                      <span className="block text-[10px] line-through text-black/50 font-semibold">
+                      <span className="block text-[10px] line-through text-white/60 font-semibold">
                         {bundleProduct.originalPrice}
                       </span>
                     )}
