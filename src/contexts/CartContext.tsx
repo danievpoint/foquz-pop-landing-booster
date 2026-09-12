@@ -316,6 +316,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const freeCanEligible = THREE_FOR_TWO_ENABLED && paidCanQty >= 2;
   const freeCanItem = items.find((i) => isFreeCanItem(i.id)) ?? null;
   const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
+  hasFreeCanRef.current = !!freeCanItem;
 
   const chooseFreeCan = useCallback((flavor: { name: string; image: string }) => {
     setItems((prev) => [
