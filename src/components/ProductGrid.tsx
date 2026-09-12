@@ -232,12 +232,15 @@ const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(activeIndex);
   const [direction, setDirection] = useState(1);
   const [infoProduct, setInfoProduct] = useState<(typeof products)[0] | null>(null);
   const [autoPlay, setAutoPlay] = useState(true);
   useLockBodyScroll(Boolean(infoProduct));
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   // Auto-advance only for products without video; video products advance via onended
   useEffect(() => {
@@ -246,10 +249,18 @@ const ProductGrid = () => {
     if (currentProduct.video) return; // video drives its own advancement
     const timer = setTimeout(() => {
       setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % products.length);
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % products.length;
+        return next;
+      });
     }, 4000);
     return () => clearTimeout(timer);
   }, [autoPlay, activeIndex]);
+
+  // Scroll carousel when activeIndex changes (e.g. autoplay, dots, arrows)
+  useEffect(() => {
+    scrollToSlide(activeIndex, 'smooth');
+  }, [activeIndex]);
 
   const scrollToSlide = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
     const el = carouselRef.current;
