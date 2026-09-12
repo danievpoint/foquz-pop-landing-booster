@@ -14,7 +14,7 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart, isGiftItem, isFreeCanItem, type CartItem } from "@/contexts/CartContext";
+import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten, allProducts } from "@/data/products";
 import { Link } from "react-router-dom";
