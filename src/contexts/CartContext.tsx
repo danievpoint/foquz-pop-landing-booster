@@ -490,7 +490,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, checkoutDiscountKey, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
     if (items.length === 0 || isCheckingOut) return;
