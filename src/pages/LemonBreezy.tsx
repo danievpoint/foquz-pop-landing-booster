@@ -229,10 +229,12 @@ const LemonBreezyInner = () => {
                   <button
                     key={b.label}
                     onClick={() => setBundle(b.label)}
-                    className={`relative w-full min-h-[80px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left transition-all ${
-                      selected
-                        ? "bg-violet-600 text-white shadow-[5px_5px_0_0_#000]"
-                        : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)] opacity-90 hover:opacity-100"
+                    className={`relative w-full min-h-[64px] flex items-center gap-2 rounded-2xl border-2 border-black p-2 text-left transition-all ${
+                      b.dosen === 3
+                        ? `bg-violet-600 text-white ${selected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.35)]"}`
+                        : selected
+                          ? "bg-yellow-400 text-black shadow-[5px_5px_0_0_#000]"
+                          : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
                     }`}
                   >
                     {b.tag && (
@@ -244,22 +246,22 @@ const LemonBreezyInner = () => {
                       {selected && <span className="w-3 h-3 rounded-full bg-yellow-400 border border-black" />}
                     </span>
                      {b.dosen === 3 && (
-                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-12 w-12 shrink-0 rounded-lg border-2 border-black object-cover sm:h-14 sm:w-14" />
+                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-9 w-9 shrink-0 rounded-lg border-2 border-black object-cover sm:h-10 sm:w-10" />
                      )}
                     <span className="flex-1">
-                      <span className="block font-barlow font-extrabold">{b.label}</span>
-                      <span className={`block text-xs font-semibold ${selected ? "text-yellow-300" : "text-muted-foreground"}`}>
+                      <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">{b.label}</span>
+                      <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${b.dosen === 3 ? "text-white/90" : "text-muted-foreground"}`}>
                         {b.desc}
                       </span>
                     </span>
                     <span className="text-right">
-                      <span className="block font-barlow font-extrabold text-lg">
+                      <span className="block font-barlow font-extrabold text-base sm:text-lg">
                         {b.price.toFixed(2).replace(".", ",")} €
                         {"oldPrice" in b && b.oldPrice && (
-                          <span className={`ml-1.5 text-xs line-through ${selected ? "text-white/70" : "text-muted-foreground"}`}>{b.oldPrice}</span>
+                          <span className={`ml-1.5 text-xs line-through ${b.dosen === 3 ? "text-white/70" : "text-muted-foreground"}`}>{b.oldPrice}</span>
                         )}
                       </span>
-                      <span className={`block text-[11px] font-semibold ${selected ? "text-white/80" : "text-muted-foreground"}`}>
+                      <span className={`block text-[11px] font-semibold ${b.dosen === 3 ? "text-white/80" : "text-muted-foreground"}`}>
                         {b.perDose} € / Dose
                       </span>
                     </span>
@@ -282,7 +284,7 @@ const LemonBreezyInner = () => {
             </button>
 
             {/* Trust */}
-            <ul className="mt-auto pt-6 space-y-3 text-xs font-semibold">
+            <ul className="pt-4 space-y-2 text-xs font-semibold">
               {["Versand mit DHL nach DE, AT und CH", "14 Tage Widerrufsrecht", "Sichere Zahlung mit PayPal, Klarna und Kreditkarte"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span className="w-4 h-4 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center shrink-0">
@@ -293,7 +295,7 @@ const LemonBreezyInner = () => {
               ))}
             </ul>
 
-            <div className="mt-6">
+            <div className="mt-3">
               <PaymentLogos compact size="md" />
             </div>
           </div>

@@ -29,7 +29,7 @@ const PaymentLogos = ({
             aria-label={label}
             title={label}
             className={`flex items-center justify-center shrink-0 overflow-hidden ${
-              isMd ? "h-6 md:h-8" : "h-5 md:h-8"
+              isMd ? "h-7 md:h-8" : "h-5 md:h-8"
             }`}
           >
             <img
@@ -37,7 +37,7 @@ const PaymentLogos = ({
               alt={label}
               className={`w-auto object-contain ${
                 isMd
-                  ? "h-4 md:h-6 max-w-[46px] md:max-w-[52px]"
+                  ? "h-5 md:h-6 max-w-[52px] md:max-w-[56px]"
                   : "h-3.5 md:h-6 max-w-[40px] md:max-w-[52px]"
               }`}
             />
