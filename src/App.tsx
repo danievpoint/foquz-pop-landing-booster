@@ -1,3 +1,6 @@
+import PeachParty from "./pages/PeachParty";
+import ThaiStyle from "./pages/ThaiStyle";
+import LemonBreezy from "./pages/LemonBreezy";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import PullToRefresh from "@/components/PullToRefresh";
@@ -66,6 +69,12 @@ const App = () => {
                 <Route path="/anleitung" element={<Anleitung />} />
                 <Route path="/hilfe" element={<HelpCenter />} />
                 <Route path="/faq" element={<Faq />} />
+                <Route path="/produkt/peach-party" element={<PeachParty />} />
+                <Route path="/produkte/peach-party" element={<PeachParty />} />
+                <Route path="/produkt/thai-style" element={<ThaiStyle />} />
+                <Route path="/produkte/thai-style" element={<ThaiStyle />} />
+                <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
+                <Route path="/produkte/lemon-breezy" element={<LemonBreezy />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
                 
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />
