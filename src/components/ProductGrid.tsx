@@ -214,7 +214,7 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  // Fünf vollständige Produktreihen geben dem nativen Swipe genug Puffer.
+  // Drei vollständige Produktreihen geben dem nativen Swipe genug Puffer.
   // Nach jeder Bewegung wird unsichtbar in die mittlere Reihe zurückgesetzt.
   // Dadurch kann keine Sorte am echten Anfang/Ende des Scrollbereichs landen.
   const COPY_COUNT = 3;
