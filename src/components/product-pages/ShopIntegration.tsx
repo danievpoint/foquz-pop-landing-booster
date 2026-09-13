@@ -18,28 +18,24 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
 }
 
 export function ProductPageMedia({ product }: { product: Product }) {
-  const [open, setOpen] = useState(false);
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
   const videoRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!open) return;
     let active = true;
     fetchProductGalleryImages(product.handle).then((result) => { if (active) setImages(result); }).catch(() => {});
     return () => { active = false; };
-  }, [product.handle, open]);
+  }, [product.handle]);
   useEffect(() => {
-    if (!open || !videoRef.current) return;
+    if (!videoRef.current) return;
     const observer = new IntersectionObserver(([entry]) => setPlay(entry.intersectionRatio >= 0.99), { threshold: [0, 0.99, 1] });
     observer.observe(videoRef.current);
     return () => { observer.disconnect(); setPlay(false); };
-  }, [open]);
-  return <div>
-    <button className="text-sm font-bold underline py-2" aria-expanded={open} onClick={() => setOpen(!open)}>Weitere Produktbilder & Video</button>
-    {open && <div className="grid gap-3 mt-3">
-      {product.video && <div ref={videoRef}><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl" /></div>}
-      {images.map((img) => <img key={img.url} src={img.url} alt={img.altText || product.name} loading="lazy" className="w-full rounded-xl" />)}
-    </div>}
+  }, []);
+  if (!product.video && images.length === 0) return null;
+  return <div className="grid grid-cols-2 gap-3 mt-3">
+    {product.video && <div ref={videoRef} className="col-span-2"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
+    {images.map((img) => <img key={img.url} src={img.url} alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-xl border-2 border-black" />)}
   </div>;
 }
 
