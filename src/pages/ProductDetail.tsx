@@ -828,11 +828,14 @@ const ProductDetail = () => {
                     <button
                       key={v.handle}
                       type="button"
-                      onClick={() => navigate(`/produkt/${v.handle}`)}
+                      onClick={() => {
+                        setOption("single");
+                        if (v.handle !== product.handle) navigate(`/produkt/${v.handle}`);
+                      }}
                       className={`w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 ${
-                        active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
+                        active && option === "single" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
-                      style={active ? { backgroundColor: YELLOW } : undefined}
+                      style={active && option === "single" ? { backgroundColor: YELLOW } : undefined}
                     >
                       <img src={v.image} alt={v.name} className="w-12 h-12 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white shrink-0" />
                       <span className="min-w-0 flex-1">
@@ -843,18 +846,20 @@ const ProductDetail = () => {
                       </span>
                       <span
                         className={`block w-4 h-4 rounded-full border-[2px] border-black shrink-0 ${
-                          active ? "bg-black" : "bg-white"
+                           active && option === "single" ? "bg-black" : "bg-white"
                         }`}
                       />
                     </button>
                   );
                 })}
 
-                {/* Power Bundle als hervorgehobene Extra-Option */}
+                {/* Power Bundle als hervorgehobene Sorten-Option */}
                 <button
                   type="button"
-                  onClick={() => navigate(`/produkt/${bundleProduct.handle}`)}
-                  className="relative w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 border-[3px] border-black hover:-translate-y-0.5"
+                  onClick={() => setOption("bundle")}
+                  className={`relative w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 border-black hover:-translate-y-0.5 ${
+                    option === "bundle" ? "border-[3px]" : "border-[2px]"
+                  }`}
                   style={{ backgroundColor: "#75559f" }}
                 >
                   <span
@@ -884,6 +889,11 @@ const ProductDetail = () => {
                       </span>
                     )}
                   </span>
+                  <span
+                    className={`block w-4 h-4 rounded-full border-[2px] border-white shrink-0 ${
+                      option === "bundle" ? "bg-white" : "bg-transparent"
+                    }`}
+                  />
                 </button>
               </div>
             </div>
@@ -893,7 +903,7 @@ const ProductDetail = () => {
               <h2 className="text-sm lg:text-lg font-black uppercase mb-2.5 md:mb-0.5">MENGE WÄHLEN</h2>
               <p className="hidden md:block text-xs font-bold text-black/60 uppercase mb-3">Mehr Dosen, mehr Wolke 7</p>
 
-              <div className="grid grid-cols-2 gap-3 mt-3 md:mt-0 md:grid-cols-1 md:space-y-3">
+              <div className="mt-3 md:mt-0">
                 <button
                   type="button"
                   onClick={() => setOption("single")}
@@ -914,40 +924,6 @@ const ProductDetail = () => {
                   </span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => setOption("bundle")}
-                  className={`relative flex flex-col md:flex-row md:items-center md:justify-between gap-0.5 p-2.5 md:p-2.5 rounded-lg md:rounded-2xl text-left transition-all ${
-                    option === "bundle" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
-                  }`}
-                  style={option === "bundle" ? { backgroundColor: YELLOW } : undefined}
-                >
-                  <span
-                    className="absolute -top-2 right-1 text-[9px] md:text-[10px] font-black uppercase px-1.5 md:px-2 py-0.5 rounded-full border-[2px] border-black"
-                    style={{ backgroundColor: YELLOW }}
-                  >
-                    BELIEBT
-                  </span>
-                  <span>
-                    <span className="block font-black uppercase text-[11px] md:text-sm">3 DOSEN</span>
-                    <span className="hidden md:block text-[10px] md:text-[11px] text-black/60 font-semibold">
-                      Alle 3 Sorten, 11 % sparen
-                    </span>
-                  </span>
-                  <span className="md:text-right shrink-0">
-                    <span className="flex items-baseline gap-1 md:justify-end">
-                      <span className="font-black text-sm md:text-lg">{formatPrice(bundleProduct.numericPrice)}</span>
-                      {bundleProduct.originalPrice && (
-                        <span className="text-[10px] md:text-xs line-through text-black/50 font-semibold">
-                          {bundleProduct.originalPrice}
-                        </span>
-                      )}
-                    </span>
-                    <span className="block text-[9px] md:text-[10px] text-black/60 font-semibold">
-                      {formatPrice(bundleProduct.numericPrice / 3)} pro Dose
-                    </span>
-                  </span>
-                </button>
               </div>
             </div>
             </>
@@ -1012,7 +988,7 @@ const ProductDetail = () => {
               ))}
             </ul>
 
-            <div className="mt-3 pt-3 md:mt-6 md:pt-6">
+            <div className="mt-3 md:mt-6">
               <PaymentLogos compact size="md" />
             </div>
 
