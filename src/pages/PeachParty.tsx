@@ -147,16 +147,6 @@ const PeachPartyInner = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
           {/* Gallery – alle Produktbilder ohne Slider */}
           <div className="flex flex-col">
-            <div className={`grid gap-2 mb-4 rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden ${galleryThumbs.length === 1 ? "grid-cols-1" : "grid-cols-2 bg-white p-2"}`}>
-              {galleryThumbs.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`Peach Party Produktbild ${i + 1}`}
-                  className={`w-full ${galleryThumbs.length === 1 ? "aspect-auto" : "aspect-square"} object-cover rounded-xl`}
-                />
-              ))}
-            </div>
             <ProductPageMedia product={product} />
             {/* Title Block – unter dem Slider */}
             <div className="text-left mt-6 md:mt-8">
