@@ -95,12 +95,17 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.08)" },
         },
+        shimmer: {
+          "0%": { transform: "translateX(-200%) skewX(-15deg)" },
+          "100%": { transform: "translateX(200%) skewX(-15deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 3s ease-in-out infinite",
         breathe: "breathe 3s ease-in-out infinite",
+        shimmer: "shimmer 2.5s infinite linear",
       },
     },
   },
