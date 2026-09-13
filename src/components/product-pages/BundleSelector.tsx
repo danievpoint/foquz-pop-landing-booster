@@ -15,7 +15,7 @@ interface BundleSelectorProps {
 
 export function BundleSelector({ bundles, selected, onSelect, className = "" }: BundleSelectorProps) {
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-4 pt-2 ${className}`}>
       {bundles.map((b) => {
         const isSelected = selected === b.label;
         const isBundle = b.dosen === 3;
