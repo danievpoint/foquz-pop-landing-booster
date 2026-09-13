@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import lifestyleImg from "@/assets/lifestyle-howto.png";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
 import howtoIcon01 from "@/assets/howto-icon-01.svg";
@@ -12,8 +13,29 @@ const steps = [
 ];
 
 const HowToSection = () => {
+  // Das Hintergrundvideo ist gross: erst laden, wenn die Sektion in die Naehe
+  // des Viewports kommt. Bis dahin traegt der Abschnitt seine Hintergrundfarbe.
+  const sectionRef = useRef<HTMLElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || showVideo) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowVideo(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [showVideo]);
+
   return (
-    <section id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px" style={{ backgroundColor: "hsl(271 30% 48%)" }}>
+    <section ref={sectionRef} id="howto" className="relative overflow-hidden scroll-mt-20 -mt-px" style={{ backgroundColor: "hsl(271 30% 48%)" }}>
       <div
         className="relative min-h-[600px] md:min-h-[600px]"
         style={{ containerType: "inline-size", backgroundColor: "hsl(271 30% 48%)" }}
@@ -28,16 +50,18 @@ const HowToSection = () => {
             .howto-content { padding-top: clamp(3rem, 5cqw, 5rem); }
           }
         `}</style>
-        <video
-          src={howtoBgVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          className="absolute inset-0 block h-full w-full object-cover"
-          style={{ contentVisibility: "auto", backgroundColor: "hsl(271 30% 48%)" }}
-        />
+        {showVideo && (
+          <video
+            src={howtoBgVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 block h-full w-full object-cover"
+            style={{ contentVisibility: "auto", backgroundColor: "hsl(271 30% 48%)" }}
+          />
+        )}
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
           <motion.div
             initial={{ opacity: 0, x: -40, rotate: -2 }}

@@ -20,11 +20,17 @@ products.forEach((p) => {
 // Galerie-Bilder der Produktseiten im Hintergrund vorladen (kleine WebP-Varianten)
 if (typeof window !== "undefined") {
   const warm = () => products.forEach((p) => prefetchProductGallery(p.handle, [200, 800]));
-  if ("requestIdleCallback" in window) {
-    (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(warm);
-  } else {
-    setTimeout(warm, 1500);
-  }
+  // Erst nach dem vollstaendigen Laden der Seite starten, damit das Vorladen
+  // nicht mit dem ersten Seitenaufbau um Bandbreite konkurriert.
+  const schedule = () => {
+    if ("requestIdleCallback" in window) {
+      (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(warm);
+    } else {
+      setTimeout(warm, 2000);
+    }
+  };
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
 }
 
 
@@ -103,21 +109,37 @@ const MobileVideoWithPoster = memo(({
   src,
   poster,
   play,
+  near,
 }: {
   src: string;
   poster: string;
   play: boolean;
+  /** Nur aktive und direkt benachbarte Slides laden ueberhaupt Video-Daten. */
+  near: boolean;
 }) => {
   return (
-    <div className="relative w-full aspect-square overflow-hidden bg-muted">
-      <AutoVideo
-        src={src}
-        poster={poster}
-        loop
-        play={play}
-        preload="auto"
-        className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
-      />
+    <div
+      className="relative w-full aspect-square overflow-hidden"
+      style={{ backgroundImage: `url(${poster})`, backgroundSize: "cover", backgroundPosition: "center" }}
+    >
+      {near ? (
+        <AutoVideo
+          src={src}
+          poster={poster}
+          loop
+          play={play}
+          preload={play ? "auto" : "metadata"}
+          className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
+        />
+      ) : (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
     </div>
   );
 });
@@ -198,11 +220,11 @@ const DesktopHoverVideo = ({ video, poster }: { video: string; poster: string })
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
-  // Fünf vollständige Produktreihen geben dem nativen Swipe genug Puffer.
+  // Drei vollständige Produktreihen geben dem nativen Swipe genug Puffer.
   // Nach jeder Bewegung wird unsichtbar in die mittlere Reihe zurückgesetzt.
   // Dadurch kann keine Sorte am echten Anfang/Ende des Scrollbereichs landen.
-  const COPY_COUNT = 5;
-  const CENTER_COPY = 2;
+  const COPY_COUNT = 3;
+  const CENTER_COPY = 1;
   const extendedProducts = useMemo(
     () => Array.from({ length: COPY_COUNT }, () => products).flat(),
     []
@@ -435,6 +457,7 @@ const ProductGrid = () => {
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
                         play={i === extendedActiveIndex}
+                        near={Math.abs(i - extendedActiveIndex) <= 1}
                       />
                     ) : (
                       <img
