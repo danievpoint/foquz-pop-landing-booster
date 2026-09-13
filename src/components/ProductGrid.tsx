@@ -435,6 +435,7 @@ const ProductGrid = () => {
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
                         play={Math.abs(i - extendedActiveIndex) <= 1}
+                        active={i === extendedActiveIndex}
                       />
                     ) : (
                       <img
