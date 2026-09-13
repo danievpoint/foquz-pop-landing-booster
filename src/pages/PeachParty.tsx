@@ -57,6 +57,7 @@ const comparisons = [
     foquzAlt: "Original FOQUZ Riechdose",
     compImg: comparisonNasenspray.url,
     compAlt: "Nasenspray",
+    foquzFootnote: "*FOQUZ ist nicht zur Behandlung einer verstopften Nase, Erkältung oder Allergie bestimmt.",
     footnote: "**Gilt nur für bestimmte abschwellende Nasensprays. Anwendung nach Packungsbeilage.",
     foquz: [
       "Kein Sprühstoß, keine Flüssigkeit",
@@ -73,6 +74,7 @@ const comparisons = [
   },
   {
     heading: ["FOQUZ VS. ENERGY DRINK"],
+    foquzTitle: "FOQUZ",
     compTitle: "ENERGY DOSE*",
     foquzImg: doseFoquz.url,
     foquzAlt: "Original FOQUZ Riechdose",
@@ -86,8 +88,8 @@ const comparisons = [
       "Mobil & wiederverschließbar",
     ],
     comp: [
-      "Koffein kann deinen Schlaf beeinträchtigen",
-      "Koffein kann länger nachwirken, als du möchtest",
+      "Koffein kann deinen Schlaf beeinträchtigen.",
+      "Koffein kann länger nachwirken, als du möchtest.",
       "Oft zu viel Zucker",
       "Nach dem Öffnen nicht wiederverschließbar",
     ],
@@ -304,7 +306,7 @@ const PeachPartyInner = () => {
         <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 py-12 md:py-16 lg:py-20">
           <div className="rounded-3xl border-4 border-black shadow-[8px_8px_0_0_#000] p-5 sm:p-8 lg:p-10" style={{ backgroundColor: "#ffd618" }}>
             <h2 className="font-barlow font-extrabold section-title text-center mb-6 md:mb-8 leading-none">
-              WAS IST PEACH PARTY
+              WAS IST PEACH PARTY?
             </h2>
             <p className="text-center text-sm md:text-base text-foreground/80 leading-relaxed mb-6 md:mb-8">
               Peach Party ist FOQUZ – die moderne Riechdose für deinen kurzen Refresh-Moment.
@@ -319,11 +321,11 @@ const PeachPartyInner = () => {
                   </div>
                   <div className="text-left">
                     <p className="font-extrabold uppercase tracking-wide text-foreground mb-1">Anwendung</p>
-                    <p>Dose öffnen. Kurz riechen. Ab auf Wolke 7. Wieder verschließen.</p>
+                    <p>Dose öffnen. Kurz riechen. AB AUF WOLKE 7. Wieder verschließen. Bei Bedarf wiederholen.</p>
                   </div>
                   <div className="text-left">
                     <p className="font-extrabold uppercase tracking-wide text-foreground mb-1">Dein Moment</p>
-                    <p>Beim Gaming, beim Sport, am Schreibtisch oder unterwegs.</p>
+                    <p>Beim Gaming für die nächste Runde. Beim Sport für den Moment zwischen zwei Sätzen. Am Schreibtisch, beim Streamen, unterwegs oder einfach zwischendurch, wenn du kurz einen neuen Refresh-Moment willst.</p>
                   </div>
                 </div>
               </div>
@@ -344,6 +346,11 @@ const PeachPartyInner = () => {
                 </p>
               </ComicBox>
             </div>
+            <div className="max-w-3xl mx-auto mt-6 md:mt-8 text-center text-sm md:text-base text-foreground/80 leading-relaxed space-y-3">
+              <p>Wenn du nur einen kurzen Refresh-Moment suchst, brauchst du dafür keinen Koffein-Drink.</p>
+              <p className="font-bold text-foreground">Kein Energy Drink. Kein Kaffee. Kein Nikotin. Kein Getränk nötig.</p>
+              <p>FOQUZ enthält kein Koffein – du entscheidest selbst, wann dein Moment beginnt und wann er vorbei ist.</p>
+            </div>
           </div>
         </section>
 
@@ -359,27 +366,25 @@ const PeachPartyInner = () => {
               <div className="text-center md:px-6">
                 <p className="font-extrabold uppercase tracking-wide text-foreground mb-1">Die Inspiration</p>
                 <p>
-                  FOQUZ ist von Ya Dom – auch Yadom genannt – inspiriert, einem bekannten thailändischen
-                  Riechprodukt. In Thailand gehört Ya Dom für viele Menschen zum Alltag.
+                  Die Idee von FOQUZ ist von Ya Dom – auch Yadom genannt – inspiriert, einem bekannten thailändischen Riechprodukt. In Thailand gehört Ya Dom für viele Menschen zum Alltag und ist klein genug, um überall dabei zu sein.
                 </p>
               </div>
               <div className="text-center md:px-6">
                 <p className="font-extrabold uppercase tracking-wide text-foreground mb-1">Neu interpretiert</p>
                 <p>
-                  Wir haben die Idee neu interpretiert und auf Wolke 7 geschickt: mit fruchtigen Duftwelten,
-                  starken Designs und einem modernen Riechritual.
+                  Wir haben diese Idee neu interpretiert und auf Wolke 7 geschickt: mit fruchtigen Duftwelten, starken Designs und einem modernen Riech-Ritual für heute.
                 </p>
               </div>
               <div className="text-center md:px-6">
                 <p className="font-extrabold uppercase tracking-wide text-foreground mb-1">FOQUZ heute</p>
                 <p>
-                  Klassische Kräuter- und Mentholnoten treffen auf Sorten wie Peach Party, Lemon Breezy und Thai Style.
+                  Klassische Kräuter- und Mentholprofile treffen bei FOQUZ auf Sorten wie Peach Party, Lemon Breezy und Thai Style.
                 </p>
               </div>
             </div>
             <p className="text-center font-bold text-foreground mt-6 md:mt-8">Keine Vape. Kein Nasenspray. Kein Arzneimittel.</p>
             <p className="text-center mt-3">
-              FOQUZ ist ein Erfrischungsprodukt zum Riechen – ohne Nikotin und ohne Koffein.
+              FOQUZ ist ein Erfrischungsprodukt zum Riechen – ohne Nikotin und ohne Koffein. Ein neues Ritual für die nächste Runde, den nächsten Satz oder den kurzen Moment dazwischen.
             </p>
           </div>
 
@@ -398,14 +403,10 @@ const PeachPartyInner = () => {
               {storyOpen && (
                 <div className="px-4 sm:px-6 pb-5 text-sm md:text-base text-foreground/80 leading-relaxed space-y-4">
                   <p>
-                    Der Begriff Ya Dom setzt sich sinngemäß aus „ya“ für Medizin und „dom“ für riechen zusammen.
-                    Ya Dom ist klein genug, um überall dabei zu sein.
+                    Der Begriff setzt sich sinngemäß aus „ya“ für Medizin und „dom“ für riechen zusammen.
                   </p>
                   <p>
-                    Wir haben diese Idee auf Wolke 7 geschickt. Bei unseren eigenen Straßeninterviews in Thailand
-                    kamen die fruchtigen FOQUZ-Düfte bei mehreren Befragten besonders gut an – gerade weil sie die
-                    klassische Duftwelt um moderne, fruchtige Noten erweitern. Klassische Kräuter- und
-                    Mentholprofile treffen bei FOQUZ auf Sorten wie Peach Party, Lemon Breezy und Thai Style.
+                    Bei unseren eigenen Straßeninterviews in Thailand kamen die fruchtigen FOQUZ-Düfte bei mehreren Befragten besonders gut an – gerade weil sie die klassische Duftwelt um moderne, fruchtige Noten erweitern.
                   </p>
                   <p>
                     FOQUZ ist ein Erfrischungsprodukt zum Riechen. Ein neues Ritual für die nächste Runde, den
@@ -518,6 +519,11 @@ const PeachPartyInner = () => {
                       </div>
                     </div>
                   </div>
+                  {c.foquzFootnote && (
+                    <p className="text-[11px] md:text-xs text-black/80 text-center mt-4 leading-relaxed max-w-4xl mx-auto">
+                      {c.foquzFootnote}
+                    </p>
+                  )}
                   {c.footnote && (
                     <p className="max-w-3xl mx-auto mt-4 md:mt-6 text-center text-[11px] md:text-xs font-semibold text-black/80 leading-snug">
                       {c.footnote}
@@ -639,9 +645,9 @@ const PeachPartyInner = () => {
               <div className="bg-white px-6 py-5 md:px-8 md:py-6">
                 <ul className="divide-y divide-border">
                   {[
-                    "Natürliche Kräuter und Ätherische Öle* – sonst nichts",
+                    "Natürliche Kräuter und ätherische Öle* – sonst nichts.",
                     "Mobil, wiederverschließbar & jederzeit griffbereit",
-                    "Deutsche Marke, Deutscher Versand & Support",
+                    "Deutsche Marke, deutscher Versand & Support",
                   ].map((t) => (
                     <li key={t} className="flex items-center gap-3 py-2.5 text-sm md:text-base font-semibold">
                       <span className="w-6 h-6 rounded-full border-2 border-black flex items-center justify-center shrink-0" style={{ backgroundColor: "#ffd618" }}>
