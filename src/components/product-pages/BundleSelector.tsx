@@ -55,12 +55,6 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
                     {isSelected && <span className="h-3 w-3 rounded-full bg-yellow-400 border border-black" />}
                   </span>
 
-                  <img
-                    src={bundleProduct.image}
-                    alt="FOQUZ Power Bundle"
-                    className="h-9 w-9 shrink-0 rounded-lg border-2 border-black object-cover sm:h-10 sm:w-10"
-                  />
-
                   <span className="flex-1">
                     <span className="flex items-center gap-1.5">
                       <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
