@@ -222,53 +222,7 @@ const LemonBreezyInner = () => {
 
             {/* Bundle wählen */}
             <h2 className="font-barlow font-extrabold text-base mb-3">MENGE WÄHLEN — MEHR DOSEN, MEHR WOLKE 7</h2>
-            <div className="space-y-4 mb-8">
-              {bundles.map((b) => {
-                const selected = bundle === b.label;
-                return (
-                  <button
-                    key={b.label}
-                    onClick={() => setBundle(b.label)}
-                    className={`relative w-full min-h-[64px] flex items-center gap-2 rounded-2xl border-2 border-black p-2 text-left transition-all ${
-                      b.dosen === 3
-                        ? `bg-violet-600 text-white ${selected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.35)]"}`
-                        : selected
-                          ? "bg-white text-black shadow-[5px_5px_0_0_#000]"
-                          : "bg-white text-black shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
-                    }`}
-                  >
-                    {b.tag && (
-                      <span className="absolute -top-3 right-3 max-w-[45%] bg-yellow-400 text-black border-2 border-black rounded-full px-2.5 py-1 text-[10px] leading-none text-center font-black shadow-[2px_2px_0_0_#000] sm:right-4 sm:max-w-none sm:px-3">
-                        {b.tag}
-                      </span>
-                    )}
-                    <span className={`w-6 h-6 rounded-full border-2 border-black flex items-center justify-center shrink-0 ${selected ? "bg-white" : "bg-white"}`}>
-                      {selected && <span className="w-3 h-3 rounded-full bg-yellow-400 border border-black" />}
-                    </span>
-                     {b.dosen === 3 && (
-                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-9 w-9 shrink-0 rounded-lg border-2 border-black object-cover sm:h-10 sm:w-10" />
-                     )}
-                    <span className="flex-1">
-                      <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">{b.label}</span>
-                      <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${b.dosen === 3 ? "text-white/90" : "text-muted-foreground"}`}>
-                        {b.desc}
-                      </span>
-                    </span>
-                    <span className="text-right">
-                      <span className="block font-barlow font-extrabold text-base sm:text-lg">
-                        {b.price.toFixed(2).replace(".", ",")} €
-                        {"oldPrice" in b && b.oldPrice && (
-                          <span className={`ml-1.5 text-xs line-through ${b.dosen === 3 ? "text-white/70" : "text-muted-foreground"}`}>{b.oldPrice}</span>
-                        )}
-                      </span>
-                      <span className={`block text-[11px] font-semibold ${b.dosen === 3 ? "text-white/80" : "text-muted-foreground"}`}>
-                        {b.perDose} € / Dose
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <BundleSelector bundles={bundles} selected={bundle} onSelect={setBundle} className="mb-8" />
 
             <p className="text-xs font-bold leading-relaxed mb-4">
               {isAvailable(selectedBundle.productName) === false ? "Aktuell ausverkauft" : isAvailable(selectedBundle.productName) === true ? "Verfügbar ⚡ · AUF LAGER — in 2 bis 5 Werktagen bei dir" : "Lieferzeit: 2 bis 5 Werktage"} <span className="font-semibold text-muted-foreground">· inkl. MwSt.</span>
