@@ -28,7 +28,7 @@ const ORANGE = "#f6871f";
 const LIGHTBLUE = "#c5e6f2";
 const MINT = "#85c8b5";
 
-const galleryThumbs = [productImages.thai];
+
 
 
 const comparisons = [

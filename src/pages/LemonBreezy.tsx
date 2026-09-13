@@ -29,7 +29,7 @@ const lemonKickBanner = { url: "/images/product-pages/lemon-kick-banner.png" };
 const ORANGE = "#f6871f";
 const LIGHTBLUE = "#c5e6f2";
 
-const galleryThumbs = [productImages.lemon];
+
 
 
 const comparisons = [

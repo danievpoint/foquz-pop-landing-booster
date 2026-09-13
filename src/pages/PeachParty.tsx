@@ -26,7 +26,7 @@ const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
 const ORANGE = "#f6871f";
 const LIGHTBLUE = "#c5e6f2";
 
-const galleryThumbs = [productImages.peach];
+
 
 
 const comparisons = [
