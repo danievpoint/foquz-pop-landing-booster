@@ -102,31 +102,19 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 const MobileVideoWithPoster = memo(({
   src,
   poster,
+  play,
 }: {
   src: string;
   poster: string;
+  play: boolean;
 }) => {
-  const [inView, setInView] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= 0.05),
-      { threshold: [0, 0.05, 1] }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <div ref={wrapRef} className="relative w-full aspect-square overflow-hidden bg-muted">
+    <div className="relative w-full aspect-square overflow-hidden bg-muted">
       <AutoVideo
         src={src}
         poster={poster}
         loop
-        play={inView}
+        play={play}
         preload="auto"
         className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
       />
@@ -446,6 +434,7 @@ const ProductGrid = () => {
                         key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
+                        play={Math.abs(i - extendedActiveIndex) <= 1}
                       />
                     ) : (
                       <img
