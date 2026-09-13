@@ -20,12 +20,9 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
 export function ProductPageMedia({ product }: { product: Product }) {
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
-  const [activeImage, setActiveImage] = useState(0);
   const videoRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let active = true;
-    setActiveImage(0);
     fetchProductGalleryImages(product.handle).then((result) => { if (active) setImages(result); }).catch(() => {});
     return () => { active = false; };
   }, [product.handle]);
@@ -35,40 +32,15 @@ export function ProductPageMedia({ product }: { product: Product }) {
     observer.observe(videoRef.current);
     return () => { observer.disconnect(); setPlay(false); };
   }, []);
-  const scrollToImage = (index: number) => {
-    const gallery = galleryRef.current;
-    if (!gallery) return;
-    gallery.scrollTo({ left: index * gallery.clientWidth, behavior: "smooth" });
-    setActiveImage(index);
-  };
-  const updateActiveImage = () => {
-    const gallery = galleryRef.current;
-    if (!gallery) return;
-    setActiveImage(Math.round(gallery.scrollLeft / gallery.clientWidth));
-  };
   if (!product.video && images.length === 0) return null;
   return <div className="mt-3">
     {product.video && <div ref={videoRef} className="mb-3"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
-    {images.length > 0 && <div className="mx-auto w-full max-w-[15rem] sm:max-w-[17rem]">
-      <div ref={galleryRef} onScroll={updateActiveImage} className="flex aspect-square snap-x snap-mandatory overflow-x-auto overflow-y-hidden rounded-lg border-2 border-black bg-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    {images.length > 0 && <div className="mx-auto mt-2 flex w-full max-w-[13rem] justify-center gap-2 sm:max-w-[15rem]">
         {images.slice(0, 3).map((img, index) => (
-          <div key={img.url} className="h-full min-w-full snap-center snap-always">
-            <img src={shopifyImageUrl(img.url, 480)} srcSet={shopifyImageSrcSet(img.url, [240, 360, 480, 640])} sizes="(min-width: 640px) 272px, 240px" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+          <div key={img.url} className="aspect-square min-w-0 flex-1 overflow-hidden rounded-md border-2 border-black bg-card">
+            <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="80px" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading="lazy" decoding="async" className="h-full w-full object-cover" />
           </div>
         ))}
-      </div>
-      <div className="mt-2 flex items-center justify-center gap-2 py-0.5" aria-label="Produktbilder">
-        {images.slice(0, 3).map((img, index) => (
-          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Zu Produktbild ${index + 1}`} aria-current={activeImage === index ? "true" : undefined} className={`h-2.5 shrink-0 rounded-full border-2 border-black transition-all ${activeImage === index ? "w-6 bg-secondary" : "w-2.5 bg-card"}`} />
-        ))}
-      </div>
-      <div className="mt-2 flex justify-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {images.slice(0, 3).map((img, index) => (
-          <button key={`thumb-${img.url}`} type="button" onClick={() => scrollToImage(index)} aria-label={`Vorschaubild ${index + 1}`} className={`h-12 w-12 shrink-0 overflow-hidden rounded-md bg-card transition-shadow ${activeImage === index ? "border-2 border-secondary shadow-[2px_2px_0_0_hsl(var(--foreground))]" : "border-2 border-border"}`}>
-            <img src={shopifyImageUrl(img.url, 120)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-          </button>
-        ))}
-      </div>
     </div>}
   </div>;
 }
