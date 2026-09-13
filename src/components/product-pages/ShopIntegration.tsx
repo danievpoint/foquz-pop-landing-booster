@@ -20,7 +20,9 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
 export function ProductPageMedia({ product }: { product: Product }) {
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
   const videoRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let active = true;
     fetchProductGalleryImages(product.handle).then((result) => { if (active) setImages(result); }).catch(() => {});
@@ -32,11 +34,40 @@ export function ProductPageMedia({ product }: { product: Product }) {
     observer.observe(videoRef.current);
     return () => { observer.disconnect(); setPlay(false); };
   }, []);
+  const scrollToImage = (index: number) => {
+    const gallery = galleryRef.current;
+    const target = gallery?.children.item(index);
+    if (!(target instanceof HTMLElement)) return;
+    target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    setActiveImage(index);
+  };
+  const updateActiveImage = () => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    const center = gallery.scrollLeft + gallery.clientWidth / 2;
+    const slides = Array.from(gallery.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
+    const closest = slides.reduce((best, slide, index) => {
+      const distance = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - center);
+      return distance < best.distance ? { index, distance } : best;
+    }, { index: 0, distance: Number.POSITIVE_INFINITY });
+    setActiveImage(closest.index);
+  };
   if (!product.video && images.length === 0) return null;
   return <div className="mt-3">
     {product.video && <div ref={videoRef} className="mb-3"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
-    {images.length > 0 && <div className="mx-auto grid w-full max-w-[17rem] grid-cols-3 gap-2 sm:max-w-[20rem] md:gap-3 lg:max-w-[22rem]">
-      {images.slice(0, 3).map((img) => <img key={img.url} src={shopifyImageUrl(img.url, 240)} srcSet={shopifyImageSrcSet(img.url, [120, 180, 240, 360])} sizes="(min-width: 1024px) 110px, (min-width: 640px) 100px, 85px" alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-lg border-2 border-black" />)}
+    {images.length > 0 && <div className="mx-auto w-full max-w-[15rem] sm:max-w-[17rem]">
+      <div ref={galleryRef} onScroll={updateActiveImage} className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-[calc(50%-5.5rem)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {images.slice(0, 3).map((img, index) => (
+          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Produktbild ${index + 1} anzeigen`} className="w-28 shrink-0 snap-center overflow-hidden rounded-lg border-2 border-black bg-white p-0">
+            <img src={shopifyImageUrl(img.url, 240)} srcSet={shopifyImageSrcSet(img.url, [120, 180, 240, 360])} sizes="112px" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading="lazy" className="aspect-square w-full object-cover" />
+          </button>
+        ))}
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2" aria-label="Produktbilder">
+        {images.slice(0, 3).map((img, index) => (
+          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Zu Produktbild ${index + 1}`} aria-current={activeImage === index ? "true" : undefined} className={`h-2.5 w-2.5 rounded-full border border-black transition-colors ${activeImage === index ? "bg-yellow-400" : "bg-white"}`} />
+        ))}
+      </div>
     </div>}
   </div>;
 }

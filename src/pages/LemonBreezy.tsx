@@ -1,6 +1,7 @@
 import { useProductPage } from "@/hooks/useProductPage";
 import { ProductPageMeta, ProductPageMedia, ProductPageSticky } from "@/components/product-pages/ShopIntegration";
 import { BundleSelector } from "@/components/product-pages/BundleSelector";
+import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { useRef, useState } from "react";
@@ -130,7 +131,6 @@ const ComicBox = ({
 const LemonBreezyInner = () => {
   const shop = useProductPage("lemon-breezy");
   const { product, bundles, addSingle, addSelection, isAvailable } = shop;
-  const navigate = useNavigate();
   const touchStart = useRef<number | null>(null);
   const [activeCompare, setActiveCompare] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -191,34 +191,7 @@ const LemonBreezyInner = () => {
           <div className="flex flex-col h-full">
             {/* Sorte wählen */}
             <h2 className="font-barlow font-extrabold text-base mb-3">SORTE WÄHLEN</h2>
-            <div className="space-y-4 mb-8">
-              {[
-                { name: "PEACH PARTY", desc: "Pfirsich & Kräuter", img: productImages.peach },
-                { name: "LEMON BREEZY", desc: "Zitrone & Kräuter", img: productImages.lemon },
-                { name: "THAI STYLE", desc: "Kräuter & Menthol", img: productImages.thai },
-              ].map((s) => {
-                const selected = sorte === s.name;
-                return (
-                  <button
-                    key={s.name}
-                    onClick={() => navigate(`/produkt/${s.name.toLowerCase().replace(/ /g, "-")}`)}
-                    aria-pressed={selected}
-                    className={`w-full min-h-[72px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left transition-all ${
-                      selected ? "bg-yellow-400 shadow-[5px_5px_0_0_#000]" : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
-                    }`}
-                  >
-                    <img src={s.img} alt={s.name} className="w-12 h-12 rounded-xl border-2 border-black object-cover shrink-0" />
-                    <span className="flex-1">
-                      <span className="block font-barlow font-extrabold">{s.name}</span>
-                      <span className="block text-xs text-muted-foreground font-semibold">{s.desc}</span>
-                    </span>
-                    <span className={`w-6 h-6 rounded-full border-2 border-black flex items-center justify-center shrink-0 ${selected ? "bg-white" : "bg-white"}`}>
-                      {selected && <span className="w-3 h-3 rounded-full bg-yellow-400 border border-black" />}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <ProductFlavorSelector selected={sorte} />
 
             {/* Bundle wählen */}
             <h2 className="font-barlow font-extrabold text-base mb-3">MENGE WÄHLEN — MEHR DOSEN, MEHR WOLKE 7</h2>
