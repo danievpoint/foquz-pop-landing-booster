@@ -69,7 +69,7 @@ export function ProductPageMedia({ product }: { product: Product }) {
     </div>
     {slideCount > 1 && <div className="mt-3 flex items-center justify-center gap-2" aria-label="Produktbild auswählen">
       {Array.from({ length: slideCount }, (_, index) => (
-        <Button key={index} type="button" variant="ghost" size="icon" onClick={() => scrollToSlide(index)} aria-label={`Bild ${index + 1} anzeigen`} aria-current={activeIndex === index ? "true" : undefined} className={`h-4 min-h-4 p-0 transition-all ${activeIndex === index ? "w-7 bg-foreground hover:bg-foreground" : "w-4 bg-muted-foreground/35 hover:bg-muted-foreground/60"}`} />
+        <Button key={index} type="button" variant="ghost" size="icon" onClick={() => scrollToSlide(index)} aria-label={`Bild ${index + 1} anzeigen`} aria-current={activeIndex === index ? "true" : undefined} className={`h-3 min-h-3 rounded-full border-2 border-foreground p-0 transition-all ${activeIndex === index ? "w-7 bg-primary hover:bg-primary" : "w-3 bg-background hover:bg-muted"}`} />
       ))}
     </div>}
     {galleryImages.length > 0 && <div className="mx-auto mt-3 flex w-full max-w-[13rem] justify-center gap-2 sm:max-w-[15rem]">
