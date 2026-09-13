@@ -129,10 +129,20 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
   // hohe Priorität) und verhindert das kurze weiße Aufblitzen, bevor das Video
   // seinen ersten Frame malen kann.
   return (
-    <div className={`relative ${className ?? ""}`}>
+    <div
+      className={`relative ${className ?? ""}`}
+      // Poster zusaetzlich als Hintergrund: selbst waehrend eines DOM-Wechsels
+      // bleibt so immer ein Bild stehen, nie eine weisse Flaeche.
+      style={{
+        backgroundImage: `url(${poster})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       {videoEl}
       {/* Poster liegt ueber dem Video, solange es nicht laeuft: verhindert das
-          weisse Aufblitzen UND das native iOS-Play-Symbol (z.B. Stromsparmodus). */}
+          weisse Aufblitzen UND das native iOS-Play-Symbol (z.B. Stromsparmodus).
+          Ohne Fade-Transition, damit beim Wechsel kein Zwischenzustand sichtbar wird. */}
       <img
         src={poster}
         alt=""
@@ -140,7 +150,7 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
         loading="eager"
         decoding="async"
         style={{ opacity: isPlaying ? 0 : 1 }}
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-200"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
     </div>
   );
