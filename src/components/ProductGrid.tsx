@@ -102,11 +102,9 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 const MobileVideoWithPoster = memo(({
   src,
   poster,
-  alt,
 }: {
   src: string;
   poster: string;
-  alt: string;
 }) => {
   const [inView, setInView] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -116,7 +114,7 @@ const MobileVideoWithPoster = memo(({
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= 0.05),
-      { threshold: [0, 0.05, 1], root: carouselRefForVideo(el) }
+      { threshold: [0, 0.05, 1] }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -448,7 +446,6 @@ const ProductGrid = () => {
                         key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
-                        alt={p.name}
                       />
                     ) : (
                       <img
