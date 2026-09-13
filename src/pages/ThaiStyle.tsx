@@ -1,5 +1,6 @@
 import { useProductPage } from "@/hooks/useProductPage";
 import { ProductPageMeta, ProductPageMedia, ProductPageSticky } from "@/components/product-pages/ShopIntegration";
+import { BundleSelector } from "@/components/product-pages/BundleSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { useRef, useState } from "react";
@@ -9,7 +10,6 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 import { productImages } from "@/lib/redesignProductImages";
-import { bundleProduct } from "@/data/products";
 
 const doseFoquz = { url: "/images/product-pages/produkt-5er-einzeln-thai.png" };
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
