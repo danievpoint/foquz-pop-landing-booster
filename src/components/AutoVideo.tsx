@@ -19,6 +19,7 @@ type Props = VideoHTMLAttributes<HTMLVideoElement> & {
 const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...rest }: Props) => {
   const ref = useRef<HTMLVideoElement>(null);
   const playbackGenerationRef = useRef(0);
+  const wasPlayingRef = useRef(false);
   const gated = play !== undefined;
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -103,6 +104,13 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
     if (!v) return;
     v.muted = true;
     if (play) {
+      // Jede erneute Auswahl beginnt wieder beim ersten Frame. Nur beim echten
+      // Wechsel von pausiert zu aktiv zuruecksetzen, nicht bei den Lade-Retries.
+      if (!wasPlayingRef.current) {
+        hidePoster();
+        try { v.currentTime = 0; } catch { /* metadata may not be ready yet */ }
+      }
+      wasPlayingRef.current = true;
       const attempt = () => {
         if (!ref.current) return;
         const p = ref.current.play();
@@ -118,9 +126,10 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
         v.removeEventListener("canplay", onReady);
       };
     } else {
+      wasPlayingRef.current = false;
       try { v.pause(); } catch { /* ignore */ }
     }
-  }, [play, gated, src]);
+  }, [play, gated, src, hidePoster]);
 
   const videoEl = (
     <video
