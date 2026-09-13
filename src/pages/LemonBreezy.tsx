@@ -250,7 +250,7 @@ const LemonBreezyInner = () => {
                      )}
                     <span className="flex-1">
                       <span className="block font-barlow font-extrabold">{b.label}</span>
-                      <span className={`block text-xs font-semibold ${selected ? "text-yellow-300" : "text-muted-foreground"}`}>
+                      <span className={`block text-xs font-semibold ${b.dosen === 3 ? "text-white/90" : "text-muted-foreground"}`}>
                         {b.desc}
                       </span>
                     </span>
@@ -258,10 +258,10 @@ const LemonBreezyInner = () => {
                       <span className="block font-barlow font-extrabold text-lg">
                         {b.price.toFixed(2).replace(".", ",")} €
                         {"oldPrice" in b && b.oldPrice && (
-                          <span className={`ml-1.5 text-xs line-through ${selected ? "text-white/70" : "text-muted-foreground"}`}>{b.oldPrice}</span>
+                          <span className={`ml-1.5 text-xs line-through ${b.dosen === 3 ? "text-white/70" : "text-muted-foreground"}`}>{b.oldPrice}</span>
                         )}
                       </span>
-                      <span className={`block text-[11px] font-semibold ${selected ? "text-white/80" : "text-muted-foreground"}`}>
+                      <span className={`block text-[11px] font-semibold ${b.dosen === 3 ? "text-white/80" : "text-muted-foreground"}`}>
                         {b.perDose} € / Dose
                       </span>
                     </span>
