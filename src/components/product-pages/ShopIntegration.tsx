@@ -25,6 +25,7 @@ export function ProductPageMedia({ product }: { product: Product }) {
   const galleryRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let active = true;
+    setActiveImage(0);
     fetchProductGalleryImages(product.handle).then((result) => { if (active) setImages(result); }).catch(() => {});
     return () => { active = false; };
   }, [product.handle]);
@@ -36,36 +37,36 @@ export function ProductPageMedia({ product }: { product: Product }) {
   }, []);
   const scrollToImage = (index: number) => {
     const gallery = galleryRef.current;
-    const target = gallery?.children.item(index);
-    if (!(target instanceof HTMLElement)) return;
-    target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    if (!gallery) return;
+    gallery.scrollTo({ left: index * gallery.clientWidth, behavior: "smooth" });
     setActiveImage(index);
   };
   const updateActiveImage = () => {
     const gallery = galleryRef.current;
     if (!gallery) return;
-    const center = gallery.scrollLeft + gallery.clientWidth / 2;
-    const slides = Array.from(gallery.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
-    const closest = slides.reduce((best, slide, index) => {
-      const distance = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - center);
-      return distance < best.distance ? { index, distance } : best;
-    }, { index: 0, distance: Number.POSITIVE_INFINITY });
-    setActiveImage(closest.index);
+    setActiveImage(Math.round(gallery.scrollLeft / gallery.clientWidth));
   };
   if (!product.video && images.length === 0) return null;
   return <div className="mt-3">
     {product.video && <div ref={videoRef} className="mb-3"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
     {images.length > 0 && <div className="mx-auto w-full max-w-[15rem] sm:max-w-[17rem]">
-      <div ref={galleryRef} onScroll={updateActiveImage} className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-[calc(50%-5.5rem)] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div ref={galleryRef} onScroll={updateActiveImage} className="flex aspect-square snap-x snap-mandatory overflow-x-auto overflow-y-hidden rounded-lg border-2 border-black bg-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {images.slice(0, 3).map((img, index) => (
-          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Produktbild ${index + 1} anzeigen`} className="w-28 shrink-0 snap-center overflow-hidden rounded-lg border-2 border-black bg-white p-0">
-            <img src={shopifyImageUrl(img.url, 240)} srcSet={shopifyImageSrcSet(img.url, [120, 180, 240, 360])} sizes="112px" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading="lazy" className="aspect-square w-full object-cover" />
-          </button>
+          <div key={img.url} className="h-full min-w-full snap-center snap-always">
+            <img src={shopifyImageUrl(img.url, 480)} srcSet={shopifyImageSrcSet(img.url, [240, 360, 480, 640])} sizes="(min-width: 640px) 272px, 240px" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+          </div>
         ))}
       </div>
-      <div className="mt-2 flex items-center justify-center gap-2" aria-label="Produktbilder">
+      <div className="mt-2 flex items-center justify-center gap-2 py-0.5" aria-label="Produktbilder">
         {images.slice(0, 3).map((img, index) => (
-          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Zu Produktbild ${index + 1}`} aria-current={activeImage === index ? "true" : undefined} className={`h-2.5 w-2.5 rounded-full border border-black transition-colors ${activeImage === index ? "bg-yellow-400" : "bg-white"}`} />
+          <button key={img.url} type="button" onClick={() => scrollToImage(index)} aria-label={`Zu Produktbild ${index + 1}`} aria-current={activeImage === index ? "true" : undefined} className={`h-2.5 shrink-0 rounded-full border-2 border-black transition-all ${activeImage === index ? "w-6 bg-secondary" : "w-2.5 bg-card"}`} />
+        ))}
+      </div>
+      <div className="mt-2 flex justify-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {images.slice(0, 3).map((img, index) => (
+          <button key={`thumb-${img.url}`} type="button" onClick={() => scrollToImage(index)} aria-label={`Vorschaubild ${index + 1}`} className={`h-12 w-12 shrink-0 overflow-hidden rounded-md bg-card transition-shadow ${activeImage === index ? "border-2 border-secondary shadow-[2px_2px_0_0_hsl(var(--foreground))]" : "border-2 border-border"}`}>
+            <img src={shopifyImageUrl(img.url, 120)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+          </button>
         ))}
       </div>
     </div>}
