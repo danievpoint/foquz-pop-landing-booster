@@ -149,10 +149,7 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       onPause={hidePoster}
       onEnded={onEnded}
       className={poster ? "absolute inset-0 z-10 w-full h-full object-cover" : className}
-      style={poster ? {
-        opacity: isPlaying ? 1 : 0,
-        visibility: isPlaying ? "visible" : "hidden",
-      } : undefined}
+
       {...rest}
     />
   );
