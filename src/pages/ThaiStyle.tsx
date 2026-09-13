@@ -232,8 +232,8 @@ const ThaiStyleInner = () => {
                       b.dosen === 3
                         ? `bg-violet-600 text-white ${selected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.35)]"}`
                         : selected
-                          ? "bg-yellow-400 text-black shadow-[5px_5px_0_0_#000]"
-                          : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
+                          ? "bg-white text-black shadow-[5px_5px_0_0_#000]"
+                          : "bg-white text-black shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
                     }`}
                   >
                     {b.tag && (
