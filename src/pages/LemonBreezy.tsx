@@ -203,8 +203,8 @@ const LemonBreezyInner = () => {
                     key={s.name}
                     onClick={() => navigate(`/produkt/${s.name.toLowerCase().replace(/ /g, "-")}`)}
                     aria-pressed={selected}
-                    className={`w-full min-h-[72px] flex items-center gap-3 rounded-2xl border-2 border-black bg-white p-3 text-left transition-all ${
-                      selected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.25)] opacity-80 hover:opacity-100"
+                    className={`w-full min-h-[72px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left transition-all ${
+                      selected ? "bg-yellow-400 shadow-[5px_5px_0_0_#000]" : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
                     }`}
                   >
                     <img src={s.img} alt={s.name} className="w-12 h-12 rounded-xl border-2 border-black object-cover shrink-0" />
