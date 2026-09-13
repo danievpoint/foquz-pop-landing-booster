@@ -50,16 +50,18 @@ const HowToSection = () => {
             .howto-content { padding-top: clamp(3rem, 5cqw, 5rem); }
           }
         `}</style>
-        <video
-          src={howtoBgVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          className="absolute inset-0 block h-full w-full object-cover"
-          style={{ contentVisibility: "auto", backgroundColor: "hsl(271 30% 48%)" }}
-        />
+        {showVideo && (
+          <video
+            src={howtoBgVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 block h-full w-full object-cover"
+            style={{ contentVisibility: "auto", backgroundColor: "hsl(271 30% 48%)" }}
+          />
+        )}
         <div className="relative z-10 container mx-auto section-padding pt-32 md:pt-40 howto-content">
           <motion.div
             initial={{ opacity: 0, x: -40, rotate: -2 }}
