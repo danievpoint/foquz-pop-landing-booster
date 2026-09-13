@@ -149,10 +149,7 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       onPause={hidePoster}
       onEnded={onEnded}
       className={poster ? "absolute inset-0 z-10 w-full h-full object-cover" : className}
-      style={poster ? {
-        opacity: isPlaying ? 1 : 0,
-        visibility: isPlaying ? "visible" : "hidden",
-      } : undefined}
+
       {...rest}
     />
   );
@@ -173,20 +170,23 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
         backgroundPosition: "center",
       }}
     >
-      {/* Das Poster bleibt dauerhaft unter dem Video. Auf iOS ist das stabiler,
-          als eine Deckschicht in dem Moment auszublenden, in dem Safari die
-          Video-Ebene in den Hardware-Compositor uebernimmt. */}
+      {/* Die Video-Ebene bleibt immer sichtbar (kein opacity/visibility-Toggle),
+          damit Safari sie nicht neu in den Compositor heben muss. Stattdessen
+          liegt das Poster als Deckschicht darueber und verschwindet erst,
+          nachdem der erste echte Videoframe gezeichnet wurde. */}
+      {videoEl}
       <img
         src={poster}
         alt=""
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        className="absolute inset-0 z-0 w-full h-full object-cover pointer-events-none"
+        className="absolute inset-0 z-20 w-full h-full object-cover pointer-events-none"
+        style={{ opacity: isPlaying ? 0 : 1 }}
       />
-      {videoEl}
     </div>
   );
+
 
 };
 
