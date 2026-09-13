@@ -9,7 +9,6 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 import { productImages } from "@/lib/redesignProductImages";
-import foquzBox from "@/assets/foquz-box.png";
 
 const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
 const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
@@ -132,7 +131,7 @@ const PeachPartyInner = () => {
   const [activeCompare, setActiveCompare] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const sorte = product.name;
-  const [bundle, setBundle] = useState("3 DOSEN – POWER BUNDLE");
+  const [bundle, setBundle] = useState("1 DOSE");
   const [storyOpen, setStoryOpen] = useState(false);
   const selectedBundle = bundles.find((b) => b.label === bundle) ?? bundles[0];
 
@@ -215,17 +214,6 @@ const PeachPartyInner = () => {
                   </button>
                 );
               })}
-              <button
-                type="button"
-                onClick={() => setBundle("3 DOSEN – POWER BUNDLE")}
-                className="relative w-full min-h-[72px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left shadow-[5px_5px_0_0_#000]"
-                style={{ backgroundColor: "#75559f", color: "#fff" }}
-              >
-                <span className="absolute -top-3 right-3 rounded-full border-2 border-black bg-yellow-400 px-3 py-1 text-[10px] font-black text-black">BELIEBT</span>
-                <img src={foquzBox} alt="FOQUZ Power Bundle" className="w-12 h-12 rounded-xl border-2 border-black object-cover bg-white shrink-0" />
-                <span className="flex-1"><span className="block font-barlow font-extrabold">FOQUZ POWER BUNDLE</span><span className="block text-xs font-semibold text-white/80">Alle 3 Sorten in einer Box</span></span>
-                <span className="font-barlow font-extrabold">19,98 €</span>
-              </button>
             </div>
 
             {/* Bundle wählen */}
