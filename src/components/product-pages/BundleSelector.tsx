@@ -22,82 +22,79 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
 
         if (isBundle) {
           return (
-            <button
-              key={b.label}
-              type="button"
-              onClick={() => onSelect(b.label)}
-              aria-pressed={isSelected}
-              className={[
-                "group relative w-full overflow-hidden rounded-2xl border-4 border-black p-3 text-left transition-all duration-300",
-                "bg-violet-600 text-white",
-                isSelected
-                  ? "shadow-[6px_6px_0_0_#000] -translate-y-0.5 ring-4 ring-violet-400/50"
-                  : "shadow-[4px_4px_0_0_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000]",
-              ].join(" ")}
-            >
-              {/* Outer glow (only when selected) */}
-              <span
-                aria-hidden="true"
+            <div key={b.label} className="relative">
+              <button
+                type="button"
+                onClick={() => onSelect(b.label)}
+                aria-pressed={isSelected}
                 className={[
-                  "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-violet-400 blur-xl transition-opacity duration-500",
-                  isSelected ? "opacity-40" : "opacity-0",
+                  "group relative w-full overflow-hidden rounded-2xl border-4 border-black p-3 text-left transition-all duration-300",
+                  "bg-violet-600 text-white",
+                  isSelected
+                    ? "shadow-[6px_6px_0_0_#000] -translate-y-0.5 ring-4 ring-violet-400/50"
+                    : "shadow-[4px_4px_0_0_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000]",
                 ].join(" ")}
-              />
-
-              {/* Glitter / dot overlay */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-[0.12] bg-[radial-gradient(circle,white_1px,transparent_1px)] [background-size:10px_10px]"
-              />
-
-              {/* Shimmer sweep */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
-              />
-
-              <span className="relative z-10 flex items-center gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white">
-                  {isSelected && <span className="h-3 w-3 rounded-full bg-yellow-400 border border-black" />}
-                </span>
-
-                <img
-                  src={bundleProduct.image}
-                  alt="FOQUZ Power Bundle"
-                  className="h-9 w-9 shrink-0 rounded-lg border-2 border-black object-cover sm:h-10 sm:w-10"
+              >
+                {/* Outer glow (only when selected) */}
+                <span
+                  aria-hidden="true"
+                  className={[
+                    "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-violet-400 blur-xl transition-opacity duration-500",
+                    isSelected ? "opacity-40" : "opacity-0",
+                  ].join(" ")}
                 />
 
-                <span className="flex-1">
-                  <span className="flex items-center gap-1.5">
-                    <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
-                      {b.label}
+                {/* Shimmer sweep */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+                />
+
+                <span className="relative z-10 flex items-center gap-2">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white">
+                    {isSelected && <span className="h-3 w-3 rounded-full bg-yellow-400 border border-black" />}
+                  </span>
+
+                  <img
+                    src={bundleProduct.image}
+                    alt="FOQUZ Power Bundle"
+                    className="h-9 w-9 shrink-0 rounded-lg border-2 border-black object-cover sm:h-10 sm:w-10"
+                  />
+
+                  <span className="flex-1">
+                    <span className="flex items-center gap-1.5">
+                      <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
+                        {b.label}
+                      </span>
+                      <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
                     </span>
-                    <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                    <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
+                      {b.desc}
+                    </span>
                   </span>
-                  <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
-                    {b.desc}
+
+                  <span className="text-right">
+                    <span className="block font-barlow text-base font-extrabold sm:text-lg">
+                      {price(b.price)} €
+                      {b.oldPrice && (
+                        <span className="ml-1.5 inline-block rounded bg-yellow-400 px-1 py-0.5 text-xs font-black text-black line-through decoration-black decoration-2">
+                          {b.oldPrice}
+                        </span>
+                      )}
+                    </span>
+                    <span className="block text-[11px] font-semibold text-white/80">{b.perDose} € / Dose</span>
                   </span>
                 </span>
+              </button>
 
-                <span className="text-right">
-                  <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                    {price(b.price)} €
-                    {b.oldPrice && (
-                      <span className="ml-1.5 text-xs line-through text-white/70">{b.oldPrice}</span>
-                    )}
-                  </span>
-                  <span className="block text-[11px] font-semibold text-white/80">{b.perDose} € / Dose</span>
-                </span>
-              </span>
-
-              {/* Best value badge */}
+              {/* Best value badge - outside button so it isn't clipped */}
               {b.tag && (
-                <span className="absolute -top-3 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2.5 py-1 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_0_#000] sm:right-4 sm:px-3">
+                <span className="absolute -top-4 -right-2 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2.5 py-1 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_0_#000] sm:-right-3 sm:px-3">
                   <Sparkles className="mr-1 h-3 w-3" />
                   {b.tag}
                 </span>
               )}
-            </button>
+            </div>
           );
         }
 
