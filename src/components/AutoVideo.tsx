@@ -139,7 +139,11 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       onPlaying={revealAfterPaint}
       onPause={hidePoster}
       onEnded={onEnded}
-      className={poster ? "absolute inset-0 w-full h-full object-cover" : className}
+      className={poster ? "absolute inset-0 z-10 w-full h-full object-cover" : className}
+      style={poster ? {
+        opacity: isPlaying ? 1 : 0,
+        visibility: isPlaying ? "visible" : "hidden",
+      } : undefined}
       {...rest}
     />
   );
@@ -160,19 +164,18 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
         backgroundPosition: "center",
       }}
     >
-      {videoEl}
-      {/* Poster liegt ueber dem Video, solange es nicht laeuft: verhindert das
-          weisse Aufblitzen UND das native iOS-Play-Symbol (z.B. Stromsparmodus).
-          Ohne Fade-Transition, damit beim Wechsel kein Zwischenzustand sichtbar wird. */}
+      {/* Das Poster bleibt dauerhaft unter dem Video. Auf iOS ist das stabiler,
+          als eine Deckschicht in dem Moment auszublenden, in dem Safari die
+          Video-Ebene in den Hardware-Compositor uebernimmt. */}
       <img
         src={poster}
         alt=""
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        style={{ opacity: isPlaying ? 0 : 1 }}
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        className="absolute inset-0 z-0 w-full h-full object-cover pointer-events-none"
       />
+      {videoEl}
     </div>
   );
 
