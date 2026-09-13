@@ -7,3 +7,5 @@
 - [x] Power Bundle mit Bild auf allen Produktseiten ergänzen
 - [x] Weiße Zahlungsleiste und schwarzen Trennbalken entfernen
 - [x] Weitere Produktbilder unter dem Hauptbild anzeigen
+- [x] Zusatzbilder kompakt unter dem Hauptbild anordnen
+- [x] Power Bundle nur einmal in der Mengenauswahl zeigen

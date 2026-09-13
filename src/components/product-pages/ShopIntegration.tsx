@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { type Product } from "@/data/products";
 import { useProductPage } from "@/hooks/useProductPage";
-import { fetchProductGalleryImages, type ShopifyImage } from "@/lib/shopify";
+import { fetchProductGalleryImages, shopifyImageSrcSet, shopifyImageUrl, type ShopifyImage } from "@/lib/shopify";
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
 
@@ -33,9 +33,11 @@ export function ProductPageMedia({ product }: { product: Product }) {
     return () => { observer.disconnect(); setPlay(false); };
   }, []);
   if (!product.video && images.length === 0) return null;
-  return <div className="grid grid-cols-2 gap-3 mt-3">
-    {product.video && <div ref={videoRef} className="col-span-2"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
-    {images.map((img) => <img key={img.url} src={img.url} alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-xl border-2 border-black" />)}
+  return <div className="mt-3">
+    {product.video && <div ref={videoRef} className="mb-3"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
+    {images.length > 0 && <div className="grid grid-cols-3 gap-2 md:gap-3">
+      {images.slice(0, 3).map((img) => <img key={img.url} src={shopifyImageUrl(img.url, 320)} srcSet={shopifyImageSrcSet(img.url, [160, 240, 320, 480])} sizes="(min-width: 1024px) 160px, 30vw" alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-lg border-2 border-black" />)}
+    </div>}
   </div>;
 }
 
