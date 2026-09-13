@@ -83,7 +83,7 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
 
               {/* Best value badge - outside button so it isn't clipped */}
               {b.tag && (
-                <span className="absolute -top-4 -right-2 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2.5 py-1 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_0_#000] sm:-right-3 sm:px-3">
+                <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   {b.tag}
                 </span>
