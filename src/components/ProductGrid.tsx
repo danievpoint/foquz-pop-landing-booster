@@ -20,11 +20,17 @@ products.forEach((p) => {
 // Galerie-Bilder der Produktseiten im Hintergrund vorladen (kleine WebP-Varianten)
 if (typeof window !== "undefined") {
   const warm = () => products.forEach((p) => prefetchProductGallery(p.handle, [200, 800]));
-  if ("requestIdleCallback" in window) {
-    (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(warm);
-  } else {
-    setTimeout(warm, 1500);
-  }
+  // Erst nach dem vollstaendigen Laden der Seite starten, damit das Vorladen
+  // nicht mit dem ersten Seitenaufbau um Bandbreite konkurriert.
+  const schedule = () => {
+    if ("requestIdleCallback" in window) {
+      (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(warm);
+    } else {
+      setTimeout(warm, 2000);
+    }
+  };
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
 }
 
 
