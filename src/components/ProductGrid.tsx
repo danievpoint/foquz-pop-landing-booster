@@ -117,8 +117,35 @@ const MobileVideoWithPoster = memo(({
   /** Nur aktive und direkt benachbarte Slides laden ueberhaupt Video-Daten. */
   near: boolean;
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isFullyVisible, setIsFullyVisible] = useState(false);
+
+  useEffect(() => {
+    const element = wrapperRef.current;
+    if (!element) return;
+
+    const updateVisibility = () => {
+      const rect = element.getBoundingClientRect();
+      const fullyVisible =
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth;
+      setIsFullyVisible(fullyVisible);
+    };
+
+    const observer = new IntersectionObserver(updateVisibility, {
+      threshold: [0, 0.99, 1],
+    });
+    observer.observe(element);
+    updateVisibility();
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={wrapperRef}
       className="relative w-full aspect-square overflow-hidden"
       style={{ backgroundImage: `url(${poster})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
@@ -127,8 +154,8 @@ const MobileVideoWithPoster = memo(({
           src={src}
           poster={poster}
           loop
-          play={play}
-          preload={play ? "auto" : "metadata"}
+          play={play && isFullyVisible}
+          preload={play && isFullyVisible ? "auto" : "metadata"}
           className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
         />
       ) : (
