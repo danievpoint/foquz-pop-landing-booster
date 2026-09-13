@@ -89,8 +89,9 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 /**
  * Mobile carousel slide: exact-first-frame poster overlays the video.
- * The video only starts playing once ≥60% of it is visible (IntersectionObserver
- * threshold 0.6). It loops endlessly; the next slide is chosen exclusively by
+ * The video starts as soon as a slide is visibly entering the carousel. This
+ * keeps the centered video and both peeking neighbours moving during a swipe.
+ * It loops endlessly; the next slide is chosen exclusively by
  * swipe/arrows/dots (no auto-advance on video end).
  *
  * The poster stays on top of the video until the real `playing` event fires,
@@ -101,56 +102,22 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 const MobileVideoWithPoster = memo(({
   src,
   poster,
-  alt,
+  play,
 }: {
   src: string;
   poster: string;
-  alt: string;
+  play: boolean;
 }) => {
-  const [playing, setPlaying] = useState(false);
-  const [inView, setInView] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= 0.6),
-      { threshold: [0, 0.6, 1] }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  // Reset poster overlay when src changes (new slide mounted).
-  useEffect(() => {
-    setPlaying(false);
-  }, [src]);
-
   return (
-    <div ref={wrapRef} className="relative w-full aspect-square">
+    <div className="relative w-full aspect-square overflow-hidden bg-muted">
       <AutoVideo
         src={src}
         poster={poster}
         loop
-        play={inView}
-        preload="metadata"
-        className="relative w-full aspect-square object-cover"
-        style={{ visibility: playing ? "visible" : "hidden" }}
-        onPlaying={() => setPlaying(true)}
-        onPause={() => {
-          // Keep poster hidden once we've actually played at least once, so a
-          // programmatic pause on swipe-out doesn't flash the poster back in.
-        }}
+        play={play}
+        preload="auto"
+        className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
       />
-      {!playing && (
-        <img
-          src={poster}
-          alt={alt}
-          draggable={false}
-          className="absolute inset-0 w-full h-full aspect-square object-cover z-10 pointer-events-none"
-        />
-      )}
     </div>
   );
 });
@@ -467,7 +434,7 @@ const ProductGrid = () => {
                         key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
-                        alt={p.name}
+                        play={Math.abs(i - extendedActiveIndex) <= 1}
                       />
                     ) : (
                       <img
