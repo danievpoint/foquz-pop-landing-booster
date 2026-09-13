@@ -229,10 +229,12 @@ const LemonBreezyInner = () => {
                   <button
                     key={b.label}
                     onClick={() => setBundle(b.label)}
-                    className={`relative w-full min-h-[80px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left transition-all ${
-                      selected
-                        ? "bg-violet-600 text-white shadow-[5px_5px_0_0_#000]"
-                        : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)] opacity-90 hover:opacity-100"
+                    className={`relative w-full min-h-[68px] flex items-center gap-2.5 rounded-2xl border-2 border-black p-2.5 text-left transition-all ${
+                      b.dosen === 3
+                        ? `bg-violet-600 text-white ${selected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.35)]"}`
+                        : selected
+                          ? "bg-yellow-400 text-black shadow-[5px_5px_0_0_#000]"
+                          : "bg-white shadow-[3px_3px_0_0_rgba(0,0,0,0.25)]"
                     }`}
                   >
                     {b.tag && (
@@ -244,7 +246,7 @@ const LemonBreezyInner = () => {
                       {selected && <span className="w-3 h-3 rounded-full bg-yellow-400 border border-black" />}
                     </span>
                      {b.dosen === 3 && (
-                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-12 w-12 shrink-0 rounded-lg border-2 border-black object-cover sm:h-14 sm:w-14" />
+                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-10 w-10 shrink-0 rounded-lg border-2 border-black object-cover sm:h-11 sm:w-11" />
                      )}
                     <span className="flex-1">
                       <span className="block font-barlow font-extrabold">{b.label}</span>
@@ -282,7 +284,7 @@ const LemonBreezyInner = () => {
             </button>
 
             {/* Trust */}
-            <ul className="mt-auto pt-6 space-y-3 text-xs font-semibold">
+            <ul className="pt-4 space-y-2 text-xs font-semibold">
               {["Versand mit DHL nach DE, AT und CH", "14 Tage Widerrufsrecht", "Sichere Zahlung mit PayPal, Klarna und Kreditkarte"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span className="w-4 h-4 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center shrink-0">
@@ -293,7 +295,7 @@ const LemonBreezyInner = () => {
               ))}
             </ul>
 
-            <div className="mt-6">
+            <div className="mt-3">
               <PaymentLogos compact size="md" />
             </div>
           </div>
