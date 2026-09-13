@@ -828,11 +828,14 @@ const ProductDetail = () => {
                     <button
                       key={v.handle}
                       type="button"
-                      onClick={() => navigate(`/produkt/${v.handle}`)}
+                      onClick={() => {
+                        setOption("single");
+                        if (v.handle !== product.handle) navigate(`/produkt/${v.handle}`);
+                      }}
                       className={`w-full flex items-center gap-3 p-2.5 md:p-2 rounded-xl md:rounded-2xl text-left transition-all md:gap-2 ${
-                        active ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
+                        active && option === "single" ? "border-[2px] md:border-[3px] border-black" : "border-[2px] border-black/30 hover:border-black bg-white"
                       }`}
-                      style={active ? { backgroundColor: YELLOW } : undefined}
+                      style={active && option === "single" ? { backgroundColor: YELLOW } : undefined}
                     >
                       <img src={v.image} alt={v.name} className="w-12 h-12 md:w-10 md:h-10 rounded-lg object-cover border-2 border-black bg-white shrink-0" />
                       <span className="min-w-0 flex-1">
@@ -843,7 +846,7 @@ const ProductDetail = () => {
                       </span>
                       <span
                         className={`block w-4 h-4 rounded-full border-[2px] border-black shrink-0 ${
-                          active ? "bg-black" : "bg-white"
+                           active && option === "single" ? "bg-black" : "bg-white"
                         }`}
                       />
                     </button>
