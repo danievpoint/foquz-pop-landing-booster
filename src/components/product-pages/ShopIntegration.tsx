@@ -35,8 +35,8 @@ export function ProductPageMedia({ product }: { product: Product }) {
   if (!product.video && images.length === 0) return null;
   return <div className="mt-3">
     {product.video && <div ref={videoRef} className="mb-3"><AutoVideo src={product.video} poster={product.videoPoster} play={play} controls className="w-full rounded-xl border-2 border-black" /></div>}
-    {images.length > 0 && <div className="grid grid-cols-3 gap-2 md:gap-3">
-      {images.slice(0, 3).map((img) => <img key={img.url} src={shopifyImageUrl(img.url, 320)} srcSet={shopifyImageSrcSet(img.url, [160, 240, 320, 480])} sizes="(min-width: 1024px) 160px, 30vw" alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-lg border-2 border-black" />)}
+    {images.length > 0 && <div className="mx-auto grid w-full max-w-[17rem] grid-cols-3 gap-2 sm:max-w-[20rem] md:gap-3 lg:max-w-[22rem]">
+      {images.slice(0, 3).map((img) => <img key={img.url} src={shopifyImageUrl(img.url, 240)} srcSet={shopifyImageSrcSet(img.url, [120, 180, 240, 360])} sizes="(min-width: 1024px) 110px, (min-width: 640px) 100px, 85px" alt={img.altText || product.name} loading="lazy" className="w-full aspect-square object-cover rounded-lg border-2 border-black" />)}
     </div>}
   </div>;
 }

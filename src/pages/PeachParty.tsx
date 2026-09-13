@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 import { productImages } from "@/lib/redesignProductImages";
+import { bundleProduct } from "@/data/products";
 
 const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
 const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
@@ -239,6 +240,9 @@ const PeachPartyInner = () => {
                     <span className={`w-6 h-6 rounded-full border-2 border-black flex items-center justify-center shrink-0 ${selected ? "bg-white" : "bg-white"}`}>
                       {selected && <span className="w-3 h-3 rounded-full bg-yellow-400 border border-black" />}
                     </span>
+                     {b.dosen === 3 && (
+                       <img src={bundleProduct.image} alt="FOQUZ Power Bundle" className="h-12 w-12 shrink-0 rounded-lg border-2 border-black object-cover sm:h-14 sm:w-14" />
+                     )}
                     <span className="flex-1">
                       <span className="block font-barlow font-extrabold">{b.label}</span>
                       <span className={`block text-xs font-semibold ${selected ? "text-yellow-300" : "text-muted-foreground"}`}>
@@ -331,10 +335,10 @@ const PeachPartyInner = () => {
               </div>
               {/* Weiße Fläche 2: Was drin ist */}
               <ComicBox title="WAS DRIN IST" className="flex flex-col justify-center">
-                <ul className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
+                <ul className="grid grid-cols-2 gap-x-3 gap-y-3 text-sm sm:grid-cols-3 sm:gap-x-4">
                   {["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Pfirsicharoma"].map(
-                    (ing) => (
-                      <li key={ing} className="flex items-center gap-2 leading-snug">
+                    (ing, index, ingredients) => (
+                      <li key={ing} className={`flex items-center gap-2 leading-snug ${ingredients.length % 2 === 1 && index === ingredients.length - 1 ? "col-span-2 justify-center sm:col-span-1 sm:justify-start" : ""}`}>
                         <Check className="w-4 h-4 text-green-600 shrink-0" />
                         {ing}
                       </li>
