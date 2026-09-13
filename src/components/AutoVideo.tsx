@@ -18,8 +18,29 @@ type Props = VideoHTMLAttributes<HTMLVideoElement> & {
  */
 const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...rest }: Props) => {
   const ref = useRef<HTMLVideoElement>(null);
+  const playbackGenerationRef = useRef(0);
   const gated = play !== undefined;
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const revealAfterPaint = useCallback(() => {
+    const video = ref.current;
+    if (!video) return;
+    const generation = ++playbackGenerationRef.current;
+    const reveal = () => {
+      if (generation !== playbackGenerationRef.current || video.paused) return;
+      setIsPlaying(true);
+    };
+    if ("requestVideoFrameCallback" in video) {
+      video.requestVideoFrameCallback(reveal);
+    } else {
+      window.requestAnimationFrame(() => window.requestAnimationFrame(reveal));
+    }
+  }, []);
+
+  const hidePoster = useCallback(() => {
+    playbackGenerationRef.current += 1;
+    setIsPlaying(false);
+  }, []);
 
   // Ref callback runs synchronously the first time the element exists,
   // BEFORE the browser starts loading the src, so iOS sees the muted +
@@ -115,8 +136,8 @@ const AutoVideo = ({ src, poster, onEnded, className, loop, play, preload, ...re
       controlsList="nodownload nofullscreen noremoteplayback"
       preload={preload ?? "auto"}
       onContextMenu={(e) => e.preventDefault()}
-      onPlaying={() => setIsPlaying(true)}
-      onPause={() => setIsPlaying(false)}
+      onPlaying={revealAfterPaint}
+      onPause={hidePoster}
       onEnded={onEnded}
       className={poster ? "absolute inset-0 w-full h-full object-cover" : className}
       {...rest}
