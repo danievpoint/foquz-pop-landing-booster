@@ -124,23 +124,38 @@ const MobileVideoWithPoster = memo(({
     const element = wrapperRef.current;
     if (!element) return;
 
+    let frame = 0;
+
     const updateVisibility = () => {
-      const rect = element.getBoundingClientRect();
-      const fullyVisible =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= window.innerHeight &&
-        rect.right <= window.innerWidth;
-      setIsFullyVisible(fullyVisible);
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const rect = element.getBoundingClientRect();
+        // Kleine Toleranz fuer Safari-Subpixel und Browserleisten: optisch ist
+        // das Video bereits vollstaendig sichtbar, ohne den Start zu verzoegern.
+        const tolerance = 4;
+        const fullyVisible =
+          rect.top >= -tolerance &&
+          rect.left >= -tolerance &&
+          rect.bottom <= window.innerHeight + tolerance &&
+          rect.right <= window.innerWidth + tolerance;
+        setIsFullyVisible(fullyVisible);
+      });
     };
 
     const observer = new IntersectionObserver(updateVisibility, {
-      threshold: [0, 0.99, 1],
+      threshold: [0, 0.95, 0.99, 1],
     });
     observer.observe(element);
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility, { passive: true });
     updateVisibility();
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -155,7 +170,7 @@ const MobileVideoWithPoster = memo(({
           poster={poster}
           loop
           play={play && isFullyVisible}
-          preload={play && isFullyVisible ? "auto" : "metadata"}
+          preload={play ? "auto" : "metadata"}
           className="relative w-full aspect-square object-cover [transform:translateZ(0)]"
         />
       ) : (
