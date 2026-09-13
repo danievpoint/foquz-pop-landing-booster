@@ -89,8 +89,8 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
 
 /**
  * Mobile carousel slide: exact-first-frame poster overlays the video.
- * The video starts as soon as a slide is visibly entering the carousel. This
- * keeps the centered video and both peeking neighbours moving during a swipe.
+ * Only the centered slide plays. As soon as the active slide changes, its
+ * video starts while every peeking neighbour remains paused.
  * It loops endlessly; the next slide is chosen exclusively by
  * swipe/arrows/dots (no auto-advance on video end).
  *
@@ -434,7 +434,7 @@ const ProductGrid = () => {
                         key={`slide-${i}-${p.name}`}
                         src={p.video}
                         poster={p.videoPoster ?? p.image}
-                        play={Math.abs(i - extendedActiveIndex) <= 1}
+                        play={i === extendedActiveIndex}
                       />
                     ) : (
                       <img
