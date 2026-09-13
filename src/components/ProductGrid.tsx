@@ -217,8 +217,8 @@ const ProductGrid = () => {
   // Fünf vollständige Produktreihen geben dem nativen Swipe genug Puffer.
   // Nach jeder Bewegung wird unsichtbar in die mittlere Reihe zurückgesetzt.
   // Dadurch kann keine Sorte am echten Anfang/Ende des Scrollbereichs landen.
-  const COPY_COUNT = 5;
-  const CENTER_COPY = 2;
+  const COPY_COUNT = 3;
+  const CENTER_COPY = 1;
   const extendedProducts = useMemo(
     () => Array.from({ length: COPY_COUNT }, () => products).flat(),
     []
