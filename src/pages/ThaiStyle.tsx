@@ -577,7 +577,7 @@ const ThaiStyleInner = () => {
           <h2 className="font-barlow font-extrabold section-title text-center mb-8 md:mb-12 leading-none">
             KURZ RIECHEN.
             <br />
-            FRISCH WEITER.
+            AB AUF WOLKE 7
           </h2>
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto items-center">
             <div className="rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
@@ -593,15 +593,16 @@ const ThaiStyleInner = () => {
                 FÜR ZWISCHENDURCH
               </span>
               <h3 className="font-barlow font-extrabold text-xl md:text-2xl mb-4 leading-tight">
-                DER MOMENT, IN DEM DIE NASE WIEDER AUFGEHT
+                DEIN REFRESH-MOMENT. DIREKT BEIM RIECHEN.
               </h3>
               <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
-                Dose auf, kurz riechen, tief durchatmen. Kein Kaffee, kein Energy Drink, kein Nikotin.
-                Passt in die Hosentasche und ist in drei Sekunden erledigt, egal ob am Schreibtisch,
-                im Gym oder unterwegs.
+                Dose auf. Kurz riechen. Ab auf Wolke 7.
+              </p>
+              <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
+                FOQUZ ist eine Riechdose – kein Energy Drink, keine Vape und kein Nasenspray. Einfach vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.
               </p>
               <ul className="space-y-3 text-sm md:text-base font-semibold">
-                {["In drei Sekunden erledigt", "Passt in jede Hosentasche", "Ohne Nikotin, ohne Koffein"].map((t) => (
+                {["Schnell zur Hand", "Wiederverschließbar", "Passt in deine Hosentasche", "Ohne Nikotin. Ohne Koffein.", "Hält bis zu 4 Wochen", "Pflanzen und Aromen Mix*"].map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <span className="w-6 h-6 rounded-full border-2 border-black flex items-center justify-center shrink-0" style={{ backgroundColor: "#ffd618" }}>
                       <Check className="w-4 h-4" />
