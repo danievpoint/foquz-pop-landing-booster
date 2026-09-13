@@ -336,9 +336,11 @@ const ProductGrid = () => {
   }, [extendedProducts.length, scrollToExtended]);
 
   const isCloneIndex = useCallback((index: number) => {
-    const centerStart = CENTER_COPY * products.length;
-    return index < centerStart || index >= centerStart + products.length;
-  }, []);
+    // Nicht direkt an der Lemon/Peach-Grenze umspringen: Dieser unsichtbare
+    // DOM-Wechsel war auf iOS als weisser Frame sichtbar. Erst kurz vor dem
+    // echten Ende des dreifachen Bandes wieder in die Mitte versetzen.
+    return index <= 1 || index >= extendedProducts.length - 2;
+  }, [extendedProducts.length]);
 
   // Wenn das Karussell auf einem Klon landet, sofort (ohne Animation) zum echten Gegenstück springen.
   const resetFromClone = useCallback((cloneIndex: number) => {
