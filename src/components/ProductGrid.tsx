@@ -340,7 +340,7 @@ const ProductGrid = () => {
       activeIndexRef.current = nearest.index;
       setExtendedActiveIndex(nearest.index);
       if (isCloneIndex(nearest.index)) resetFromClone(nearest.index);
-    }, 120);
+    }, 40);
   }, [isCloneIndex, resetFromClone]);
 
   useEffect(() => () => {
@@ -459,7 +459,8 @@ const ProductGrid = () => {
                 <div
                   key={`${p.name}-${i}`}
                   data-slide-index={i}
-                  className="w-[72vw] shrink-0 snap-center">
+                  className="w-[72vw] shrink-0 snap-center"
+                  style={{ scrollSnapStop: 'always' }}>
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
                       <MobileVideoWithPoster
