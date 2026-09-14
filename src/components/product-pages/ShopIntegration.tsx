@@ -18,14 +18,16 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
     jsonLd={{ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.desc, image: new URL(product.image, "https://www.foquz.de").href, brand: { "@type": "Brand", name: "FOQUZ" }, offers: { "@type": "Offer", url, priceCurrency: "EUR", price: product.numericPrice, ...(availability === null ? {} : { availability: `https://schema.org/${availability ? "InStock" : "OutOfStock"}` }) } }} />;
 }
 
-export function ProductPageMedia({ product }: { product: Product }) {
+export function ProductPageMedia({ product, includeProductImage = false, maxImages = 3 }: { product: Product; includeProductImage?: boolean; maxImages?: number }) {
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number>();
-  const galleryImages = images.slice(0, 3);
+  const galleryImages = (includeProductImage
+    ? [{ url: product.image, altText: product.name }, ...images.filter((image) => image.url !== product.image)]
+    : images).slice(0, maxImages);
   const slideOffset = product.video ? 1 : 0;
   const slideCount = galleryImages.length + slideOffset;
   useEffect(() => {
@@ -57,7 +59,7 @@ export function ProductPageMedia({ product }: { product: Product }) {
     gallery.scrollTo({ left: index * gallery.clientWidth, behavior: "smooth" });
     setActiveIndex(index);
   };
-  if (!product.video && images.length === 0) return null;
+  if (!product.video && galleryImages.length === 0) return null;
   return <div className="mt-3">
     <div ref={galleryRef} onScroll={updateActiveIndex} className="flex w-full snap-x snap-mandatory overflow-x-auto rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {product.video && <div ref={videoRef} className="min-w-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} controls className="aspect-square w-full rounded-xl border-2 border-black object-cover" /></div>}

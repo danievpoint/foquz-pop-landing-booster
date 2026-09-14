@@ -1,31 +1,34 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PeachParty from "./PeachParty";
 import ThaiStyle from "./ThaiStyle";
 import LemonBreezy from "./LemonBreezy";
+import StarterBundle from "./StarterBundle";
 
 const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | null }));
-vi.mock("@/contexts/CartContext", () => ({ useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
+vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
 vi.mock("@/hooks/useProductAvailability", () => ({ useProductAvailability: () => ({ isAvailable: () => state.available }) }));
 vi.mock("@/lib/klaviyo", () => ({ trackViewedProduct: vi.fn() }));
-vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]) }));
+vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined }));
 vi.mock("@/components/Navbar", () => ({ default: () => null }));
 vi.mock("@/components/Footer", () => ({ default: () => null }));
 vi.mock("@/components/SeoHead", () => ({ default: () => null }));
 vi.mock("@/components/LooxRating", () => ({ default: () => null }));
 vi.mock("@/components/LooxReviews", () => ({ default: () => null }));
+vi.mock("@/components/AutoVideo", () => ({ default: () => null }));
 beforeEach(() => {
   state.add.mockClear(); state.available = true;
   vi.stubGlobal("IntersectionObserver", class { observe() {} disconnect() {} });
 });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+afterEach(async () => { await act(async () => {}); cleanup(); vi.unstubAllGlobals(); });
 
 function page(handle = "peach-party") {
   return render(<MemoryRouter initialEntries={[`/produkt/${handle}`]}><Routes>
     <Route path="/produkt/peach-party" element={<PeachParty />} />
     <Route path="/produkt/thai-style" element={<ThaiStyle />} />
     <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
+    <Route path="/produkt/starter-bundle" element={<StarterBundle />} />
   </Routes></MemoryRouter>);
 }
 
@@ -35,10 +38,10 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
     expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON|SQUAD BUNDLE/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 19.98 }));
-    fireEvent.click(screen.getByRole('button', { name: /1 DOSE Zum Reinschnuppern/ }));
-    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
+    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – POWER BUNDLE/ }));
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 19.98 }));
   });
   it('switches product content and cart identity with the flavor selector', () => {
     page();
@@ -62,5 +65,27 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(faq); expect(faq).toHaveAttribute('aria-expanded', 'true');
     fireEvent.click(screen.getByRole('button', { name: 'Nächster Vergleich' }));
     expect(document.querySelector('[style*="translateX(-100%)"]')).not.toBeNull();
+  });
+  it('opens the starter bundle from the existing selector and buys one Shopify bundle', () => {
+    page();
+    fireEvent.click(screen.getByRole('button', { name: /FOQUZ Power Bundle Alle 3 Sorten/i }));
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('3ER STARTER BUNDLE');
+    expect(screen.queryByText(/Blueberry|Watermelon|39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
+    expect(screen.getByText('FOQUZ Sticker (gratis)')).toBeInTheDocument();
+    expect(screen.getByText('Nasen-Stripes (gratis)')).toBeInTheDocument();
+    expect(screen.getByAltText('Google Pay')).toBeInTheDocument();
+    expect(screen.queryByAltText('Klarna')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 19.98 }));
+    fireEvent.click(screen.getByRole('button', { name: 'Welche Sorten sind im Starter Bundle?' }));
+    expect(screen.getByText(/Im 3er Starter Bundle findest du/)).toBeInTheDocument();
+  });
+  it('disables sold-out bundles', () => {
+    state.available = false;
+    page('starter-bundle');
+    const buy = screen.getByRole('button', { name: /IN DEN WARENKORB/ });
+    expect(buy).toBeDisabled();
+    fireEvent.click(buy);
+    expect(state.add).not.toHaveBeenCalled();
   });
 });

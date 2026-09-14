@@ -1,3 +1,4 @@
+import StarterBundle from "./pages/StarterBundle";
 import PeachParty from "./pages/PeachParty";
 import ThaiStyle from "./pages/ThaiStyle";
 import LemonBreezy from "./pages/LemonBreezy";
@@ -75,6 +76,8 @@ const App = () => {
                 <Route path="/produkte/thai-style" element={<ThaiStyle />} />
                 <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
                 <Route path="/produkte/lemon-breezy" element={<LemonBreezy />} />
+                <Route path="/produkt/starter-bundle" element={<StarterBundle />} />
+                <Route path="/produkte/starter-bundle" element={<StarterBundle />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
                 
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />

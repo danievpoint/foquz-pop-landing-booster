@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { products, bundleProduct } from "@/data/products";
+import { products, allProducts, bundleProduct } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
@@ -7,19 +7,20 @@ import { trackViewedProduct } from "@/lib/klaviyo";
 const price = (value: number) => value.toFixed(2).replace(".", ",");
 
 export function useProductPage(handle: string) {
-  const product = products.find((p) => p.handle === handle)!;
+  const product = allProducts.find((p) => p.handle === handle)!;
   const { addToCart, isOpen, popupOpen } = useCart();
   const { isAvailable } = useProductAvailability();
   const ctaRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
-  const bundles = [
+  const options = [
     { label: "1 DOSE", desc: "Zum Reinschnuppern", price: product.numericPrice, perDose: price(product.numericPrice), dosen: 1, tag: null, productName: product.name, oldPrice: undefined },
     { label: "3 DOSEN – POWER BUNDLE", desc: "Alle 3 Sorten in einer Box, 11 % sparen", price: bundleProduct.numericPrice, oldPrice: bundleProduct.originalPrice, perDose: price(bundleProduct.numericPrice / 3), dosen: 3, tag: "BELIEBT", productName: bundleProduct.name },
   ];
+  const bundles = product.isBundle ? options.filter((option) => option.dosen === 3) : options;
   const addSingle = () => {
     if (isAvailable(product.name) !== false) {
-      addToCart(1, { id: product.name, name: product.name, price: product.numericPrice, image: product.image });
+      addToCart(1, { id: product.isBundle ? "starter-bundle" : product.name, name: product.name, price: product.numericPrice, image: product.image });
     }
   };
   const addSelection = (selection: typeof bundles[number]) => {
@@ -29,7 +30,7 @@ export function useProductPage(handle: string) {
   };
 
   useEffect(() => {
-    trackViewedProduct({ id: product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
+    trackViewedProduct({ id: product.isBundle ? "starter-bundle" : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
   }, [product]);
 
   useEffect(() => {
