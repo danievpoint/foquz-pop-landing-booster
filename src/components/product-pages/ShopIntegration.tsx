@@ -62,7 +62,7 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   if (!product.video && galleryImages.length === 0) return null;
   return <div className="mt-3">
     <div ref={galleryRef} onScroll={updateActiveIndex} className="flex w-full snap-x snap-mandatory overflow-x-auto rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      {product.video && <div ref={videoRef} className="min-w-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} controls className="aspect-square w-full rounded-xl border-2 border-black object-cover" /></div>}
+      {product.video && <div ref={videoRef} className="min-w-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="aspect-square w-full rounded-xl border-2 border-black object-cover pointer-events-none" /></div>}
       {galleryImages.map((img, index) => (
         <div key={img.url} className="aspect-square min-w-full snap-center overflow-hidden rounded-xl border-2 border-black bg-card">
           <img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="h-full w-full object-cover" />
