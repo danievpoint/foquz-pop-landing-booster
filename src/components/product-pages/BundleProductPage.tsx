@@ -52,9 +52,8 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
             {/* Gallery */}
             <div className="flex flex-col">
-              <ProductPageMedia product={product} includeProductImage maxImages={Infinity} />
-              {/* Title Block */}
-              <div className="text-left mt-6 md:mt-8">
+              {/* Title Block – über der Galerie */}
+              <div className="text-left">
                 <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
                   <span style={{ color: config.titleTopColor }}>{config.titleTop}</span>{" "}
                   <span style={{ color: config.titleBottomColor }}>{config.titleBottom}</span>
@@ -77,6 +76,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
                   <LooxRating productId={shop.productId} />
                 </div>
               </div>
+              <ProductPageMedia product={product} includeProductImage maxImages={Infinity} />
             </div>
 
             {/* Buy Panel */}
