@@ -149,9 +149,8 @@ const ThaiStyleInner = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
           {/* Gallery – alle Produktbilder ohne Slider */}
           <div className="flex flex-col">
-            <ProductPageMedia product={product} />
-            {/* Title Block – unter dem Slider */}
-            <div className="text-left mt-6 md:mt-8">
+            {/* Title Block – über der Galerie */}
+            <div className="text-left">
               <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
                 <span style={{ color: "#85c8b5" }}>THAI</span>{" "}
                 <span style={{ color: "#facc15" }}>STYLE</span>
@@ -174,6 +173,7 @@ const ThaiStyleInner = () => {
                 <LooxRating productId="10276796498262" />
               </div>
             </div>
+            <ProductPageMedia product={product} />
           </div>
 
           {/* Buy Panel */}
