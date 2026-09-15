@@ -38,7 +38,10 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   }, [product.handle]);
   useEffect(() => {
     if (!videoRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => setPlay(entry.intersectionRatio >= 0.99), { threshold: [0, 0.99, 1] });
+    // Sofort starten, sobald ein nennenswerter Teil sichtbar ist (z. B. direkt
+    // nach dem Seitenaufruf), nicht erst bei vollstaendiger Sichtbarkeit.
+    setPlay(true);
+    const observer = new IntersectionObserver(([entry]) => setPlay(entry.intersectionRatio >= 0.25), { threshold: [0, 0.25, 0.6, 1] });
     observer.observe(videoRef.current);
     return () => { observer.disconnect(); setPlay(false); };
   }, []);
