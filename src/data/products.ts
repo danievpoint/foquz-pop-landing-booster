@@ -5,7 +5,7 @@ import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
 import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
 import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
 import foquzBox from "@/assets/foquz-box.png";
-import foquzBundleHg from "@/assets/foquz-produkt-bundle-hg.webp.asset.json";
+import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
 
 export interface Product {
   name: string;
@@ -102,7 +102,7 @@ export const bundleProduct: Product = {
     ],
   },
 
-  image: foquzBundleHg.url,
+  image: foquzBundleClean.url,
   color: "#75559f",
   isBundle: true,
   ingredients: [
