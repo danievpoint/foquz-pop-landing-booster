@@ -10,4 +10,4 @@
 - [x] Zusatzbilder kompakt und mobil per Wischen, Klick und Punkten navigierbar machen
 - [x] Power Bundle zusätzlich mit Bild und „Beliebt“-Hinweis bei der Sortenauswahl zeigen
 - [x] Power Bundle in der Mengenauswahl ohne zusätzliches Produktbild darstellen
-- [x] Großes Produktbild per Wischen navigierbar machen und aktive Bildpunkte ergänzen
+- [x] Großes Produktbild per Wischen navigierbar machen und aktive Bildpunkte ergänzen- [x] Grüne Vergleichs-Sektion mobil kompakter: Slider-Höhe passt sich der aktiven Folie an, Abstände reduziert (alle 3 Sortenseiten)
