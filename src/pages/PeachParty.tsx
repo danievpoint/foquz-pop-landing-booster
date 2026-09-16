@@ -4,7 +4,7 @@ import { BundleSelector } from "@/components/product-pages/BundleSelector";
 import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -130,6 +130,17 @@ const PeachPartyInner = () => {
   const { product, bundles, addSingle, addSelection, isAvailable } = shop;
   const touchStart = useRef<number | null>(null);
   const [activeCompare, setActiveCompare] = useState(0);
+  const compareSlideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [compareSlideHeight, setCompareSlideHeight] = useState<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    const el = compareSlideRefs.current[activeCompare];
+    if (!el) return;
+    const update = () => setCompareSlideHeight(el.offsetHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [activeCompare]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const sorte = product.name;
   const [bundle, setBundle] = useState("1 DOSE");
@@ -362,18 +373,19 @@ const PeachPartyInner = () => {
         </section>
 
         {/* ===== Vergleichs-Slider: Foquz vs. Thailand-Dose / Nasenspray / Energy Drink ===== */}
-        <section className="flex flex-col justify-center py-12 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: ORANGE }}>
+        <section className="flex flex-col justify-center py-8 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: ORANGE }}>
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
-            <div className="overflow-hidden pb-3">
+            <div className="pb-3">
+            <div className="overflow-hidden transition-[height] duration-300 ease-out" style={{ height: compareSlideHeight }}>
             <div onTouchStart={(e) => { touchStart.current = e.touches[0].clientX; }} onTouchEnd={(e) => {
               if (touchStart.current === null) return;
               const distance = touchStart.current - e.changedTouches[0].clientX;
               if (Math.abs(distance) > 40) setActiveCompare((current) => (current + (distance > 0 ? 1 : -1) + comparisons.length) % comparisons.length);
               touchStart.current = null;
-            }} className="flex transition-transform duration-300 ease-out" style={{ transform: `translateX(-${activeCompare * 100}%)` }}>
+            }} className="flex items-start transition-transform duration-300 ease-out" style={{ transform: `translateX(-${activeCompare * 100}%)` }}>
               {comparisons.map((c, i) => (
-                <div key={i} className="w-full shrink-0 px-2">
-                   <h2 className="font-barlow font-extrabold text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl text-center text-black mb-8 leading-none whitespace-nowrap">
+                <div key={i} ref={(el) => { compareSlideRefs.current[i] = el; }} className="w-full shrink-0 px-2">
+                   <h2 className="font-barlow font-extrabold text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl text-center text-black mb-5 md:mb-8 leading-none whitespace-nowrap">
                     {c.heading[0]}
                     {c.heading[1] && (
                       <>
@@ -382,7 +394,7 @@ const PeachPartyInner = () => {
                       </>
                     )}
                   </h2>
-                   <div className="relative grid gap-6 lg:grid-cols-2 lg:gap-8 items-stretch">
+                   <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-8 items-stretch">
                     {/* VS Badge */}
                     <span className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-black text-yellow-400 items-center justify-center font-barlow font-black text-2xl lg:text-3xl border-4 border-yellow-400 shadow-[4px_4px_0_0_rgba(0,0,0,0.35)] rotate-[-6deg]">
                       VS
@@ -443,17 +455,18 @@ const PeachPartyInner = () => {
                     </div>
                   </div>
                   {c.foquzFootnote && (
-                    <p className="text-[11px] md:text-xs text-black/80 text-center mt-4 leading-relaxed max-w-4xl mx-auto">
+                    <p className="text-[11px] md:text-xs text-black/80 text-center mt-3 md:mt-4 leading-relaxed max-w-4xl mx-auto">
                       {c.foquzFootnote}
                     </p>
                   )}
                   {c.footnote && (
-                    <p className="max-w-3xl mx-auto mt-4 md:mt-6 text-center text-[11px] md:text-xs font-semibold text-black/80 leading-snug">
+                    <p className="max-w-3xl mx-auto mt-3 md:mt-6 text-center text-[11px] md:text-xs font-semibold text-black/80 leading-snug">
                       {c.footnote}
                     </p>
                   )}
                 </div>
               ))}
+            </div>
             </div>
             </div>
 
