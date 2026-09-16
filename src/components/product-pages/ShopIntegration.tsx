@@ -33,7 +33,13 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   useEffect(() => {
     let active = true;
     setActiveIndex(0);
-    fetchProductGalleryImages(product.handle).then((result) => { if (active) setImages(result); }).catch(() => {});
+    galleryRef.current?.scrollTo({ left: 0 });
+    fetchProductGalleryImages(product.handle).then((result) => {
+      if (!active) return;
+      setImages(result);
+      setActiveIndex(0);
+      galleryRef.current?.scrollTo({ left: 0 });
+    }).catch(() => {});
     return () => { active = false; };
   }, [product.handle]);
   useEffect(() => {
