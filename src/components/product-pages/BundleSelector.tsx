@@ -72,12 +72,12 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
 
                   <span className="text-right">
                     <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                      {price(b.price)} €
                       {b.oldPrice && (
-                        <span className="ml-1.5 inline-block rounded bg-yellow-400 px-1 py-0.5 text-xs font-black text-black line-through decoration-black decoration-2">
+                        <span className="mr-1.5 inline-block rounded bg-yellow-400 px-1 py-0.5 text-xs font-black text-black line-through decoration-black decoration-2">
                           {b.oldPrice}
                         </span>
                       )}
+                      {price(b.price)} €
                     </span>
                     <span className="block text-[11px] font-semibold text-white/80">{b.perDose} € / Dose</span>
                   </span>
