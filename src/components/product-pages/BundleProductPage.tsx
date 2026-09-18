@@ -52,7 +52,12 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
             {/* Gallery */}
             <div className="flex flex-col">
-              {/* Title Block – über der Galerie */}
+              <ProductPageMedia product={product} includeProductImage maxImages={Infinity} />
+            </div>
+
+            {/* Buy Panel */}
+            <div className="flex flex-col h-full">
+              {/* Titel + Subline */}
               <div className="text-left">
                 <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
                   <span style={{ color: config.titleTopColor }}>{config.titleTop}</span>{" "}
@@ -61,26 +66,8 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
                 <p className="text-foreground/90 text-base md:text-lg font-bold leading-relaxed">
                   {config.tagline}
                 </p>
-
-                {/* Badges */}
-                <div className="flex flex-wrap gap-2 mt-6 justify-start">
-                  {["ohne Nikotin", "ohne Koffein", "echte Kräuter", "deutsche Marke"].map((b) => (
-                    <span key={b} className="bg-white border-2 border-black rounded-full px-2.5 py-1 text-[11px] font-bold shadow-[2px_2px_0_0_#000]">
-                      {b}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Bewertung */}
-                <div className="flex items-center justify-start gap-2 mt-4">
-                  <LooxRating productId={shop.productId} />
-                </div>
               </div>
-              <ProductPageMedia product={product} includeProductImage maxImages={Infinity} />
-            </div>
 
-            {/* Buy Panel */}
-            <div className="flex flex-col h-full">
               <h2 className="font-barlow font-extrabold text-base mb-3">DEIN BUNDLE</h2>
               <BundleSelector bundles={bundles} selected={selectedBundle.label} onSelect={() => {}} className="mb-6" />
               <h3 className="font-barlow font-extrabold text-base mb-3">PRODUKTE ENTDECKEN</h3>
@@ -126,6 +113,20 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 
               <div className="mt-3">
                 <PaymentLogos compact size="md" />
+              </div>
+
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mt-6 justify-start">
+                {["ohne Nikotin", "ohne Koffein", "echte Kräuter", "deutsche Marke"].map((b) => (
+                  <span key={b} className="bg-white border-2 border-black rounded-full px-2.5 py-1 text-[11px] font-bold shadow-[2px_2px_0_0_#000]">
+                    {b}
+                  </span>
+                ))}
+              </div>
+
+              {/* Bewertung */}
+              <div className="flex items-center justify-start gap-2 mt-4">
+                <LooxRating productId={shop.productId} />
               </div>
             </div>
           </div>
