@@ -1,6 +1,6 @@
-import { bundleProduct } from "@/data/products";
 import { useProductPage } from "@/hooks/useProductPage";
 import { Sparkles } from "lucide-react";
+import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
 
 const price = (value: number) => value.toFixed(2).replace(".", ",");
 
@@ -10,15 +10,17 @@ interface BundleSelectorProps {
   bundles: Bundle[];
   selected: string;
   onSelect: (label: string) => void;
+  selectedFlavor: string;
+  onFlavorSelect: (name: string) => void;
   className?: string;
 }
 
-export function BundleSelector({ bundles, selected, onSelect, className = "" }: BundleSelectorProps) {
+export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, onFlavorSelect, className = "" }: BundleSelectorProps) {
   return (
     <div className={`space-y-4 pt-2 ${className}`}>
       {bundles.map((b) => {
         const isSelected = selected === b.label;
-        const isBundle = b.dosen === 3;
+        const isBundle = b.dosen > 1;
 
         if (isBundle) {
           return (
@@ -56,11 +58,12 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
                   </span>
 
                   <span className="flex-1">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex flex-wrap items-center gap-1.5">
                       <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
                         {b.label}
                       </span>
                       <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                      {b.dosen === 6 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
                     </span>
                     <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
                       {b.desc}
@@ -82,30 +85,24 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
               </button>
 
               {/* Best value badge - outside button so it isn't clipped */}
-              {b.tag && (
+              {b.dosen === 6 && (
                 <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
-                  {b.tag}
+                  BELIEBTESTE WAHL
                 </span>
               )}
+              {b.tag && <span className="mt-2 inline-flex rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase text-black shadow-[2px_2px_0_0_#000]">{b.tag}</span>}
             </div>
           );
         }
 
         // Single can option: plain white, no yellow highlight when selected
         return (
-          <button
-            key={b.label}
-            type="button"
-            onClick={() => onSelect(b.label)}
-            aria-pressed={isSelected}
-            className={[
-              "relative w-full min-h-[64px] flex items-center gap-2 rounded-2xl border-2 border-black bg-white p-2 text-left text-black transition-all duration-200",
-              isSelected
-                ? "shadow-[5px_5px_0_0_#000]"
-                : "shadow-[3px_3px_0_0_rgba(0,0,0,0.25)] hover:shadow-[4px_4px_0_0_rgba(0,0,0,0.4)]",
-            ].join(" ")}
-          >
+          <div key={b.label}>
+            <button type="button" onClick={() => onSelect(b.label)} aria-pressed={isSelected} className={[
+                "relative w-full min-h-[64px] flex items-center gap-2 rounded-2xl border-2 border-black bg-white p-2 text-left text-black transition-all duration-200",
+                isSelected ? "shadow-[5px_5px_0_0_#000]" : "shadow-[3px_3px_0_0_rgba(0,0,0,0.25)] hover:shadow-[4px_4px_0_0_rgba(0,0,0,0.4)]",
+              ].join(" ")}>
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white">
               {isSelected && <span className="h-3 w-3 rounded-full bg-black" />}
             </span>
@@ -119,7 +116,9 @@ export function BundleSelector({ bundles, selected, onSelect, className = "" }: 
               <span className="block font-barlow text-base font-extrabold sm:text-lg">{price(b.price)} €</span>
               <span className="block text-[11px] font-semibold text-muted-foreground">{b.perDose} € / Dose</span>
             </span>
-          </button>
+            </button>
+            {isSelected && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} onSelect={onFlavorSelect} /></div>}
+          </div>
         );
       })}
     </div>

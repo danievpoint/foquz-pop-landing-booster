@@ -5,6 +5,7 @@ import { fetchProductGalleryImages, shopifyImageSrcSet, shopifyImageUrl, type Sh
 import SeoHead from "@/components/SeoHead";
 import AutoVideo from "@/components/AutoVideo";
 import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 
 const price = (value: number) => value.toFixed(2).replace(".", ",");
 
@@ -100,5 +101,20 @@ export function ProductPageSticky({ shop, selectedBundle }: { shop: Shop; select
     <button className="comic-btn w-full text-sm py-3" style={{ backgroundColor: "#ffd618", color: "#000" }} disabled={shop.isAvailable(selectedBundle.productName) === false} onClick={() => shop.addSelection(selectedBundle)}>
       IN DEN WARENKORB – {price(selectedBundle.price)} €
     </button>
+  </div>;
+}
+
+export function FreeShippingStatus({ selectedPrice }: { selectedPrice: number }) {
+  const remaining = Math.max(0, 29 - selectedPrice);
+  return <div className="pt-4 flex items-center gap-2 text-xs font-semibold">
+    {remaining === 0 && <span className="w-4 h-4 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5" /></span>}
+    <span>{remaining === 0 ? "Versandkostenfrei" : `Noch ${price(remaining)} € bis zum Gratisversand`}</span>
+  </div>;
+}
+
+export function ProductPromise() {
+  return <div className="mt-4 rounded-2xl border-2 border-black bg-white p-4 shadow-[4px_4px_0_0_#000]">
+    <h2 className="font-barlow font-extrabold text-base">UNSER VERSPRECHEN</h2>
+    <p className="mt-2 text-xs font-semibold leading-relaxed">Ungeöffnete Dosen kannst du innerhalb von 14 Tagen zurückschicken und bekommst dein Geld zurück. Geöffnete Dosen nehmen wir aus Hygienegründen nicht zurück (§ 312g Abs. 2 Nr. 3 BGB). Wenn mit deiner Bestellung etwas nicht stimmt, schreib uns an info@foquz.de und wir kümmern uns drum.</p>
   </div>;
 }
