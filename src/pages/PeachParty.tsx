@@ -1,7 +1,6 @@
 import { useProductPage } from "@/hooks/useProductPage";
-import { ProductPageMeta, ProductPageMedia, ProductPageSticky } from "@/components/product-pages/ShopIntegration";
+import { FreeShippingStatus, ProductPageMeta, ProductPageMedia, ProductPageSticky, ProductPromise } from "@/components/product-pages/ShopIntegration";
 import { BundleSelector } from "@/components/product-pages/BundleSelector";
-import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -142,10 +141,11 @@ const PeachPartyInner = () => {
     return () => observer.disconnect();
   }, [activeCompare]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const sorte = product.name;
-  const [bundle, setBundle] = useState("1 DOSE");
+  const [sorte, setSorte] = useState(product.name);
+  const [bundle, setBundle] = useState("6 DOSEN");
   const [storyOpen, setStoryOpen] = useState(false);
-  const selectedBundle = bundles.find((b) => b.label === bundle) ?? bundles[0];
+  const selectedOption = bundles.find((b) => b.label === bundle) ?? bundles[2];
+  const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: LIGHTBLUE }}>
@@ -188,13 +188,8 @@ const PeachPartyInner = () => {
               <LooxRating productId="10276796498262" />
             </div>
 
-            {/* Sorte wählen */}
-            <h2 className="font-barlow font-extrabold text-base mb-3">SORTE WÄHLEN</h2>
-            <ProductFlavorSelector selected={sorte} />
-
-            {/* Bundle wählen */}
-            <h2 className="font-barlow font-extrabold text-base mb-3">MENGE WÄHLEN — MEHR DOSEN, MEHR WOLKE 7</h2>
-            <BundleSelector bundles={bundles} selected={bundle} onSelect={setBundle} className="mb-8" />
+            <h2 className="font-barlow font-extrabold text-base mb-3">DEIN SET WÄHLEN</h2>
+            <BundleSelector bundles={bundles} selected={bundle} onSelect={setBundle} selectedFlavor={sorte} onFlavorSelect={setSorte} className="mb-8" />
 
             <p className="text-xs font-bold leading-relaxed mb-4">
               {isAvailable(selectedBundle.productName) === false ? "Aktuell ausverkauft" : isAvailable(selectedBundle.productName) === true ? "Verfügbar ⚡ · AUF LAGER — in 2 bis 5 Werktagen bei dir" : "Lieferzeit: 2 bis 5 Werktage"} <span className="font-semibold text-muted-foreground">· inkl. MwSt.</span>
@@ -208,6 +203,7 @@ const PeachPartyInner = () => {
             >
               IN DEN WARENKORB – {selectedBundle.price.toFixed(2).replace(".", ",")} €
             </button>
+            <FreeShippingStatus selectedPrice={selectedBundle.price} />
 
             {/* Trust */}
             <ul className="pt-4 space-y-2 text-xs font-semibold">
@@ -224,6 +220,7 @@ const PeachPartyInner = () => {
             <div className="mt-3">
               <PaymentLogos compact size="md" />
             </div>
+            <ProductPromise />
 
           </div>
           </div>
