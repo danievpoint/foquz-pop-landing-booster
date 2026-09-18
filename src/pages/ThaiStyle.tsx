@@ -160,7 +160,12 @@ const ThaiStyleInner = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
           {/* Gallery – alle Produktbilder ohne Slider */}
           <div className="flex flex-col">
-            {/* Title Block – über der Galerie */}
+            <ProductPageMedia product={product} />
+          </div>
+
+          {/* Buy Panel */}
+          <div className="flex flex-col h-full">
+            {/* Titel + Subline */}
             <div className="text-left">
               <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
                 <span style={{ color: "#85c8b5" }}>THAI</span>{" "}
@@ -169,26 +174,8 @@ const ThaiStyleInner = () => {
               <p className="text-foreground/90 text-base md:text-lg font-bold leading-relaxed">
                 Dein Style, dein Kick.<br />Kräuter-Power für tiefste Konzentration.
               </p>
-
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mt-6 justify-start">
-                {["ohne Nikotin", "ohne Koffein", "echte Kräuter", "deutsche Marke"].map((b) => (
-                  <span key={b} className="bg-white border-2 border-black rounded-full px-2.5 py-1 text-[11px] font-bold shadow-[2px_2px_0_0_#000]">
-                    {b}
-                  </span>
-                ))}
-              </div>
-
-              {/* Bewertung unter den Badges */}
-              <div className="flex items-center justify-start gap-2 mt-4">
-                <LooxRating productId="10276796498262" />
-              </div>
             </div>
-            <ProductPageMedia product={product} />
-          </div>
 
-          {/* Buy Panel */}
-          <div className="flex flex-col h-full">
             {/* Sorte wählen */}
             <h2 className="font-barlow font-extrabold text-base mb-3">SORTE WÄHLEN</h2>
             <ProductFlavorSelector selected={sorte} />
@@ -224,6 +211,20 @@ const ThaiStyleInner = () => {
 
             <div className="mt-3">
               <PaymentLogos compact size="md" />
+            </div>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2 mt-6 justify-start">
+              {["ohne Nikotin", "ohne Koffein", "echte Kräuter", "deutsche Marke"].map((b) => (
+                <span key={b} className="bg-white border-2 border-black rounded-full px-2.5 py-1 text-[11px] font-bold shadow-[2px_2px_0_0_#000]">
+                  {b}
+                </span>
+              ))}
+            </div>
+
+            {/* Bewertung */}
+            <div className="flex items-center justify-start gap-2 mt-4">
+              <LooxRating productId="10276796498262" />
             </div>
           </div>
           </div>
