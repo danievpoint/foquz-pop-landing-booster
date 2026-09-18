@@ -90,7 +90,7 @@ const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
 // enthalten ist. Nicht einzeln kaufbar, nicht entfernbar.
 // FEATURE-FLAG: auf `true` setzen, um die Gratis-Zugaben wieder zu aktivieren.
 export const GIFTS_ENABLED = true;
-const BUNDLE_IDS = ["bundle", "starter-bundle"];
+const BUNDLE_IDS = ["bundle", "starter-bundle", "6er-vorrats-set"];
 export const GIFT_ITEMS: Omit<CartItem, "qty">[] = [
   { id: "gift-nasenstripes", name: "Nasen-Stripes (gratis)", price: 0, image: giftNasenstripes.url },
   { id: "gift-sticker", name: "FOQUZ Sticker (gratis)", price: 0, image: giftSticker.url },

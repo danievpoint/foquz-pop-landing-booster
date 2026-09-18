@@ -11,3 +11,7 @@
 - [x] Power Bundle zusätzlich mit Bild und „Beliebt“-Hinweis bei der Sortenauswahl zeigen
 - [x] Power Bundle in der Mengenauswahl ohne zusätzliches Produktbild darstellen
 - [x] Großes Produktbild per Wischen navigierbar machen und aktive Bildpunkte ergänzen- [x] Grüne Vergleichs-Sektion mobil kompakter: Slider-Höhe passt sich der aktiven Folie an, Abstände reduziert (alle 3 Sortenseiten)
+- [x] Gemeinsamen 1er-/3er-/6er-Set-Block auf allen vier Produktseiten umsetzen
+- [x] 6er-Vorrats-Set mit Shopify-Warenkorb verbinden
+- [x] Versandhinweis und Garantie-Block ergänzen
+- [ ] Produktseiten und Warenkorb mobil sowie Desktop prüfen

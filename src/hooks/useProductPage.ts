@@ -14,10 +14,11 @@ export function useProductPage(handle: string) {
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
   const options = [
-    { label: "1 DOSE", desc: "Zum Reinschnuppern", price: product.numericPrice, perDose: price(product.numericPrice), dosen: 1, tag: null, productName: product.name, oldPrice: undefined },
-    { label: "3 DOSEN – POWER BUNDLE", desc: "Alle 3 Sorten in einer Box, 11 % sparen", price: bundleProduct.numericPrice, oldPrice: bundleProduct.originalPrice, perDose: price(bundleProduct.numericPrice / 3), dosen: 3, tag: "BELIEBT", productName: bundleProduct.name },
+    { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name },
+    { label: "3 DOSEN", desc: "je 1× jede Sorte", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "6,66", dosen: 3, tag: "SPARE 11 %", productName: bundleProduct.name, id: "starter-bundle" },
+    { label: "6 DOSEN", desc: "2× jede Sorte – Vorrat für zu Hause, Büro und Tasche", price: 34.90, oldPrice: "44,94 €", perDose: "5,82", dosen: 6, tag: "SPARE 22 %", productName: "6ER VORRATS-SET", id: "6er-vorrats-set" },
   ];
-  const bundles = product.isBundle ? options.filter((option) => option.dosen === 3) : options;
+  const bundles = options;
   const addSingle = () => {
     if (isAvailable(product.name) !== false) {
       addToCart(1, { id: product.isBundle ? "starter-bundle" : product.name, name: product.name, price: product.numericPrice, image: product.image });
@@ -25,8 +26,12 @@ export function useProductPage(handle: string) {
   };
   const addSelection = (selection: typeof bundles[number]) => {
     if (isAvailable(selection.productName) === false) return;
-    if (selection.dosen === 1) addSingle();
-    else addToCart(1, { id: "starter-bundle", name: bundleProduct.name, price: bundleProduct.numericPrice, image: bundleProduct.image });
+    if (selection.dosen === 1) {
+      const single = products.find((item) => item.name === selection.productName) ?? products[0];
+      addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
+    } else {
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: bundleProduct.image });
+    }
   };
 
   useEffect(() => {

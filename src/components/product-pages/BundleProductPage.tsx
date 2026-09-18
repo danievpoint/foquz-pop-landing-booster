@@ -2,9 +2,8 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useProductPage } from "@/hooks/useProductPage";
-import { ProductPageMedia, ProductPageMeta, ProductPageSticky } from "@/components/product-pages/ShopIntegration";
+import { FreeShippingStatus, ProductPageMedia, ProductPageMeta, ProductPageSticky, ProductPromise } from "@/components/product-pages/ShopIntegration";
 import { BundleSelector } from "@/components/product-pages/BundleSelector";
-import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { Check, ChevronDown } from "lucide-react";
@@ -38,7 +37,10 @@ export interface BundleProductConfig {
 const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
   const shop = useProductPage("starter-bundle");
   const { product, bundles, addSelection, isAvailable } = shop;
-  const selectedBundle = bundles[0];
+  const [bundle, setBundle] = useState("6 DOSEN");
+  const [sorte, setSorte] = useState("PEACH PARTY");
+  const selectedOption = bundles.find((option) => option.label === bundle) ?? bundles[2];
+  const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -82,11 +84,8 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
                 <LooxRating productId={shop.productId} />
               </div>
 
-              <h2 className="font-barlow font-extrabold text-base mb-3">DEIN BUNDLE</h2>
-              <BundleSelector bundles={bundles} selected={selectedBundle.label} onSelect={() => {}} className="mb-6" />
-              <h3 className="font-barlow font-extrabold text-base mb-3">PRODUKTE ENTDECKEN</h3>
-              <ProductFlavorSelector selected={product.name} />
-              <p className="text-sm font-semibold mb-4">Im Power Bundle enthalten: je eine Dose Peach Party, Lemon Breezy und Thai Style.</p>
+              <h2 className="font-barlow font-extrabold text-base mb-3">DEIN SET WÄHLEN</h2>
+              <BundleSelector bundles={bundles} selected={bundle} onSelect={setBundle} selectedFlavor={sorte} onFlavorSelect={setSorte} className="mb-6" />
 
               {/* Checkpoints */}
               <ul className="space-y-2 mb-5">
@@ -105,13 +104,14 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
               </p>
               <button
                 ref={shop.ctaRef}
-                disabled={isAvailable(product.name) === false}
+                disabled={isAvailable(selectedBundle.productName) === false}
                 onClick={() => addSelection(selectedBundle)}
                 className="comic-btn w-full min-h-12 text-center py-3 font-extrabold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "#ffd618", color: "#000" }}
               >
-                IN DEN WARENKORB – {product.numericPrice.toFixed(2).replace(".", ",")} €
+                IN DEN WARENKORB – {selectedBundle.price.toFixed(2).replace(".", ",")} €
               </button>
+              <FreeShippingStatus selectedPrice={selectedBundle.price} />
 
               {/* Trust */}
               <ul className="pt-4 space-y-2 text-xs font-semibold">
@@ -128,6 +128,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
               <div className="mt-3">
                 <PaymentLogos compact size="md" />
               </div>
+              <ProductPromise />
 
             </div>
           </div>
