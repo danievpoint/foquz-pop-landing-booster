@@ -14,7 +14,7 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, type CartItem } from "@/contexts/CartContext";
+import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten, allProducts } from "@/data/products";
 import { Link } from "react-router-dom";
@@ -36,8 +36,15 @@ const PAYMENT_METHODS = [
 ];
 
 const BUNDLE_ID = "starter-bundle";
+const SIX_PACK_ID = "6er-vorrats-set";
 const BUNDLE_LIST_PRICE = 19.98;
 const SINGLE_PRICE = 7.49;
+// Vergleichspreise (UVP der Einzeldosen) je Position – Basis für die Ersparnis.
+const COMPARE_AT_PRICE_BY_ID: Record<string, number> = {
+  bundle: 22.47,
+  "starter-bundle": 22.47,
+  "6er-vorrats-set": 44.94,
+};
 // Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
 // Versand-Profil (Zone Deutschland) sein – dort ist die Grenze 29,00 €.
 // Shopify stellt die Versandschwelle via Storefront API leider nicht bereit,
