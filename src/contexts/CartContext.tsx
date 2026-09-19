@@ -429,6 +429,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 
   const getCheckoutLines = useCallback(() => {
+    const prioLine =
+      prioShipping && items.length > 0
+        ? [{ variantId: VARIANT_GID_BY_ID[PRIO_SHIPPING_ID], quantity: 1 }]
+        : [];
     return items
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
