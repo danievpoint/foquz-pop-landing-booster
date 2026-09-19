@@ -201,6 +201,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
+  const [prioShipping, setPrioShipping] = useState(false);
   const shopifyCartIdRef = useRef<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
