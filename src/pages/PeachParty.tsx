@@ -1,4 +1,5 @@
 import { useProductPage } from "@/hooks/useProductPage";
+import { useInitialSetSize } from "@/hooks/useInitialSetSize";
 import { FreeShippingStatus, ProductPageMeta, ProductPageMedia, ProductPageSticky, ProductPromise } from "@/components/product-pages/ShopIntegration";
 import { BundleSelector } from "@/components/product-pages/BundleSelector";
 import LooxRating from "@/components/LooxRating";
@@ -141,8 +142,9 @@ const PeachPartyInner = () => {
     return () => observer.disconnect();
   }, [activeCompare]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const initialSetSize = useInitialSetSize();
   const [sorte, setSorte] = useState(product.name);
-  const [bundle, setBundle] = useState("6 DOSEN");
+  const [bundle, setBundle] = useState(initialSetSize);
   const [storyOpen, setStoryOpen] = useState(false);
   const selectedOption = bundles.find((b) => b.label === bundle) ?? bundles[2];
   const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
