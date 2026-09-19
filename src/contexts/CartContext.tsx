@@ -552,6 +552,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           sessionStorage.removeItem("foquz_checkout_pending");
           shopifyCartIdRef.current = null;
           setItems([]);
+          setPrioShipping(false);
           setIsOpen(false);
           setCheckoutUrl(null);
           localStorage.removeItem(DISCOUNT_KEY);
