@@ -45,6 +45,9 @@ interface CartContextType {
   checkout: () => Promise<void>;
   isCheckingOut: boolean;
   checkoutUrl: string | null;
+  /** Prio-Versand als Zusatzposition (zählt nicht zur Gratisversand-Schwelle). */
+  prioShipping: boolean;
+  setPrioShipping: (v: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -75,7 +78,12 @@ const CartContext = createContext<CartContextType>({
   checkout: async () => {},
   isCheckingOut: false,
   checkoutUrl: null,
+  prioShipping: false,
+  setPrioShipping: () => {},
 });
+
+export const PRIO_SHIPPING_ID = "prio-versand";
+export const PRIO_SHIPPING_PRICE = 1.95;
 
 export const useCart = () => useContext(CartContext);
 
