@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToHash = () => {
-  const { hash, pathname } = useLocation();
+  const { hash, pathname, state } = useLocation();
+  const keepScroll = Boolean((state as { keepScroll?: boolean } | null)?.keepScroll);
   const hasMounted = useRef(false);
   const hasInitialized = useRef(false);
 

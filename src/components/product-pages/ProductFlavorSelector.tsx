@@ -7,7 +7,13 @@ const choices = [
   { name: "THAI STYLE", desc: "Kräuter & Menthol", img: productImages.thai, handle: "thai-style" },
 ];
 
-export function ProductFlavorSelector({ selected, onSelect }: { selected: string; onSelect?: (name: string) => void }) {
+interface ProductFlavorSelectorProps {
+  selected: string;
+  /** Aktuell gewählte Set-Größe, bleibt beim Sortenwechsel erhalten. */
+  setSize?: string;
+}
+
+export function ProductFlavorSelector({ selected, setSize }: ProductFlavorSelectorProps) {
   const navigate = useNavigate();
 
   return (
@@ -18,7 +24,11 @@ export function ProductFlavorSelector({ selected, onSelect }: { selected: string
           <div key={choice.name} className="relative">
             <button
               type="button"
-              onClick={() => onSelect ? onSelect(choice.name) : navigate(`/produkt/${choice.handle}`)}
+              onClick={() =>
+                navigate(`/produkt/${choice.handle}`, {
+                  state: { keepScroll: true, setSize, flavor: choice.name },
+                })
+              }
               aria-pressed={isSelected}
               className={[
                 "relative w-full min-h-[72px] flex items-center gap-3 rounded-2xl border-2 border-black p-3 text-left transition-all",
