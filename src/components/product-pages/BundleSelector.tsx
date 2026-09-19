@@ -11,7 +11,8 @@ interface BundleSelectorProps {
   selected: string;
   onSelect: (label: string) => void;
   selectedFlavor: string;
-  onFlavorSelect: (name: string) => void;
+  /** Wird nicht mehr benötigt – Sortenwechsel navigiert auf die Sortenseite. */
+  onFlavorSelect?: (name: string) => void;
   className?: string;
 }
 
