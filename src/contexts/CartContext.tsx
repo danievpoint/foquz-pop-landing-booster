@@ -445,8 +445,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         return { variantId, quantity: i.qty };
       })
-      .filter((l): l is { variantId: string; quantity: number } => l !== null);
-  }, [items]);
+      .filter((l): l is { variantId: string; quantity: number } => l !== null)
+      .concat(prioLine);
+  }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
   const freeShippingUnlocked = items.length > 0 && discountedTotal >= FREE_SHIPPING_THRESHOLD;
@@ -579,6 +580,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
+      prioShipping, setPrioShipping,
     }}>
 
       {children}
