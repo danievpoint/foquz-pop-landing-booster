@@ -63,6 +63,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                         {b.label}
                       </span>
                       <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                      {b.tag && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">{b.tag}</span>}
                       {b.dosen === 6 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
                     </span>
                     <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">

@@ -41,9 +41,12 @@ const ScrollToHash = () => {
       return;
     }
 
+    // Sortenwechsel innerhalb der Produktseite: Scrollposition beibehalten.
+    if (keepScroll) return;
+
     // Neue Seite ohne Hash → instant nach ganz oben (überschreibt CSS scroll-behavior: smooth).
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-  }, [hash, pathname]);
+  }, [hash, pathname, keepScroll]);
 
   return null;
 };
