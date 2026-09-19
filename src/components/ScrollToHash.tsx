@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToHash = () => {
-  const { hash, pathname } = useLocation();
+  const { hash, pathname, state } = useLocation();
+  const keepScroll = Boolean((state as { keepScroll?: boolean } | null)?.keepScroll);
   const hasMounted = useRef(false);
   const hasInitialized = useRef(false);
 
@@ -40,9 +41,12 @@ const ScrollToHash = () => {
       return;
     }
 
+    // Sortenwechsel innerhalb der Produktseite: Scrollposition beibehalten.
+    if (keepScroll) return;
+
     // Neue Seite ohne Hash → instant nach ganz oben (überschreibt CSS scroll-behavior: smooth).
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-  }, [hash, pathname]);
+  }, [hash, pathname, keepScroll]);
 
   return null;
 };

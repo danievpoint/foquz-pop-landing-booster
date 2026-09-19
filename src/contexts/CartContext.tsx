@@ -45,6 +45,9 @@ interface CartContextType {
   checkout: () => Promise<void>;
   isCheckingOut: boolean;
   checkoutUrl: string | null;
+  /** Prio-Versand als Zusatzposition (zählt nicht zur Gratisversand-Schwelle). */
+  prioShipping: boolean;
+  setPrioShipping: (v: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -75,7 +78,12 @@ const CartContext = createContext<CartContextType>({
   checkout: async () => {},
   isCheckingOut: false,
   checkoutUrl: null,
+  prioShipping: false,
+  setPrioShipping: () => {},
 });
+
+export const PRIO_SHIPPING_ID = "prio-versand";
+export const PRIO_SHIPPING_PRICE = 1.95;
 
 export const useCart = () => useContext(CartContext);
 
@@ -193,6 +201,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
+  const [prioShipping, setPrioShipping] = useState(false);
   const shopifyCartIdRef = useRef<string | null>(null);
 
   const openCart = useCallback(() => setIsOpen(true), []);
@@ -420,6 +429,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 
   const getCheckoutLines = useCallback(() => {
+    const prioLine =
+      prioShipping && items.length > 0
+        ? [{ variantId: VARIANT_GID_BY_ID[PRIO_SHIPPING_ID], quantity: 1 }]
+        : [];
     return items
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
@@ -432,8 +445,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         return { variantId, quantity: i.qty };
       })
-      .filter((l): l is { variantId: string; quantity: number } => l !== null);
-  }, [items]);
+      .filter((l): l is { variantId: string; quantity: number } => l !== null)
+      .concat(prioLine);
+  }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
   const freeShippingUnlocked = items.length > 0 && discountedTotal >= FREE_SHIPPING_THRESHOLD;
@@ -538,6 +552,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           sessionStorage.removeItem("foquz_checkout_pending");
           shopifyCartIdRef.current = null;
           setItems([]);
+          setPrioShipping(false);
           setIsOpen(false);
           setCheckoutUrl(null);
           localStorage.removeItem(DISCOUNT_KEY);
@@ -566,6 +581,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut, checkoutUrl,
+      prioShipping, setPrioShipping,
     }}>
 
       {children}

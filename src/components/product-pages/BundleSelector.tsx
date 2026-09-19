@@ -11,7 +11,8 @@ interface BundleSelectorProps {
   selected: string;
   onSelect: (label: string) => void;
   selectedFlavor: string;
-  onFlavorSelect: (name: string) => void;
+  /** Wird nicht mehr benötigt – Sortenwechsel navigiert auf die Sortenseite. */
+  onFlavorSelect?: (name: string) => void;
   className?: string;
 }
 
@@ -63,6 +64,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                         {b.label}
                       </span>
                       <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                      {b.tag && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">{b.tag}</span>}
                       {b.dosen === 6 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
                     </span>
                     <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
@@ -91,7 +93,6 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                   BELIEBTESTE WAHL
                 </span>
               )}
-              {b.tag && <span className="mt-2 inline-flex rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase text-black shadow-[2px_2px_0_0_#000]">{b.tag}</span>}
             </div>
           );
         }
@@ -117,7 +118,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
               <span className="block text-[11px] font-semibold text-muted-foreground">{b.perDose} € / Dose</span>
             </span>
             </button>
-            {isSelected && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} onSelect={onFlavorSelect} /></div>}
+            {isSelected && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
           </div>
         );
       })}
