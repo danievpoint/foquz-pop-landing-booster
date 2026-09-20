@@ -86,7 +86,7 @@ function loadTikTok() {
   const ttq: any = (w.ttq = w.ttq || []);
   ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
   ttq.setAndDefer = (t: any, e: string) => {
-    t[e] = (...args: unknown[]) => t.push([e].concat(args));
+    t[e] = (...args: unknown[]) => t.push([e, ...args]);
   };
   for (const method of ttq.methods) ttq.setAndDefer(ttq, method);
   ttq.load = (id: string) => {
