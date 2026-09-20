@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useViewContentPixel } from "@/hooks/useViewContentPixel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useProductPage } from "@/hooks/useProductPage";
@@ -41,6 +42,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
   const [sorte, setSorte] = useState("PEACH PARTY");
   const selectedOption = bundles.find((option) => option.label === bundle) ?? bundles[2];
   const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
+  useViewContentPixel(selectedBundle.id, selectedBundle.productName, selectedBundle.price);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (

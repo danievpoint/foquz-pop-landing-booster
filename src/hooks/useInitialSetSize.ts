@@ -9,3 +9,13 @@ export function useInitialSetSize(fallback = "6 DOSEN"): string {
   const setSize = (state as { setSize?: string } | null)?.setSize;
   return setSize ?? fallback;
 }
+
+/**
+ * Liefert zusätzlich einen Schlüssel, der sich bei jeder Navigation ändert,
+ * damit die Produktseite ihren Auswahl-Zustand zuverlässig synchronisieren kann.
+ */
+export function useSetSelection(fallback = "6 DOSEN") {
+  const { state, key } = useLocation();
+  const setSize = (state as { setSize?: string } | null)?.setSize ?? fallback;
+  return { setSize, navigationKey: key };
+}

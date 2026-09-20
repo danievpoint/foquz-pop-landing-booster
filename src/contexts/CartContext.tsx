@@ -3,7 +3,8 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
-import { trackAddedToCart } from "@/lib/klaviyo";
+import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
+import { trackPixelAddToCart } from "@/lib/tracking";
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 
@@ -361,6 +362,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (!added || addToCartTimestamp === 0) return;
     pendingKlaviyoAdd.current = null;
     trackAddedToCart(added, items);
+    trackPixelAddToCart({
+      contentId: variantIdFor(added.id) ?? added.id,
+      name: added.name,
+      value: Number((added.price * added.qty).toFixed(2)),
+      quantity: added.qty,
+    });
   }, [addToCartTimestamp, items]);
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
