@@ -13,8 +13,8 @@
 
 export const TRACKING_IDS = {
   metaPixelId: "835106479686262",
-  tiktokPixelId: "",
-  googleAdsId: "",
+  tiktokPixelId: "D9FARVJC77UCUJ4UM35G",
+  googleAdsId: "AW-18438820424",
   googleAdsConversionLabel: "",
 };
 
