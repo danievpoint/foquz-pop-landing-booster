@@ -107,9 +107,13 @@ function loadGoogle() {
   if (googleLoaded || !TRACKING_IDS.googleAdsId) return;
   googleLoaded = true;
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer?.push(args);
+  // Gtag exakt nach Google-Vorgabe: das arguments-Objekt pushen – kein Array,
+  // kein Spread, keine Arrow-Function. Alles andere ignoriert gtag.js.
+  /* eslint-disable prefer-rest-params */
+  window.gtag = function gtag() {
+    window.dataLayer?.push(arguments);
   };
+  /* eslint-enable prefer-rest-params */
   injectScript(`https://www.googletagmanager.com/gtag/js?id=${TRACKING_IDS.googleAdsId}`);
   window.gtag("js", new Date());
   window.gtag("config", TRACKING_IDS.googleAdsId);
