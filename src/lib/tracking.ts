@@ -141,19 +141,74 @@ export function initTracking() {
   }
 }
 
-const send = (event: string, props: Props) => {
+interface Item {
+  contentId: string;
+  name: string;
+  value: number;
+  quantity?: number;
+}
+
+const send = (event: "PageView" | "ViewContent" | "AddToCart", item?: Item) => {
   try {
     if (!hasMarketingConsent()) return;
     loadTrackingPixels();
-    if (TRACKING_IDS.metaPixelId) window.fbq?.("track", event, props);
+
+    const qty = item?.quantity ?? 1;
+
+    // --- Meta ---
+    if (TRACKING_IDS.metaPixelId) {
+      const props: Props = item
+        ? {
+            content_type: "product",
+            content_ids: [item.contentId],
+            content_name: item.name,
+            value: item.value,
+            quantity: qty,
+            currency: CURRENCY,
+          }
+        : {};
+      window.fbq?.("track", event, props);
+    }
+
+    // --- TikTok ---
     if (TRACKING_IDS.tiktokPixelId) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ttq = window.ttq as any;
-      if (event === "PageView") ttq?.page?.();
-      else ttq?.track?.(event, props);
+      if (event === "PageView") {
+        ttq?.page?.();
+      } else if (item) {
+        ttq?.track?.(event, {
+          content_id: item.contentId,
+          content_type: "product",
+          content_name: item.name,
+          quantity: qty,
+          value: item.value,
+          currency: CURRENCY,
+        });
+      }
     }
-    if (TRACKING_IDS.googleAdsId && event !== "PageView") {
-      window.gtag?.("event", event.toLowerCase(), props);
+
+    // --- Google Ads (gtag.js) ---
+    if (TRACKING_IDS.googleAdsId) {
+      if (event === "PageView") {
+        window.gtag?.("event", "page_view", {
+          page_location: window.location.href,
+          page_path: window.location.pathname,
+        });
+      } else if (item) {
+        window.gtag?.("event", event === "ViewContent" ? "view_item" : "add_to_cart", {
+          value: item.value,
+          currency: CURRENCY,
+          items: [
+            {
+              item_id: item.contentId,
+              item_name: item.name,
+              price: item.value,
+              quantity: qty,
+            },
+          ],
+        });
+      }
     }
   } catch (e) {
     console.warn("Tracking event failed:", e);
@@ -161,26 +216,13 @@ const send = (event: string, props: Props) => {
 };
 
 export function trackPixelPageView() {
-  send("PageView", {});
+  send("PageView");
 }
 
 export function trackPixelViewContent(p: { contentId: string; name: string; value: number }) {
-  send("ViewContent", {
-    content_type: "product",
-    content_ids: [p.contentId],
-    content_name: p.name,
-    value: p.value,
-    currency: CURRENCY,
-  });
+  send("ViewContent", p);
 }
 
 export function trackPixelAddToCart(p: { contentId: string; name: string; value: number; quantity: number }) {
-  send("AddToCart", {
-    content_type: "product",
-    content_ids: [p.contentId],
-    content_name: p.name,
-    value: p.value,
-    quantity: p.quantity,
-    currency: CURRENCY,
-  });
+  send("AddToCart", p);
 }
