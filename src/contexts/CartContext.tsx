@@ -540,10 +540,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    // Tab sofort öffnen (sonst blockt der Browser nach dem await).
+    const tab = window.open("", "_blank", "noopener,noreferrer");
     // Einwilligung an Shopify übergeben, damit der Checkout die Pixel lädt.
     await syncShopifyConsentWithTimeout(1500);
 
-    window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+    if (tab) tab.location.href = checkoutUrl;
+    else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     sessionStorage.setItem("foquz_checkout_pending", "1");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 
