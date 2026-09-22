@@ -139,7 +139,12 @@ export function initTracking() {
     if (typeof window === "undefined" || initialized) return;
     initialized = true;
     loadTrackingPixels();
-    window.addEventListener("foquz-consent-change", () => loadTrackingPixels());
+    // Bestehende Entscheidung sofort an Shopify weitergeben.
+    void syncShopifyConsentWithTimeout();
+    window.addEventListener("foquz-consent-change", () => {
+      loadTrackingPixels();
+      void syncShopifyConsentWithTimeout();
+    });
   } catch (e) {
     console.warn("Tracking init failed:", e);
   }
