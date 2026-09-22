@@ -4,6 +4,7 @@ import productLemon from "@/assets/product-lemon-new.png";
 import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
 import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
 import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
+import lemonBreezyProductVideo from "@/assets/lemon-breezy-product.mp4.asset.json";
 import foquzBox from "@/assets/foquz-box.png";
 import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
 
@@ -80,7 +81,7 @@ export const products: Product[] = [
       ],
     },
     image: productLemon,
-    video: "/videos/video_product_lemon.mp4",
+    video: lemonBreezyProductVideo.url,
     videoPoster: productLemonVideoPoster,
     color: "#ffd618",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Zitronenaroma"],
