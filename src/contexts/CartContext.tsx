@@ -110,7 +110,7 @@ const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
 
 // ---- Kampagne "3 FÜR 2": ab 2 Einzeldosen ist die dritte Dose gratis. ----
 // FEATURE-FLAG: auf `false` setzen, um die Aktion zu beenden.
-export const THREE_FOR_TWO_ENABLED = true;
+export const THREE_FOR_TWO_ENABLED = false;
 export const THREE_FOR_TWO_CODE = "3FUER2";
 // Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
 export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"];
