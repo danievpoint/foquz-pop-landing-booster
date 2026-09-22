@@ -110,7 +110,7 @@ const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
 
 // ---- Kampagne "3 FÜR 2": ab 2 Einzeldosen ist die dritte Dose gratis. ----
 // FEATURE-FLAG: auf `false` setzen, um die Aktion zu beenden.
-export const THREE_FOR_TWO_ENABLED = true;
+export const THREE_FOR_TWO_ENABLED = false;
 export const THREE_FOR_TWO_CODE = "3FUER2";
 // Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
 export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"];
@@ -226,7 +226,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (!normalized) return;
     // Der Aktionscode wird ausschließlich automatisch gesetzt (Gratis-Dose).
     if (normalized === THREE_FOR_TWO_CODE) {
-      toast.error("Die 3-für-2-Aktion wird automatisch angewendet, sobald 2 Dosen im Warenkorb liegen.");
+      toast.error(THREE_FOR_TWO_ENABLED
+        ? "Die 3-für-2-Aktion wird automatisch angewendet, sobald 2 Dosen im Warenkorb liegen."
+        : "Die 3-für-2-Aktion ist aktuell nicht aktiv.");
       return;
     }
     // Während die 3-für-2-Aktion greift, ist kein anderer Code kombinierbar.
