@@ -230,3 +230,103 @@ export function trackPixelViewContent(p: { contentId: string; name: string; valu
 export function trackPixelAddToCart(p: { contentId: string; name: string; value: number; quantity: number }) {
   send("AddToCart", p);
 }
+
+/* ------------------------------------------------------------------ */
+/* Shopify Customer Privacy API – Consent an den Checkout weitergeben   */
+/* ------------------------------------------------------------------ */
+
+const SHOPIFY_PRIVACY_API_SRC =
+  "https://cdn.shopify.com/shopifycloud/consent-tracking-api/v0.1/consent-tracking-api.js";
+const STOREFRONT_ACCESS_TOKEN = "8aca74773e74c1661173fb980846444a";
+const CHECKOUT_ROOT_DOMAIN = "checkout.foquz.de";
+const STOREFRONT_ROOT_DOMAIN = "foquz.de";
+
+let privacyApiPromise: Promise<void> | null = null;
+
+function loadShopifyPrivacyApi(): Promise<void> {
+  if (privacyApiPromise) return privacyApiPromise;
+  privacyApiPromise = new Promise<void>((resolve) => {
+    try {
+      if (typeof window === "undefined") return resolve();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((window as any).Shopify?.customerPrivacy) return resolve();
+      const existing = document.querySelector<HTMLScriptElement>(
+        `script[src="${SHOPIFY_PRIVACY_API_SRC}"]`
+      );
+      if (existing) {
+        existing.addEventListener("load", () => resolve());
+        existing.addEventListener("error", () => resolve());
+        return;
+      }
+      const el = document.createElement("script");
+      el.async = true;
+      el.src = SHOPIFY_PRIVACY_API_SRC;
+      el.onload = () => resolve();
+      el.onerror = () => resolve();
+      document.head.appendChild(el);
+    } catch {
+      resolve();
+    }
+  });
+  return privacyApiPromise;
+}
+
+/**
+ * Gibt die Einwilligung aus unserem Banner an Shopify weiter, damit der
+ * Checkout (checkout.foquz.de) die Pixel laden darf.
+ */
+export function syncShopifyConsent(consent: {
+  analytics: boolean;
+  marketing: boolean;
+}): Promise<void> {
+  return new Promise<void>((resolve) => {
+    try {
+      if (typeof window === "undefined") return resolve();
+      void loadShopifyPrivacyApi().then(() => {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const api = (window as any).Shopify?.customerPrivacy;
+          if (!api?.setTrackingConsent) return resolve();
+          api.setTrackingConsent(
+            {
+              analytics: consent.analytics,
+              marketing: consent.marketing,
+              preferences: consent.marketing,
+              sale_of_data: consent.marketing,
+              headlessStorefront: true,
+              checkoutRootDomain: CHECKOUT_ROOT_DOMAIN,
+              storefrontRootDomain: STOREFRONT_ROOT_DOMAIN,
+              storefrontAccessToken: STOREFRONT_ACCESS_TOKEN,
+            },
+            () => resolve()
+          );
+        } catch (e) {
+          console.warn("Shopify consent sync failed:", e);
+          resolve();
+        }
+      });
+    } catch (e) {
+      console.warn("Shopify consent sync failed:", e);
+      resolve();
+    }
+  });
+}
+
+/** Wartet maximal `ms` auf die Shopify-Consent-Übergabe. */
+export function syncShopifyConsentWithTimeout(ms = 1500): Promise<void> {
+  try {
+    if (typeof window === "undefined") return Promise.resolve();
+    const raw = window.localStorage.getItem(CONSENT_KEY);
+    if (!raw) return Promise.resolve();
+    const parsed = JSON.parse(raw) as { analytics?: boolean; marketing?: boolean };
+    return Promise.race([
+      syncShopifyConsent({
+        analytics: parsed.analytics === true,
+        marketing: parsed.marketing === true,
+      }),
+      new Promise<void>((r) => setTimeout(r, ms)),
+    ]);
+  } catch {
+    return Promise.resolve();
+  }
+}
