@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
 import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
-import { trackPixelAddToCart } from "@/lib/tracking";
+import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 
@@ -540,7 +540,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+    // Tab sofort öffnen (sonst blockt der Browser nach dem await).
+    const tab = window.open("", "_blank", "noopener,noreferrer");
+    // Einwilligung an Shopify übergeben, damit der Checkout die Pixel lädt.
+    await syncShopifyConsentWithTimeout(1500);
+
+    if (tab) tab.location.href = checkoutUrl;
+    else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     sessionStorage.setItem("foquz_checkout_pending", "1");
   }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
 

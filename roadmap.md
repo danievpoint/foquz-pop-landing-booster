@@ -15,3 +15,5 @@
 - [x] 6er-Vorrats-Set mit Shopify-Warenkorb verbinden
 - [x] Versandhinweis und Garantie-Block ergänzen
 - [ ] Produktseiten und Warenkorb mobil sowie Desktop prüfen
+- [x] 3-für-2-Aktion wieder deaktivieren
+- [ ] Cookie-Einwilligung an Shopify (Customer Privacy API) weitergeben
