@@ -19,6 +19,7 @@ const squads = [
     imageAlt: "FOQUZ 3er Starter Bundle Box",
     // Seitenverhältnis passend zum Bild (1920×1586), damit nichts beschnitten wird.
     imageAspect: "1920 / 1586",
+    imageClass: "hover:scale-105",
     title: "3ER STARTER BUNDLE",
     description:
       "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
@@ -35,8 +36,9 @@ const squads = [
     name: "5ER SQUAD BUNDLE",
     image: squadBox,
     imageAlt: "FOQUZ 5er Squad Bundle",
-    // Seitenverhältnis passend zum Bild (1920×1340), damit nichts beschnitten wird.
-    imageAspect: "1920 / 1340",
+    // Gleicher Rahmen und engerer Ausschnitt wie beim 3er, damit der Karton gleich groß wirkt.
+    imageAspect: "1920 / 1586",
+    imageClass: "scale-[1.22] hover:scale-[1.27]",
     title: "5ER SQUAD BUNDLE",
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
@@ -78,7 +80,7 @@ const BundleSection = () => {
                     src={bundle.image}
                     loading="lazy"
                     alt={bundle.imageAlt}
-                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                    className={`h-full w-full object-cover transition-transform duration-300 ${bundle.imageClass}`}
                   />
                 </Link>
               ) : (
@@ -87,7 +89,7 @@ const BundleSection = () => {
                     src={bundle.image}
                     loading="lazy"
                     alt={bundle.imageAlt}
-                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                    className={`h-full w-full object-cover transition-transform duration-300 ${bundle.imageClass}`}
                   />
                 </div>
               )}

@@ -17,3 +17,6 @@
 - [ ] Produktseiten und Warenkorb mobil sowie Desktop prüfen
 - [x] 3-für-2-Aktion wieder deaktivieren
 - [ ] Cookie-Einwilligung an Shopify (Customer Privacy API) weitergeben
+- [x] Vollständige Bildergalerie beim 5er-Bundle anzeigen
+- [x] Bundle-Vorschaubilder ohne weiße Ränder darstellen
+- [x] Kartongröße von 3er- und 5er-Bundle auf der Startseite angleichen

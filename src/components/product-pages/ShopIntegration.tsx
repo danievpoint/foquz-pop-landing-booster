@@ -87,7 +87,7 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
     {galleryImages.length > 0 && <div className="mx-auto mt-3 flex w-full flex-wrap justify-center gap-2">
       {galleryImages.map((img, index) => (
         <button key={img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 bg-white p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
-          <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" width={160} height={160} alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-contain" />
+          <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" width={160} height={160} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`block h-full w-full ${product.isBundle ? "object-cover" : "object-contain"}`} />
         </button>
       ))}
     </div>}
