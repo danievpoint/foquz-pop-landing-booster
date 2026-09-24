@@ -74,7 +74,7 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   };
   if (!product.video && galleryImages.length === 0) return null;
   return <div className="mt-3">
-    <div ref={galleryRef} onScroll={updateActiveIndex} style={{ aspectRatio: activeIndex === 0 && product.video ? "1 / 1" : activeRatio }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden transition-[aspect-ratio] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div ref={galleryRef} onScroll={updateActiveIndex} style={{ aspectRatio: activeIndex === 0 && product.video ? "1 / 1" : activeRatio }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto transition-[aspect-ratio] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {product.video && <div ref={videoRef} className="w-full flex-none basis-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="aspect-square w-full rounded-xl border-2 border-black object-cover pointer-events-none" /></div>}
       {galleryImages.map((img, index) => (
         <div key={img.url} className="w-full flex-none basis-full snap-center">

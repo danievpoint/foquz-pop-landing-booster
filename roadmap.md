@@ -25,3 +25,5 @@
 - [x] Galerierahmen auf allen Produktseiten exakt an das jeweilige Bildformat anpassen
 - [x] Doppelte Watermelon-/Blueberry-Bilder im 5er-Bundle entfernen
 - [x] Bundle-Vorschaubilder einheitlich groß und mit vollständig sichtbaren Rahmen darstellen
+- [x] Mobilen Rahmen des vierten 5er-Bundle-Bildes vollständig sichtbar machen
+- [x] Watermelon und Blueberry unter „Was ist drin?“ auf die Video-Startbilder umstellen
