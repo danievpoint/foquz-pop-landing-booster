@@ -53,6 +53,16 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
       <main className="product-page-design pt-24 md:pt-28 lg:pt-32">
         {/* ===== Product Hero: Gallery + Buy Panel ===== */}
         <section className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Titel + Subline über der Galerie */}
+          <div className="text-left mb-6 lg:mb-8">
+            <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
+              <span style={{ color: config.titleTopColor }}>{config.titleTop}</span>{" "}
+              <span style={{ color: config.titleBottomColor }}>{config.titleBottom}</span>
+            </h1>
+            <p className="text-foreground/90 text-base md:text-lg font-bold leading-relaxed">
+              {config.tagline}
+            </p>
+          </div>
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
             {/* Gallery */}
             <div className="flex flex-col">
@@ -61,16 +71,6 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 
             {/* Buy Panel */}
             <div className="flex flex-col h-full">
-              {/* Titel + Subline */}
-              <div className="text-left">
-                <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
-                  <span style={{ color: config.titleTopColor }}>{config.titleTop}</span>{" "}
-                  <span style={{ color: config.titleBottomColor }}>{config.titleBottom}</span>
-                </h1>
-                <p className="text-foreground/90 text-base md:text-lg font-bold leading-relaxed">
-                  {config.tagline}
-                </p>
-              </div>
 
               {/* Badges */}
               <div className="flex flex-wrap gap-2 mt-6 justify-start">
