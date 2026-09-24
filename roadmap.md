@@ -27,3 +27,4 @@
 - [x] Bundle-Vorschaubilder einheitlich groß und mit vollständig sichtbaren Rahmen darstellen
 - [x] Mobilen Rahmen des vierten 5er-Bundle-Bildes vollständig sichtbar machen
 - [x] Watermelon und Blueberry unter „Was ist drin?“ auf die Video-Startbilder umstellen
+- [x] Untere Bildrahmen beim ersten und vierten 5er-Bundle-Bild vollständig anzeigen
