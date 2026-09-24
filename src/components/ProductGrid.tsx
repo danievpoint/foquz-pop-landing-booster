@@ -283,17 +283,6 @@ const ProductGrid = () => {
   const isResettingRef = useRef(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useLockBodyScroll(Boolean(infoProduct));
-  const desktopRef = useRef<HTMLDivElement>(null);
-  const scrollDesktop = useCallback((dir: number) => {
-    const el = desktopRef.current;
-    if (!el) return;
-    const card = el.querySelector("[data-desktop-card]") as HTMLElement | null;
-    const step = card ? card.offsetWidth + parseFloat(getComputedStyle(el).columnGap || "0") : el.clientWidth / 3;
-    const max = el.scrollWidth - el.clientWidth;
-    if (dir > 0 && el.scrollLeft >= max - 4) el.scrollTo({ left: 0, behavior: "smooth" });
-    else if (dir < 0 && el.scrollLeft <= 4) el.scrollTo({ left: max, behavior: "smooth" });
-    else el.scrollBy({ left: dir * step, behavior: "smooth" });
-  }, []);
 
   const getRealIndex = useCallback((extendedIndex: number) => {
     return ((extendedIndex % products.length) + products.length) % products.length;
