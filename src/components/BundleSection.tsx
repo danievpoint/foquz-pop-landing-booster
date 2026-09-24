@@ -12,6 +12,7 @@ const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
 const squads = [
   {
     id: "starter-bundle",
+    link: "/produkt/starter-bundle",
     name: bundleProduct.name,
     image: foquzBox,
     imageAlt: "FOQUZ 3er Starter Bundle Box",
@@ -65,19 +66,34 @@ const BundleSection = () => {
               style={{ boxShadow: "8px 8px 0 #000" }}
             >
               {/* Bild oben */}
-              <div className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden" style={{ backgroundColor: "#ffd618" }}>
-                <img
-                  src={bundle.image}
-                  loading="lazy"
-                  alt={bundle.imageAlt}
-                  className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
+              {bundle.link ? (
+                <Link to={bundle.link} className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden cursor-pointer" style={{ backgroundColor: "#ffd618" }}>
+                  <img
+                    src={bundle.image}
+                    loading="lazy"
+                    alt={bundle.imageAlt}
+                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </Link>
+              ) : (
+                <div className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden" style={{ backgroundColor: "#ffd618" }}>
+                  <img
+                    src={bundle.image}
+                    loading="lazy"
+                    alt={bundle.imageAlt}
+                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              )}
 
               {/* Text unten */}
               <div className="flex flex-col flex-1">
                 <h2 className="text-2xl md:text-4xl font-black leading-none text-black mb-2 md:mb-3">
-                  {bundle.title}
+                  {bundle.link ? (
+                    <Link to={bundle.link} className="hover:opacity-80 transition-opacity">{bundle.title}</Link>
+                  ) : (
+                    bundle.title
+                  )}
                 </h2>
                 <p className="text-black/70 text-sm leading-relaxed lg:text-base mb-4 md:mb-6">
                   {bundle.description}
