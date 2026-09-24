@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { products, allProducts, bundleProduct, flavorProducts } from "@/data/products";
+import { products, allProducts, bundleProduct, squadBundleProduct, flavorProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
