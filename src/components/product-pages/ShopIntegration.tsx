@@ -81,7 +81,7 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
           <img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
             const { naturalWidth, naturalHeight } = event.currentTarget;
             if (naturalWidth > 0 && naturalHeight > 0) {
-              const framedRatio = naturalWidth / (naturalHeight + 10);
+              const framedRatio = naturalWidth / (naturalHeight + 4);
               setImageRatios((current) => current[img.url] === framedRatio ? current : { ...current, [img.url]: framedRatio });
             }
           }} className="block h-auto w-full rounded-xl border-2 border-black" />
