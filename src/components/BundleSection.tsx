@@ -17,6 +17,8 @@ const squads = [
     name: bundleProduct.name,
     image: foquzBox,
     imageAlt: "FOQUZ 3er Starter Bundle Box",
+    // Seitenverhältnis passend zum Bild (1920×1586), damit nichts beschnitten wird.
+    imageAspect: "1920 / 1586",
     title: "3ER STARTER BUNDLE",
     description:
       "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
@@ -29,18 +31,20 @@ const squads = [
   },
   {
     id: "squad-bundle",
-    name: "Squad Bundle (5 Dosen)",
+    name: "5ER SQUAD BUNDLE",
     image: squadBox,
     imageAlt: "FOQUZ 5er Squad Bundle",
+    // Seitenverhältnis passend zum Bild (1920×1340), damit nichts beschnitten wird.
+    imageAspect: "1920 / 1340",
     title: "5ER SQUAD BUNDLE",
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
     checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht"],
-    price: null,
-    oldPrice: null,
+    price: "29,90€",
+    oldPrice: "37,45€",
     dosen: 1,
-    cartPrice: null,
-    enabled: false,
+    cartPrice: 29.9,
+    enabled: true,
   },
 ];
 
@@ -68,7 +72,7 @@ const BundleSection = () => {
             >
               {/* Bild oben */}
               {bundle.link ? (
-                <Link to={bundle.link} className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden cursor-pointer" style={{ backgroundColor: "#ffd618" }}>
+                <Link to={bundle.link} className="flex items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden cursor-pointer" style={{ backgroundColor: "#ffd618", aspectRatio: bundle.imageAspect }}>
                   <img
                     src={bundle.image}
                     loading="lazy"
@@ -77,7 +81,7 @@ const BundleSection = () => {
                   />
                 </Link>
               ) : (
-                <div className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden" style={{ backgroundColor: "#ffd618" }}>
+                <div className="flex items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden" style={{ backgroundColor: "#ffd618", aspectRatio: bundle.imageAspect }}>
                   <img
                     src={bundle.image}
                     loading="lazy"
