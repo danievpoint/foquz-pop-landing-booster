@@ -577,7 +577,7 @@ const ThaiStyleInner = () => {
               >
                 <span
                   className="inline-block text-[11px] md:text-xs font-black uppercase tracking-wide mb-3"
-                  style={{ color: "#f2d04c" }}
+                  style={{ color: "#000" }}
                 >
                   Kurz riechen, ab auf Wolke 7
                 </span>
