@@ -14,6 +14,7 @@ const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
 const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
 
 export interface BundleProductConfig {
+  handle?: string;
   titleTop: string;
   titleBottom: string;
   titleTopColor: string;
@@ -36,11 +37,11 @@ export interface BundleProductConfig {
 
 
 const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
-  const shop = useProductPage("starter-bundle");
+  const shop = useProductPage(config.handle ?? "starter-bundle");
   const { product, bundles, addSelection, isAvailable } = shop;
-  const [bundle, setBundle] = useState("6 DOSEN");
+  const [bundle, setBundle] = useState(bundles[bundles.length - 1].label);
   const [sorte, setSorte] = useState("PEACH PARTY");
-  const selectedOption = bundles.find((option) => option.label === bundle) ?? bundles[2];
+  const selectedOption = bundles.find((option) => option.label === bundle) ?? bundles[bundles.length - 1];
   const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
   useViewContentPixel(selectedBundle.id, selectedBundle.productName, selectedBundle.price);
   const [openFaq, setOpenFaq] = useState<number | null>(null);

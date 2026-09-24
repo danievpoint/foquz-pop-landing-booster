@@ -31,6 +31,7 @@ const squads = [
   },
   {
     id: "squad-bundle",
+    link: "/produkt/squad-bundle",
     name: "5ER SQUAD BUNDLE",
     image: squadBox,
     imageAlt: "FOQUZ 5er Squad Bundle",

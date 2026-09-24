@@ -167,4 +167,17 @@ export const bundleProduct: Product = {
   ],
 };
 
-export const allProducts: Product[] = [...flavorProducts, bundleProduct];
+export const squadBundleProduct: Product = {
+  name: "5ER SQUAD BUNDLE",
+  handle: "squad-bundle",
+  price: "29,90€",
+  originalPrice: "37,45€",
+  numericPrice: 29.90,
+  desc: "Alle fünf Sorten in einer Box – je eine Dose pro Sorte.",
+  image: "/images/product-pages/foquz_produkt_bundle_5er.webp",
+  color: "#85c8b5",
+  isBundle: true,
+  ingredients: flavorProducts.map((product) => product.name),
+};
+
+export const allProducts: Product[] = [...flavorProducts, bundleProduct, squadBundleProduct];

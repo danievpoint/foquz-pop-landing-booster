@@ -18,10 +18,12 @@ export function useProductPage(handle: string) {
     { label: "3 DOSEN", desc: "je 1× jede Sorte", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "6,66", dosen: 3, tag: "SPARE 11 %", productName: bundleProduct.name, id: "starter-bundle" },
     { label: "6 DOSEN", desc: "2× jede Sorte – Vorrat für zu Hause, Büro und Tasche", price: 34.90, oldPrice: "44,94 €", perDose: "5,82", dosen: 6, tag: "SPARE 22 %", productName: "6ER VORRATS-SET", id: "6er-vorrats-set" },
   ];
-  const bundles = options;
+  const bundles = handle === "squad-bundle" ? [
+    { label: "5 DOSEN – SQUAD BUNDLE", desc: "Je 1× alle fünf Sorten", price: product.numericPrice, oldPrice: "37,45 €", perDose: "5,98", dosen: 5, tag: "SPARE 20 %", productName: product.name, id: product.handle },
+  ] : options;
   const addSingle = () => {
     if (isAvailable(product.name) !== false) {
-      addToCart(1, { id: product.isBundle ? "starter-bundle" : product.name, name: product.name, price: product.numericPrice, image: product.image });
+      addToCart(1, { id: product.isBundle ? product.handle : product.name, name: product.name, price: product.numericPrice, image: product.image });
     }
   };
   const addSelection = (selection: typeof bundles[number]) => {
@@ -30,12 +32,12 @@ export function useProductPage(handle: string) {
       const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
-      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: bundleProduct.image });
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : bundleProduct.image });
     }
   };
 
   useEffect(() => {
-    trackViewedProduct({ id: product.isBundle ? "starter-bundle" : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
+    trackViewedProduct({ id: product.isBundle ? product.handle : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
   }, [product]);
 
   useEffect(() => {

@@ -74,6 +74,7 @@ export async function fetchProductsAvailability(): Promise<ProductAvailability[]
 
 // Numerische Shopify-PRODUKT-IDs (nicht Varianten) – u.a. für Loox
 export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
+  "squad-bundle": "11298415771990",
   "peach-party": "10276794335574",
   "thai-style": "10276796301654",
   "lemon-breezy": "10276796399958",
@@ -397,6 +398,7 @@ const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
 export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
+  if (handle === "squad-bundle") handle = "5er-squad-bundle";
   const local = LOCAL_GALLERY_BY_HANDLE[handle];
   if (local) return Promise.resolve(local);
   const cached = galleryCache.get(handle);
