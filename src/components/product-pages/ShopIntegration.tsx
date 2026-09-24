@@ -90,10 +90,10 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
         <Button key={index} type="button" variant="ghost" size="icon" onClick={() => scrollToSlide(index)} aria-label={`Bild ${index + 1} anzeigen`} aria-current={activeIndex === index ? "true" : undefined} className={`h-3 min-h-3 rounded-full border-2 border-foreground p-0 transition-all ${activeIndex === index ? "w-7 bg-primary hover:bg-primary" : "w-3 bg-background hover:bg-muted"}`} />
       ))}
     </div>}
-    {galleryImages.length > 0 && <div className="mx-auto mt-3 flex w-full flex-wrap justify-center gap-2">
+    {galleryImages.length > 0 && <div className="mx-auto mt-3 flex w-full flex-wrap justify-center gap-2 px-1 py-1">
       {galleryImages.map((img, index) => (
-        <button key={img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-auto flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
-          <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-auto" />
+        <button key={img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
+          <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
         </button>
       ))}
     </div>}
