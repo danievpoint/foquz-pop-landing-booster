@@ -496,13 +496,13 @@ const ProductGrid = () => {
             <div
               ref={carouselRef}
               onScroll={handleCarouselScroll}
-              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw]"
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 px-[14vw] md:px-[26vw]"
               style={{ touchAction: 'pan-x pan-y', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {extendedProducts.map((p, i) => (
                 <div
                   key={`${p.name}-${i}`}
                   data-slide-index={i}
-                  className="w-[72vw] shrink-0 snap-center"
+                  className="w-[72vw] md:w-[48vw] shrink-0 snap-center"
                   style={{ scrollSnapStop: 'always' }}>
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
