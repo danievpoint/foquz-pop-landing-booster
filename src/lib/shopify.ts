@@ -399,6 +399,23 @@ const SQUAD_BUNDLE_EXTRA_IMAGES: ShopifyImage[] = [
   { url: blueberryInhaltsstoffe.url, altText: "Blueberry Flow – Packungsinhalt" },
 ];
 
+const imageKey = (image: ShopifyImage) => {
+  const source = `${image.url} ${image.altText ?? ""}`.toLowerCase();
+  if (source.includes("watermelon") && (source.includes("inhalt") || source.includes("packung"))) return "watermelon-packungsinhalt";
+  if (source.includes("blueberry") && (source.includes("inhalt") || source.includes("packung"))) return "blueberry-packungsinhalt";
+  return image.url.split("?")[0];
+};
+
+const uniqueImages = (images: ShopifyImage[]) => {
+  const seen = new Set<string>();
+  return images.filter((image) => {
+    const key = imageKey(image);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
@@ -425,7 +442,7 @@ export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[
         .slice(1)
         .map((e) => e.node)
         .sort((a, b) => rank(a.url) - rank(b.url));
-      return handle === "5er-squad-bundle" ? [...images, ...SQUAD_BUNDLE_EXTRA_IMAGES] : images;
+      return handle === "5er-squad-bundle" ? uniqueImages([...images, ...SQUAD_BUNDLE_EXTRA_IMAGES]) : images;
     } catch (e) {
       console.error("Failed to fetch product images:", e);
       galleryCache.delete(handle);

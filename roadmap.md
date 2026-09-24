@@ -23,3 +23,5 @@
 - [x] Nur das erste Bundlebild rahmenfüllend zeigen; weitere Galeriebilder vollständig darstellen
 - [x] Watermelon- und Blueberry-Packungsinhaltbilder beim 5er-Bundle ergänzen
 - [x] Galerierahmen auf allen Produktseiten exakt an das jeweilige Bildformat anpassen
+- [x] Doppelte Watermelon-/Blueberry-Bilder im 5er-Bundle entfernen
+- [x] Bundle-Vorschaubilder einheitlich groß und mit vollständig sichtbaren Rahmen darstellen
