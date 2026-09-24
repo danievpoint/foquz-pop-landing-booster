@@ -113,7 +113,7 @@ const isGiftItemId = (id: string) => GIFT_ITEM_IDS.includes(id);
 export const THREE_FOR_TWO_ENABLED = false;
 export const THREE_FOR_TWO_CODE = "3FUER2";
 // Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
-export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"];
+export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
 const FREE_CAN_PREFIX = "free:";
 export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
 export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
