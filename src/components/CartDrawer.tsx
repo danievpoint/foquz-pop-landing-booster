@@ -42,7 +42,6 @@ const SINGLE_PRICE = 7.49;
 const COMPARE_AT_PRICE_BY_ID: Record<string, number> = {
   bundle: 22.47,
   "starter-bundle": 22.47,
-  "6er-vorrats-set": 44.94,
   "squad-bundle": 37.45,
 };
 // Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
