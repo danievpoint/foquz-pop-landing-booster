@@ -573,15 +573,15 @@ const LemonBreezyInner = () => {
             <div className="rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
               <div
                 className="px-6 py-6 md:px-8 md:py-8 text-center"
-                style={{ backgroundColor: "#7547b2" }}
+                style={{ backgroundColor: "#ffd618" }}
               >
                 <span
                   className="inline-block text-[11px] md:text-xs font-black uppercase tracking-wide mb-3"
-                  style={{ color: "#f2d04c" }}
+                  style={{ color: "#000" }}
                 >
                   Kurz riechen, ab auf Wolke 7
                 </span>
-                <h2 className="font-barlow font-extrabold text-white text-2xl md:text-4xl leading-tight">
+                <h2 className="font-barlow font-extrabold text-black text-2xl md:text-4xl leading-tight">
                   KEIN TABAK.
                   <br />
                   KEIN NIKOTIN.
