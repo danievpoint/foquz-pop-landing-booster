@@ -23,6 +23,7 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [imageRatios, setImageRatios] = useState<Record<string, number>>({});
   const videoRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number>();
@@ -31,6 +32,8 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
     : images).slice(0, maxImages);
   const slideOffset = product.video ? 1 : 0;
   const slideCount = galleryImages.length + slideOffset;
+  const activeImage = activeIndex >= slideOffset ? galleryImages[activeIndex - slideOffset] : undefined;
+  const activeRatio = activeImage ? imageRatios[activeImage.url] : undefined;
   useEffect(() => {
     let active = true;
     setActiveIndex(0);
@@ -71,11 +74,14 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   };
   if (!product.video && galleryImages.length === 0) return null;
   return <div className="mt-3">
-    <div ref={galleryRef} onScroll={updateActiveIndex} className="flex w-full snap-x snap-mandatory overflow-x-auto rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div ref={galleryRef} onScroll={updateActiveIndex} style={{ aspectRatio: activeIndex === 0 && product.video ? "1 / 1" : activeRatio }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto transition-[aspect-ratio] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {product.video && <div ref={videoRef} className="w-full flex-none basis-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="aspect-square w-full rounded-xl border-2 border-black object-cover pointer-events-none" /></div>}
       {galleryImages.map((img, index) => (
-        <div key={img.url} className={`${product.isBundle ? "aspect-[6/5]" : "aspect-square"} w-full flex-none basis-full snap-center overflow-hidden rounded-xl border-2 border-black bg-white`}>
-          <img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" width={product.isBundle ? 1920 : 900} height={product.isBundle ? 1586 : 900} alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" className={`block h-full w-full ${product.isBundle && index === 0 ? "object-cover" : "object-contain"}`} />
+        <div key={img.url} className="w-full flex-none basis-full snap-center">
+          <img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
+            const { naturalWidth, naturalHeight } = event.currentTarget;
+            if (naturalWidth > 0 && naturalHeight > 0) setImageRatios((current) => current[img.url] === naturalWidth / naturalHeight ? current : { ...current, [img.url]: naturalWidth / naturalHeight });
+          }} className="block h-auto w-full rounded-xl border-2 border-black" />
         </div>
       ))}
     </div>

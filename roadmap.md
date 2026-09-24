@@ -22,3 +22,4 @@
 - [x] Kartongröße von 3er- und 5er-Bundle auf der Startseite angleichen
 - [x] Nur das erste Bundlebild rahmenfüllend zeigen; weitere Galeriebilder vollständig darstellen
 - [x] Watermelon- und Blueberry-Packungsinhaltbilder beim 5er-Bundle ergänzen
+- [x] Galerierahmen auf allen Produktseiten exakt an das jeweilige Bildformat anpassen
