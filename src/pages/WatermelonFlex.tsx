@@ -175,8 +175,8 @@ const WatermelonFlexInner = () => {
             {/* Titel + Subline */}
             <div className="text-left">
               <h1 className="font-barlow font-extrabold leading-[0.95] text-pop text-primary-foreground text-4xl sm:text-5xl lg:text-6xl mb-4">
-                <span style={{ color: "#ff8fa0" }}>WATERMELON</span>{" "}
-                <span style={{ color: "#ffd618" }}>FLEX</span>
+                <span style={{ color: "#ff6b9d" }}>WATERMELON</span>{" "}
+                <span style={{ color: "#facc15" }}>FLEX</span>
               </h1>
               <p className="text-foreground/90 text-base md:text-lg font-bold leading-relaxed">
                 Melon Flex. Just Relax.<br />Saftige Melone trifft auf kühle Frische.
@@ -377,7 +377,7 @@ const WatermelonFlexInner = () => {
         </section>
 
         {/* ===== Vergleichs-Slider: Foquz vs. Thailand-Dose / Nasenspray / Energy Drink ===== */}
-        <section className="flex flex-col justify-center py-8 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: "#ffb3bf" }}>
+        <section className="flex flex-col justify-center py-8 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: "#de596a" }}>
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
             <div className="pb-3">
             <div className="overflow-hidden transition-[height] duration-300 ease-out" style={{ height: compareSlideHeight }}>
@@ -608,7 +608,7 @@ const WatermelonFlexInner = () => {
         </section>
 
         {/* ===== Kundenstimmen ===== */}
-        <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: "#ffb3bf" }}>
+        <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: "#de596a" }}>
           <div className="container mx-auto px-4">
             <h2 className="font-barlow font-extrabold text-3xl md:text-5xl text-center text-black mb-8 md:mb-12 leading-none">
               DAS SAGEN UNSERE KUNDEN
