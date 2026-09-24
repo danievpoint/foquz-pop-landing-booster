@@ -283,17 +283,6 @@ const ProductGrid = () => {
   const isResettingRef = useRef(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useLockBodyScroll(Boolean(infoProduct));
-  const desktopRef = useRef<HTMLDivElement>(null);
-  const scrollDesktop = useCallback((dir: number) => {
-    const el = desktopRef.current;
-    if (!el) return;
-    const card = el.querySelector("[data-desktop-card]") as HTMLElement | null;
-    const step = card ? card.offsetWidth + parseFloat(getComputedStyle(el).columnGap || "0") : el.clientWidth / 3;
-    const max = el.scrollWidth - el.clientWidth;
-    if (dir > 0 && el.scrollLeft >= max - 4) el.scrollTo({ left: 0, behavior: "smooth" });
-    else if (dir < 0 && el.scrollLeft <= 4) el.scrollTo({ left: max, behavior: "smooth" });
-    else el.scrollBy({ left: dir * step, behavior: "smooth" });
-  }, []);
 
   const getRealIndex = useCallback((extendedIndex: number) => {
     return ((extendedIndex % products.length) + products.length) % products.length;
@@ -439,13 +428,7 @@ const ProductGrid = () => {
               Fünf Sorten, fünfmal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
             <div className="relative pg-grid">
-            <button type="button" aria-label="Vorherige Sorten" onClick={() => scrollDesktop(-1)} className="absolute -left-5 top-[38%] z-10 w-11 h-11 rounded-full comic-btn bg-white text-black flex items-center justify-center !p-0">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button type="button" aria-label="Nächste Sorten" onClick={() => scrollDesktop(1)} className="absolute -right-5 top-[38%] z-10 w-11 h-11 rounded-full comic-btn bg-white text-black flex items-center justify-center !p-0">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-            <div ref={desktopRef} className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-[clamp(1.25rem,2cqw,2rem)]" style={{ scrollbarWidth: 'none' }}>
+            <div className="grid grid-cols-5 gap-[clamp(1rem,1.5cqw,1.5rem)]">
               {products.map((p, i) => {
                 return (
                 <motion.div
@@ -455,8 +438,7 @@ const ProductGrid = () => {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  data-desktop-card
-                  className="flex flex-col group shrink-0 snap-start basis-[calc((100%-2*clamp(1.25rem,2cqw,2rem))/3)]">
+                  className="flex flex-col group min-w-0">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
                         <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
