@@ -6,7 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import { products } from "@/data/products";
+import { flavorProducts as products } from "@/data/products";
 import AutoVideo from "@/components/AutoVideo";
 import { AccordionSections } from "@/pages/ProductDetail";
 import { prefetchProductGallery } from "@/lib/shopify";
@@ -283,6 +283,17 @@ const ProductGrid = () => {
   const isResettingRef = useRef(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useLockBodyScroll(Boolean(infoProduct));
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const scrollDesktop = useCallback((dir: number) => {
+    const el = desktopRef.current;
+    if (!el) return;
+    const card = el.querySelector("[data-desktop-card]") as HTMLElement | null;
+    const step = card ? card.offsetWidth + parseFloat(getComputedStyle(el).columnGap || "0") : el.clientWidth / 3;
+    const max = el.scrollWidth - el.clientWidth;
+    if (dir > 0 && el.scrollLeft >= max - 4) el.scrollTo({ left: 0, behavior: "smooth" });
+    else if (dir < 0 && el.scrollLeft <= 4) el.scrollTo({ left: max, behavior: "smooth" });
+    else el.scrollBy({ left: dir * step, behavior: "smooth" });
+  }, []);
 
   const getRealIndex = useCallback((extendedIndex: number) => {
     return ((extendedIndex % products.length) + products.length) % products.length;
@@ -425,9 +436,16 @@ const ProductGrid = () => {
               WÄHLE DEINEN VIBE
             </h2>
             <p className="pg-subtitle text-muted-foreground font-medium text-center max-w-xl mx-auto leading-relaxed">
-              Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+              Fünf Sorten, fünfmal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
-            <div className="pg-grid grid grid-cols-3 mx-auto">
+            <div className="relative pg-grid">
+            <button type="button" aria-label="Vorherige Sorten" onClick={() => scrollDesktop(-1)} className="absolute -left-5 top-[38%] z-10 w-11 h-11 rounded-full comic-btn bg-white text-black flex items-center justify-center !p-0">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button type="button" aria-label="Nächste Sorten" onClick={() => scrollDesktop(1)} className="absolute -right-5 top-[38%] z-10 w-11 h-11 rounded-full comic-btn bg-white text-black flex items-center justify-center !p-0">
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            <div ref={desktopRef} className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-[clamp(1.25rem,2cqw,2rem)]" style={{ scrollbarWidth: 'none' }}>
               {products.map((p, i) => {
                 return (
                 <motion.div
@@ -437,7 +455,8 @@ const ProductGrid = () => {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="flex flex-col group">
+                  data-desktop-card
+                  className="flex flex-col group shrink-0 snap-start basis-[calc((100%-2*clamp(1.25rem,2cqw,2rem))/3)]">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
                         <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
@@ -469,6 +488,7 @@ const ProductGrid = () => {
                 );
               })}
             </div>
+            </div>
           </div>
 
           {/* Mobile heading */}
@@ -477,7 +497,7 @@ const ProductGrid = () => {
               WÄHLE DEINEN VIBE
             </h2>
             <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs leading-relaxed">
-              Drei Sorten, drei mal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+              Fünf Sorten, fünfmal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
             </p>
           </div>
 
