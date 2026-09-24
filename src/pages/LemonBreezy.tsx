@@ -577,11 +577,11 @@ const LemonBreezyInner = () => {
               >
                 <span
                   className="inline-block text-[11px] md:text-xs font-black uppercase tracking-wide mb-3"
-                  style={{ color: "#f2d04c" }}
+                  style={{ color: "#000" }}
                 >
                   Kurz riechen, ab auf Wolke 7
                 </span>
-                <h2 className="font-barlow font-extrabold text-white text-2xl md:text-4xl leading-tight">
+                <h2 className="font-barlow font-extrabold text-black text-2xl md:text-4xl leading-tight">
                   KEIN TABAK.
                   <br />
                   KEIN NIKOTIN.
