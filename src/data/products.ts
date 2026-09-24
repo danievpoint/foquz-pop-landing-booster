@@ -9,6 +9,8 @@ import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster
 import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.jpg";
 import blueberryFlowProductVideo from "@/assets/blueberry-flow-product.mp4.asset.json";
 import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.asset.json";
+import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
+import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
 import foquzBox from "@/assets/foquz-box.png";
 import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
 
@@ -45,7 +47,7 @@ export const products: Product[] = [
       ],
     },
     image: productWatermelon,
-    video: "/videos/video_product_peach.mp4",
+    video: peachPartyProductVideo.url,
     videoPoster: productPeachVideoPoster,
     color: "#e88a3a",
     ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Pfirsicharoma"],
@@ -65,7 +67,7 @@ export const products: Product[] = [
       ],
     },
     image: productThai,
-    video: "/videos/video_product_mint.mp4",
+    video: thaiStyleProductVideo.url,
     videoPoster: productThaiVideoPoster,
     color: "#85c8b5",
     ingredients: ["Menthol", "Borneol", "Kampferaroma"],
