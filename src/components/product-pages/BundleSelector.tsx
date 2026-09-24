@@ -65,7 +65,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       </span>
                       <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
                       {b.tag && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">{b.tag}</span>}
-                      {b.dosen === 6 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
+                      {b.dosen === 5 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
                     </span>
                     <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
                       {b.desc}
@@ -87,7 +87,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
               </button>
 
               {/* Best value badge - outside button so it isn't clipped */}
-              {b.dosen === 6 && (
+              {b.dosen === 5 && (
                 <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   BELIEBTESTE WAHL

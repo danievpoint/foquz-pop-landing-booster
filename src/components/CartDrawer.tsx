@@ -36,14 +36,12 @@ const PAYMENT_METHODS = [
 ];
 
 const BUNDLE_ID = "starter-bundle";
-const SIX_PACK_ID = "6er-vorrats-set";
 const BUNDLE_LIST_PRICE = 19.98;
 const SINGLE_PRICE = 7.49;
 // Vergleichspreise (UVP der Einzeldosen) je Position – Basis für die Ersparnis.
 const COMPARE_AT_PRICE_BY_ID: Record<string, number> = {
   bundle: 22.47,
   "starter-bundle": 22.47,
-  "6er-vorrats-set": 44.94,
   "squad-bundle": 37.45,
 };
 // Mindestbestellwert für kostenlosen Versand. Muss identisch zum Shopify-
@@ -55,7 +53,7 @@ const FREE_SHIPPING_THRESHOLD = 29;
 const SHIPPING_COST_DE = 4.49;
 
 const getProductHandle = (item: CartItem): string | null => {
-  if (item.id === "bundle" || item.id === "starter-bundle" || item.id === "6er-vorrats-set") return "starter-bundle";
+  if (item.id === "bundle" || item.id === "starter-bundle") return "starter-bundle";
   const byName = allProducts.find((p) => p.name === item.name);
   if (byName) return byName.handle;
   const byId = allProducts.find((p) => p.handle === item.id);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { products, allProducts, bundleProduct, flavorProducts } from "@/data/products";
+import { products, allProducts, bundleProduct, squadBundleProduct, flavorProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
@@ -16,7 +16,7 @@ export function useProductPage(handle: string) {
   const options = [
     { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name },
     { label: "3 DOSEN", desc: "je 1× jede Sorte", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "6,66", dosen: 3, tag: "SPARE 11 %", productName: bundleProduct.name, id: "starter-bundle" },
-    { label: "6 DOSEN", desc: "2× jede Sorte – Vorrat für zu Hause, Büro und Tasche", price: 34.90, oldPrice: "44,94 €", perDose: "5,82", dosen: 6, tag: "SPARE 22 %", productName: "6ER VORRATS-SET", id: "6er-vorrats-set" },
+    { label: "5 DOSEN", desc: "je 1× alle fünf Sorten", price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "5,98", dosen: 5, tag: "SPARE 20 %", productName: squadBundleProduct.name, id: "squad-bundle" },
   ];
   const bundles = handle === "squad-bundle" ? [
     { label: "5 DOSEN – SQUAD BUNDLE", desc: "Je 1× alle fünf Sorten", price: product.numericPrice, oldPrice: "37,45 €", perDose: "5,98", dosen: 5, tag: "SPARE 20 %", productName: product.name, id: product.handle },
@@ -32,7 +32,7 @@ export function useProductPage(handle: string) {
       const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
-      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : bundleProduct.image });
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : selection.id === "squad-bundle" ? squadBundleProduct.image : bundleProduct.image });
     }
   };
 
