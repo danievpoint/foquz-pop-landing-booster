@@ -38,7 +38,7 @@ const squads = [
     imageAlt: "FOQUZ 5er Squad Bundle",
     // Gleicher Rahmen und engerer Ausschnitt wie beim 3er, damit der Karton gleich groß wirkt.
     imageAspect: "1920 / 1586",
-    imageClass: "scale-[1.22] hover:scale-[1.27]",
+    imageClass: "scale-[1.45] hover:scale-150",
     title: "5ER SQUAD BUNDLE",
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
