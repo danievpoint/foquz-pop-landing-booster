@@ -396,11 +396,11 @@ const ProductGrid = () => {
     return () => clearTimeout(timer);
   }, [autoPlay, realActiveIndex, extendedProducts.length, scrollToExtended]);
 
-  // Scroll carousel when extendedActiveIndex changes, unless we are resetting from a clone
-  useEffect(() => {
-    if (isResettingRef.current) return;
-    scrollToExtended(extendedActiveIndex, 'auto');
-  }, [extendedActiveIndex, scrollToExtended]);
+  // Kein zusaetzlicher Scroll-Effekt bei extendedActiveIndex-Aenderungen:
+  // Jeder Setter (Pfeile, Punkte, Autoplay, Klon-Reset) scrollt bereits selbst.
+  // Ein Effekt hier wuerde mitten im Wischen des Nutzers erneut anspringen,
+  // das Momentum abbrechen und Punkt-Anzeige sowie sichtbares Produkt
+  // auseinanderlaufen lassen.
 
   return (
     <>
