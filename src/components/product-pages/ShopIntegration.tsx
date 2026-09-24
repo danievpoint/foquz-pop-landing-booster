@@ -33,7 +33,17 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   const slideOffset = product.video ? 1 : 0;
   const slideCount = galleryImages.length + slideOffset;
   const activeImage = activeIndex >= slideOffset ? galleryImages[activeIndex - slideOffset] : undefined;
-  const activeRatio = activeImage ? imageRatios[activeImage.url] : undefined;
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [galleryHeight, setGalleryHeight] = useState<number>();
+  useEffect(() => {
+    const el = slideRefs.current[activeIndex];
+    if (!el) return;
+    const measure = () => setGalleryHeight(el.offsetHeight || undefined);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [activeIndex, galleryImages.length, imageRatios]);
   useEffect(() => {
     let active = true;
     setActiveIndex(0);
@@ -74,17 +84,17 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   };
   if (!product.video && galleryImages.length === 0) return null;
   return <div className="mt-3">
-    <div ref={galleryRef} onScroll={updateActiveIndex} style={{ aspectRatio: activeIndex === 0 && product.video ? "1 / 1" : activeRatio }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden transition-[aspect-ratio] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      {product.video && <div ref={videoRef} className="w-full flex-none basis-full snap-center"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="aspect-square w-full rounded-xl border-2 border-black object-cover pointer-events-none" /></div>}
+    <div ref={galleryRef} onScroll={updateActiveIndex} style={{ height: galleryHeight }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden transition-[height] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {product.video && <div ref={(el) => { videoRef.current = el; slideRefs.current[0] = el; }} className="w-full flex-none basis-full snap-center"><div className="box-border overflow-hidden rounded-xl border-2 border-black"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="block aspect-square w-full object-cover pointer-events-none" /></div></div>}
       {galleryImages.map((img, index) => (
-        <div key={img.url} className="w-full flex-none basis-full snap-center">
-          <img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
+        <div key={img.url} ref={(el) => { slideRefs.current[index + slideOffset] = el; }} className="w-full flex-none basis-full snap-center">
+          <div className="box-border overflow-hidden rounded-xl border-2 border-black"><img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
             const { naturalWidth, naturalHeight } = event.currentTarget;
             if (naturalWidth > 0 && naturalHeight > 0) {
-              const framedRatio = naturalWidth / (naturalHeight + 4);
+              const framedRatio = naturalWidth / naturalHeight;
               setImageRatios((current) => current[img.url] === framedRatio ? current : { ...current, [img.url]: framedRatio });
             }
-          }} className="block h-auto w-full rounded-xl border-2 border-black" />
+          }} className="block h-auto w-full" /></div>
         </div>
       ))}
     </div>
@@ -93,7 +103,10 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
         <Button key={index} type="button" variant="ghost" size="icon" onClick={() => scrollToSlide(index)} aria-label={`Bild ${index + 1} anzeigen`} aria-current={activeIndex === index ? "true" : undefined} className={`h-3 min-h-3 rounded-full border-2 border-foreground p-0 transition-all ${activeIndex === index ? "w-7 bg-primary hover:bg-primary" : "w-3 bg-background hover:bg-muted"}`} />
       ))}
     </div>}
-    {galleryImages.length > 0 && <div className="mx-auto mt-3 flex w-full flex-wrap justify-center gap-2 px-1 py-1">
+    {slideCount > 1 && <div className="mx-auto mt-3 flex w-full flex-wrap justify-center gap-2 px-1 py-1">
+      {product.video && <button type="button" onClick={() => scrollToSlide(0)} aria-label={`${product.name} Video anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === 0 ? "border-primary ring-2 ring-primary" : "border-black"}`}>
+        <img src={product.videoPoster || product.image} alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
+      </button>}
       {galleryImages.map((img, index) => (
         <button key={img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
           <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
