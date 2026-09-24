@@ -140,8 +140,8 @@ const BundleSection = () => {
                 >
                   {bundle.enabled ? "JETZT SPAR-BUNDLE SICHERN" : "BALD VERFÜGBAR"}
                 </button>
-                {bundle.enabled && <Link
-                  to="/produkt/starter-bundle"
+                {bundle.link && <Link
+                  to={bundle.link}
                   className="mt-3 inline-block text-xs md:text-sm font-black uppercase underline underline-offset-4 text-black/70 hover:text-black"
                 >
                   Details zum Bundle

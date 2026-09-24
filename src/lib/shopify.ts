@@ -95,6 +95,7 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "bundle": "gid://shopify/ProductVariant/52867411837270",
   "starter-bundle": "gid://shopify/ProductVariant/52867411837270",
   "6er-vorrats-set": "gid://shopify/ProductVariant/55425602879830",
+  "squad-bundle": "gid://shopify/ProductVariant/55478191325526",
   // Prio-Versand – wird über den Toggle im Warenkorb zugebucht
   "prio-versand": "gid://shopify/ProductVariant/55430739493206",
   // Gratis-Zugaben – werden ausschließlich automatisch zum Power Bundle gelegt
