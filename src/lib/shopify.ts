@@ -74,6 +74,8 @@ export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
   "thai-style": "10276796301654",
   "lemon-breezy": "10276796399958",
   "starter-bundle": "10276796498262",
+  "watermelon-flex": "11265797292374",
+  "blueberry-flow": "11265796211030",
   "6er-vorrats-set": "11285827944790",
 };
 
@@ -83,6 +85,8 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "PEACH PARTY": "gid://shopify/ProductVariant/52867405513046",
   "THAI STYLE": "gid://shopify/ProductVariant/52867410788694",
   "LEMON BREEZY": "gid://shopify/ProductVariant/52867411738966",
+  "WATERMELON FLEX": "gid://shopify/ProductVariant/55343195816278",
+  "BLUEBERRY FLOW": "gid://shopify/ProductVariant/55343191359830",
   // Bundle IDs (used in CartContext default and ProductDetail)
   "bundle": "gid://shopify/ProductVariant/52867411837270",
   "starter-bundle": "gid://shopify/ProductVariant/52867411837270",

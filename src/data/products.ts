@@ -5,6 +5,10 @@ import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
 import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
 import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
 import lemonBreezyProductVideo from "@/assets/lemon-breezy-product.mp4.asset.json";
+import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster.jpg";
+import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.jpg";
+import blueberryFlowProductVideo from "@/assets/blueberry-flow-product.mp4.asset.json";
+import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.asset.json";
 import foquzBox from "@/assets/foquz-box.png";
 import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
 
@@ -88,6 +92,53 @@ export const products: Product[] = [
   },
 ];
 
+/** Neue Sorten – erscheinen im Karussell und haben eigene Produktseiten, sind aber nicht Teil des 3er-Bundles. */
+export const newFlavorProducts: Product[] = [
+  {
+    name: "WATERMELON FLEX",
+    handle: "watermelon-flex",
+    price: "€7,49",
+    numericPrice: 7.49,
+    desc: "Melon Flex. Just Relax.\nSaftige Melone trifft auf kühle Frische.",
+    longDesc: {
+      heading: "Was ist Watermelon Flex?",
+      paragraphs: [
+        "Watermelon Flex verbindet den klassischen FOQUZ-Frischemoment mit einer saftigen Wassermelonennote.",
+        "Dose öffnen, kurz daran riechen und tief durchatmen. Ideal für Schule, Uni, Büro, Gaming, Autofahrten oder einfach zwischendurch.",
+        "Kein Energy Drink. Kein Kaffee. Kein Nikotin.",
+      ],
+    },
+    image: "/images/product-pages/product-new-watermelon.png",
+    video: watermelonFlexProductVideo.url,
+    videoPoster: productWatermelonVideoPoster,
+    color: "#e5566b",
+    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Wassermelonenaroma"],
+  },
+  {
+    name: "BLUEBERRY FLOW",
+    handle: "blueberry-flow",
+    price: "€7,49",
+    numericPrice: 7.49,
+    desc: "Feel the Flow. Bleib im Glow.\nFruchtige Blaubeere, frischer Kopf.",
+    longDesc: {
+      heading: "Was ist Blueberry Flow?",
+      paragraphs: [
+        "Blueberry Flow verbindet den klassischen FOQUZ-Frischemoment mit einer fruchtigen Blaubeernote.",
+        "Dose öffnen, kurz daran riechen und tief durchatmen. Ideal für Schule, Uni, Büro, Gaming, Autofahrten oder einfach zwischendurch.",
+        "Kein Energy Drink. Kein Kaffee. Kein Nikotin.",
+      ],
+    },
+    image: "/images/product-pages/product-new-blueberry.png",
+    video: blueberryFlowProductVideo.url,
+    videoPoster: productBlueberryVideoPoster,
+    color: "#7b6cc0",
+    ingredients: ["Zitronengras", "Gewürznelke", "Weißdorn", "Süßholz", "Knöterichwurzel", "Osmanthusblüte", "Jasminblüte", "Menthol", "Blaubeeraroma"],
+  },
+];
+
+/** Alle Einzelsorten (Karussell, Sortenauswahl, Warenkorb). */
+export const flavorProducts: Product[] = [...products, ...newFlavorProducts];
+
 export const bundleProduct: Product = {
   name: "FOQUZ Power Bundle",
   handle: "starter-bundle",
@@ -114,4 +165,4 @@ export const bundleProduct: Product = {
   ],
 };
 
-export const allProducts: Product[] = [...products, bundleProduct];
+export const allProducts: Product[] = [...flavorProducts, bundleProduct];

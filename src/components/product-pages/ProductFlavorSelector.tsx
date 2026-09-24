@@ -5,6 +5,8 @@ const choices = [
   { name: "PEACH PARTY", desc: "Pfirsich & Kräuter", img: productImages.peach, handle: "peach-party" },
   { name: "LEMON BREEZY", desc: "Zitrone & Kräuter", img: productImages.lemon, handle: "lemon-breezy" },
   { name: "THAI STYLE", desc: "Kräuter & Menthol", img: productImages.thai, handle: "thai-style" },
+  { name: "WATERMELON FLEX", desc: "Wassermelone & Kräuter", img: productImages.watermelon, handle: "watermelon-flex" },
+  { name: "BLUEBERRY FLOW", desc: "Blaubeere & Kräuter", img: productImages.blueberry, handle: "blueberry-flow" },
 ];
 
 interface ProductFlavorSelectorProps {
