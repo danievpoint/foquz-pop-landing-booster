@@ -318,22 +318,22 @@ const ProductGrid = () => {
   const goNext = useCallback(() => {
     setAutoPlay(false);
     setDirection(1);
-    setExtendedActiveIndex((prev) => {
-      const next = Math.min(prev + 1, extendedProducts.length - 2);
-      scrollToExtended(next);
-      return next;
-    });
-  }, [extendedProducts.length, scrollToExtended]);
+    const nextRealIndex = (getRealIndex(activeIndexRef.current) + 1) % products.length;
+    const next = CENTER_COPY * products.length + nextRealIndex;
+    activeIndexRef.current = next;
+    setExtendedActiveIndex(next);
+    scrollToExtended(next, 'smooth');
+  }, [getRealIndex, scrollToExtended]);
 
   const goPrev = useCallback(() => {
     setAutoPlay(false);
     setDirection(-1);
-    setExtendedActiveIndex((prev) => {
-      const next = Math.max(prev - 1, 1);
-      scrollToExtended(next);
-      return next;
-    });
-  }, [extendedProducts.length, scrollToExtended]);
+    const previousRealIndex = (getRealIndex(activeIndexRef.current) - 1 + products.length) % products.length;
+    const next = CENTER_COPY * products.length + previousRealIndex;
+    activeIndexRef.current = next;
+    setExtendedActiveIndex(next);
+    scrollToExtended(next, 'smooth');
+  }, [getRealIndex, scrollToExtended]);
 
   const isCloneIndex = useCallback((index: number) => {
     // Nicht direkt an der Lemon/Peach-Grenze umspringen: Dieser unsichtbare
