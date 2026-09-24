@@ -1,5 +1,9 @@
 import { toast } from "sonner";
 import { getCreator, getDtId } from "./attribution";
+import watermelonVorteile from "@/assets/foquz_product_image_watermelon_vorteile.png.asset.json";
+import watermelonInhaltsstoffe from "@/assets/foquz_product_image_watermelon_inhaltsstoffe.webp.asset.json";
+import blueberryVorteile from "@/assets/foquz_product_image_blueberry_vorteile.png.asset.json";
+import blueberryInhaltsstoffe from "@/assets/foquz_product_image_blueberry_inhaltsstoffe.webp.asset.json";
 
 
 const SHOPIFY_API_VERSION = '2025-07';
@@ -74,6 +78,8 @@ export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
   "thai-style": "10276796301654",
   "lemon-breezy": "10276796399958",
   "starter-bundle": "10276796498262",
+  "watermelon-flex": "11265797292374",
+  "blueberry-flow": "11265796211030",
   "6er-vorrats-set": "11285827944790",
 };
 
@@ -83,6 +89,8 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "PEACH PARTY": "gid://shopify/ProductVariant/52867405513046",
   "THAI STYLE": "gid://shopify/ProductVariant/52867410788694",
   "LEMON BREEZY": "gid://shopify/ProductVariant/52867411738966",
+  "WATERMELON FLEX": "gid://shopify/ProductVariant/55343195816278",
+  "BLUEBERRY FLOW": "gid://shopify/ProductVariant/55343191359830",
   // Bundle IDs (used in CartContext default and ProductDetail)
   "bundle": "gid://shopify/ProductVariant/52867411837270",
   "starter-bundle": "gid://shopify/ProductVariant/52867411837270",
@@ -368,10 +376,28 @@ export function shopifyImageSrcSet(url: string, widths: number[]): string {
 }
 
 
+// Galerie der neuen Sorten (gleiche Reihenfolge wie bei den bestehenden:
+// Vorteile/Sortiment, Anwendung, Inhaltsstoffe)
+const THAI_ANWENDUNG = "https://cdn.shopify.com/s/files/1/1012/7609/0710/files/foquz_product_image_thai_anwendung.jpg?v=1788078644";
+const LOCAL_GALLERY_BY_HANDLE: Record<string, ShopifyImage[]> = {
+  "watermelon-flex": [
+    { url: watermelonVorteile.url, altText: "Watermelon Flex – Das ist FOQUZ" },
+    { url: THAI_ANWENDUNG, altText: "FOQUZ Anwendung" },
+    { url: watermelonInhaltsstoffe.url, altText: "Watermelon Flex – Inhaltsstoffe" },
+  ],
+  "blueberry-flow": [
+    { url: blueberryVorteile.url, altText: "Blueberry Flow – Das ist FOQUZ" },
+    { url: THAI_ANWENDUNG, altText: "FOQUZ Anwendung" },
+    { url: blueberryInhaltsstoffe.url, altText: "Blueberry Flow – Inhaltsstoffe" },
+  ],
+};
+
 const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
 export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
+  const local = LOCAL_GALLERY_BY_HANDLE[handle];
+  if (local) return Promise.resolve(local);
   const cached = galleryCache.get(handle);
   if (cached) return cached;
 

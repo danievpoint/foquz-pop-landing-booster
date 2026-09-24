@@ -2,6 +2,8 @@ import StarterBundle from "./pages/StarterBundle";
 import PeachParty from "./pages/PeachParty";
 import ThaiStyle from "./pages/ThaiStyle";
 import LemonBreezy from "./pages/LemonBreezy";
+import WatermelonFlex from "./pages/WatermelonFlex";
+import BlueberryFlow from "./pages/BlueberryFlow";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import PullToRefresh from "@/components/PullToRefresh";
@@ -76,6 +78,10 @@ const App = () => {
                 <Route path="/produkte/thai-style" element={<ThaiStyle />} />
                 <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
                 <Route path="/produkte/lemon-breezy" element={<LemonBreezy />} />
+                <Route path="/produkt/watermelon-flex" element={<WatermelonFlex />} />
+                <Route path="/produkte/watermelon-flex" element={<WatermelonFlex />} />
+                <Route path="/produkt/blueberry-flow" element={<BlueberryFlow />} />
+                <Route path="/produkte/blueberry-flow" element={<BlueberryFlow />} />
                 <Route path="/produkt/starter-bundle" element={<StarterBundle />} />
                 <Route path="/produkte/starter-bundle" element={<StarterBundle />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />

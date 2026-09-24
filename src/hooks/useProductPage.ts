@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { products, allProducts, bundleProduct } from "@/data/products";
+import { products, allProducts, bundleProduct, flavorProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
@@ -27,7 +27,7 @@ export function useProductPage(handle: string) {
   const addSelection = (selection: typeof bundles[number]) => {
     if (isAvailable(selection.productName) === false) return;
     if (selection.dosen === 1) {
-      const single = products.find((item) => item.name === selection.productName) ?? products[0];
+      const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
       addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: bundleProduct.image });
@@ -55,6 +55,6 @@ export function useProductPage(handle: string) {
   return {
     product, productId: SHOPIFY_PRODUCT_ID_BY_HANDLE[handle], bundles, addSingle, addSelection, isAvailable,
     ctaRef, footerRef, showSticky: showSticky && !isOpen && !popupOpen,
-    priceFor: (name: string) => products.find((p) => p.name === name)?.price ?? "",
+    priceFor: (name: string) => flavorProducts.find((p) => p.name === name)?.price ?? "",
   };
 }
