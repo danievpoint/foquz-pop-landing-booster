@@ -570,7 +570,7 @@ const PeachPartyInner = () => {
             <div className="rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
               <div
                 className="px-6 py-6 md:px-8 md:py-8 text-center"
-                style={{ backgroundColor: "#7547b2" }}
+                style={{ backgroundColor: ORANGE }}
               >
                 <span
                   className="inline-block text-[11px] md:text-xs font-black uppercase tracking-wide mb-3"
