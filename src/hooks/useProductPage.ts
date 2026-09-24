@@ -32,7 +32,7 @@ export function useProductPage(handle: string) {
       const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
-      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : bundleProduct.image });
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : selection.id === "squad-bundle" ? squadBundleProduct.image : bundleProduct.image });
     }
   };
 
