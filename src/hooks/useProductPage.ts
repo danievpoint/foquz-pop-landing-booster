@@ -15,7 +15,7 @@ export function useProductPage(handle: string) {
   const [showSticky, setShowSticky] = useState(false);
   const options = [
     { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name },
-    { label: "3 DOSEN", desc: "je 1× jede Sorte", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "6,66", dosen: 3, tag: "SPARE 11 %", productName: bundleProduct.name, id: "starter-bundle" },
+    { label: "3 DOSEN", desc: "Thai Style, Lemon Breezy & Peach Party", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "6,66", dosen: 3, tag: "SPARE 11 %", productName: bundleProduct.name, id: "starter-bundle" },
     { label: "5 DOSEN", desc: "je 1× alle fünf Sorten", price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "5,98", dosen: 5, tag: "SPARE 20 %", productName: squadBundleProduct.name, id: "squad-bundle" },
   ];
   const bundles = handle === "squad-bundle" ? [
