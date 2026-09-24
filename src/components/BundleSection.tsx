@@ -1,133 +1,133 @@
 import { motion } from "framer-motion";
-import foquzBox from "@/assets/foquz-box.png";
 import { Link } from "react-router-dom";
+import { bundleProduct } from "@/data/products";
+import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
+import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
 
-const checks = [
-  "Alle Sorten testen",
-  "Exklusive Box",
-  "Inklusive limitierten Sticker-Set & Nasenstrips",
+const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp";
+const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
+
+const squads = [
+  {
+    id: "starter-bundle",
+    name: bundleProduct.name,
+    image: foquzBox,
+    imageAlt: "FOQUZ 3er Starter Bundle Box",
+    title: "3ER STARTER BUNDLE",
+    description:
+      "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
+    checks: ["3 Klassiker entdecken", "Exklusive Box", "Inklusive Sticker-Set & Nasenstrips"],
+    price: bundleProduct.price,
+    oldPrice: bundleProduct.originalPrice,
+    dosen: 1,
+    cartPrice: bundleProduct.numericPrice,
+    enabled: true,
+  },
+  {
+    id: "squad-bundle",
+    name: "Squad Bundle (5 Dosen)",
+    image: squadBox,
+    imageAlt: "FOQUZ 5er Squad Bundle",
+    title: "5ER SQUAD BUNDLE",
+    description:
+      "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
+    checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht"],
+    price: null,
+    oldPrice: null,
+    dosen: 1,
+    cartPrice: null,
+    enabled: false,
+  },
 ];
 
 const BundleSection = () => {
   const { addToCart } = useCart();
+  const { isAvailable } = useProductAvailability();
 
   return (
     <section id="bundle"
-      className="section-padding py-10 md:py-16 lg:py-32 relative overflow-hidden scroll-mt-20"
-      style={{ backgroundColor: "#75559f", containerType: 'inline-size' }}
+      className="section-padding py-12 md:py-20 lg:py-24 relative overflow-hidden scroll-mt-20"
+      style={{ backgroundColor: "#75559f" }}
     >
-      <style>{`
-        @container (min-width: 1024px) {
-          .bundle-headline { font-size: clamp(2.5rem, 3.5cqw, 3.5rem); line-height: 0.95; margin-bottom: clamp(0.5rem, 0.8cqw, 0.875rem); }
-          .bundle-subtitle { font-size: clamp(1rem, 1.3cqw, 1.25rem); margin-bottom: clamp(0.25rem, 0.4cqw, 0.5rem); }
-          .bundle-body { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
-          .bundle-checks { gap: clamp(0.375rem, 0.6cqw, 0.625rem); margin-bottom: clamp(1rem, 1.5cqw, 1.5rem); }
-          .bundle-check-icon { width: clamp(1.125rem, 1.5cqw, 1.5rem); height: clamp(1.125rem, 1.5cqw, 1.5rem); font-size: clamp(0.5rem, 0.7cqw, 0.75rem); }
-          .bundle-check-text { font-size: clamp(0.8rem, 0.95cqw, 1rem); }
-          .bundle-price { font-size: clamp(1.75rem, 2.5cqw, 2.5rem); }
-          .bundle-price-old { font-size: clamp(0.875rem, 1.1cqw, 1.125rem); }
-          .bundle-price-row { gap: clamp(0.625rem, 1cqw, 1rem); margin-bottom: clamp(0.75rem, 1.2cqw, 1.25rem); }
-          .bundle-btn { font-size: clamp(0.8rem, 1cqw, 1rem) !important; padding: clamp(0.4rem, 0.65cqw, 0.65rem) clamp(1.25rem, 2cqw, 2rem) !important; }
-          .bundle-grid { gap: clamp(1.5rem, 2.5cqw, 2.5rem); }
-        }
-      `}</style>
-      <img src={bundleBg} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+      <img src={bundleBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
-        {/* Mobile: scarcity banner on top */}
-        <div className="md:hidden flex items-center justify-center gap-1.5 mb-3">
-          <span className="text-[#ffd618] text-sm">🔥</span>
-          <span className="text-[#ffd618] font-black text-xs tracking-wide uppercase">
-            Limitiert – Nur solange der Vorrat reicht!
-          </span>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4 md:gap-4 lg:gap-12 items-center bundle-grid">
-          {/* Left: Bundle visual */}
-          <motion.div
-            className="relative flex items-center justify-center"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-              <Link to="/produkt/starter-bundle">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch -mx-2 sm:mx-0">
+          {squads.map((bundle, i) => (
+            <motion.div
+              key={bundle.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="flex flex-col w-full max-w-xl mx-auto lg:max-w-none lg:mx-0 rounded-2xl border-2 border-black bg-white/95 p-4 sm:p-6 lg:p-8"
+              style={{ boxShadow: "8px 8px 0 #000" }}
+            >
+              {/* Bild oben */}
+              <div className="flex aspect-[16/9] items-center justify-center mb-4 md:mb-6 rounded-xl border-2 border-black overflow-hidden" style={{ backgroundColor: "#ffd618" }}>
                 <img
-                  src={foquzBox}
-                  alt="FOQUZ Power Bundle Box"
+                  src={bundle.image}
                   loading="lazy"
-                  width={800}
-                  height={800}
-                  className="w-full max-w-[80vw] md:max-w-[75vw] lg:max-w-[38cqw] mx-auto md:scale-130 lg:scale-100 hover:scale-[1.05] md:hover:scale-[1.35] lg:hover:scale-[1.05] transition-transform duration-300 drop-shadow-2xl"
+                  alt={bundle.imageAlt}
+                  className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
                 />
-              </Link>
-          </motion.div>
-
-          {/* Right: Text content */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-[50px] md:leading-[0.95] text-white mb-2 md:mb-4 bundle-headline">
-              FOQUZ POWER BUNDLE
-            </h2>
-            <p className="text-white font-black text-lg lg:text-xl mb-1 md:mb-2 bundle-subtitle">
-              Eine Box. Voller Fokus.
-            </p>
-            <p className="text-white/80 text-base lg:text-lg mb-4 lg:mb-8 max-w-lg bundle-body">
-              Teste alle unsere 3 Sorten in einer Box.
-            </p>
-
-            {/* Checkpoints - 2 columns on mobile */}
-            <div className="grid grid-cols-2 md:flex md:flex-col gap-2 lg:gap-3 mb-4 lg:mb-8 bundle-checks">
-              {checks.map((c) => (
-                <div key={c} className="flex items-center gap-2 lg:gap-3">
-                  <span className="w-5 h-5 lg:w-7 lg:h-7 rounded-full flex items-center justify-center text-xs lg:text-sm font-black shrink-0 bundle-check-icon"
-                    style={{ backgroundColor: "#ffd618" }}>
-                    ✓
-                  </span>
-                  <span className="text-white font-semibold text-sm lg:text-base bundle-check-text">
-                    {c}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Price */}
-            <div className="flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4 lg:mb-6 flex-wrap bundle-price-row">
-              <span className="text-base lg:text-lg text-white/60 line-through bundle-price-old">22,47€</span>
-              <span className="text-2xl md:text-4xl font-black text-[#ffd618] bundle-price">Nur 19,98€</span>
-            </div>
-
-            {/* CTA + Scarcity banner */}
-            <div className="flex flex-col items-center md:items-start gap-3 md:gap-4">
-              <button
-                onClick={() =>
-                  addToCart(1, {
-                    id: "starter-bundle",
-                    name: "FOQUZ Power Bundle (3 Sorten)",
-                    price: 19.98,
-                    image: foquzBox,
-                  })
-                }
-                className="comic-btn text-sm md:text-lg py-2.5 px-8 md:py-3 md:px-10 font-black bundle-btn shrink-0"
-                style={{ backgroundColor: "#ffd618", color: "#000" }}
-              >
-                JETZT SPAR-BUNDLE SICHERN
-              </button>
-              {/* Scarcity banner - desktop only */}
-              <div className="hidden md:flex w-full max-w-full lg:w-fit items-center justify-center lg:justify-start gap-2 px-4 py-2 rounded-full border-2 border-[#ffd618]/60" style={{ backgroundColor: 'rgba(255, 214, 24, 0.15)' }}>
-                <span className="text-[#ffd618] text-lg shrink-0">🔥</span>
-                <span className="min-w-0 text-center lg:text-left text-[#ffd618] font-black text-sm md:text-base tracking-wide uppercase leading-tight break-words">
-                  Limitiert – Nur solange der Vorrat reicht!
-                </span>
               </div>
-            </div>
-            
-          </motion.div>
+
+              {/* Text unten */}
+              <div className="flex flex-col flex-1">
+                <h2 className="text-2xl md:text-4xl font-black leading-none text-black mb-2 md:mb-3">
+                  {bundle.title}
+                </h2>
+                <p className="text-black/70 text-sm leading-relaxed lg:text-base mb-4 md:mb-6">
+                  {bundle.description}
+                </p>
+
+                {/* Checkpoints */}
+                <div className="flex flex-col gap-2 mb-4 md:mb-6">
+                  {bundle.checks.map((c) => (
+                    <div key={c} className="flex items-center gap-2 md:gap-3">
+                      <span className="w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-xs md:text-sm font-black shrink-0 border-2 border-black"
+                        style={{ backgroundColor: "#ffd618" }}>
+                        ✓
+                      </span>
+                      <span className="text-black font-semibold text-sm lg:text-base">{c}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Price */}
+                <div className="mt-auto flex items-center gap-3 md:gap-4 mb-3 md:mb-5 flex-wrap">
+                  <span className="text-xl md:text-3xl font-black text-black">{bundle.price ? `Nur ${bundle.price}` : "Bald verfügbar"}</span>
+                  {bundle.oldPrice && <span className="text-sm md:text-lg text-black/50 line-through">{bundle.oldPrice}</span>}
+                  {bundle.enabled && <StockBadge variant="dark" available={isAvailable(bundle.name)} />}
+                </div>
+
+                {/* CTA */}
+                <button
+                  onClick={() =>
+                    bundle.enabled && bundle.cartPrice !== null && isAvailable(bundle.name) !== false && addToCart(1, {
+                      id: bundle.id,
+                      name: bundle.name,
+                      price: bundle.cartPrice,
+                      image: bundle.image,
+                    })
+                  }
+                  disabled={!bundle.enabled || isAvailable(bundle.name) === false}
+                  className="comic-btn disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-fit text-sm md:text-lg py-3 px-6 md:px-8 font-black text-center"
+                  style={{ backgroundColor: "#ffd618", color: "#000" }}
+                >
+                  {bundle.enabled ? "JETZT SPAR-BUNDLE SICHERN" : "BALD VERFÜGBAR"}
+                </button>
+                {bundle.enabled && <Link
+                  to="/produkt/starter-bundle"
+                  className="mt-3 inline-block text-xs md:text-sm font-black uppercase underline underline-offset-4 text-black/70 hover:text-black"
+                >
+                  Details zum Bundle
+                </Link>}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
