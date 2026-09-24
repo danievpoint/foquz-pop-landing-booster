@@ -394,6 +394,11 @@ const LOCAL_GALLERY_BY_HANDLE: Record<string, ShopifyImage[]> = {
   ],
 };
 
+const SQUAD_BUNDLE_EXTRA_IMAGES: ShopifyImage[] = [
+  { url: watermelonInhaltsstoffe.url, altText: "Watermelon Flex – Packungsinhalt" },
+  { url: blueberryInhaltsstoffe.url, altText: "Blueberry Flow – Packungsinhalt" },
+];
+
 const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
@@ -416,10 +421,11 @@ export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[
         const i = order.findIndex((k) => name.includes(k));
         return i === -1 ? order.length : i;
       };
-      return edges
+      const images = edges
         .slice(1)
         .map((e) => e.node)
         .sort((a, b) => rank(a.url) - rank(b.url));
+      return handle === "5er-squad-bundle" ? [...images, ...SQUAD_BUNDLE_EXTRA_IMAGES] : images;
     } catch (e) {
       console.error("Failed to fetch product images:", e);
       galleryCache.delete(handle);
