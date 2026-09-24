@@ -11,23 +11,21 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
-import ingredientsAsset from "@/assets/foquz_product_image_blueberry_inhaltsstoffe.webp.asset.json";
 import { productImages } from "@/lib/redesignProductImages";
 
-const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
-const lemonCan = { url: productImages.blueberry };
+const productCan = { url: "/images/product-pages/produkt-5er-einzeln-blueberry.png" };
+const kickBanner = { url: "/images/product-pages/blueberry-kick-banner.png" };
 
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lemonLifestyle = { url: "/images/product-pages/lifestyle-nase.png" };
+const lifestyle = { url: "/images/product-pages/blueberry-lifestyle.png" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
-const lemonIngredients = { url: ingredientsAsset.url };
+const ingredientsImage = { url: "/images/product-pages/blueberry-ingredients.png" };
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
 const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
 
 
-const ORANGE = "#f6871f";
 const LIGHTBLUE = "#c5e6f2";
 
 
@@ -38,7 +36,7 @@ const comparisons = [
     heading: ["FOQUZ VS. STANDARD"],
     foquzTitle: "FOQUZ",
     compTitle: "STANDARD",
-    foquzImg: lemonCan.url,
+    foquzImg: productCan.url,
     foquzAlt: "Original FOQUZ Riechdose Blueberry Flow",
     compImg: doseIncognito.url,
     compAlt: "Standard Dose",
@@ -59,7 +57,7 @@ const comparisons = [
     heading: ["FOQUZ VS. NASENSPRAY"],
     foquzTitle: "FOQUZ*",
     compTitle: "NASENSPRAY",
-    foquzImg: lemonCan.url,
+    foquzImg: productCan.url,
     foquzAlt: "Original FOQUZ Riechdose",
     compImg: comparisonNasenspray.url,
     compAlt: "Nasenspray",
@@ -82,7 +80,7 @@ const comparisons = [
     heading: ["FOQUZ VS. ENERGY DRINK"],
     foquzTitle: "FOQUZ",
     compTitle: "ENERGY DOSE*",
-    foquzImg: lemonCan.url,
+    foquzImg: productCan.url,
     foquzAlt: "Original FOQUZ Riechdose",
     compImg: comparisonEnergy.url,
     compAlt: "Energy Drink",
@@ -237,6 +235,11 @@ const BlueberryFlowInner = () => {
           </div>
         </section>
 
+        {/* ===== Blueberry Flow Banner ===== */}
+        <section className="w-full">
+          <img src={kickBanner.url} alt="Blueberry Flow Banner" className="w-full h-auto object-cover" loading="lazy" />
+        </section>
+
         {/* ===== Was ist Blueberry Flow ===== */}
         <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 py-12 md:py-16 lg:py-20">
           <div className="rounded-3xl border-4 border-black shadow-[8px_8px_0_0_#000] p-5 sm:p-8 lg:p-10" style={{ backgroundColor: "#ffd618" }}>
@@ -374,7 +377,7 @@ const BlueberryFlowInner = () => {
         </section>
 
         {/* ===== Vergleichs-Slider: Foquz vs. Thailand-Dose / Nasenspray / Energy Drink ===== */}
-        <section className="flex flex-col justify-center py-8 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: "#c9c0f2" }}>
+        <section className="flex flex-col justify-center py-8 md:py-16 lg:py-20 overflow-hidden" style={{ backgroundColor: "#7c6eb0" }}>
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
             <div className="pb-3">
             <div className="overflow-hidden transition-[height] duration-300 ease-out" style={{ height: compareSlideHeight }}>
@@ -516,7 +519,7 @@ const BlueberryFlowInner = () => {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto items-center">
             <div className="rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
               <img
-                src={lemonLifestyle.url}
+                src={lifestyle.url}
                 alt="FOQUZ Blueberry Flow – Mann mit FOQUZ-Brille riecht an der Dose"
                 className="w-full aspect-[6/5] object-cover"
                 loading="lazy"
@@ -554,7 +557,7 @@ const BlueberryFlowInner = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 grid md:grid-cols-[1fr_1.1fr] gap-10 md:gap-12 items-center overflow-hidden">
             <div className="order-2 md:order-1 py-6 md:py-10">
               <img
-                src={lemonIngredients.url}
+                src={ingredientsImage.url}
                 alt="FOQUZ Blueberry Flow – Dosen, Pflanzen- und Aromenmix"
                 className="w-full object-contain scale-110 md:scale-[1.15] lg:scale-125"
                 loading="lazy"
@@ -605,7 +608,7 @@ const BlueberryFlowInner = () => {
         </section>
 
         {/* ===== Kundenstimmen ===== */}
-        <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: "#c9c0f2" }}>
+        <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: "#75559f" }}>
           <div className="container mx-auto px-4">
             <h2 className="font-barlow font-extrabold text-3xl md:text-5xl text-center text-black mb-8 md:mb-12 leading-none">
               DAS SAGEN UNSERE KUNDEN
