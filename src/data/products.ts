@@ -152,7 +152,7 @@ export const bundleProduct: Product = {
     heading: "Eine Box. Voller Fokus.",
     paragraphs: [
       "Teste alle unsere 3 Sorten in einer Box.",
-      "Alle Sorten testen. Exklusive Box. Inklusive limitiertem Sticker-Set & Nasenstrips.",
+      "Alle Sorten testen. Exklusive Box.",
     ],
   },
 

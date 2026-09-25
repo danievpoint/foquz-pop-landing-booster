@@ -23,7 +23,7 @@ const squads = [
     title: "3ER STARTER BUNDLE",
     description:
       "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
-    checks: ["3 Klassiker entdecken", "Exklusive Box", "Inklusive Sticker-Set & Nasenstrips"],
+    checks: ["3 Klassiker entdecken", "Exklusive Box", "3 Dosen im Set"],
     price: bundleProduct.price,
     oldPrice: bundleProduct.originalPrice,
     dosen: 1,

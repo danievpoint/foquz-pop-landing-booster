@@ -105,7 +105,7 @@ const BundleBanner = () => {
               FOQUZ POWER BUNDLE – Alle 3 Sorten!
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              <strong>Spare 11%</strong> gegenüber dem Einzelkauf und teste alle unsere 3 Sorten in einer Box.
+              <strong>Spare 3 %</strong> gegenüber dem Einzelkauf und teste alle unsere 3 Sorten in einer Box.
             </p>
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-2xl md:text-3xl">{bundleProduct.price}</span>
@@ -878,7 +878,7 @@ const ProductDetail = () => {
                       {bundleProduct.name}
                     </span>
                     <span className="block text-[11px] text-white/80 font-semibold leading-snug mt-0.5">
-                      Alle 3 Sorten, 11 % sparen
+                      Alle 3 Sorten, 3 % sparen
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
@@ -941,7 +941,7 @@ const ProductDetail = () => {
                   className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full border-[3px] border-black"
                   style={{ backgroundColor: YELLOW }}
                 >
-                  11 % SPAREN
+                  3 % SPAREN
                 </span>
               </div>
             )}
