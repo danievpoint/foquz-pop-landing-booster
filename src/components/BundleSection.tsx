@@ -43,10 +43,10 @@ const squads = [
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
     checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht"],
-    price: "29,90€",
+    price: "34,90€",
     oldPrice: "37,45€",
     dosen: 1,
-    cartPrice: 29.9,
+    cartPrice: 34.9,
     enabled: true,
   },
 ];

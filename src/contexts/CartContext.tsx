@@ -91,7 +91,7 @@ export const useCart = () => useContext(CartContext);
 const DEFAULT_PRODUCT: Omit<CartItem, "qty"> = {
   id: "bundle",
   name: "FOQUZ Bundle",
-  price: 19.98,
+  price: 21.90,
   image: "",
 };
 
@@ -140,6 +140,10 @@ const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 // Shopify müssen hier nachgezogen werden – Storefront API liefert die
 // Versandschwelle nicht aus.
 const FREE_SHIPPING_THRESHOLD = 29;
+// Bundles, die unabhängig vom Warenwert (auch mit Rabatt) immer versandfrei sind.
+export const ALWAYS_FREE_SHIPPING_IDS = ["squad-bundle", "vorrats-bundle"];
+// Nur diese Bundles enthalten Nasenstrips + Sticker als Extras.
+const GIFT_BUNDLE_IDS = ["squad-bundle", "vorrats-bundle"];
 
 
 const CONFETTI_COLORS = [
@@ -307,7 +311,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Bei deaktiviertem Flag werden evtl. gespeicherte Zugaben entfernt.
   useEffect(() => {
     const bundleQty = items
-      .filter((i) => BUNDLE_IDS.includes(i.id))
+      .filter((i) => GIFT_BUNDLE_IDS.includes(i.id))
       .reduce((s, i) => s + i.qty, 0);
 
     const wantedQty = GIFTS_ENABLED && bundleQty > 0 ? 1 : 0;
@@ -459,7 +463,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
-  const freeShippingUnlocked = items.length > 0 && discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id)));
   const prevFreeShippingRef = useRef(freeShippingUnlocked);
   useEffect(() => {
     if (freeShippingUnlocked && !prevFreeShippingRef.current) {

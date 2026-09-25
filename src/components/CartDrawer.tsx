@@ -36,7 +36,7 @@ const PAYMENT_METHODS = [
 ];
 
 const BUNDLE_ID = "starter-bundle";
-const BUNDLE_LIST_PRICE = 19.98;
+const BUNDLE_LIST_PRICE = 21.90;
 const SINGLE_PRICE = 7.49;
 // Vergleichspreise (UVP der Einzeldosen) je Position – Basis für die Ersparnis.
 const COMPARE_AT_PRICE_BY_ID: Record<string, number> = {
@@ -129,9 +129,10 @@ const CartDrawer = () => {
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
   // Shipping/savings
-  const freeShipping = discountedTotal >= FREE_SHIPPING_THRESHOLD;
-  const missingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
-  const shipProgress = Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const hasAlwaysFreeBundle = items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id));
+  const freeShipping = hasAlwaysFreeBundle || discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const missingForFreeShip = freeShipping ? 0 : Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
+  const shipProgress = freeShipping ? 100 : Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
   const shippingCost = freeShipping ? 0 : SHIPPING_COST_DE;
   const totalSavings = discountAmount + (freeShipping ? SHIPPING_COST_DE : 0);
 
