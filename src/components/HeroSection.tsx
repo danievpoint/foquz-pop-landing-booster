@@ -1,22 +1,12 @@
 import { useState, useEffect } from "react";
-import type { CSSProperties } from "react";
-import { Link } from "react-router-dom";
-
-import HeroPromoBanner from "@/components/HeroPromoBanner";
 import { scrollToSection } from "@/lib/scrollToSection";
-import heroBgAsset from "@/assets/hero-bg-v1.png.asset.json";
-import heroGuyJarsAsset from "@/assets/hero-guy-jars.png.asset.json";
-import heroClouds from "@/assets/hero-clouds.svg";
-import heroScene from "@/assets/hero-bg.svg";
+import "./HeroSection.css";
 
-
-// Desktop uses the layered PNG scene; mobile/tablet uses the original SVG background + product jars PNG.
-const heroBgDesktop = heroBgAsset.url;
-const heroBgMobile = heroScene; // hero-bg.svg
-const heroJars = heroGuyJarsAsset.url; // mobile/tablet hero visual (guy + jars)
+const heroBgDesktop = "/images/hero/foquz-desktop.png";
+const heroBgMobile = "/images/hero/foquz-mobile.png";
 
 const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroJars, heroClouds, heroScene].map(
+  [heroBgDesktop, heroBgMobile].map(
     (src) =>
       new Promise<void>((resolve) => {
         const img = new Image();
@@ -31,13 +21,13 @@ const heroImagePromise = Promise.all(
 const heroFontsPromise: Promise<unknown> =
   typeof document !== "undefined" && "fonts" in document
     ? Promise.all([
-        (document as any).fonts.load("400 1em Barlow"),
-        (document as any).fonts.load("600 1em Barlow"),
-        (document as any).fonts.load("700 1em Barlow"),
-        (document as any).fonts.load("800 1em Barlow"),
-        (document as any).fonts.load("900 1em Barlow"),
-        (document as any).fonts.load("400 1em Bangers"),
-        (document as any).fonts.ready,
+        document.fonts.load("400 1em Barlow"),
+        document.fonts.load("600 1em Barlow"),
+        document.fonts.load("700 1em Barlow"),
+        document.fonts.load("800 1em Barlow"),
+        document.fonts.load("900 1em Barlow"),
+        document.fonts.load("400 1em Bangers"),
+        document.fonts.ready,
       ]).catch(() => undefined)
     : Promise.resolve();
 
@@ -55,171 +45,31 @@ const HeroSection = () => {
   const ready = useHeroReady();
 
   return (
-    <section className="relative overflow-hidden bg-background" style={{ zIndex: 1 }}>
-      {!ready && <div className="w-full bg-background" style={{ minHeight: "max(700px, 75vh)" }} />}
-
-      <div
-        className="transition-opacity duration-500"
-        style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
-      >
-        {/* === MOBILE / TABLET (< lg) — restored to state before "guy" PNG === */}
-        <div className="lg:hidden relative w-full" style={{ minHeight: "max(700px, 75vh)" }}>
-          <HeroPromoBanner className="absolute left-0 right-0 top-[calc(var(--safe-area-top)+var(--marquee-height)+58px)] sm:top-[calc(var(--safe-area-top)+var(--marquee-height)+64px)]" />
-          <Link
-            to="/produkt/starter-bundle"
-            className="absolute right-0 bottom-0 z-0 -mr-4 sm:-mr-6 md:mr-0"
-          >
-            <img
-              src={heroJars}
-              alt="FOQUZ Produkte – Thai Style, Lemon Breezy und Peach Party"
-              loading="eager"
-              decoding="async"
-              className="w-[115%] sm:w-[105%] md:w-[70%] h-auto cursor-pointer translate-x-[5%] sm:translate-x-[8%] md:translate-x-[55%] translate-y-[26%] scale-[0.91] md:scale-[0.86]"
-            />
-          </Link>
-          <img
-            src={heroBgMobile}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top z-[-1]"
-          />
-          {/* Foreground blue clouds mask the bottom edge of the hero image */}
-          <img
-            src={heroClouds}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            decoding="async"
-            className="absolute bottom-0 left-0 w-full h-[35%] object-cover object-bottom pointer-events-none z-[5]"
-          />
-          <div className="relative w-full max-w-[1800px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-4 sm:pb-0">
-            <div className="flex flex-col">
-              <div className="relative z-10 pb-4 sm:pb-8">
-                <h1 className="flex flex-col gap-[0.18em] sm:gap-[0.2em] md:gap-[0.22em] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-2 sm:mb-4 md:mb-5 text-primary-foreground text-pop whitespace-nowrap">
-                  <span className="block">KURZ RIECHEN.</span>
-                  <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                </h1>
-                <p className="text-lg sm:text-xl md:text-2xl font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm mb-3 sm:mb-5 md:mb-6 whitespace-nowrap">
-                  DU ENTSCHEIDEST WAS DU RIECHST
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                  <a
-                    href="#bundle"
-                    onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-secondary text-secondary-foreground w-fit"
-                  >
-                    POWER-BUNDLE HOLEN
-                  </a>
-                  <a
-                    href="#sorten"
-                    onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
-                    className="comic-btn !text-sm !py-2.5 !px-6 sm:!text-base sm:!py-3 sm:!px-8 md:!text-lg font-black bg-card text-foreground w-fit"
-                  >
-                    EINZELN KAUFEN
-                  </a>
-                </div>
-              </div>
-            </div>
+    <section className="foquz-hero bg-background" aria-label="FOQUZ Riechdosen">
+      <div className="foquz-hero-scene" style={{ opacity: ready ? 1 : 0 }}>
+        {/* One composed scene keeps the products, background and clouds in proportion. */}
+        <picture>
+          <source media="(min-width: 768px)" srcSet={heroBgDesktop} />
+          <img className="foquz-hero-art" src={heroBgMobile} width="390" height="800"
+            alt="FOQUZ Riechdosen: Watermelon Flex, Blueberry Flow, Thai Style, Lemon Breezy und Peach Party"
+            loading="eager" fetchPriority="high" decoding="async" />
+        </picture>
+        <div className="foquz-hero-copy">
+          <p className="foquz-hero-shipping-mobile"><strong>Versandkostenfrei</strong> ab 29€ nach DE &amp; AT</p>
+          <h1 className="foquz-hero-title text-primary-foreground text-pop">
+            <span>KURZ RIECHEN.</span>
+            <span className="text-secondary">AB AUF WOLKE 7.</span>
+          </h1>
+          <p className="foquz-hero-subtitle text-primary-foreground">
+            Deine Riechdose für den Frischekick mit<br />echten Kräutern &amp; Menthol.
+          </p>
+          <div className="foquz-hero-actions">
+            <a href="#bundle" onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
+              className="comic-btn bg-secondary text-secondary-foreground">POWER-BUNDLE HOLEN</a>
+            <a href="#sorten" onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
+              className="comic-btn bg-card text-foreground">EINZELN KAUFEN</a>
           </div>
-        </div>
-
-        {/* === DESKTOP (lg+) — only animation removed === */}
-        <div className="hidden lg:block">
-          <div
-            className="relative w-full overflow-hidden -mt-[2px]"
-            style={{
-              aspectRatio: "1920 / 772",
-              containerType: "inline-size",
-            }}
-          >
-            <HeroPromoBanner className="absolute left-0 right-0 top-[100px]" />
-
-            <style>{`
-              .hero-title {
-                display: flex;
-                flex-direction: column;
-                gap: 0.22em;
-                font-size: 4.2cqw;
-                line-height: 1.08;
-                margin-bottom: 1cqw;
-              }
-              .hero-subtitle {
-                font-size: 1.3cqw;
-                margin-bottom: 1.2cqw;
-              }
-              .hero-btn {
-                font-size: 0.9cqw !important;
-                padding: 0.65cqw 1.5cqw !important;
-              }
-              .hero-btn-row {
-                gap: 1.2cqw;
-              }
-            `}</style>
-
-            {/* Layer 0: Original SVG scene */}
-            <img
-              src={heroScene}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-top"
-            />
-
-            {/* Layer 1: Foreground PNG */}
-            <img
-              src={heroBgDesktop}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-top"
-              style={{ transform: "translateY(10%) scale(0.84)", transformOrigin: "top right" }}
-            />
-
-            {/* Layer 2: Clouds overlay */}
-            <img
-              src={heroClouds}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            />
-
-            {/* Layer 3: Text + CTAs */}
-            <div className="absolute inset-0 z-10">
-              <div className="h-full flex items-center" style={{ paddingTop: "100px", paddingBottom: "15%" }}>
-                <div style={{ paddingLeft: "4%" }}>
-                  <div aria-hidden="true" className="hero-title text-primary-foreground text-pop whitespace-nowrap font-extrabold uppercase tracking-tight">
-                    <span className="block">KURZ RIECHEN.</span>
-                    <span className="block text-secondary">AB AUF WOLKE 7.</span>
-                  </div>
-                  <p className="hero-subtitle font-extrabold uppercase tracking-tight text-primary-foreground text-pop-sm whitespace-nowrap">
-                    DU ENTSCHEIDEST WAS DU RIECHST
-                  </p>
-                  <div className="flex flex-row hero-btn-row">
-                    <a
-                      href="#bundle"
-                    onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
-                      className="comic-btn hero-btn font-black bg-secondary text-secondary-foreground w-fit whitespace-nowrap"
-                    >
-                      POWER-BUNDLE HOLEN
-                    </a>
-                    <a
-                      href="#sorten"
-                    onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
-                      className="comic-btn hero-btn font-black bg-card text-foreground w-fit whitespace-nowrap"
-                    >
-                      EINZELN KAUFEN
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p className="foquz-hero-shipping-desktop"><strong>Versandkostenfrei</strong> ab 29€ nach DE &amp; AT</p>
         </div>
       </div>
     </section>
