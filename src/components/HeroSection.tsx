@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
 
@@ -43,9 +43,23 @@ export const useHeroReady = () => {
 
 const HeroSection = () => {
   const ready = useHeroReady();
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const navbar = document.getElementById("site-navbar");
+    const hero = heroRef.current;
+    if (!navbar || !hero) return;
+    // The marquee already reserves its own space above the hero.
+    // Follow the real navbar height, including font loading and browser zoom.
+    const updateOffset = () => hero.style.setProperty("--hero-nav-height", `${navbar.getBoundingClientRect().height}px`);
+    updateOffset();
+    const observer = new ResizeObserver(updateOffset);
+    observer.observe(navbar);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="foquz-hero bg-background" aria-label="FOQUZ Riechdosen">
+    <section ref={heroRef} className="foquz-hero bg-background" aria-label="FOQUZ Riechdosen">
       <div className="foquz-hero-scene" style={{ opacity: ready ? 1 : 0 }}>
         {/* One composed scene keeps the products, background and clouds in proportion. */}
         <picture>

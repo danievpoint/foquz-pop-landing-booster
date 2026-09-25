@@ -100,6 +100,7 @@ const Navbar = () => {
   return (
     <>
     <nav
+      id="site-navbar"
       className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
       style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', opacity: heroReady ? 1 : 0, transition: 'opacity 500ms ease', pointerEvents: heroReady ? 'auto' : 'none' }}
     >
