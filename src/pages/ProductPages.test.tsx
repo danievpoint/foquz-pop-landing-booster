@@ -71,8 +71,8 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /FOQUZ Power Bundle Alle 3 Sorten/i }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('3ER STARTER BUNDLE');
     expect(screen.queryByText(/Blueberry|Watermelon|39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
-    expect(screen.getByText('FOQUZ Sticker (gratis)')).toBeInTheDocument();
-    expect(screen.getByText('Nasen-Stripes (gratis)')).toBeInTheDocument();
+    expect(screen.queryByText('FOQUZ Sticker (gratis)')).not.toBeInTheDocument();
+    expect(screen.queryByText('Nasen-Stripes (gratis)')).not.toBeInTheDocument();
     expect(screen.getByAltText('Google Pay')).toBeInTheDocument();
     expect(screen.queryByAltText('Klarna')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
