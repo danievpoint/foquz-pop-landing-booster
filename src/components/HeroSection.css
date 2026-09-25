@@ -4,14 +4,14 @@
   overflow: hidden;
   padding-top: calc(var(--hero-nav-height, 71px) - 1px);
 }
-.foquz-hero-scene { position: relative; container-type: inline-size; aspect-ratio: 390 / 824; background: #482d77; transition: opacity .5s; }
-.foquz-hero-art { display: block; position: absolute; inset: 0; width: 100%; height: auto; transform: translateY(6.15cqw); }
-.foquz-hero-copy { position: absolute; top: 4%; left: 4.1%; right: 4.1%; }
+.foquz-hero-scene { position: relative; container-type: inline-size; aspect-ratio: 390 / 787; overflow: hidden; background: hsl(var(--background)); transition: opacity .5s; }
+.foquz-hero-art { display: block; position: absolute; inset: 0; width: 100%; height: auto; transform: translateY(-3.08cqw); }
+.foquz-hero-copy { position: absolute; top: 2%; left: 4.1%; right: 4.1%; }
 .foquz-hero-title { font-size: 9.5cqw; line-height: 1.05; margin-bottom: 3cqw; }
 .foquz-hero-title span { display: block; white-space: nowrap; }
 .foquz-hero-subtitle { font-size: 4cqw; line-height: 1.35; font-weight: 900; text-transform: uppercase; margin-bottom: 4cqw; }
-.foquz-hero-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 3cqw; }
-.foquz-hero-actions .comic-btn { font-size: 3.6cqw; padding: 2.6cqw 6cqw; font-weight: 900; white-space: nowrap; }
+.foquz-hero-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 2cqw; }
+.foquz-hero-actions .comic-btn { font-size: 3.6cqw; padding: 2.6cqw 6cqw; font-weight: 900; line-height: 1.2; white-space: nowrap; }
 .foquz-hero-shipping-mobile { display: inline-block; background: white; border-radius: 999px; padding: 1.5cqw 3cqw; margin-bottom: 4cqw; font-size: 2.8cqw; font-weight: 700; }
 .foquz-hero-shipping-mobile strong { color: hsl(var(--primary)); text-transform: uppercase; }
 .foquz-hero-shipping-desktop { display: none; }
@@ -20,7 +20,7 @@
 @media (min-width: 768px) {
   .foquz-hero-scene { aspect-ratio: 1920 / 800; }
   .foquz-hero-art { transform: none; }
-  .foquz-hero-copy { top: 10%; left: 7.3%; right: auto; }
+  .foquz-hero-copy { top: 5%; left: 7.3%; right: auto; }
   .foquz-hero-title { font-size: 4.2cqw; line-height: .98; margin-bottom: 1.3cqw; }
   .foquz-hero-subtitle { font-size: 1.3cqw; margin-bottom: 1.4cqw; }
   .foquz-hero-actions { flex-direction: row; gap: 1cqw; }
@@ -28,5 +28,12 @@
   .foquz-hero-shipping-mobile { display: none; }
   .foquz-hero-shipping-desktop { display: block; color: white; font-size: .8cqw; font-weight: 700; margin-top: 1cqw; }
 }
+@media (min-width: 768px) and (max-width: 1199px) {
+  .foquz-hero-copy { top: 5%; }
+  .foquz-hero-title { font-size: 4cqw; margin-bottom: 1cqw; }
+  .foquz-hero-subtitle { font-size: 1.35cqw; line-height: 1.25; margin-bottom: 1cqw; }
+  .foquz-hero-actions { gap: 1cqw; }
+  .foquz-hero-actions .comic-btn { font-size: max(10px, 1cqw); padding: .65cqw 1.3cqw; box-shadow: 3px 3px 0 #000; }
+  .foquz-hero-shipping-desktop { font-size: max(9px, .85cqw); margin-top: .9cqw; }
+}
 @media (prefers-reduced-motion: reduce) { .foquz-hero-scene { transition: none; } }
-
