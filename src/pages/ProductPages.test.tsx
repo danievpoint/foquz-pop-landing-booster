@@ -41,7 +41,7 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
     fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – POWER BUNDLE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 19.98 }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
   });
   it('switches product content and cart identity with the flavor selector', () => {
     page();
@@ -71,12 +71,12 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /FOQUZ Power Bundle Alle 3 Sorten/i }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('3ER STARTER BUNDLE');
     expect(screen.queryByText(/Blueberry|Watermelon|39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
-    expect(screen.getByText('FOQUZ Sticker (gratis)')).toBeInTheDocument();
-    expect(screen.getByText('Nasen-Stripes (gratis)')).toBeInTheDocument();
+    expect(screen.queryByText('FOQUZ Sticker (gratis)')).not.toBeInTheDocument();
+    expect(screen.queryByText('Nasen-Stripes (gratis)')).not.toBeInTheDocument();
     expect(screen.getByAltText('Google Pay')).toBeInTheDocument();
     expect(screen.queryByAltText('Klarna')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 19.98 }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
     fireEvent.click(screen.getByRole('button', { name: 'Welche Sorten sind im Starter Bundle?' }));
     expect(screen.getByText(/Im 3er Starter Bundle findest du/)).toBeInTheDocument();
   });

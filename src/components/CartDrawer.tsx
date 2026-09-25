@@ -14,7 +14,7 @@ import {
   Truck,
   Plus as PlusIcon,
 } from "lucide-react";
-import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, type CartItem } from "@/contexts/CartContext";
+import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
 import { products as allSorten, allProducts } from "@/data/products";
 import { Link } from "react-router-dom";
@@ -36,7 +36,7 @@ const PAYMENT_METHODS = [
 ];
 
 const BUNDLE_ID = "starter-bundle";
-const BUNDLE_LIST_PRICE = 19.98;
+const BUNDLE_LIST_PRICE = 21.90;
 const SINGLE_PRICE = 7.49;
 // Vergleichspreise (UVP der Einzeldosen) je Position – Basis für die Ersparnis.
 const COMPARE_AT_PRICE_BY_ID: Record<string, number> = {
@@ -129,9 +129,10 @@ const CartDrawer = () => {
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
   // Shipping/savings
-  const freeShipping = discountedTotal >= FREE_SHIPPING_THRESHOLD;
-  const missingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
-  const shipProgress = Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const hasAlwaysFreeBundle = items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id));
+  const freeShipping = hasAlwaysFreeBundle || discountedTotal >= FREE_SHIPPING_THRESHOLD;
+  const missingForFreeShip = freeShipping ? 0 : Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
+  const shipProgress = freeShipping ? 100 : Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
   const shippingCost = freeShipping ? 0 : SHIPPING_COST_DE;
   const totalSavings = discountAmount + (freeShipping ? SHIPPING_COST_DE : 0);
 

@@ -127,7 +127,7 @@ export function ProductPageSticky({ shop, selectedBundle }: { shop: Shop; select
 }
 
 export function FreeShippingStatus({ selectedPrice }: { selectedPrice: number }) {
-  const remaining = Math.max(0, 29 - selectedPrice);
+  const remaining = selectedPrice >= 34.9 ? 0 : Math.max(0, 29 - selectedPrice);
   return <div className="pt-4 flex items-center gap-2 text-xs font-semibold">
     {remaining === 0 && <span className="w-4 h-4 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5" /></span>}
     <span>{remaining === 0 ? "Versandkostenfrei" : `Noch ${price(remaining)} € bis zum Gratisversand`}</span>

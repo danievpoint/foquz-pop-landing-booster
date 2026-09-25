@@ -23,7 +23,7 @@ const squads = [
     title: "3ER STARTER BUNDLE",
     description:
       "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
-    checks: ["3 Klassiker entdecken", "Exklusive Box", "Inklusive Sticker-Set & Nasenstrips"],
+    checks: ["3 Klassiker entdecken", "Exklusive Box", "3 Dosen im Set"],
     price: bundleProduct.price,
     oldPrice: bundleProduct.originalPrice,
     dosen: 1,
@@ -43,10 +43,10 @@ const squads = [
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
     checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht"],
-    price: "29,90€",
+    price: "34,90€",
     oldPrice: "37,45€",
     dosen: 1,
-    cartPrice: 29.9,
+    cartPrice: 34.9,
     enabled: true,
   },
 ];

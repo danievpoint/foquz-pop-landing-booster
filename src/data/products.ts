@@ -144,15 +144,15 @@ export const flavorProducts: Product[] = [...products, ...newFlavorProducts];
 export const bundleProduct: Product = {
   name: "FOQUZ Power Bundle",
   handle: "starter-bundle",
-  price: "19,98€",
+  price: "21,90€",
   originalPrice: "22,47€",
-  numericPrice: 19.98,
+  numericPrice: 21.90,
   desc: "Alle 3 Sorten in einer Box.",
   longDesc: {
     heading: "Eine Box. Voller Fokus.",
     paragraphs: [
       "Teste alle unsere 3 Sorten in einer Box.",
-      "Alle Sorten testen. Exklusive Box. Inklusive limitiertem Sticker-Set & Nasenstrips.",
+      "Alle Sorten testen. Exklusive Box.",
     ],
   },
 
@@ -170,9 +170,9 @@ export const bundleProduct: Product = {
 export const squadBundleProduct: Product = {
   name: "5ER SQUAD BUNDLE",
   handle: "squad-bundle",
-  price: "29,90€",
+  price: "34,90€",
   originalPrice: "37,45€",
-  numericPrice: 29.90,
+  numericPrice: 34.90,
   desc: "Alle fünf Sorten in einer Box – je eine Dose pro Sorte.",
   image: "/images/product-pages/foquz_produkt_bundle_5er.webp",
   color: "#85c8b5",

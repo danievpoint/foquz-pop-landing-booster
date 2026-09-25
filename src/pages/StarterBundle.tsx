@@ -1,6 +1,6 @@
 import BundleProductPage from "@/components/product-pages/BundleProductPage";
 import { products } from "@/data/products";
-import { GIFTS_ENABLED, GIFT_ITEMS } from "@/contexts/CartContext";
+
 
 const starterBundleHeaderImg = "/images/starter-bundle/header-mann-standard-3er.jpg";
 const starterBundleFlatlayImg = "/images/starter-bundle/3er-bundle-16zu9-3.jpg";
@@ -24,7 +24,6 @@ const StarterBundle = () => (
       introText: "Drei Klassiker, eine Box: Peach Party, Lemon Breezy und Thai Style – je eine Dose pro Sorte. Entdecke deinen Lieblingsduft oder teile die drei Sorten. Einfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Drei Duftwelten für deinen Refresh-Moment.\n\nAb auf Wolke 7 – dreimal, mit allen drei Klassikern.",
       contents: [
         ...products.map((product) => ({ name: product.name, desc: product.handle === "peach-party" ? "Pfirsich & Kräuter" : product.handle === "lemon-breezy" ? "Zitrone & Kräuter" : "Kräuter & Menthol", img: product.image })),
-        ...(GIFTS_ENABLED ? GIFT_ITEMS.map((gift) => ({ name: gift.name, desc: "Gratis im Power Bundle", img: gift.image })) : []),
       ],
       checks: ["Alle Sorten testen", "Exklusive Box", "Bestpreis sichern"],
       faqs: [
