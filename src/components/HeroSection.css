@@ -4,9 +4,9 @@
   overflow: hidden;
   padding-top: calc(var(--hero-nav-height, 71px) - 1px);
 }
-.foquz-hero-scene { position: relative; container-type: inline-size; aspect-ratio: 390 / 787; overflow: hidden; background: hsl(var(--background)); transition: opacity .5s; }
-.foquz-hero-art { display: block; position: absolute; inset: 0; width: 100%; height: auto; transform: translateY(-3.08cqw); }
-.foquz-hero-copy { position: absolute; top: 2%; left: 4.1%; right: 4.1%; }
+.foquz-hero-scene { position: relative; container-type: inline-size; aspect-ratio: 390 / 757; overflow: hidden; background: hsl(var(--background)); transition: opacity .5s; }
+.foquz-hero-art { display: block; position: absolute; inset: 0; width: 100%; height: auto; transform: translateY(-10.77cqw); }
+.foquz-hero-copy { position: absolute; top: 1%; left: 4.1%; right: 4.1%; }
 .foquz-hero-title { font-size: 9.5cqw; line-height: 1.05; margin-bottom: 3cqw; }
 .foquz-hero-title span { display: block; white-space: nowrap; }
 .foquz-hero-subtitle { font-size: 4cqw; line-height: 1.35; font-weight: 900; text-transform: uppercase; margin-bottom: 4cqw; }
