@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { bundleProduct } from "@/data/products";
+import { bundleProduct, crewBundleProduct } from "@/data/products";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
@@ -49,6 +49,23 @@ const squads = [
     cartPrice: 34.9,
     enabled: true,
   },
+  {
+    id: crewBundleProduct.handle,
+    link: "/produkt/zehner-bundle",
+    name: crewBundleProduct.name,
+    image: crewBundleProduct.image,
+    imageAlt: "FOQUZ 10er Crew Bundle",
+    imageAspect: "1920 / 1586",
+    imageClass: "hover:scale-105",
+    title: crewBundleProduct.name,
+    description: crewBundleProduct.desc,
+    checks: ["Jede Sorte zweimal", "Sticker & Nasen-Strips inklusive", "Kostenloser Versand in Deutschland"],
+    price: crewBundleProduct.price,
+    oldPrice: crewBundleProduct.originalPrice,
+    dosen: 1,
+    cartPrice: crewBundleProduct.numericPrice,
+    enabled: true,
+  },
 ];
 
 const BundleSection = () => {
@@ -62,7 +79,7 @@ const BundleSection = () => {
     >
       <img src={bundleBg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch -mx-2 sm:mx-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-stretch -mx-2 sm:mx-0">
           {squads.map((bundle, i) => (
             <motion.div
               key={bundle.id}
@@ -70,7 +87,7 @@ const BundleSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="flex flex-col w-full max-w-xl mx-auto lg:max-w-none lg:mx-0 rounded-2xl border-2 border-black bg-white/95 p-4 sm:p-6 lg:p-8"
+              className="flex flex-col w-full max-w-xl mx-auto lg:max-w-none lg:mx-0 rounded-2xl border-2 border-black bg-white/95 p-4 sm:p-6 lg:p-5"
               style={{ boxShadow: "8px 8px 0 #000" }}
             >
               {/* Bild oben */}
@@ -96,7 +113,7 @@ const BundleSection = () => {
 
               {/* Text unten */}
               <div className="flex flex-col flex-1">
-                <h2 className="text-2xl md:text-4xl font-black leading-none text-black mb-2 md:mb-3">
+                <h2 className="text-2xl md:text-3xl font-black leading-none text-black mb-2 md:mb-3">
                   {bundle.link ? (
                     <Link to={bundle.link} className="hover:opacity-80 transition-opacity">{bundle.title}</Link>
                   ) : (
@@ -138,10 +155,10 @@ const BundleSection = () => {
                     })
                   }
                   disabled={!bundle.enabled || isAvailable(bundle.name) === false}
-                  className="comic-btn disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-fit text-sm md:text-lg py-3 px-6 md:px-8 font-black text-center"
+                  className="comic-btn disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-fit text-sm py-3 px-4 font-black text-center"
                   style={{ backgroundColor: "#ffd618", color: "#000" }}
                 >
-                  {bundle.enabled ? "JETZT SPAR-BUNDLE SICHERN" : "BALD VERFÜGBAR"}
+                  {bundle.enabled ? (bundle.id === "vorrats-bundle" ? "JETZT POWER-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN") : "BALD VERFÜGBAR"}
                 </button>
                 {bundle.link && <Link
                   to={bundle.link}

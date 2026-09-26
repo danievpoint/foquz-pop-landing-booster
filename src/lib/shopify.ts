@@ -75,6 +75,7 @@ export async function fetchProductsAvailability(): Promise<ProductAvailability[]
 // Numerische Shopify-PRODUKT-IDs (nicht Varianten) – u.a. für Loox
 export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
   "squad-bundle": "11298415771990",
+  "vorrats-bundle": "11298415837526",
   "peach-party": "10276794335574",
   "thai-style": "10276796301654",
   "lemon-breezy": "10276796399958",
@@ -97,6 +98,7 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "starter-bundle": "gid://shopify/ProductVariant/52867411837270",
   "6er-vorrats-set": "gid://shopify/ProductVariant/55425602879830",
   "squad-bundle": "gid://shopify/ProductVariant/55478191325526",
+  "vorrats-bundle": "gid://shopify/ProductVariant/55478191391062",
   // Prio-Versand – wird über den Toggle im Warenkorb zugebucht
   "prio-versand": "gid://shopify/ProductVariant/55430739493206",
   // Gratis-Zugaben – werden ausschließlich automatisch zum Power Bundle gelegt
@@ -420,6 +422,7 @@ const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
 export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
+  if (handle === "vorrats-bundle") handle = "10er-vorrats-bundle";
   if (handle === "squad-bundle") handle = "5er-squad-bundle";
   const local = LOCAL_GALLERY_BY_HANDLE[handle];
   if (local) return Promise.resolve(local);

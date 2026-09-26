@@ -1,3 +1,4 @@
+import ZehnerBundle from "./pages/ZehnerBundle";
 import SquadBundle from "./pages/SquadBundle";
 import StarterBundle from "./pages/StarterBundle";
 import PeachParty from "./pages/PeachParty";
@@ -83,6 +84,14 @@ const App = () => {
                 <Route path="/produkte/watermelon-flex" element={<WatermelonFlex />} />
                 <Route path="/produkt/blueberry-flow" element={<BlueberryFlow />} />
                 <Route path="/produkte/blueberry-flow" element={<BlueberryFlow />} />
+                <Route path="/produkt/zehner-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkt/vorrats-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkt/10er-crew-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkt/10er-vorrats-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkte/zehner-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkte/vorrats-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkte/10er-crew-bundle" element={<ZehnerBundle />} />
+                <Route path="/produkte/10er-vorrats-bundle" element={<ZehnerBundle />} />
                 <Route path="/produkt/squad-bundle" element={<SquadBundle />} />
                 <Route path="/produkte/squad-bundle" element={<SquadBundle />} />
                 <Route path="/produkt/5er-squad-bundle" element={<SquadBundle />} />

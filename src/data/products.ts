@@ -180,4 +180,17 @@ export const squadBundleProduct: Product = {
   ingredients: flavorProducts.map((product) => product.name),
 };
 
-export const allProducts: Product[] = [...flavorProducts, bundleProduct, squadBundleProduct];
+export const crewBundleProduct: Product = {
+  name: "10ER POWER-BUNDLE",
+  handle: "vorrats-bundle",
+  price: "59,90€",
+  originalPrice: "74,90€",
+  numericPrice: 59.90,
+  desc: "Zehn Dosen, alle fünf Sorten – je zwei Dosen pro Sorte.",
+  image: "/images/product-pages/foquz_produkt_bundle_10er.webp",
+  color: "#85c8b5",
+  isBundle: true,
+  ingredients: flavorProducts.map((product) => `2× ${product.name}`),
+};
+
+export const allProducts: Product[] = [...flavorProducts, bundleProduct, squadBundleProduct, crewBundleProduct];
