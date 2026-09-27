@@ -7,6 +7,7 @@ import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
 const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp";
 const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
+const crewBox = "/images/product-pages/foquz_produkt_bundle_10er.webp";
 
 const squads = [
   {
@@ -51,7 +52,7 @@ const squads = [
     id: crewBundleProduct.handle,
     link: "/produkt/zehner-bundle",
     name: crewBundleProduct.name,
-    image: crewBundleProduct.image,
+    image: crewBox,
     imageAlt: "FOQUZ 10er Crew Bundle",
     imageAspect: "1920 / 1586",
     imageClass: "hover:scale-105",
