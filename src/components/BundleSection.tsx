@@ -52,7 +52,7 @@ const squads = [
     id: crewBundleProduct.handle,
     link: "/produkt/zehner-bundle",
     name: crewBundleProduct.name,
-    image: crewBundleProduct.image,
+    image: crewBox,
     imageAlt: "FOQUZ 10er Crew Bundle",
     imageAspect: "1920 / 1586",
     imageClass: "hover:scale-105",
