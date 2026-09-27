@@ -12,8 +12,6 @@ import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.ass
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
 import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
 import foquzBox from "@/assets/foquz-box.png";
-import squadBundleTitleImage from "@/assets/foquz-produkt-bundle-5er-text.jpg.asset.json";
-import crewBundleTitleImage from "@/assets/foquz-produkt-bundle-10er-text.jpg.asset.json";
 
 export interface Product {
   name: string;
