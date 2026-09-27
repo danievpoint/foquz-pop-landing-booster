@@ -422,8 +422,8 @@ const galleryCache = new Map<string, Promise<ShopifyImage[]>>();
 
 /** Extra gallery images uploaded in Shopify (primary image excluded). Ergebnis wird gecacht. */
 export function fetchProductGalleryImages(handle: string): Promise<ShopifyImage[]> {
-  if (handle === "vorrats-bundle") handle = "10er-vorrats-bundle";
-  if (handle === "squad-bundle") handle = "5er-squad-bundle";
+  // Das 10er nutzt dieselben Galeriebilder wie das 5er (eigene Box-Fotos bleiben vorn).
+  if (handle === "vorrats-bundle" || handle === "squad-bundle") handle = "5er-squad-bundle";
   const local = LOCAL_GALLERY_BY_HANDLE[handle];
   if (local) return Promise.resolve(local);
   const cached = galleryCache.get(handle);
