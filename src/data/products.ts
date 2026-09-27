@@ -173,7 +173,7 @@ export const squadBundleProduct: Product = {
   originalPrice: "37,45€",
   numericPrice: 34.90,
   desc: "Alle fünf Sorten in einer Box – je eine Dose pro Sorte.",
-  image: squadBundleTitleImage.url,
+  image: "/images/product-pages/foquz_produkt_bundle_5er_text.jpg",
   color: "#85c8b5",
   isBundle: true,
   ingredients: flavorProducts.map((product) => product.name),
