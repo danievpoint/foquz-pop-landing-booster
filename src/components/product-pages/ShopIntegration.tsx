@@ -137,6 +137,6 @@ export function FreeShippingStatus({ selectedPrice }: { selectedPrice: number })
 export function ProductPromise() {
   return <div className="mt-4 mb-24 lg:mb-0 rounded-2xl border-2 border-black bg-white p-4 pb-5 shadow-[4px_4px_0_0_#000]">
     <h2 className="font-barlow font-extrabold text-base">UNSER VERSPRECHEN</h2>
-    <p className="mt-2 text-xs font-semibold leading-relaxed">Ungeöffnete Dosen kannst du innerhalb von 14 Tagen zurückschicken und bekommst dein Geld zurück. Geöffnete Dosen nehmen wir aus Hygienegründen nicht zurück (§ 312g Abs. 2 Nr. 3 BGB). Wenn mit deiner Bestellung etwas nicht stimmt, schreib uns an info@foquz.de und wir kümmern uns drum.</p>
+    <p className="mt-2 text-xs font-semibold leading-relaxed"><span className="font-extrabold">4 Wochen Duftgarantie:</span> Wenn der Duft nicht dein Ding ist, schreib uns einfach innerhalb von 4 Wochen an info@foquz.de und du bekommst dein Geld zurück — ob die Dose geöffnet ist oder nicht. Zusätzlich gilt: Ungeöffnete Dosen kannst du innerhalb von 14 Tagen zurückschicken (geöffnete Dosen nehmen wir aus Hygienegründen nicht zurück, § 312g Abs. 2 Nr. 3 BGB). Wenn mit deiner Bestellung etwas nicht stimmt, schreib uns an info@foquz.de und wir kümmern uns drum.</p>
   </div>;
 }
