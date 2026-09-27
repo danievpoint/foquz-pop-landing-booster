@@ -186,7 +186,7 @@ export const crewBundleProduct: Product = {
   originalPrice: "74,90€",
   numericPrice: 59.90,
   desc: "Zehn Dosen, alle fünf Sorten – je zwei Dosen pro Sorte.",
-  image: crewBundleTitleImage.url,
+  image: "/images/product-pages/foquz_produkt_bundle_10er_text.jpg",
   color: "#85c8b5",
   isBundle: true,
   ingredients: flavorProducts.map((product) => `2× ${product.name}`),
