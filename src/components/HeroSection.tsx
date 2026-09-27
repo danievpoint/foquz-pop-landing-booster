@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
 
@@ -78,8 +79,8 @@ const HeroSection = () => {
             Deine Riechdose für den Frischekick mit<br />echten Kräutern &amp; Menthol.
           </p>
           <div className="foquz-hero-actions">
-            <a href="#bundle" onClick={(e) => { e.preventDefault(); scrollToSection("#bundle"); }}
-              className="comic-btn bg-secondary text-secondary-foreground">POWER-BUNDLE HOLEN</a>
+            <Link to="/produkt/squad-bundle"
+              className="comic-btn bg-secondary text-secondary-foreground">SQUAD BUNDLE HOLEN</Link>
             <a href="#sorten" onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
               className="comic-btn bg-card text-foreground">EINZELN KAUFEN</a>
           </div>
