@@ -14,10 +14,10 @@ import PaymentLogos from "@/components/PaymentLogos";
 import { productImages } from "@/lib/redesignProductImages";
 
 const productCan = { url: "/images/product-pages/produkt-5er-einzeln-watermelon.png" };
-const kickBanner = { url: "/images/product-pages/watermelon-kick-banner.png" };
+const kickBanner = { url: "/images/product-pages/watermelon-kick-banner.webp" };
 
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lifestyle = { url: "/images/product-pages/watermelon-lifestyle.png" };
+const lifestyle = { url: "/images/product-pages/watermelon-lifestyle.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
 const ingredientsImage = { url: "/images/product-pages/watermelon-ingredients.png" };

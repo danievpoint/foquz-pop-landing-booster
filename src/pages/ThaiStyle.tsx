@@ -15,11 +15,11 @@ import { productImages } from "@/lib/redesignProductImages";
 
 const doseFoquz = { url: "/images/product-pages/produkt-5er-einzeln-thai.png" };
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.png" };
-const thaiLifestyle = { url: "/images/product-pages/thai-lifestyle.png" };
+const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.webp" };
+const thaiLifestyle = { url: "/images/product-pages/thai-lifestyle.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
-const thaiKickBanner = { url: "/images/product-pages/thai-kick-banner.png" };
+const thaiKickBanner = { url: "/images/product-pages/thai-kick-banner.webp" };
 const thaiIngredients = { url: "/images/product-pages/thai-ingredients.png" };
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
