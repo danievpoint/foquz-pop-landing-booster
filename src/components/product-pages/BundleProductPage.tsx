@@ -151,7 +151,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 
         {/* ===== Intro Image + Text ===== */}
         {(config.introImage || config.introHeadline || config.introText) && (
-          <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 pt-10 md:pt-14 lg:pt-16 pb-16 md:pb-20 lg:pb-24">
+          <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 pt-10 md:pt-14 lg:pt-16 pb-8 md:pb-20 lg:pb-24">
             <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
               {config.introImage && (
                 <div className="rounded-3xl border-4 border-black shadow-[8px_8px_0_0_#000] overflow-hidden">
@@ -182,7 +182,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
         )}
 
         {/* ===== Was ist drin ===== */}
-        <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 py-12 md:py-16 lg:py-20">
+        <section className="mx-auto w-full max-w-[1300px] px-4 sm:px-6 pt-8 pb-12 md:py-16 lg:py-20">
           <div className="rounded-3xl border-4 border-black shadow-[8px_8px_0_0_#000] p-5 sm:p-8 lg:p-10" style={{ backgroundColor: config.cardColor }}>
             <h2 className="font-barlow font-extrabold section-title text-center mb-6 md:mb-8 leading-none">
               WAS IST DRIN
