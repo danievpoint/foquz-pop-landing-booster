@@ -5,9 +5,7 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
-import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
-
-const foquzBox = foquzBundleClean.url;
+const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp";
 const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
 
 const squads = [

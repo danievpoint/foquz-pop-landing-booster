@@ -12,7 +12,6 @@ import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.ass
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
 import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
 import foquzBox from "@/assets/foquz-box.png";
-import foquzBundleClean from "@/assets/foquz-produkt-bundle-clean.webp.asset.json";
 
 export interface Product {
   name: string;
@@ -156,7 +155,7 @@ export const bundleProduct: Product = {
     ],
   },
 
-  image: foquzBundleClean.url,
+  image: "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp",
   color: "#75559f",
   isBundle: true,
   ingredients: [
