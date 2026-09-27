@@ -37,7 +37,7 @@ Ab auf Wolke 7 – mit der ganzen Crew.`,
         { name: "STICKER PACK", desc: "Exklusive FOQUZ Sticker", img: stickerAsset.url },
         { name: "NOSE STRIPS", desc: "Schwarz & Weiß", img: noseStripsAsset.url },
       ],
-      checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht"],
+      checks: ["5 Dosen voller Power", "Maximale Auswahl", "Kostenloser Versand innerhalb Deutschlands"],
       faqs: [
         { q: "Welche Sorten sind im Squad Bundle?", a: "Im 5er Squad Bundle steckt die volle FOQUZ-Auswahl: Peach Party, Lemon Breezy, Thai Style, Watermelon Flex und Blueberry Flow – je eine Dose pro Sorte." },
         { q: "Wofür ist FOQUZ?", a: "FOQUZ ist deine Frische-Dose für die Nase – für zwischendurch beim Arbeiten, Lernen, Zocken, Sport oder unterwegs. Einfach kurz riechen, tief durchatmen, weiter geht's." },
