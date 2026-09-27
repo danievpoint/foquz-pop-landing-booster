@@ -5,9 +5,9 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
-const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp";
-const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
-const crewBox = "/images/product-pages/foquz_produkt_bundle_10er.webp";
+const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
+const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.jpg";
+const crewBox = "/images/product-pages/foquz_produkt_bundle_10er_text.jpg";
 
 const squads = [
   {
@@ -16,8 +16,8 @@ const squads = [
     name: bundleProduct.name,
     image: foquzBox,
     imageAlt: "FOQUZ 3er Starter Bundle Box",
-    // Seitenverhältnis passend zum Bild (1920×1586), damit nichts beschnitten wird.
-    imageAspect: "1920 / 1586",
+    // Quadratisches Promobild – Rahmen passend zum Bild, nichts beschnitten.
+    imageAspect: "1 / 1",
     imageClass: "hover:scale-105",
     title: "3ER STARTER BUNDLE",
     description:
@@ -35,9 +35,9 @@ const squads = [
     name: "5ER SQUAD BUNDLE",
     image: squadBox,
     imageAlt: "FOQUZ 5er Squad Bundle",
-    // Gleicher Rahmen und engerer Ausschnitt wie beim 3er, damit der Karton gleich groß wirkt.
-    imageAspect: "1920 / 1586",
-    imageClass: "scale-[1.45] hover:scale-150",
+    // Quadratisches Promobild – Rahmen passend zum Bild, nichts beschnitten.
+    imageAspect: "1 / 1",
+    imageClass: "hover:scale-105",
     title: "5ER SQUAD BUNDLE",
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
@@ -54,7 +54,7 @@ const squads = [
     name: crewBundleProduct.name,
     image: crewBox,
     imageAlt: "FOQUZ 10er Crew Bundle",
-    imageAspect: "1920 / 1586",
+    imageAspect: "1 / 1",
     imageClass: "hover:scale-105",
     title: crewBundleProduct.name,
     description: crewBundleProduct.desc,
