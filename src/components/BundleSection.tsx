@@ -5,9 +5,9 @@ import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.png";
-const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp";
-const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_breiter.webp";
-const crewBox = "/images/product-pages/foquz_produkt_bundle_10er.webp";
+const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
+const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.jpg";
+const crewBox = "/images/product-pages/foquz_produkt_bundle_10er_text.jpg";
 
 const squads = [
   {
