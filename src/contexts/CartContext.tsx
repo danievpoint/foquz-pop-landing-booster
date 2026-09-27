@@ -129,6 +129,7 @@ const KNOWN_DISCOUNTS: Record<string, number> = {
   CLOUD10: 10,
   WOLKE7: 15,
   FOQUZ20: 20,
+  DROP20: 20,
 
 };
 
