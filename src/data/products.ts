@@ -156,7 +156,7 @@ export const bundleProduct: Product = {
     ],
   },
 
-  image: foquzBundleClean.url,
+  image: "/images/product-pages/foquz_produkt_bundle_3er_breiter.webp",
   color: "#75559f",
   isBundle: true,
   ingredients: [
