@@ -16,7 +16,7 @@ import { productImages } from "@/lib/redesignProductImages";
 const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
 const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.png" };
+const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
 const peachIngredients = { url: "/images/product-pages/peach-ingredients.png" };

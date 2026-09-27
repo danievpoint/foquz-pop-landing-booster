@@ -14,10 +14,10 @@ import PaymentLogos from "@/components/PaymentLogos";
 import { productImages } from "@/lib/redesignProductImages";
 
 const productCan = { url: "/images/product-pages/produkt-5er-einzeln-blueberry.png" };
-const kickBanner = { url: "/images/product-pages/blueberry-kick-banner.png" };
+const kickBanner = { url: "/images/product-pages/blueberry-kick-banner.webp" };
 
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lifestyle = { url: "/images/product-pages/blueberry-lifestyle.png" };
+const lifestyle = { url: "/images/product-pages/blueberry-lifestyle.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
 const ingredientsImage = { url: "/images/product-pages/blueberry-ingredients.png" };

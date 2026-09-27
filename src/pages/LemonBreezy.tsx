@@ -17,14 +17,14 @@ const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
 const lemonCan = { url: "/images/product-pages/lemon-can.png" };
 
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
-const lemonLifestyle = { url: "/images/product-pages/lemon-lifestyle.png" };
+const lemonLifestyle = { url: "/images/product-pages/lemon-lifestyle.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
 const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
 const lemonIngredients = { url: "/images/product-pages/lemon-ingredients.png" };
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
 const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
-const lemonKickBanner = { url: "/images/product-pages/lemon-kick-banner.png" };
+const lemonKickBanner = { url: "/images/product-pages/lemon-kick-banner.webp" };
 
 
 const ORANGE = "#f6871f";
