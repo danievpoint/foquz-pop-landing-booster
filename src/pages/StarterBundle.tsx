@@ -2,7 +2,7 @@ import BundleProductPage from "@/components/product-pages/BundleProductPage";
 import { products } from "@/data/products";
 
 
-const starterBundleHeaderImg = "/images/starter-bundle/header-mann-standard-3er.jpg";
+const starterBundleHeaderImg = "/images/starter-bundle/header-mann-standard-3er.webp";
 const starterBundleFlatlayImg = "/images/starter-bundle/3er-bundle-16zu9-3.jpg";
 
 const StarterBundle = () => (

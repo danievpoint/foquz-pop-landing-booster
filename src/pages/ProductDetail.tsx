@@ -15,7 +15,7 @@ import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, Coffee, Leaf, Flag, Check, Plus, Truck, Timer, Wind } from "lucide-react";
-import foquzBox from "@/assets/foquz-box.png";
+import foquzBox from "@/assets/foquz-box.webp";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";

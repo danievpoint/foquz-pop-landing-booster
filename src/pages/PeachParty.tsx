@@ -13,7 +13,7 @@ import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 
 const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
-const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
+const doseFoquz = { url: "/images/product-pages/dose-vergleich.webp" };
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
 const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.webp" };
 const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };

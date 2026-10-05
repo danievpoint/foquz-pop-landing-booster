@@ -1,6 +1,6 @@
-import productWatermelon from "@/assets/product-watermelon-new.png";
-import productThai from "@/assets/product-thai-new.png";
-import productLemon from "@/assets/product-lemon-new.png";
+import productWatermelon from "@/assets/product-watermelon-new.webp";
+import productThai from "@/assets/product-thai-new.webp";
+import productLemon from "@/assets/product-lemon-new.webp";
 import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
 import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
 import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
@@ -11,7 +11,7 @@ import blueberryFlowProductVideo from "@/assets/blueberry-flow-product.mp4.asset
 import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.asset.json";
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
 import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
-import foquzBox from "@/assets/foquz-box.png";
+import foquzBox from "@/assets/foquz-box.webp";
 
 export interface Product {
   name: string;
@@ -109,7 +109,7 @@ export const newFlavorProducts: Product[] = [
         "Kein Energy Drink. Kein Kaffee. Kein Nikotin.",
       ],
     },
-    image: "/images/product-pages/product-new-watermelon.png",
+    image: "/images/product-pages/product-new-watermelon.webp",
     video: watermelonFlexProductVideo.url,
     videoPoster: productWatermelonVideoPoster,
     color: "#e5566b",
@@ -129,7 +129,7 @@ export const newFlavorProducts: Product[] = [
         "Kein Energy Drink. Kein Kaffee. Kein Nikotin.",
       ],
     },
-    image: "/images/product-pages/product-new-blueberry.png",
+    image: "/images/product-pages/product-new-blueberry.webp",
     video: blueberryFlowProductVideo.url,
     videoPoster: productBlueberryVideoPoster,
     color: "#7b6cc0",
