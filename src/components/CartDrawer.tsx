@@ -560,7 +560,7 @@ const CartDrawer = () => {
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
-                            <Sparkles size={12} /> Empfehlung
+                            <Sparkles size={12} /> {u.label}
                           </div>
                           <h3 className="font-black text-sm uppercase leading-tight">{u.title}</h3>
                           <p className="text-xs text-muted-foreground mt-1">{u.desc}</p>
