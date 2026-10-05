@@ -3,20 +3,19 @@ import { Link } from "react-router-dom";
 import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
 
-const heroBgDesktop = "/images/hero/foquz-desktop.png";
-const heroBgMobile = "/images/hero/foquz-mobile.png";
+const heroBgDesktop = "/images/hero/foquz-desktop.webp";
+const heroBgMobile = "/images/hero/foquz-mobile.webp";
 
-const heroImagePromise = Promise.all(
-  [heroBgDesktop, heroBgMobile].map(
-    (src) =>
-      new Promise<void>((resolve) => {
+// Only fetch the hero image that matches the current screen (not both).
+const heroImagePromise: Promise<void> =
+  typeof window === "undefined"
+    ? Promise.resolve()
+    : new Promise<void>((resolve) => {
         const img = new Image();
         img.onload = () => resolve();
         img.onerror = () => resolve();
-        img.src = src;
-      }),
-  ),
-);
+        img.src = window.matchMedia("(min-width: 768px)").matches ? heroBgDesktop : heroBgMobile;
+      });
 
 // Wait for web fonts (Barlow / Bangers) so we never flash a fallback font (FOUT).
 const heroFontsPromise: Promise<unknown> =
@@ -37,7 +36,11 @@ export const heroReadyPromise = Promise.all([heroImagePromise, heroFontsPromise]
 export const useHeroReady = () => {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    heroReadyPromise.then(() => setReady(true));
+    heroReadyPromise.then(() => {
+      setReady(true);
+      // Tells the preload screen in index.html that the hero can be shown.
+      requestAnimationFrame(() => window.dispatchEvent(new Event("foquz:hero-ready")));
+    });
   }, []);
   return ready;
 };
