@@ -129,8 +129,8 @@ const CartDrawer = () => {
   const showBundleUpsell = !hasBundle && singlesCount > 0;
   const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
 
-  type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string; label: string };
-  const upsell5: Upsell = { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image, label: "Beliebteste Option" };
+  type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string; label: string; featured?: boolean };
+  const upsell5: Upsell = { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image, label: "Beliebteste Option", featured: true };
   const upsell3: Upsell = { id: BUNDLE_ID, name: "FOQUZ Power Bundle (3 Sorten)", title: "3er Power Bundle", desc: "Thai Style, Lemon Breezy & Peach Party", price: BUNDLE_LIST_PRICE, compareAt: 22.47, image: foquzBox, label: "Empfehlung" };
   const upsell10: Upsell = { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image, label: "Empfehlung" };
   const upsells: Upsell[] = [];
@@ -543,40 +543,64 @@ const CartDrawer = () => {
                   {/* Bundle upsell */}
                   {upsells.map((u) => {
                     const savings = (u.compareAt - u.price).toFixed(2).replace(".", ",");
+                    const featured = !!u.featured;
                     return (
                       <motion.div
                         key={u.id}
                         layout
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                        className={
+                          featured
+                            ? "rounded-xl border-2 border-black bg-violet-600 shadow-[6px_6px_0_0_#000] overflow-hidden"
+                            : "flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                        }
                       >
-                        <img
-                          src={u.image}
-                          alt={u.title}
-                          width={80}
-                          height={80}
-                          className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
-                            <Sparkles size={12} /> {u.label}
+                        {featured && (
+                          <div className="flex items-center justify-center gap-1.5 bg-[#ffd618] border-b-2 border-black px-3 py-1.5">
+                            <Sparkles size={13} className="text-black shrink-0" />
+                            <span className="font-black uppercase text-[11px] sm:text-xs tracking-wide leading-none text-black">
+                              {u.label}
+                            </span>
+                            <Sparkles size={13} className="text-black shrink-0" />
                           </div>
-                          <h3 className="font-black text-sm uppercase leading-tight">{u.title}</h3>
-                          <p className="text-xs text-muted-foreground mt-1">{u.desc}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            <span className="line-through">€{u.compareAt.toFixed(2).replace(".", ",")}</span>{" "}
-                            <span className="font-black text-foreground">€{u.price.toFixed(2).replace(".", ",")}</span>{" "}
-                            <span className="font-bold text-green-700">(spare €{savings})</span>
-                          </p>
-                          <button
-                            onClick={() =>
-                              addToCart(1, { id: u.id, name: u.name, price: u.price, image: u.image })
-                            }
-                            className="comic-btn bg-primary text-primary-foreground text-xs py-1.5 px-4 mt-2"
-                          >
-                            BUNDLE HINZUFÜGEN
-                          </button>
+                        )}
+                        <div className="flex gap-3 sm:gap-4 p-3 sm:p-4">
+                          <img
+                            src={u.image}
+                            alt={u.title}
+                            width={80}
+                            height={80}
+                            className={`w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0 ${featured ? "border-2 border-black bg-white" : ""}`}
+                          />
+                          <div className="flex-1 min-w-0">
+                            {!featured && (
+                              <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
+                                <Sparkles size={12} /> {u.label}
+                              </div>
+                            )}
+                            <h3 className={`font-black text-sm uppercase leading-tight ${featured ? "text-white" : ""}`}>
+                              {u.title}
+                            </h3>
+                            <p className={`text-xs mt-1 ${featured ? "text-white/85" : "text-muted-foreground"}`}>{u.desc}</p>
+                            <p className={`text-xs mt-0.5 ${featured ? "text-white/85" : "text-muted-foreground"}`}>
+                              <span className="line-through">€{u.compareAt.toFixed(2).replace(".", ",")}</span>{" "}
+                              <span className={`font-black ${featured ? "text-white" : "text-foreground"}`}>
+                                €{u.price.toFixed(2).replace(".", ",")}
+                              </span>{" "}
+                              <span className={`font-bold ${featured ? "text-[#ffd618]" : "text-green-700"}`}>
+                                (spare €{savings})
+                              </span>
+                            </p>
+                            <button
+                              onClick={() =>
+                                addToCart(1, { id: u.id, name: u.name, price: u.price, image: u.image })
+                              }
+                              className={`comic-btn text-xs py-1.5 px-4 mt-2 ${featured ? "bg-[#ffd618] text-black" : "bg-primary text-primary-foreground"}`}
+                            >
+                              BUNDLE HINZUFÜGEN
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
                     );
