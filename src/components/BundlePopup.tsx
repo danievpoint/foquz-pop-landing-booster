@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import foquzBox from "@/assets/foquz-box.png";
+import foquzBox from "@/assets/foquz-box.webp";
 import { Link } from "react-router-dom";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 

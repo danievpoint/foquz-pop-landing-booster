@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 
-const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
+const doseFoquz = { url: "/images/product-pages/dose-vergleich.webp" };
 const lemonCan = { url: "/images/product-pages/lemon-can.png" };
 
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import whyfoquzBg from "@/assets/whyfoquz-bg.png";
+import whyfoquzBg from "@/assets/whyfoquz-bg.webp";
 import iconYourFocus from "@/assets/icon-your-focus.svg";
 import iconYourCloud from "@/assets/icon-your-cloud.svg";
 import iconYourNose from "@/assets/icon-your-nose.svg";
