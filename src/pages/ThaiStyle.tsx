@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
-import { productImages } from "@/lib/redesignProductImages";
 
 const doseFoquz = { url: "/images/product-pages/produkt-5er-einzeln-thai.png" };
 const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
