@@ -663,19 +663,48 @@ const BlueberryFlowInner = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
             {[
-              { name: "PEACH PARTY", image: productImages.peach, href: "/produkte/peach-party" },
-              { name: "THAI STYLE", image: productImages.thai, href: "/produkte/thai-style" },
+              {
+                name: "5ER SQUAD BUNDLE",
+                desc: "je 1× alle fünf Sorten",
+                price: "34,90 €",
+                compareAt: "37,45 €",
+                tag: "BELIEBTESTE WAHL",
+                tagClass: "bg-yellow-400 text-black",
+                cta: "5ER HOLEN",
+                image: "/images/product-pages/foquz_produkt_bundle_5er.webp",
+                href: "/produkt/squad-bundle",
+              },
+              {
+                name: "10ER POWER-BUNDLE",
+                desc: "je 2× alle fünf Sorten",
+                price: "59,90 €",
+                compareAt: "74,90 €",
+                tag: "SPARE 20 %",
+                tagClass: "bg-violet-600 text-white",
+                cta: "10ER HOLEN",
+                image: "/images/product-pages/foquz_produkt_bundle_10er.webp",
+                href: "/produkt/zehner-bundle",
+              },
             ].map((p) => (
               <div key={p.name} className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
-                <Link to={p.href} className="block overflow-hidden">
-                  <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
-                </Link>
+                <div className="relative">
+                  <span className={`absolute left-2 top-2 z-10 inline-flex items-center rounded-full border-2 border-black px-2 py-0.5 text-[9px] font-black uppercase leading-none shadow-[2px_2px_0_0_#000] sm:text-[10px] ${p.tagClass}`}>
+                    {p.tag}
+                  </span>
+                  <Link to={p.href} className="block overflow-hidden">
+                    <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
+                  </Link>
+                </div>
                 <div className="p-3 md:p-4 text-center">
                   <Link to={p.href}><h3 className="font-barlow font-extrabold mb-1 text-sm">{p.name}</h3></Link>
-                  <p className="text-[11px] text-muted-foreground mb-2">{shop.priceFor(p.name)}</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">{p.desc}</p>
+                  <p className="mb-2 text-[11px]">
+                    <span className="font-extrabold">{p.price}</span>{" "}
+                    <span className="text-muted-foreground line-through">{p.compareAt}</span>
+                  </p>
                   <Link to={p.href}>
                     <button className="comic-btn w-full text-[10px] sm:text-[11px] py-2 px-2 font-extrabold" style={{ backgroundColor: "#ffd618", color: "#000" }}>
-                      JETZT ENTDECKEN
+                      {p.cta}
                     </button>
                   </Link>
                 </div>
