@@ -91,7 +91,7 @@
         function contentState(){
           var r=document.getElementById('root');if(!r||!r.children.length)return 0;
           var els=r.querySelectorAll('img,h1'),seen=0,pending=0;
-          for(var i=0;i<els.length;i++){var e=els[i];if(e.closest('[data-chrome]'))continue;var b=e.getBoundingClientRect();if(!b.width||b.top>=innerHeight||b.bottom<=0)continue;seen++;if(e.tagName==='IMG'&&!e.complete)pending++;}
+          for(var i=0;i<els.length;i++){var e=els[i];var b=e.getBoundingClientRect();if(!b.width||b.top>=innerHeight||b.bottom<=0)continue;if(e.closest('[data-chrome]')){if(e.tagName==='IMG'&&!e.complete)pending++;continue;}seen++;if(e.tagName==='IMG'&&!e.complete)pending++;}
           return !seen?0:(pending?1:2);
         }
         var start=Date.now();
