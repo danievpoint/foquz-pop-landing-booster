@@ -670,7 +670,7 @@ const WatermelonFlexInner = () => {
                 tag: "BELIEBTESTE WAHL",
                 tagClass: "bg-yellow-400 text-black",
                 cta: "5ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_5er.webp",
+                image: "/images/product-pages/foquz_produkt_bundle_5er_text.jpg",
                 href: "/produkt/squad-bundle",
               },
               {
@@ -681,7 +681,7 @@ const WatermelonFlexInner = () => {
                 tag: "SPARE 20 %",
                 tagClass: "bg-violet-600 text-white",
                 cta: "10ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_10er.webp",
+                image: "/images/product-pages/foquz_produkt_bundle_10er_text.jpg",
                 href: "/produkt/zehner-bundle",
               },
             ].map((p) => (
