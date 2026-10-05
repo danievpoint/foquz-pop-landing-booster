@@ -86,19 +86,26 @@
         var done=false,isHome=location.pathname==='/'||location.pathname==='';
         function loadKlaviyo(){setTimeout(function(){var k=document.createElement('script');k.async=true;k.src='https://static.klaviyo.com/onsite/js/WE63iq/klaviyo.js';document.head.appendChild(k);},2500);}
         function hide(){if(done)return;done=true;var el=document.getElementById('foquz-preload');if(el){el.classList.add('hide');setTimeout(function(){el.remove()},400);}loadKlaviyo();}
-        function viewportImagesDone(){
-          var r=document.getElementById('root');if(!r||!r.children.length)return false;
-          var nav=document.getElementById('site-navbar');
-          var imgs=r.querySelectorAll('img'),content=0;
-          for(var i=0;i<imgs.length;i++){if(nav&&nav.contains(imgs[i]))continue;var b=imgs[i].getBoundingClientRect();if(!b.width||b.top>=innerHeight||b.bottom<=0)continue;content++;if(!imgs[i].complete)return false;}
-          return content>0;
+        // Status of the visible page content (navbar + marquee are ignored, they must never show alone).
+        // 0 = page content not rendered yet, 1 = rendered but images still loading, 2 = complete.
+        function contentState(){
+          var r=document.getElementById('root');if(!r||!r.children.length)return 0;
+          var els=r.querySelectorAll('img,h1'),seen=0,pending=0;
+          for(var i=0;i<els.length;i++){var e=els[i];if(e.closest('[data-chrome]'))continue;var b=e.getBoundingClientRect();if(!b.width||b.top>=innerHeight||b.bottom<=0)continue;seen++;if(e.tagName==='IMG'&&!e.complete)pending++;}
+          return !seen?0:(pending?1:2);
         }
+        var start=Date.now();
         if(isHome){window.addEventListener('foquz:hero-ready',function(){requestAnimationFrame(hide)});}
-        else{
-          var fonts=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
-          fonts.then(function(){var t=setInterval(function(){if(document.readyState!=='loading'&&viewportImagesDone()){clearInterval(t);requestAnimationFrame(hide);}},80);});
-        }
-        setTimeout(hide,4000);
+        var fonts=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+        fonts.then(function(){var t=setInterval(function(){
+          if(done){clearInterval(t);return;}
+          if(document.readyState==='loading')return;
+          var s=contentState(),el=Date.now()-start;
+          // Normal case: everything visible is loaded. Slow network: after 4.5s show the page as soon as its
+          // content (not just the navbar) is there; images then fade in.
+          if((!isHome&&s===2)||(s>=1&&el>4500)){clearInterval(t);requestAnimationFrame(hide);}
+        },80);});
+        setTimeout(hide,9000);
       })();
     </script>
     <div id="root"></div>
