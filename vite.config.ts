@@ -19,11 +19,14 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    // Inline the header background so the navbar logo/clouds paint together with the page.
+    assetsInlineLimit: (file: string) => (/navbar-header-bg\.(svg|webp)$/.test(file) ? true : undefined),
     rollupOptions: {
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-ui": ["framer-motion", "recharts", "canvas-confetti"],
+          // recharts is only used by the dashboard – keep it off the critical path.
+          "vendor-ui": ["framer-motion"],
           "vendor-supabase": ["@supabase/supabase-js"],
         },
       },

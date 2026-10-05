@@ -10,6 +10,7 @@
     --safe-area-top: env(safe-area-inset-top, 0px);
     --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     --marquee-height: 0px;
+    --marquee-full: 0px;
 
     --background: 203 92% 89%;
     --foreground: 0 0% 0%;

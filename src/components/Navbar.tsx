@@ -101,8 +101,9 @@ const Navbar = () => {
     <>
     <nav
       id="site-navbar"
-      className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
-      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+      className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-shadow duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
+      data-chrome
+      style={{ top: "calc(var(--safe-area-top) + var(--marquee-full))", transform: "translate3d(0, calc(var(--marquee-height) - var(--marquee-full)), 0)", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
