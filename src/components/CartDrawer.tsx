@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
-import { products as allSorten, allProducts } from "@/data/products";
+import { products as allSorten, allProducts, squadBundleProduct, crewBundleProduct } from "@/data/products";
 import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
@@ -117,8 +117,10 @@ const CartDrawer = () => {
   const hasAppliedDiscount = Boolean(discountCode) && discountAmount > 0;
   const discountRatio = total > 0 && hasAppliedDiscount ? discountedTotal / total : 1;
 
-  // Bundle upsell
+  // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const hasBundle = items.some((i) => i.id === BUNDLE_ID);
+  const hasSquad = items.some((i) => i.id === "squad-bundle");
+  const hasCrew = items.some((i) => i.id === "vorrats-bundle");
   const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
   const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
   const paidSingleCanQty = items
@@ -126,8 +128,22 @@ const CartDrawer = () => {
     .reduce((s, i) => s + i.qty, 0);
   const showBundleUpsell = !hasBundle && singlesCount > 0;
   const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
-  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_LIST_PRICE).toFixed(2).replace(".", ",");
-  const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
+
+  type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string };
+  const upsells: Upsell[] = [];
+  if (!hasCrew) {
+    if (hasSquad) {
+      upsells.push({ id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image });
+    } else if (hasBundle) {
+      upsells.push({ id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image });
+    } else if (showBundleUpsell) {
+      upsells.push(
+        { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image },
+        { id: BUNDLE_ID, name: "FOQUZ Power Bundle (3 Sorten)", title: "3er Power Bundle", desc: "Thai Style, Lemon Breezy & Peach Party", price: BUNDLE_LIST_PRICE, compareAt: 22.47, image: foquzBox },
+        { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image },
+      );
+    }
+  }
 
   // Shipping/savings
   const hasAlwaysFreeBundle = items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id));
@@ -526,48 +542,46 @@ const CartDrawer = () => {
                   )}
 
                   {/* Bundle upsell */}
-                  {showBundleUpsell && (
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
-                    >
-                      <img
-                        src={foquzBox}
-                        alt="FOQUZ Power Bundle"
-                        width={80}
-                        height={80}
-                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
-                          <Sparkles size={12} /> Empfehlung
+                  {upsells.map((u) => {
+                    const savings = (u.compareAt - u.price).toFixed(2).replace(".", ",");
+                    return (
+                      <motion.div
+                        key={u.id}
+                        layout
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 border-dashed border-foreground/50 bg-[#ffd618]/20"
+                      >
+                        <img
+                          src={u.image}
+                          alt={u.title}
+                          width={80}
+                          height={80}
+                          className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-primary">
+                            <Sparkles size={12} /> Empfehlung
+                          </div>
+                          <h3 className="font-black text-sm uppercase leading-tight">{u.title}</h3>
+                          <p className="text-xs text-muted-foreground mt-1">{u.desc}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            <span className="line-through">€{u.compareAt.toFixed(2).replace(".", ",")}</span>{" "}
+                            <span className="font-black text-foreground">€{u.price.toFixed(2).replace(".", ",")}</span>{" "}
+                            <span className="font-bold text-green-700">(spare €{savings})</span>
+                          </p>
+                          <button
+                            onClick={() =>
+                              addToCart(1, { id: u.id, name: u.name, price: u.price, image: u.image })
+                            }
+                            className="comic-btn bg-primary text-primary-foreground text-xs py-1.5 px-4 mt-2"
+                          >
+                            BUNDLE HINZUFÜGEN
+                          </button>
                         </div>
-                        <h3 className="font-black text-sm uppercase leading-tight">
-                          Alle 3 Sorten – Power Bundle
-                        </h3>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          3× einzeln <span className="line-through">€{singlesPriceLabel}</span> → Bundle{" "}
-                          <span className="font-black text-foreground">€{BUNDLE_LIST_PRICE.toFixed(2)}</span>{" "}
-                          <span className="font-bold text-green-700">(spare €{bundleSavings})</span>
-                        </p>
-                        <button
-                          onClick={() =>
-                            addToCart(1, {
-                              id: BUNDLE_ID,
-                              name: "FOQUZ Power Bundle (3 Sorten)",
-                              price: BUNDLE_LIST_PRICE,
-                              image: foquzBox,
-                            })
-                          }
-                          className="comic-btn bg-primary text-primary-foreground text-xs py-1.5 px-4 mt-2"
-                        >
-                          BUNDLE HINZUFÜGEN
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
+                      </motion.div>
+                    );
+                  })}
 
                   {/* Nachschub-Upsell (Carousel) */}
                   {suggestions.length > 0 && (
