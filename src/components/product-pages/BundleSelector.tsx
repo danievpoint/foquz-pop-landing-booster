@@ -86,11 +86,6 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                           GRATIS VERSAND
                         </span>
                       )}
-                      {b.dosen >= 5 && (
-                        <span className={`hidden rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none sm:inline-flex ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
-                          STICKERS &amp; NASENSTRIPES GRATIS
-                        </span>
-                      )}
                     </span>
                     <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${yellow ? "text-black/80" : "text-white/90"}`}>
                       {b.desc}
