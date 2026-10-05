@@ -1,11 +1,12 @@
-import ZehnerBundle from "./pages/ZehnerBundle";
-import SquadBundle from "./pages/SquadBundle";
-import StarterBundle from "./pages/StarterBundle";
-import PeachParty from "./pages/PeachParty";
-import ThaiStyle from "./pages/ThaiStyle";
-import LemonBreezy from "./pages/LemonBreezy";
-import WatermelonFlex from "./pages/WatermelonFlex";
-import BlueberryFlow from "./pages/BlueberryFlow";
+import { lazy, Suspense } from "react";
+const ZehnerBundle = lazy(() => import("./pages/ZehnerBundle"));
+const SquadBundle = lazy(() => import("./pages/SquadBundle"));
+const StarterBundle = lazy(() => import("./pages/StarterBundle"));
+const PeachParty = lazy(() => import("./pages/PeachParty"));
+const ThaiStyle = lazy(() => import("./pages/ThaiStyle"));
+const LemonBreezy = lazy(() => import("./pages/LemonBreezy"));
+const WatermelonFlex = lazy(() => import("./pages/WatermelonFlex"));
+const BlueberryFlow = lazy(() => import("./pages/BlueberryFlow"));
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import PullToRefresh from "@/components/PullToRefresh";
@@ -14,30 +15,30 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
-import Datenschutz from "./pages/Datenschutz";
-import Impressum from "./pages/Impressum";
+const Datenschutz = lazy(() => import("./pages/Datenschutz"));
+const Impressum = lazy(() => import("./pages/Impressum"));
 
-import UeberUns from "./pages/UeberUns";
-import DasIstDrin from "./pages/DasIstDrin";
-import AGB from "./pages/AGB";
-import Widerrufsbelehrung from "./pages/Widerrufsbelehrung";
-import Versandbedingungen from "./pages/Versandbedingungen";
-import B2BAnfragen from "./pages/B2BAnfragen";
-import Anleitung from "./pages/Anleitung";
-import HelpCenter from "./pages/HelpCenter";
-import Faq from "./pages/Faq";
-import ProductDetail from "./pages/ProductDetail";
+const UeberUns = lazy(() => import("./pages/UeberUns"));
+const DasIstDrin = lazy(() => import("./pages/DasIstDrin"));
+const AGB = lazy(() => import("./pages/AGB"));
+const Widerrufsbelehrung = lazy(() => import("./pages/Widerrufsbelehrung"));
+const Versandbedingungen = lazy(() => import("./pages/Versandbedingungen"));
+const B2BAnfragen = lazy(() => import("./pages/B2BAnfragen"));
+const Anleitung = lazy(() => import("./pages/Anleitung"));
+const HelpCenter = lazy(() => import("./pages/HelpCenter"));
+const Faq = lazy(() => import("./pages/Faq"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 
 import ScrollToHash from "./components/ScrollToHash";
 import GlobalMarquee from "./components/GlobalMarquee";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import KlaviyoNewsletterBridge from "./components/KlaviyoNewsletterBridge";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import DiscountRedirect from "./pages/DiscountRedirect";
-import ShopifyRedirectRoute from "./pages/ShopifyRedirectRoute";
-import NewsletterConfirmed from "./pages/NewsletterConfirmed";
-import Unsubscribe from "./pages/Unsubscribe";
+const Auth = lazy(() => import("./pages/Auth"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const DiscountRedirect = lazy(() => import("./pages/DiscountRedirect"));
+const ShopifyRedirectRoute = lazy(() => import("./pages/ShopifyRedirectRoute"));
+const NewsletterConfirmed = lazy(() => import("./pages/NewsletterConfirmed"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 
 
 
@@ -57,6 +58,7 @@ const App = () => {
                 <ScrollToHash />
                 <AnalyticsTracker />
                 <GlobalMarquee />
+              <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/discount/:code" element={<DiscountRedirect />} />
@@ -104,6 +106,7 @@ const App = () => {
                 <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="*" element={<ShopifyRedirectRoute />} />
               </Routes>
+              </Suspense>
             </BrowserRouter>
           </PullToRefresh>
         </TooltipProvider>
