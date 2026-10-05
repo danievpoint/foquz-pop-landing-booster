@@ -88,9 +88,10 @@
         function hide(){if(done)return;done=true;var el=document.getElementById('foquz-preload');if(el){el.classList.add('hide');setTimeout(function(){el.remove()},400);}loadKlaviyo();}
         function viewportImagesDone(){
           var r=document.getElementById('root');if(!r||!r.children.length)return false;
-          var imgs=r.querySelectorAll('img');if(!imgs.length)return false;
-          for(var i=0;i<imgs.length;i++){var b=imgs[i].getBoundingClientRect();if(b.width&&b.top<innerHeight&&b.bottom>0&&!imgs[i].complete)return false;}
-          return true;
+          var nav=document.getElementById('site-navbar');
+          var imgs=r.querySelectorAll('img'),content=0;
+          for(var i=0;i<imgs.length;i++){if(nav&&nav.contains(imgs[i]))continue;var b=imgs[i].getBoundingClientRect();if(!b.width||b.top>=innerHeight||b.bottom<=0)continue;content++;if(!imgs[i].complete)return false;}
+          return content>0;
         }
         if(isHome){window.addEventListener('foquz:hero-ready',function(){requestAnimationFrame(hide)});}
         else{
