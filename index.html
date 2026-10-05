@@ -78,12 +78,10 @@
       html,body{background:#ffffff;}
       #foquz-preload{position:fixed;inset:0;z-index:2147483646;background:#ffffff;display:flex;align-items:center;justify-content:center;transition:opacity .35s ease;}
       #foquz-preload.hide{opacity:0;pointer-events:none;}
-      #foquz-preload span{width:44px;height:44px;border-radius:50%;border:4px solid rgba(0,0,0,.12);border-top-color:#000;animation:fqp .7s linear infinite;}
-      @keyframes fqp{to{transform:rotate(360deg)}}
     </style>
   </head>
   <body>
-    <div id="foquz-preload" aria-hidden="true"><span></span></div>
+    <div id="foquz-preload" aria-hidden="true"></div>
     <script>
       (function(){
         var done=false,isHome=location.pathname==='/'||location.pathname==='';
