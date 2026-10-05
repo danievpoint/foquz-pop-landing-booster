@@ -12,13 +12,13 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 
-const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
+const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.webp" };
 const doseFoquz = { url: "/images/product-pages/dose-vergleich.webp" };
-const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
+const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.webp" };
 const lifestyleNase = { url: "/images/product-pages/lifestyle-nase.webp" };
-const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
-const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
-const peachIngredients = { url: "/images/product-pages/peach-ingredients.png" };
+const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.webp" };
+const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.webp" };
+const peachIngredients = { url: "/images/product-pages/peach-ingredients.webp" };
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
 const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
@@ -673,7 +673,7 @@ const PeachPartyInner = () => {
                 tag: "BELIEBTESTE WAHL",
                 tagClass: "bg-yellow-400 text-black",
                 cta: "5ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_5er_text.jpg",
+                image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp",
                 href: "/produkt/squad-bundle",
               },
               {
@@ -684,7 +684,7 @@ const PeachPartyInner = () => {
                 tag: "SPARE 20 %",
                 tagClass: "bg-violet-600 text-white",
                 cta: "10ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_10er_text.jpg",
+                image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp",
                 href: "/produkt/zehner-bundle",
               },
             ].map((p) => (

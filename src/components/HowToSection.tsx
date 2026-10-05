@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import lifestyleImg from "@/assets/lifestyle-howto.png";
+import lifestyleImg from "@/assets/lifestyle-howto.webp";
 import howtoBgVideo from "@/assets/howto-bg-video.mp4";
 import howtoIcon01 from "@/assets/howto-icon-01.svg";
 import howtoIcon02 from "@/assets/howto-icon-02.svg";

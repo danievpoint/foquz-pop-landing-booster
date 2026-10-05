@@ -12,14 +12,14 @@ import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
 
-const productCan = { url: "/images/product-pages/produkt-5er-einzeln-watermelon.png" };
+const productCan = { url: "/images/product-pages/produkt-5er-einzeln-watermelon.webp" };
 const kickBanner = { url: "/images/product-pages/watermelon-kick-banner.webp" };
 
-const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.png" };
+const doseIncognito = { url: "/images/product-pages/dose-vergleich-incognito.webp" };
 const lifestyle = { url: "/images/product-pages/watermelon-lifestyle.webp" };
-const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.png" };
-const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.png" };
-const ingredientsImage = { url: "/images/product-pages/watermelon-ingredients.png" };
+const comparisonNasenspray = { url: "/images/product-pages/comparison-nasenspray.webp" };
+const comparisonEnergy = { url: "/images/product-pages/comparison-energydrink.webp" };
+const ingredientsImage = { url: "/images/product-pages/watermelon-ingredients.webp" };
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
 const howToStep3 = { url: "/images/product-pages/how-to-step-3.svg" };
@@ -670,7 +670,7 @@ const WatermelonFlexInner = () => {
                 tag: "BELIEBTESTE WAHL",
                 tagClass: "bg-yellow-400 text-black",
                 cta: "5ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_5er_text.jpg",
+                image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp",
                 href: "/produkt/squad-bundle",
               },
               {
@@ -681,7 +681,7 @@ const WatermelonFlexInner = () => {
                 tag: "SPARE 20 %",
                 tagClass: "bg-violet-600 text-white",
                 cta: "10ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_10er_text.jpg",
+                image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp",
                 href: "/produkt/zehner-bundle",
               },
             ].map((p) => (

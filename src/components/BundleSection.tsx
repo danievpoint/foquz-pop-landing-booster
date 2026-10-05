@@ -4,10 +4,10 @@ import { bundleProduct, crewBundleProduct } from "@/data/products";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
-import bundleBg from "@/assets/bundle-bg.png";
+import bundleBg from "@/assets/bundle-bg.webp";
 const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
-const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.jpg";
-const crewBox = "/images/product-pages/foquz_produkt_bundle_10er_text.jpg";
+const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.webp";
+const crewBox = "/images/product-pages/foquz_produkt_bundle_10er_text.webp";
 
 const squads = [
   {

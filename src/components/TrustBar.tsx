@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import iconLeaf from "@/assets/icon-trust-leaf.png";
+import iconLeaf from "@/assets/icon-trust-leaf.webp";
 import iconBolt from "@/assets/icon-trust-bolt.png";
-import iconNoCoffee from "@/assets/icon-trust-nocoffee.png";
+import iconNoCoffee from "@/assets/icon-trust-nocoffee.webp";
 import iconShipping from "@/assets/icon-trust-shipping.png";
-import iconLegal from "@/assets/icon-trust-legal.png";
+import iconLegal from "@/assets/icon-trust-legal.webp";
 
 const trustItems = [
   { icon: iconLeaf, label: "100% ÄTHERISCHE ÖLE" },

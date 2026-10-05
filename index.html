@@ -91,7 +91,7 @@
         function hide(){if(done)return;done=true;var el=document.getElementById('foquz-preload');if(el){el.classList.add('hide');setTimeout(function(){el.remove()},400);}loadKlaviyo();}
         function viewportImagesDone(){
           var r=document.getElementById('root');if(!r||!r.children.length)return false;
-          var imgs=r.querySelectorAll('img');
+          var imgs=r.querySelectorAll('img');if(!imgs.length)return false;
           for(var i=0;i<imgs.length;i++){var b=imgs[i].getBoundingClientRect();if(b.width&&b.top<innerHeight&&b.bottom>0&&!imgs[i].complete)return false;}
           return true;
         }
@@ -100,7 +100,7 @@
           var fonts=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
           fonts.then(function(){var t=setInterval(function(){if(document.readyState!=='loading'&&viewportImagesDone()){clearInterval(t);requestAnimationFrame(hide);}},80);});
         }
-        setTimeout(hide,isHome?6000:5000);
+        setTimeout(hide,4000);
       })();
     </script>
     <div id="root"></div>
