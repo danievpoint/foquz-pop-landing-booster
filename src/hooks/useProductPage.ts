@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { products, allProducts, bundleProduct, squadBundleProduct, flavorProducts } from "@/data/products";
+import { products, allProducts, bundleProduct, squadBundleProduct, crewBundleProduct, flavorProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
@@ -17,6 +17,7 @@ export function useProductPage(handle: string) {
     { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name },
     { label: "3 DOSEN", desc: "Thai Style, Lemon Breezy & Peach Party", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "7,30", dosen: 3, tag: "SPARE 3 %", productName: bundleProduct.name, id: "starter-bundle" },
     { label: "5 DOSEN", desc: "je 1× alle fünf Sorten", price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "6,98", dosen: 5, tag: "SPARE 7 %", productName: squadBundleProduct.name, id: "squad-bundle" },
+    { label: "10 DOSEN", desc: "je 2× alle fünf Sorten", price: crewBundleProduct.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: "SPARE 20 %", productName: crewBundleProduct.name, id: "vorrats-bundle" },
   ];
   const bundles = handle === "vorrats-bundle" ? [
     { label: "10 DOSEN – POWER-BUNDLE", desc: "Je 2× alle fünf Sorten", price: product.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: "SPARE 20 %", productName: product.name, id: product.handle },
@@ -34,7 +35,7 @@ export function useProductPage(handle: string) {
       const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
-      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : selection.id === "squad-bundle" ? squadBundleProduct.image : bundleProduct.image });
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : selection.id === "squad-bundle" ? squadBundleProduct.image : selection.id === "vorrats-bundle" ? crewBundleProduct.image : bundleProduct.image });
     }
   };
 
