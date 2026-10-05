@@ -73,8 +73,31 @@
         "url": "https://www.foquz.de/"
       }
     </script>
+    <style>
+      html,body{background:#ffffff;}
+      #foquz-preload{position:fixed;inset:0;z-index:2147483646;background:#ffffff;display:flex;align-items:center;justify-content:center;transition:opacity .35s ease;}
+      #foquz-preload.hide{opacity:0;pointer-events:none;}
+      #foquz-preload span{font:900 44px/1 system-ui,Arial,sans-serif;letter-spacing:.04em;color:#000;animation:fqp 1s ease-in-out infinite alternate;}
+      @keyframes fqp{from{opacity:.35;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    </style>
   </head>
   <body>
+    <div id="foquz-preload" aria-hidden="true"><span>FOQUZ</span></div>
+    <script>
+      (function(){
+        var done=false,start=Date.now();
+        function hide(){if(done)return;done=true;var el=document.getElementById('foquz-preload');if(!el)return;el.classList.add('hide');setTimeout(function(){el.remove()},400);}
+        function ready(){
+          var fonts=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+          fonts.then(function(){
+            var imgs=[].slice.call(document.querySelectorAll('#root img')).filter(function(i){var r=i.getBoundingClientRect();return r.top<window.innerHeight&&r.bottom>0&&!i.complete;});
+            return Promise.all(imgs.map(function(i){return new Promise(function(res){i.addEventListener('load',res,{once:true});i.addEventListener('error',res,{once:true});});}));
+          }).then(function(){requestAnimationFrame(function(){requestAnimationFrame(hide)});});
+        }
+        if(document.readyState==='complete')setTimeout(ready,50);else window.addEventListener('load',function(){setTimeout(ready,50)});
+        setTimeout(hide,8000);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script async src="https://loox.io/widget/loox.js?shop=foquz-pop-landing-booster-xb8ca.myshopify.com"></script>
