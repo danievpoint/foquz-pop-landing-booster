@@ -6,6 +6,14 @@ const price = (value: number) => value.toFixed(2).replace(".", ",");
 
 type Bundle = ReturnType<typeof useProductPage>["bundles"][number];
 
+/** Ersparnis in Euro aus durchgestrichenem Preis und Bundle-Preis. */
+const savings = (b: Bundle) => {
+  if (!b.oldPrice) return null;
+  const old = parseFloat(b.oldPrice.replace("€", "").replace(/\./g, "").replace(",", "."));
+  const diff = old - b.price;
+  return Number.isFinite(diff) && diff > 0.009 ? diff : null;
+};
+
 interface BundleSelectorProps {
   bundles: Bundle[];
   selected: string;
@@ -21,9 +29,12 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
     <div className={`space-y-4 pt-2 ${className}`}>
       {bundles.map((b) => {
         const isSelected = selected === b.label;
-        const isBundle = b.dosen > 1;
+        const save = savings(b);
+        // Farbcode: 1 + 3 Dosen weiß, 5 Dosen lila, 10 Dosen gelb (#FFD11A)
+        const highlight = b.dosen >= 10 ? "yellow" : b.dosen >= 5 ? "violet" : null;
 
-        if (isBundle) {
+        if (highlight) {
+          const yellow = highlight === "yellow";
           return (
             <div key={b.label} className="relative">
               <button
@@ -32,9 +43,9 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 aria-pressed={isSelected}
                 className={[
                   "group relative w-full overflow-hidden rounded-2xl border-4 border-black p-3 text-left transition-all duration-300",
-                  "bg-violet-600 text-white",
+                  yellow ? "bg-[#FFD11A] text-black" : "bg-violet-600 text-white",
                   isSelected
-                    ? "shadow-[6px_6px_0_0_#000] -translate-y-0.5 ring-4 ring-violet-400/50"
+                    ? `shadow-[6px_6px_0_0_#000] -translate-y-0.5 ring-4 ${yellow ? "ring-[#FFD11A]/70" : "ring-violet-400/50"}`
                     : "shadow-[4px_4px_0_0_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000]",
                 ].join(" ")}
               >
@@ -42,7 +53,8 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 <span
                   aria-hidden="true"
                   className={[
-                    "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-violet-400 blur-xl transition-opacity duration-500",
+                    "pointer-events-none absolute inset-0 -z-10 rounded-2xl blur-xl transition-opacity duration-500",
+                    yellow ? "bg-[#FFD11A]" : "bg-violet-400",
                     isSelected ? "opacity-40" : "opacity-0",
                   ].join(" ")}
                 />
@@ -55,7 +67,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
 
                 <span className="relative z-10 flex items-center gap-2">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white">
-                    {isSelected && <span className="h-3 w-3 rounded-full bg-yellow-400 border border-black" />}
+                    {isSelected && <span className={`h-3 w-3 rounded-full border border-black ${yellow ? "bg-black" : "bg-[#FFD11A]"}`} />}
                   </span>
 
                   <span className="flex-1">
@@ -63,11 +75,19 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
                         {b.label}
                       </span>
-                      <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
-                      {b.tag && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">{b.tag}</span>}
-                      {b.dosen >= 5 && <span className="rounded-full border border-black bg-yellow-400 px-1.5 py-0.5 text-[9px] font-black text-black">GRATIS VERSAND</span>}
+                      <Sparkles className={`h-3.5 w-3.5 animate-pulse ${yellow ? "text-black" : "text-[#FFD11A]"}`} />
+                      {save && (
+                        <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black bg-black text-[#FFD11A]" : "border-black bg-[#FFD11A] text-black"}`}>
+                          SPARE {price(save)} €
+                        </span>
+                      )}
+                      {b.dosen >= 5 && (
+                        <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
+                          GRATIS VERSAND
+                        </span>
+                      )}
                     </span>
-                    <span className="block text-[10px] font-semibold leading-tight text-white/90 sm:text-xs">
+                    <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${yellow ? "text-black/80" : "text-white/90"}`}>
                       {b.desc}
                     </span>
                   </span>
@@ -75,20 +95,20 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                   <span className="text-right">
                     <span className="block font-barlow text-base font-extrabold sm:text-lg">
                       {b.oldPrice && (
-                        <span className="mr-1.5 inline-block rounded bg-yellow-400 px-1 py-0.5 text-xs font-black text-black line-through decoration-black decoration-2">
+                        <span className={`mr-1.5 inline-block rounded px-1 py-0.5 text-xs font-black line-through decoration-2 ${yellow ? "bg-white/70 text-black decoration-black" : "bg-[#FFD11A] text-black decoration-black"}`}>
                           {b.oldPrice}
                         </span>
                       )}
                       {price(b.price)} €
                     </span>
-                    <span className="block text-[11px] font-semibold text-white/80">{b.perDose} € / Dose</span>
+                    <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>{b.perDose} € / Dose</span>
                   </span>
                 </span>
               </button>
 
               {/* Best value badge - outside button so it isn't clipped */}
               {b.dosen === 5 && (
-                <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-yellow-400 px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
+                <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-[#FFD11A] px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   BELIEBTESTE WAHL
                 </span>
@@ -97,7 +117,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
           );
         }
 
-        // Single can option: plain white, no yellow highlight when selected
+        // Einzeldose und 3er-Mix: schlichtes Weiß
         return (
           <div key={b.label}>
             <button type="button" onClick={() => onSelect(b.label)} aria-pressed={isSelected} className={[
@@ -108,17 +128,29 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
               {isSelected && <span className="h-3 w-3 rounded-full bg-black" />}
             </span>
             <span className="flex-1">
-              <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">{b.label}</span>
+              <span className="flex flex-wrap items-center gap-1.5">
+                <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">{b.label}</span>
+                {save && (
+                  <span className="rounded-full border border-black bg-[#FFD11A] px-1.5 py-0.5 text-[9px] font-black leading-none">
+                    SPARE {price(save)} €
+                  </span>
+                )}
+              </span>
               <span className="block text-[10px] font-semibold leading-tight text-muted-foreground sm:text-xs">
                 {b.desc}
               </span>
             </span>
             <span className="text-right">
-              <span className="block font-barlow text-base font-extrabold sm:text-lg">{price(b.price)} €</span>
+              <span className="block font-barlow text-base font-extrabold sm:text-lg">
+                {b.oldPrice && (
+                  <span className="mr-1.5 text-xs font-bold text-muted-foreground line-through">{b.oldPrice}</span>
+                )}
+                {price(b.price)} €
+              </span>
               <span className="block text-[11px] font-semibold text-muted-foreground">{b.perDose} € / Dose</span>
             </span>
             </button>
-            {isSelected && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
+            {isSelected && b.dosen === 1 && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
           </div>
         );
       })}
