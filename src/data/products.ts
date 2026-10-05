@@ -1,12 +1,12 @@
 import productWatermelon from "@/assets/product-watermelon-new.webp";
 import productThai from "@/assets/product-thai-new.webp";
 import productLemon from "@/assets/product-lemon-new.webp";
-import productPeachVideoPoster from "@/assets/product-peach-video-poster.jpg";
-import productThaiVideoPoster from "@/assets/product-thai-video-poster.jpg";
+import productPeachVideoPoster from "@/assets/product-peach-video-poster.webp";
+import productThaiVideoPoster from "@/assets/product-thai-video-poster.webp";
 import productLemonVideoPoster from "@/assets/product-lemon-video-poster.jpg";
 import lemonBreezyProductVideo from "@/assets/lemon-breezy-product.mp4.asset.json";
-import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster.jpg";
-import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.jpg";
+import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster.webp";
+import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.webp";
 import blueberryFlowProductVideo from "@/assets/blueberry-flow-product.mp4.asset.json";
 import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.asset.json";
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
@@ -173,7 +173,7 @@ export const squadBundleProduct: Product = {
   originalPrice: "37,45€",
   numericPrice: 34.90,
   desc: "Alle fünf Sorten in einer Box – je eine Dose pro Sorte.",
-  image: "/images/product-pages/foquz_produkt_bundle_5er_text.jpg",
+  image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp",
   color: "#85c8b5",
   isBundle: true,
   ingredients: flavorProducts.map((product) => product.name),
@@ -186,7 +186,7 @@ export const crewBundleProduct: Product = {
   originalPrice: "74,90€",
   numericPrice: 59.90,
   desc: "Zehn Dosen, alle fünf Sorten – je zwei Dosen pro Sorte.",
-  image: "/images/product-pages/foquz_produkt_bundle_10er_text.jpg",
+  image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp",
   color: "#85c8b5",
   isBundle: true,
   ingredients: flavorProducts.map((product) => `2× ${product.name}`),

@@ -9,7 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
-import mascotWatermelon from "@/assets/mascot-watermelon.png";
+import mascotWatermelon from "@/assets/mascot-watermelon.webp";
 import { heroReadyPromise } from "@/components/HeroSection";
 
 // Deaktiviert: Die Newsletter-Anmeldung läuft jetzt über das Klaviyo-Popup.

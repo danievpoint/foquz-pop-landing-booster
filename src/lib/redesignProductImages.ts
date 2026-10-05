@@ -1,5 +1,5 @@
-import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.jpg";
-import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster.jpg";
+import productWatermelonVideoPoster from "@/assets/product-watermelon-video-poster.webp";
+import productBlueberryVideoPoster from "@/assets/product-blueberry-video-poster.webp";
 
 export const productImages = {
   peach: "/images/product-pages/product-new-peach.webp",

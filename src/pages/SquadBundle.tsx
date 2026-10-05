@@ -1,8 +1,8 @@
 import BundleProductPage from "@/components/product-pages/BundleProductPage";
 import { productImages } from "@/lib/redesignProductImages";
-const squadBundleBannerAsset = { url: "/images/product-pages/5er-bundle-16zu9.jpg" };
-const squadBundleHeaderAsset = { url: "/images/product-pages/mann-standard-5er.jpg" };
-const stickerAsset = { url: "/images/product-pages/sticker-logo-nase.jpg" };
+const squadBundleBannerAsset = { url: "/images/product-pages/5er-bundle-16zu9.webp" };
+const squadBundleHeaderAsset = { url: "/images/product-pages/mann-standard-5er.webp" };
+const stickerAsset = { url: "/images/product-pages/sticker-logo-nase.webp" };
 const noseStripsAsset = { url: "/images/product-pages/nose-strips.jpg" };
 
 const SquadBundle = () => (
