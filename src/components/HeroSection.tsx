@@ -8,7 +8,7 @@ const heroBgMobile = "/images/hero/foquz-mobile.webp";
 
 // Only fetch the hero image that matches the current screen (not both).
 const heroImagePromise: Promise<void> =
-  typeof window === "undefined"
+  typeof window === "undefined" || (location.pathname !== "/" && location.pathname !== "")
     ? Promise.resolve()
     : new Promise<void>((resolve) => {
         const img = new Image();
