@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
-import { productImages } from "@/lib/redesignProductImages";
 
 const productCan = { url: "/images/product-pages/produkt-5er-einzeln-blueberry.png" };
 const kickBanner = { url: "/images/product-pages/blueberry-kick-banner.webp" };
