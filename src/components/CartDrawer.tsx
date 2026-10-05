@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
 import foquzBox from "@/assets/foquz-box.png";
-import { products as allSorten, allProducts } from "@/data/products";
+import { products as allSorten, allProducts, squadBundleProduct, crewBundleProduct } from "@/data/products";
 import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
@@ -117,8 +117,10 @@ const CartDrawer = () => {
   const hasAppliedDiscount = Boolean(discountCode) && discountAmount > 0;
   const discountRatio = total > 0 && hasAppliedDiscount ? discountedTotal / total : 1;
 
-  // Bundle upsell
+  // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const hasBundle = items.some((i) => i.id === BUNDLE_ID);
+  const hasSquad = items.some((i) => i.id === "squad-bundle");
+  const hasCrew = items.some((i) => i.id === "vorrats-bundle");
   const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
   const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
   const paidSingleCanQty = items
@@ -128,6 +130,22 @@ const CartDrawer = () => {
   const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
   const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_LIST_PRICE).toFixed(2).replace(".", ",");
   const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
+
+  type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string };
+  const upsells: Upsell[] = [];
+  if (!hasCrew) {
+    if (hasSquad) {
+      upsells.push({ id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image });
+    } else if (hasBundle) {
+      upsells.push({ id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image });
+    } else if (showBundleUpsell) {
+      upsells.push(
+        { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image },
+        { id: BUNDLE_ID, name: "FOQUZ Power Bundle (3 Sorten)", title: "3er Power Bundle", desc: "Thai Style, Lemon Breezy & Peach Party", price: BUNDLE_LIST_PRICE, compareAt: 22.47, image: foquzBox },
+        { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image },
+      );
+    }
+  }
 
   // Shipping/savings
   const hasAlwaysFreeBundle = items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id));
