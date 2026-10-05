@@ -103,7 +103,7 @@
           var s=contentState(),el=Date.now()-start;
           // Normal case: everything visible is loaded. Slow network: after 4.5s show the page as soon as its
           // content (not just the navbar) is there; images then fade in.
-          if((!isHome&&s===2)||(s>=1&&el>4500)){clearInterval(t);requestAnimationFrame(hide);}
+          if(!isHome&&(s===2||(s>=1&&el>4500))){clearInterval(t);requestAnimationFrame(hide);}
         },80);});
         setTimeout(hide,9000);
       })();
