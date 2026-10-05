@@ -102,15 +102,15 @@ const Navbar = () => {
     <nav
       id="site-navbar"
       className={`fixed left-0 right-0 z-[9999] overflow-hidden isolate transition-all duration-300 border-b-[3px] border-foreground bg-[hsl(var(--foquz-lightblue))] ${scrolled ? "shadow-md" : ""}`}
-      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', opacity: heroReady ? 1 : 0, transition: 'opacity 500ms ease', pointerEvents: heroReady ? 'auto' : 'none' }}
+      style={{ top: "calc(var(--safe-area-top) + var(--marquee-height))", willChange: 'transform', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Solid background fallback to prevent content showing through */}
         <div className="absolute inset-0 bg-[hsl(var(--foquz-lightblue))]" />
         {/* Mobile: PNG background */}
-        <img src={navbarHeaderBgPng} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
+        <img src={navbarHeaderBgPng} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 w-full h-full object-cover pointer-events-none lg:hidden" />
         {/* Desktop: original SVG positioning */}
-        <img src={navbarHeaderBgSvg} alt="" className="absolute top-[-86%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-[0.4]" />
+        <img src={navbarHeaderBgSvg} alt="" fetchPriority="high" decoding="async" className="absolute top-[-86%] left-0 w-full h-[300%] object-contain object-top pointer-events-none hidden lg:block scale-[0.4]" />
       </div>
       <div className="container mx-auto flex items-center justify-center py-3 md:py-4 relative z-10">
         {/* Desktop: left pill | centered logo | right pill */}

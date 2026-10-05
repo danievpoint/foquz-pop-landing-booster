@@ -44,6 +44,20 @@ const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 
 const queryClient = new QueryClient();
 
+// Load the remaining pages quietly in the background once the current page is idle,
+// so navigating never shows an empty screen.
+if (typeof window !== "undefined") {
+  const prefetch = () => {
+    [
+      () => import("./pages/PeachParty"), () => import("./pages/ThaiStyle"), () => import("./pages/LemonBreezy"),
+      () => import("./pages/WatermelonFlex"), () => import("./pages/BlueberryFlow"), () => import("./pages/SquadBundle"),
+      () => import("./pages/ZehnerBundle"), () => import("./pages/StarterBundle"), () => import("./pages/Faq"),
+      () => import("./pages/ProductDetail"),
+    ].forEach((f) => f().catch(() => undefined));
+  };
+  window.addEventListener("load", () => setTimeout(() => ("requestIdleCallback" in window ? (window as any).requestIdleCallback(prefetch) : prefetch()), 3000));
+}
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
