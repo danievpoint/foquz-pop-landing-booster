@@ -128,8 +128,6 @@ const CartDrawer = () => {
     .reduce((s, i) => s + i.qty, 0);
   const showBundleUpsell = !hasBundle && singlesCount > 0;
   const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
-  const bundleSavings = (SINGLE_PRICE * 3 - BUNDLE_LIST_PRICE).toFixed(2).replace(".", ",");
-  const singlesPriceLabel = (SINGLE_PRICE * 3).toFixed(2).replace(".", ",");
 
   type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string };
   const upsells: Upsell[] = [];
