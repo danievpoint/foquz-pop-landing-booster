@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Check, X, ChevronDown } from "lucide-react";
 import PaymentLogos from "@/components/PaymentLogos";
-import { productImages } from "@/lib/redesignProductImages";
 
 const peachKickBanner = { url: "/images/product-pages/peach-kick-banner-16zu9.jpg" };
 const doseFoquz = { url: "/images/product-pages/dose-vergleich.png" };
