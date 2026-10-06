@@ -22,10 +22,10 @@ const Index = () => {
         <div className="min-h-screen">
         <Navbar />
         <HeroSection />
+        <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
           <BundleSection />
         </Suspense>
-        <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />
         </Suspense>
