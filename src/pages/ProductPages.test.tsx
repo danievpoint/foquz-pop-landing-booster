@@ -36,10 +36,11 @@ describe("Imported product pages keep Shopify identities", () => {
   it.each([['peach-party', 'PEACH PARTY'], ['thai-style', 'THAI STYLE'], ['lemon-breezy', 'LEMON BREEZY']])("buys the correct single and real bundle on %s", (handle, name) => {
     page(handle);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
-    expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON|SQUAD BUNDLE/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
-    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – POWER BUNDLE/ }));
+    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – STARTER SET/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
   });
