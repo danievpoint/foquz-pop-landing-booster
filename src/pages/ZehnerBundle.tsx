@@ -9,7 +9,7 @@ const ZehnerBundle = () => (
   <BundleProductPage
     config={{
       handle: "vorrats-bundle",
-      titleTop: "10ER POWER-",
+      titleTop: "10ER VORRATS-",
       titleBottom: "BUNDLE",
       titleTopColor: "#85c8b5",
       titleBottomColor: "#ffd618",
@@ -19,10 +19,10 @@ const ZehnerBundle = () => (
       tagline: "Alle Sorten. Doppelt am Start.",
       description: "Zehn Dosen, alle fünf Sorten – je zwei Dosen pro Sorte.",
       introBannerImage: squadBundleBannerAsset.url,
-      introBannerImageAlt: "FOQUZ 10er Power-Bundle Flatlay",
+      introBannerImageAlt: "FOQUZ 10er Vorrats-Bundle Flatlay",
       introImage: squadBundleHeaderAsset.url,
-      introImageAlt: "FOQUZ 10er Power-Bundle Header",
-      introHeadline: "10er Power-Bundle",
+      introImageAlt: "FOQUZ 10er Vorrats-Bundle Header",
+      introHeadline: "10er Vorrats-Bundle",
       introText: `Alle Sorten. Doppelt am Start. Hol dir jede unserer fünf Duftwelten zweimal: Peach Party, Lemon Breezy, Thai Style, Blueberry Flow und Watermelon Flex.
 
 Eine für den Schreibtisch. Eine für die Sporttasche. Und genug zum Teilen – wenn du willst. Mit dem 10er Vorrats-Bundle hast du deinen Frische-Mix griffbereit. Für die nächste Gaming-Runde, zwischen zwei Sätzen im Gym oder einfach zwischendurch.
@@ -45,7 +45,7 @@ Kurz riechen. Ab auf Wolke 7.`,
       ],
       checks: ["10 Dosen · Jede Sorte zweimal", "Inklusive Stickern & Nasen-Strips", "Kostenloser Versand innerhalb Deutschlands"],
       faqs: [
-        { q: "Welche Sorten sind im 10er Power-Bundle?", a: "Im 10er Power-Bundle steckt die volle FOQUZ-Auswahl: Peach Party, Lemon Breezy, Thai Style, Watermelon Flex und Blueberry Flow – je zwei Dosen pro Sorte." },
+        { q: "Welche Sorten sind im 10er Vorrats-Bundle?", a: "Im 10er Vorrats-Bundle steckt die volle FOQUZ-Auswahl: Peach Party, Lemon Breezy, Thai Style, Watermelon Flex und Blueberry Flow – je zwei Dosen pro Sorte." },
         { q: "Wofür ist FOQUZ?", a: "FOQUZ ist deine Frische-Dose für die Nase – für zwischendurch beim Arbeiten, Lernen, Zocken, Sport oder unterwegs. Einfach kurz riechen, tief durchatmen, weiter geht's." },
         { q: "Ist FOQUZ legal?", a: "Ja. FOQUZ ist ein frei verkäufliches Lifestyle-Produkt ohne Nikotin und ohne Koffein. Es wird gerochen, nicht geschnupft." },
         { q: "Wie schnell wird meine Bestellung geliefert?", a: "Versand mit DHL nach Deutschland, Österreich und die Schweiz – in 2 bis 5 Werktagen bei dir." },

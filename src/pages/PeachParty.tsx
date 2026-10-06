@@ -165,7 +165,7 @@ const PeachPartyInner = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 lg:items-stretch">
           {/* Gallery – alle Produktbilder ohne Slider */}
           <div className="flex flex-col">
-            <ProductPageMedia product={product} />
+            <ProductPageMedia product={product} setImage={selectedOption.dosen === 1 ? null : selectedOption.boxImage} />
           </div>
 
           {/* Buy Panel */}
@@ -677,7 +677,7 @@ const PeachPartyInner = () => {
                 href: "/produkt/squad-bundle",
               },
               {
-                name: "10ER POWER-BUNDLE",
+                name: "10ER VORRATS-BUNDLE",
                 desc: "je 2× alle fünf Sorten",
                 price: "59,90 €",
                 compareAt: "74,90 €",

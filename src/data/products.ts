@@ -180,7 +180,7 @@ export const squadBundleProduct: Product = {
 };
 
 export const crewBundleProduct: Product = {
-  name: "10ER POWER-BUNDLE",
+  name: "10ER VORRATS-BUNDLE",
   handle: "vorrats-bundle",
   price: "59,90€",
   originalPrice: "74,90€",
