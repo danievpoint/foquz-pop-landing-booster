@@ -9,7 +9,7 @@ import StarterBundle from "./StarterBundle";
 const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | null }));
 vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
 vi.mock("@/hooks/useProductAvailability", () => ({ useProductAvailability: () => ({ isAvailable: () => state.available }) }));
-vi.mock("@/lib/klaviyo", () => ({ trackViewedProduct: vi.fn() }));
+vi.mock("@/lib/klaviyo", () => ({ trackViewedProduct: vi.fn(), variantIdFor: () => null }));
 vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined }));
 vi.mock("@/components/Navbar", () => ({ default: () => null }));
 vi.mock("@/components/Footer", () => ({ default: () => null }));
@@ -21,8 +21,9 @@ beforeEach(() => {
   state.add.mockClear(); state.available = true;
   vi.stubGlobal("IntersectionObserver", class { observe() {} disconnect() {} });
   vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} unobserve() {} });
+  (Element.prototype as unknown as { scrollTo: () => void }).scrollTo = () => {};
 });
-afterEach(async () => { await act(async () => {}); cleanup(); vi.unstubAllGlobals(); });
+afterEach(async () => { await act(async () => {}); cleanup(); vi.unstubAllGlobals(); delete (Element.prototype as unknown as { scrollTo?: () => void }).scrollTo; });
 
 function page(handle = "peach-party") {
   return render(<MemoryRouter initialEntries={[`/produkt/${handle}`]}><Routes>
@@ -38,7 +39,7 @@ describe("Imported product pages keep Shopify identities", () => {
     page(handle);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
     expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON/)).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /1 DOSE/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
     fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – STARTER SET/ }));
@@ -47,6 +48,7 @@ describe("Imported product pages keep Shopify identities", () => {
   });
   it('switches product content and cart identity with the flavor selector', () => {
     page();
+    fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /THAI STYLE Kräuter/ }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('THAI STYLE');
     fireEvent.click(screen.getByRole('button', { name: /LEMON BREEZY Zitrone/ }));
@@ -68,19 +70,17 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: 'Nächster Vergleich' }));
     expect(document.querySelector('[style*="translateX(-100%)"]')).not.toBeNull();
   });
-  it('opens the starter bundle from the existing selector and buys one Shopify bundle', () => {
+  it('selects the starter set card and buys one Shopify bundle', () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: /FOQUZ Power Bundle Alle 3 Sorten/i }));
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('3ER STARTER BUNDLE');
-    expect(screen.queryByText(/Blueberry|Watermelon|39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – STARTER SET/ }));
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('PEACH PARTY');
+    expect(screen.queryByText(/39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
     expect(screen.queryByText('FOQUZ Sticker (gratis)')).not.toBeInTheDocument();
     expect(screen.queryByText('Nasen-Stripes (gratis)')).not.toBeInTheDocument();
     expect(screen.getByAltText('Google Pay')).toBeInTheDocument();
     expect(screen.queryByAltText('Klarna')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
-    fireEvent.click(screen.getByRole('button', { name: 'Welche Sorten sind im Starter Bundle?' }));
-    expect(screen.getByText(/Im 3er Starter Bundle findest du/)).toBeInTheDocument();
   });
   it('disables sold-out bundles', () => {
     state.available = false;
