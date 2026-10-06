@@ -20,6 +20,7 @@ vi.mock("@/components/AutoVideo", () => ({ default: () => null }));
 beforeEach(() => {
   state.add.mockClear(); state.available = true;
   vi.stubGlobal("IntersectionObserver", class { observe() {} disconnect() {} });
+  vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} unobserve() {} });
 });
 afterEach(async () => { await act(async () => {}); cleanup(); vi.unstubAllGlobals(); });
 
