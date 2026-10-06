@@ -70,7 +70,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                     {isSelected && <span className={`h-3 w-3 rounded-full border border-black ${yellow ? "bg-black" : "bg-[#FFD11A]"}`} />}
                   </span>
 
-                  <span className="flex-1">
+                  <span className="flex-1 min-w-0">
                     <span className="flex flex-wrap items-center gap-1.5">
                       <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">
                         {b.label}
@@ -78,46 +78,55 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       <Sparkles className={`h-3.5 w-3.5 animate-pulse ${yellow ? "text-black" : "text-[#FFD11A]"}`} />
                       {save && (
                         <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black bg-black text-[#FFD11A]" : "border-black bg-[#FFD11A] text-black"}`}>
-                          SPARE {price(save)} €
+                          Du sparst {price(save)} €
                         </span>
                       )}
-                      {b.dosen >= 5 && (
-                        <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
-                          GRATIS VERSAND
-                        </span>
-                      )}
+                      <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
+                        GRATIS VERSAND
+                      </span>
+                      <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
+                        + Sticker & Nasen-Stripes gratis
+                      </span>
                     </span>
                     <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${yellow ? "text-black/80" : "text-white/90"}`}>
                       {b.desc}
                     </span>
                   </span>
 
-                  <span className="text-right">
+                  <span className="text-right shrink-0">
+                    {b.oldPrice && (
+                      <span className={`block text-[10px] font-semibold leading-tight ${yellow ? "text-black/60" : "text-white/75"}`}>
+                        statt <span className="line-through decoration-2">{b.oldPrice}</span> einzeln
+                      </span>
+                    )}
                     <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                      {b.oldPrice && (
-                        <span className={`mr-1.5 inline-block rounded px-1 py-0.5 text-xs font-black line-through decoration-2 ${yellow ? "bg-white/70 text-black decoration-black" : "bg-[#FFD11A] text-black decoration-black"}`}>
-                          {b.oldPrice}
-                        </span>
-                      )}
                       {price(b.price)} €
                     </span>
-                    <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>{b.perDose} € / Dose</span>
+                    <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
+                      {b.perDose} € / Dose · {b.perKg} €/kg
+                    </span>
                   </span>
                 </span>
               </button>
 
-              {/* Best value badge - outside button so it isn't clipped */}
+              {/* Badge über der Karte */}
               {b.dosen === 5 && (
                 <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-[#FFD11A] px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   BELIEBTESTE WAHL
                 </span>
               )}
+              {b.dosen === 10 && (
+                <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-black px-2 py-0.5 text-[9px] font-black uppercase leading-none text-[#FFD11A] shadow-[2px_2px_0_0_rgba(0,0,0,0.35)] sm:px-2.5 sm:text-[10px]">
+                  <Sparkles className="mr-1 h-3 w-3" />
+                  BESTER PREIS
+                </span>
+              )}
             </div>
           );
         }
 
-        // Einzeldose und 3er-Mix: schlichtes Weiß
+        // Einzeldose und Starter Set: schlichtes Weiß
         return (
           <div key={b.label}>
             <button type="button" onClick={() => onSelect(b.label)} aria-pressed={isSelected} className={[
@@ -127,12 +136,12 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white">
               {isSelected && <span className="h-3 w-3 rounded-full bg-black" />}
             </span>
-            <span className="flex-1">
+            <span className="flex-1 min-w-0">
               <span className="flex flex-wrap items-center gap-1.5">
                 <span className="block font-barlow text-sm font-extrabold leading-tight sm:text-base">{b.label}</span>
                 {save && (
                   <span className="rounded-full border border-black bg-[#FFD11A] px-1.5 py-0.5 text-[9px] font-black leading-none">
-                    SPARE {price(save)} €
+                    Du sparst {price(save)} €
                   </span>
                 )}
               </span>
@@ -140,14 +149,18 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 {b.desc}
               </span>
             </span>
-            <span className="text-right">
+            <span className="text-right shrink-0">
+              {b.oldPrice && (
+                <span className="block text-[10px] font-semibold leading-tight text-muted-foreground">
+                  statt <span className="line-through">{b.oldPrice}</span> einzeln
+                </span>
+              )}
               <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                {b.oldPrice && (
-                  <span className="mr-1.5 text-xs font-bold text-muted-foreground line-through">{b.oldPrice}</span>
-                )}
                 {price(b.price)} €
               </span>
-              <span className="block text-[11px] font-semibold text-muted-foreground">{b.perDose} € / Dose</span>
+              <span className="block text-[11px] font-semibold text-muted-foreground">
+                {b.perDose} € / Dose{b.perKg ? ` · ${b.perKg} €/kg` : ""}
+              </span>
             </span>
             </button>
             {isSelected && b.dosen === 1 && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
