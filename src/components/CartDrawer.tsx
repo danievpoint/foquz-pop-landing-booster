@@ -132,7 +132,7 @@ const CartDrawer = () => {
   type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string; label: string; featured?: boolean };
   const upsell5: Upsell = { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image, label: "Beliebteste Option", featured: true };
   const upsell3: Upsell = { id: BUNDLE_ID, name: "FOQUZ Power Bundle (3 Sorten)", title: "3er Power Bundle", desc: "Thai Style, Lemon Breezy & Peach Party", price: BUNDLE_LIST_PRICE, compareAt: 22.47, image: foquzBox, label: "Empfehlung" };
-  const upsell10: Upsell = { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Power-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image, label: "Empfehlung" };
+  const upsell10: Upsell = { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Vorrats-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image, label: "Empfehlung" };
   const upsells: Upsell[] = [];
   if (!hasCrew) {
     if (hasSquad) {

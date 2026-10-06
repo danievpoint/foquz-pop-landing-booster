@@ -3,7 +3,7 @@ import { fetchProductsAvailability } from "@/lib/shopify";
 
 // Local display names may differ from Shopify product titles.
 const SHOPIFY_TITLE_BY_NAME: Record<string, string> = {
-  "10ER POWER-BUNDLE": "10ER VORRATS BUNDLE",
+  "10ER VORRATS-BUNDLE": "10ER VORRATS BUNDLE",
   "FOQUZ Power Bundle": "Starter Bundle",
 };
 
