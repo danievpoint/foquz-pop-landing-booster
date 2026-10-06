@@ -25,6 +25,7 @@ const squads = [
     checks: ["3 Klassiker entdecken", "Exklusive Box", "3 Dosen im Set"],
     price: bundleProduct.price,
     oldPrice: bundleProduct.originalPrice,
+    perKg: "1.460,00 €/kg",
     dosen: 1,
     cartPrice: bundleProduct.numericPrice,
     enabled: true,
@@ -41,9 +42,10 @@ const squads = [
     title: "5ER SQUAD BUNDLE",
     description:
       "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
-    checks: ["5 Dosen voller Power", "Maximale Auswahl", "Nur solange der Vorrat reicht", "Kostenloser Versand in Deutschland"],
+    checks: ["5 Dosen voller Power", "Maximale Auswahl", "Kostenloser Versand in Deutschland"],
     price: "34,90€",
     oldPrice: "37,45€",
+    perKg: "1.396,00 €/kg",
     dosen: 1,
     cartPrice: 34.9,
     enabled: true,
@@ -61,6 +63,7 @@ const squads = [
     checks: ["Jede Sorte zweimal", "Sticker & Nasen-Strips inklusive", "Kostenloser Versand in Deutschland"],
     price: crewBundleProduct.price,
     oldPrice: crewBundleProduct.originalPrice,
+    perKg: "1.198,00 €/kg",
     dosen: 1,
     cartPrice: crewBundleProduct.numericPrice,
     enabled: true,
@@ -137,10 +140,13 @@ const BundleSection = () => {
                 </div>
 
                 {/* Price */}
-                <div className="mt-auto flex items-center gap-3 md:gap-4 mb-3 md:mb-5 flex-wrap">
-                  <span className="text-xl md:text-3xl font-black text-black">{bundle.price ? `Nur ${bundle.price}` : "Bald verfügbar"}</span>
-                  {bundle.oldPrice && <span className="text-sm md:text-lg text-black/50 line-through">{bundle.oldPrice}</span>}
-                  {bundle.enabled && <StockBadge variant="dark" available={isAvailable(bundle.name)} />}
+                <div className="mt-auto flex flex-col gap-1 mb-3 md:mb-5">
+                  <div className="flex items-center gap-3 md:gap-4 mb-0 flex-wrap">
+                    <span className="text-xl md:text-3xl font-black text-black">{bundle.price ? `Nur ${bundle.price}` : "Bald verfügbar"}</span>
+                    {bundle.oldPrice && <span className="text-xs md:text-sm text-black/50">statt <span className="line-through">{bundle.oldPrice}</span> einzeln</span>}
+                    {bundle.enabled && <StockBadge variant="dark" available={isAvailable(bundle.name)} />}
+                  </div>
+                  <span className="text-[11px] md:text-xs font-semibold text-black/60">{bundle.perKg}</span>
                 </div>
 
                 {/* CTA */}
@@ -157,7 +163,7 @@ const BundleSection = () => {
                   className="comic-btn disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-fit text-sm py-3 px-4 font-black text-center"
                   style={{ backgroundColor: "#ffd618", color: "#000" }}
                 >
-                  {bundle.enabled ? (bundle.id === "vorrats-bundle" ? "JETZT POWER-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN") : "BALD VERFÜGBAR"}
+                  {bundle.enabled ? (bundle.id === "vorrats-bundle" ? "JETZT VORRATS-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN") : "BALD VERFÜGBAR"}
                 </button>
                 {bundle.link && <Link
                   to={bundle.link}
