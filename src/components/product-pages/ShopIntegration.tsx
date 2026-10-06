@@ -19,7 +19,7 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
     jsonLd={{ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.desc, image: new URL(product.image, "https://www.foquz.de").href, brand: { "@type": "Brand", name: "FOQUZ" }, offers: { "@type": "Offer", url, priceCurrency: "EUR", price: product.numericPrice, ...(availability === null ? {} : { availability: `https://schema.org/${availability ? "InStock" : "OutOfStock"}` }) } }} />;
 }
 
-export function ProductPageMedia({ product, includeProductImage = false, maxImages = 3 }: { product: Product; includeProductImage?: boolean; maxImages?: number }) {
+export function ProductPageMedia({ product, includeProductImage = false, maxImages = 3, setImage }: { product: Product; includeProductImage?: boolean; maxImages?: number; setImage?: { url: string; altText: string } | null }) {
   const [images, setImages] = useState<ShopifyImage[]>([]);
   const [play, setPlay] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -27,9 +27,11 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   const videoRef = useRef<HTMLDivElement | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number>();
-  const galleryImages = (includeProductImage
+  const baseImages = (includeProductImage
     ? [{ url: product.image, altText: product.name }, ...images.filter((image) => image.url !== product.image)]
     : images).slice(0, maxImages);
+  // Gewähltes Set (Starter/Squad/Vorrats) als erstes Bild, Sortenbilder bleiben als Folien/Thumbnails.
+  const galleryImages = setImage ? [setImage, ...baseImages] : baseImages;
   const slideOffset = product.video ? 1 : 0;
   const slideCount = galleryImages.length + slideOffset;
   const activeImage = activeIndex >= slideOffset ? galleryImages[activeIndex - slideOffset] : undefined;
@@ -44,18 +46,31 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
     ro.observe(el);
     return () => ro.disconnect();
   }, [activeIndex, galleryImages.length, imageRatios]);
+  const managedGallery = setImage !== undefined;
+  const setImageUrl = setImage?.url;
   useEffect(() => {
     let active = true;
-    setActiveIndex(0);
-    galleryRef.current?.scrollTo({ left: 0 });
+    const initialIndex = managedGallery ? slideOffset : 0;
+    const scrollToInitial = () => {
+      const gallery = galleryRef.current;
+      gallery?.scrollTo({ left: initialIndex * (gallery?.clientWidth ?? 0) });
+    };
+    setActiveIndex(initialIndex);
+    scrollToInitial();
     fetchProductGalleryImages(product.handle).then((result) => {
       if (!active) return;
       setImages(result);
-      setActiveIndex(0);
-      galleryRef.current?.scrollTo({ left: 0 });
+      setActiveIndex(initialIndex);
+      scrollToInitial();
     }).catch(() => {});
     return () => { active = false; };
-  }, [product.handle]);
+  }, [product.handle, slideOffset, managedGallery]);
+  useEffect(() => {
+    if (!managedGallery) return;
+    const gallery = galleryRef.current;
+    setActiveIndex(slideOffset);
+    gallery?.scrollTo({ left: slideOffset * (gallery?.clientWidth ?? 0) });
+  }, [setImageUrl, slideOffset, managedGallery]);
   useEffect(() => {
     if (!videoRef.current) return;
     // Sofort starten, sobald ein nennenswerter Teil sichtbar ist (z. B. direkt
@@ -86,17 +101,20 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
   return <div className="mt-3">
     <div ref={galleryRef} onScroll={updateActiveIndex} style={{ height: galleryHeight }} className="flex w-full snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden transition-[height] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {product.video && <div ref={(el) => { videoRef.current = el; slideRefs.current[0] = el; }} className="w-full flex-none basis-full snap-center"><div className="box-border overflow-hidden rounded-xl border-2 border-black"><AutoVideo src={product.video} poster={product.videoPoster} play={play && activeIndex === 0} className="block aspect-square w-full object-cover pointer-events-none" /></div></div>}
-      {galleryImages.map((img, index) => (
-        <div key={img.url} ref={(el) => { slideRefs.current[index + slideOffset] = el; }} className="w-full flex-none basis-full snap-center">
-          <div className="box-border overflow-hidden rounded-xl border-2 border-black"><img src={shopifyImageUrl(img.url, 900)} srcSet={shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes="(max-width: 1024px) 100vw, 50vw" alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
-            const { naturalWidth, naturalHeight } = event.currentTarget;
-            if (naturalWidth > 0 && naturalHeight > 0) {
-              const framedRatio = naturalWidth / naturalHeight;
-              setImageRatios((current) => current[img.url] === framedRatio ? current : { ...current, [img.url]: framedRatio });
-            }
-          }} className="block h-auto w-full" /></div>
-        </div>
-      ))}
+      {galleryImages.map((img, index) => {
+        const isSet = setImage != null && index === 0;
+        return (
+          <div key={isSet ? "set-image" : img.url} ref={(el) => { slideRefs.current[index + slideOffset] = el; }} className="w-full flex-none basis-full snap-center">
+            <div className="box-border overflow-hidden rounded-xl border-2 border-black"><img src={isSet ? img.url : shopifyImageUrl(img.url, 900)} srcSet={isSet ? undefined : shopifyImageSrcSet(img.url, [480, 640, 900, 1200])} sizes={isSet ? undefined : "(max-width: 1024px) 100vw, 50vw"} alt={img.altText || `${product.name} Produktbild ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" onLoad={(event) => {
+              const { naturalWidth, naturalHeight } = event.currentTarget;
+              if (naturalWidth > 0 && naturalHeight > 0) {
+                const framedRatio = naturalWidth / naturalHeight;
+                setImageRatios((current) => current[img.url] === framedRatio ? current : { ...current, [img.url]: framedRatio });
+              }
+            }} className="block h-auto w-full" /></div>
+          </div>
+        );
+      })}
     </div>
     {slideCount > 1 && <div className="mt-3 flex items-center justify-center gap-2" aria-label="Produktbild auswählen">
       {Array.from({ length: slideCount }, (_, index) => (
@@ -107,11 +125,14 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
       {product.video && <button type="button" onClick={() => scrollToSlide(0)} aria-label={`${product.name} Video anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === 0 ? "border-primary ring-2 ring-primary" : "border-black"}`}>
         <img src={product.videoPoster || product.image} alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
       </button>}
-      {galleryImages.map((img, index) => (
-        <button key={img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
-          <img src={shopifyImageUrl(img.url, 160)} srcSet={shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes="56px" alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
-        </button>
-      ))}
+      {galleryImages.map((img, index) => {
+        const isSet = setImage != null && index === 0;
+        return (
+          <button key={isSet ? "set-image" : img.url} type="button" onClick={() => scrollToSlide(index + slideOffset)} aria-label={`${img.altText || `${product.name} Produktbild ${index + 1}`} anzeigen`} className={`h-14 w-14 flex-none overflow-hidden rounded-md border-2 p-0 ${activeIndex === index + slideOffset ? "border-primary ring-2 ring-primary" : "border-black"}`}>
+            <img src={isSet ? img.url : shopifyImageUrl(img.url, 160)} srcSet={isSet ? undefined : shopifyImageSrcSet(img.url, [96, 128, 160, 240])} sizes={isSet ? undefined : "56px"} alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-full w-full object-cover" />
+          </button>
+        );
+      })}
     </div>}
 
   </div>;
