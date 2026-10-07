@@ -495,7 +495,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) {
       shopifyCartIdRef.current = null;
       setShopifyDiscountedSubtotal(null);
-      setCheckoutUrl(buildOnlineStoreCartPermalink(lines, discountCode));
+      // Prio-Versand-Produkt ist im Onlineshop nicht verfügbar und würde den Permalink brechen.
+      const prioGid = VARIANT_GID_BY_ID[PRIO_SHIPPING_ID];
+      setCheckoutUrl(buildOnlineStoreCartPermalink(lines.filter((l) => l.variantId !== prioGid), discountCode));
       setIsCheckingOut(false);
       return;
     }
