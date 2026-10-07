@@ -321,7 +321,7 @@ export async function validateDiscountCode(code: string): Promise<boolean> {
 
   // Use any known variant as a stub line so Shopify actually evaluates the code.
   const stubVariantId =
-    VARIANT_GID_BY_ID["starter-bundle"] ||
+    VARIANT_GID_BY_ID["PEACH PARTY"] ||
     Object.values(VARIANT_GID_BY_ID)[0];
   if (!stubVariantId) return false;
 
@@ -475,26 +475,62 @@ export function prefetchProductGallery(handle: string, widths: number[] = [200, 
 }
 
 
-/** Bundle-Verfügbarkeit direkt über die Variante (Shopify berechnet sie aus den Einzelsorten). */
+/**
+ * Die Bundles der Shopify-Bundles-App lassen sich nicht im Lovable-Kanal freigeben.
+ * Verfügbarkeit kommt daher aus dem öffentlichen Produkt-JSON des Onlineshops,
+ * Warenkörbe mit Bundles gehen per Cart-Permalink über den Onlineshop in den Checkout.
+ */
+export const ONLINE_STORE_ORIGIN = "https://checkout.foquz.de";
+
 export const BUNDLE_VARIANT_BY_NAME: Record<string, string> = {
   "FOQUZ Power Bundle": "gid://shopify/ProductVariant/55628113117526",
   "5ER SQUAD BUNDLE": "gid://shopify/ProductVariant/55628142707030",
   "10ER VORRATS-BUNDLE": "gid://shopify/ProductVariant/55628181274966",
 };
 
-const VARIANT_AVAILABILITY_QUERY = `
-  query VariantAvailability($ids: [ID!]!) {
-    nodes(ids: $ids) { ... on ProductVariant { id availableForSale } }
-  }
-`;
+const BUNDLE_HANDLE_BY_NAME: Record<string, string> = {
+  "FOQUZ Power Bundle": "3er-starter-bundle",
+  "5ER SQUAD BUNDLE": "5er-squad-bundle-1",
+  "10ER VORRATS-BUNDLE": "10er-vorrats-bundle-1",
+};
 
-/** Liefert je Bundle-Name true/false. Nicht im Verkaufskanal sichtbare Varianten gelten als nicht kaufbar. */
+export const ONLINE_STORE_BUNDLE_VARIANTS = new Set(Object.values(BUNDLE_VARIANT_BY_NAME));
+
+const numericId = (gid: string) => gid.split("/").pop() ?? gid;
+
+/** Liefert je Bundle-Name true/false. Nicht im Onlineshop aktive Bundles gelten als nicht kaufbar. */
 export async function fetchBundleAvailability(): Promise<Record<string, boolean>> {
-  const ids = Object.values(BUNDLE_VARIANT_BY_NAME);
-  const data = await storefrontApiRequest(VARIANT_AVAILABILITY_QUERY, { ids });
-  const nodes: Array<{ id: string; availableForSale: boolean } | null> = data?.data?.nodes ?? [];
-  const byId = new Map(nodes.filter(Boolean).map((n) => [n!.id, n!.availableForSale]));
-  return Object.fromEntries(
-    Object.entries(BUNDLE_VARIANT_BY_NAME).map(([name, id]) => [name, byId.get(id) ?? false]),
+  const entries = await Promise.all(
+    Object.entries(BUNDLE_HANDLE_BY_NAME).map(async ([name, handle]) => {
+      try {
+        const res = await fetch(`${ONLINE_STORE_ORIGIN}/products/${handle}.js`, { cache: "no-store" });
+        if (!res.ok) return [name, false] as const;
+        const json: { variants?: Array<{ id: number; available: boolean }> } = await res.json();
+        const wanted = numericId(BUNDLE_VARIANT_BY_NAME[name]);
+        const variant = json.variants?.find((v) => String(v.id) === wanted);
+        return [name, variant?.available === true] as const;
+      } catch {
+        return [name, false] as const;
+      }
+    }),
   );
+  return Object.fromEntries(entries);
+}
+
+/**
+ * Cart-Permalink über den Onlineshop: bildet immer den kompletten aktuellen Warenkorb ab
+ * (wird bei jeder Änderung neu erzeugt). Rabattcode und Attribution gehen mit.
+ * https://shopify.dev/docs/apps/build/checkout/create-cart-permalinks
+ */
+export function buildOnlineStoreCartPermalink(lines: CheckoutLine[], discountCode?: string | null): string {
+  const merged = new Map<string, number>();
+  for (const l of lines) merged.set(numericId(l.variantId), (merged.get(numericId(l.variantId)) ?? 0) + l.quantity);
+  const path = [...merged].map(([id, qty]) => `${id}:${qty}`).join(",");
+  const url = new URL(`${ONLINE_STORE_ORIGIN}/cart/${path}`);
+  if (discountCode) url.searchParams.set("discount", discountCode);
+  const dtId = getDtId();
+  const creator = getCreator();
+  if (dtId) { url.searchParams.set("attributes[dt_id]", dtId); url.searchParams.set("dt_id", dtId); }
+  if (creator) url.searchParams.set("attributes[creator]", creator);
+  return url.toString();
 }
