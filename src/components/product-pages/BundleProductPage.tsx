@@ -39,7 +39,10 @@ export interface BundleProductConfig {
 const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
   const shop = useProductPage(config.handle ?? "starter-bundle");
   const { product, bundles, addSelection, isAvailable } = shop;
-  const [bundle, setBundle] = useState(bundles[bundles.length - 1].label);
+  const [bundle, setBundle] = useState(() => {
+    const own = bundles.find((option) => option.id === (config.handle ?? "starter-bundle"));
+    return (own ?? bundles[bundles.length - 1]).label;
+  });
   const [sorte, setSorte] = useState("PEACH PARTY");
   const selectedOption = bundles.find((option) => option.label === bundle) ?? bundles[bundles.length - 1];
   const selectedBundle = selectedOption.dosen === 1 ? { ...selectedOption, productName: sorte, id: sorte } : selectedOption;
