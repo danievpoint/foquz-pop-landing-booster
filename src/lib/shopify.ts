@@ -94,11 +94,14 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "WATERMELON FLEX": "gid://shopify/ProductVariant/55343195816278",
   "BLUEBERRY FLOW": "gid://shopify/ProductVariant/55343191359830",
   // Bundle IDs (used in CartContext default and ProductDetail)
-  "bundle": "gid://shopify/ProductVariant/52867411837270",
-  "starter-bundle": "gid://shopify/ProductVariant/52867411837270",
+  // Bundles: komponentenbasierte Produkte aus der Shopify-Bundles-App (Bestand wird je Sorte abgezogen).
+  // Alte, ungetrackte Bundle-Varianten werden bewusst nicht mehr verwendet; gespeicherte
+  // Warenkörbe behalten ihre lokalen IDs und zeigen dadurch automatisch auf die neuen Varianten.
+  "bundle": "gid://shopify/ProductVariant/55628113117526",
+  "starter-bundle": "gid://shopify/ProductVariant/55628113117526",
   "6er-vorrats-set": "gid://shopify/ProductVariant/55425602879830",
-  "squad-bundle": "gid://shopify/ProductVariant/55478191325526",
-  "vorrats-bundle": "gid://shopify/ProductVariant/55478191391062",
+  "squad-bundle": "gid://shopify/ProductVariant/55628142707030",
+  "vorrats-bundle": "gid://shopify/ProductVariant/55628181274966",
   // Prio-Versand – wird über den Toggle im Warenkorb zugebucht
   "prio-versand": "gid://shopify/ProductVariant/55430739493206",
   // Gratis-Zugaben – werden ausschließlich automatisch zum Power Bundle gelegt
@@ -469,4 +472,29 @@ export function prefetchProductGallery(handle: string, widths: number[] = [200, 
       });
     });
   });
+}
+
+
+/** Bundle-Verfügbarkeit direkt über die Variante (Shopify berechnet sie aus den Einzelsorten). */
+export const BUNDLE_VARIANT_BY_NAME: Record<string, string> = {
+  "FOQUZ Power Bundle": "gid://shopify/ProductVariant/55628113117526",
+  "5ER SQUAD BUNDLE": "gid://shopify/ProductVariant/55628142707030",
+  "10ER VORRATS-BUNDLE": "gid://shopify/ProductVariant/55628181274966",
+};
+
+const VARIANT_AVAILABILITY_QUERY = `
+  query VariantAvailability($ids: [ID!]!) {
+    nodes(ids: $ids) { ... on ProductVariant { id availableForSale } }
+  }
+`;
+
+/** Liefert je Bundle-Name true/false. Nicht im Verkaufskanal sichtbare Varianten gelten als nicht kaufbar. */
+export async function fetchBundleAvailability(): Promise<Record<string, boolean>> {
+  const ids = Object.values(BUNDLE_VARIANT_BY_NAME);
+  const data = await storefrontApiRequest(VARIANT_AVAILABILITY_QUERY, { ids });
+  const nodes: Array<{ id: string; availableForSale: boolean } | null> = data?.data?.nodes ?? [];
+  const byId = new Map(nodes.filter(Boolean).map((n) => [n!.id, n!.availableForSale]));
+  return Object.fromEntries(
+    Object.entries(BUNDLE_VARIANT_BY_NAME).map(([name, id]) => [name, byId.get(id) ?? false]),
+  );
 }
