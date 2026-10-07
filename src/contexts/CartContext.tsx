@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
-import { applyDiscountCodeToCart, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { applyDiscountCodeToCart, buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
 import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
 import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
@@ -488,6 +488,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
       setShopifyDiscountedSubtotal(null);
+      return;
+    }
+
+    // Bundles (Shopify-Bundles-App) sind nur im Onlineshop kaufbar → Cart-Permalink.
+    if (lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) {
+      shopifyCartIdRef.current = null;
+      setShopifyDiscountedSubtotal(null);
+      setCheckoutUrl(buildOnlineStoreCartPermalink(lines, discountCode));
+      setIsCheckingOut(false);
       return;
     }
 
