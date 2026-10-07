@@ -523,8 +523,13 @@ export async function fetchBundleAvailability(): Promise<Record<string, boolean>
  * https://shopify.dev/docs/apps/build/checkout/create-cart-permalinks
  */
 export function buildOnlineStoreCartPermalink(lines: CheckoutLine[], discountCode?: string | null): string {
+  // Prio-Versand ist im Onlineshop bewusst nicht freigegeben → nie in den Permalink.
+  const prioGid = VARIANT_GID_BY_ID["prio-versand"];
   const merged = new Map<string, number>();
-  for (const l of lines) merged.set(numericId(l.variantId), (merged.get(numericId(l.variantId)) ?? 0) + l.quantity);
+  for (const l of lines) {
+    if (l.variantId === prioGid) continue;
+    merged.set(numericId(l.variantId), (merged.get(numericId(l.variantId)) ?? 0) + l.quantity);
+  }
   const path = [...merged].map(([id, qty]) => `${id}:${qty}`).join(",");
   const url = new URL(`${ONLINE_STORE_ORIGIN}/cart/${path}`);
   if (discountCode) url.searchParams.set("discount", discountCode);
