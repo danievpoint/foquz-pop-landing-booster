@@ -474,6 +474,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [freeShippingUnlocked]);
 
 
+  // Bundle-Warenkörbe: Permalink synchron aus den aktuellen Items ableiten, damit der
+  // href des Kassen-Links nie einer Änderung hinterherhinkt (auch bei Mittelklick/neuem Tab).
+  const bundlePermalink = (() => {
+    const lines = getCheckoutLines();
+    if (!lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) return null;
+    return buildOnlineStoreCartPermalink(lines, discountCode);
+  })();
+  // Für Nicht-Bundle-Warenkörbe nie einen (veralteten) Permalink ausgeben.
+  const effectiveCheckoutUrl =
+    bundlePermalink ?? (checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
+
 
   useEffect(() => {
     if (items.length === 0) {
@@ -492,12 +503,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Bundles (Shopify-Bundles-App) sind nur im Onlineshop kaufbar → Cart-Permalink.
+    // Der Link wird synchron beim Rendern abgeleitet (siehe bundlePermalink), nicht hier.
     if (lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) {
       shopifyCartIdRef.current = null;
       setShopifyDiscountedSubtotal(null);
-      // Prio-Versand-Produkt ist im Onlineshop nicht verfügbar und würde den Permalink brechen.
-      const prioGid = VARIANT_GID_BY_ID[PRIO_SHIPPING_ID];
-      setCheckoutUrl(buildOnlineStoreCartPermalink(lines.filter((l) => l.variantId !== prioGid), discountCode));
+      setCheckoutUrl(null);
       setIsCheckingOut(false);
       return;
     }
@@ -542,7 +552,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
-    if (items.length === 0 || isCheckingOut) return;
+    if (items.length === 0 || (isCheckingOut && !bundlePermalink)) return;
+    const checkoutUrl = effectiveCheckoutUrl;
 
     const lines = getCheckoutLines();
 
@@ -564,7 +575,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (tab) tab.location.href = checkoutUrl;
     else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     sessionStorage.setItem("foquz_checkout_pending", "1");
-  }, [items.length, isCheckingOut, checkoutUrl, getCheckoutLines]);
+  }, [items.length, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines]);
 
   // Only clear the cart once the Shopify checkout was actually completed
   // (i.e. the Shopify cart no longer exists or has 0 items). If the user
@@ -611,7 +622,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
-      checkout, isCheckingOut, checkoutUrl,
+      checkout, isCheckingOut, checkoutUrl: effectiveCheckoutUrl,
       prioShipping, setPrioShipping,
     }}>
 
