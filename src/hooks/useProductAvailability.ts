@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchProductsAvailability } from "@/lib/shopify";
+import { fetchProductsAvailability, fetchBundleAvailability, BUNDLE_VARIANT_BY_NAME } from "@/lib/shopify";
 
 // Local display names may differ from Shopify product titles.
 const SHOPIFY_TITLE_BY_NAME: Record<string, string> = {
@@ -17,7 +17,20 @@ export function useProductAvailability() {
     refetchOnMount: false,
   });
 
+  const { data: bundleAvailability, isLoading: bundlesLoading } = useQuery({
+    queryKey: ["shopify-bundle-availability"],
+    queryFn: fetchBundleAvailability,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+
   const isAvailable = (productName: string): boolean | null => {
+    if (BUNDLE_VARIANT_BY_NAME[productName]) {
+      if (bundlesLoading) return null;
+      return bundleAvailability?.[productName] ?? false;
+    }
     if (loading) return null;
     const shopifyTitle = SHOPIFY_TITLE_BY_NAME[productName] ?? productName;
     const product = availability.find(
