@@ -114,6 +114,8 @@ export const THREE_FOR_TWO_ENABLED = false;
 export const THREE_FOR_TWO_CODE = "3FUER2";
 // Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
 export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
+/** Einzeldosen, die aktuell nicht einzeln kaufbar sind (in Bundles weiterhin enthalten). */
+export const SOLD_OUT_SINGLE_IDS = ["THAI STYLE"];
 const FREE_CAN_PREFIX = "free:";
 export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
 export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
@@ -277,6 +279,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const p = product || DEFAULT_PRODUCT;
     // Gratis-Zugaben können nicht direkt gekauft werden.
     if (isGiftItem(p.id)) return;
+    // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
+    if (SOLD_OUT_SINGLE_IDS.includes(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
       if (existing) {

@@ -27,6 +27,8 @@ export function useProductAvailability() {
   });
 
   const isAvailable = (productName: string): boolean | null => {
+    // THAI STYLE ist als Einzeldose ausverkauft – nur noch über Bundles erhältlich.
+    if (productName === "THAI STYLE") return false;
     if (BUNDLE_VARIANT_BY_NAME[productName]) {
       if (bundlesLoading) return null;
       return bundleAvailability?.[productName] ?? false;
