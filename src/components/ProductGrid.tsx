@@ -467,9 +467,10 @@ const ProductGrid = () => {
                       <div className="pg-card-actions flex items-center justify-center gap-3">
                         <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
-                          className="comic-btn text-black pg-card-btn"
+                          disabled={isAvailable(p.name) === false}
+                          className="comic-btn text-black pg-card-btn disabled:opacity-50 disabled:cursor-not-allowed"
                           style={{ backgroundColor: p.color }}>
-                          IN DEN WARENKORB
+                          {isAvailable(p.name) === false ? "AUSVERKAUFT" : "IN DEN WARENKORB"}
                         </button>
                         <InfoButton onClick={() => setInfoProduct(p)} />
                       </div>
@@ -541,9 +542,10 @@ const ProductGrid = () => {
                     const p = products[realActiveIndex];
                     addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image });
                   }}
-                  className="comic-btn text-black text-xs py-2 px-5"
+                  disabled={isAvailable(products[realActiveIndex].name) === false}
+                  className="comic-btn text-black text-xs py-2 px-5 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: products[realActiveIndex].color }}>
-                  IN DEN WARENKORB
+                  {isAvailable(products[realActiveIndex].name) === false ? "AUSVERKAUFT" : "IN DEN WARENKORB"}
                 </button>
                 <InfoButton onClick={() => setInfoProduct(products[realActiveIndex])} />
               </div>

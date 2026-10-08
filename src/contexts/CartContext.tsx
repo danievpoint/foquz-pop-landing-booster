@@ -279,6 +279,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const p = product || DEFAULT_PRODUCT;
     // Gratis-Zugaben können nicht direkt gekauft werden.
     if (isGiftItem(p.id)) return;
+    // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
+    if (SOLD_OUT_SINGLE_IDS.includes(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
       if (existing) {
