@@ -90,6 +90,16 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
   ?
 </button>;
 
+/** diagonales SOLD-OUT-Banner über dem Produktbild, sobald eine Sorte ausverkauft ist */
+const SoldOutRibbon = () =>
+  <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center overflow-hidden">
+    <div className="w-[140%] -rotate-12 bg-[#e94362] border-y-4 border-black py-2 md:py-2.5 shadow-[4px_4px_0_0_#000] text-center">
+      <span className="font-barlow font-extrabold text-white text-base md:text-lg tracking-[0.2em] whitespace-nowrap">
+        SOLD OUT
+      </span>
+    </div>
+  </div>;
+
 
 
 
@@ -438,6 +448,7 @@ const ProductGrid = () => {
             <div className="relative pg-grid">
             <div className="grid grid-cols-5 gap-[clamp(1rem,1.5cqw,1.5rem)]">
               {products.map((p, i) => {
+                const soldOut = isAvailable(p.name) === false;
                 return (
                 <motion.div
                   key={p.name}
@@ -449,10 +460,13 @@ const ProductGrid = () => {
                   className="flex flex-col group min-w-0">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
-                        <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
+                        <div className={soldOut ? "grayscale" : undefined}>
+                          <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
+                        </div>
                       ) : (
-                        <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
+                        <img src={p.image} alt={p.name} className={`w-full aspect-square object-cover hover:scale-105 transition-transform duration-300 ${soldOut ? "grayscale" : ""}`} />
                       )}
+                      {soldOut && <SoldOutRibbon />}
                     </Link>
                     <div className="pg-card-body">
                       <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity text-center">
@@ -507,19 +521,22 @@ const ProductGrid = () => {
                   style={{ scrollSnapStop: 'always' }}>
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
-                      <MobileVideoWithPoster
-                        key={`slide-${i}-${p.name}`}
-                        src={p.video}
-                        poster={p.videoPoster ?? p.image}
-                        play={i === extendedActiveIndex}
-                        near={Math.abs(i - extendedActiveIndex) <= 1}
-                      />
+                      <div className={isAvailable(p.name) === false ? "grayscale" : undefined}>
+                        <MobileVideoWithPoster
+                          key={`slide-${i}-${p.name}`}
+                          src={p.video}
+                          poster={p.videoPoster ?? p.image}
+                          play={i === extendedActiveIndex}
+                          near={Math.abs(i - extendedActiveIndex) <= 1}
+                        />
+                      </div>
                     ) : (
                       <img
                         src={p.image}
                         alt={p.name}
-                        className="relative w-full aspect-square object-cover" />
+                        className={`relative w-full aspect-square object-cover ${isAvailable(p.name) === false ? "grayscale" : ""}`} />
                     )}
+                    {isAvailable(p.name) === false && <SoldOutRibbon />}
                   </Link>
                 </div>
               ))}
