@@ -7,6 +7,8 @@ import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
 import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
+import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
+export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
   id: string;
@@ -114,8 +116,6 @@ export const THREE_FOR_TWO_ENABLED = false;
 export const THREE_FOR_TWO_CODE = "3FUER2";
 // Einzeldosen werden über ihren Produktnamen als Warenkorb-ID geführt.
 export const SINGLE_CAN_IDS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
-/** Einzeldosen, die aktuell nicht einzeln kaufbar sind (in Bundles weiterhin enthalten). */
-export const SOLD_OUT_SINGLE_IDS = ["THAI STYLE"];
 const FREE_CAN_PREFIX = "free:";
 export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
 export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
@@ -212,6 +212,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [prioShipping, setPrioShipping] = useState(false);
   const shopifyCartIdRef = useRef<string | null>(null);
 
+  const hasSoldOutSingle = items.some((item) => isSoldOutSingleItem(item.id));
+  useEffect(() => {
+    if (!hasSoldOutSingle) return;
+    setItems((previous) => previous.filter((item) => !isSoldOutSingleItem(item.id)));
+    shopifyCartIdRef.current = null;
+    setCheckoutUrl(null);
+    setShopifyDiscountedSubtotal(null);
+    toast.error("Thai Style ist einzeln ausverkauft und wurde aus deinem Warenkorb entfernt. Bundles bleiben unverändert.");
+  }, [hasSoldOutSingle]);
+
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
@@ -280,7 +290,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Gratis-Zugaben können nicht direkt gekauft werden.
     if (isGiftItem(p.id)) return;
     // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
-    if (SOLD_OUT_SINGLE_IDS.includes(p.id)) return;
+    if (isSoldOutSingleItem(p.id)) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
       if (existing) {
@@ -348,6 +358,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const freeCanFlavor = freeCanItem ? freeCanFlavorOf(freeCanItem.id) : null;
 
   const chooseFreeCan = useCallback((flavor: { name: string; image: string }) => {
+    if (isSoldOutSingleItem(flavor.name)) return;
     setItems((prev) => [
       ...prev.filter((i) => !isFreeCanItem(i.id)),
       {
@@ -452,6 +463,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         ? [{ variantId: VARIANT_GID_BY_ID[PRIO_SHIPPING_ID], quantity: 1 }]
         : [];
     return items
+      .filter((item) => !isSoldOutSingleItem(item.id))
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
         // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.
@@ -487,11 +499,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   })();
   // Für Nicht-Bundle-Warenkörbe nie einen (veralteten) Permalink ausgeben.
   const effectiveCheckoutUrl =
-    bundlePermalink ?? (checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
+    hasSoldOutSingle || items.length === 0 ? null :
+      bundlePermalink ?? (checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
 
 
   useEffect(() => {
-    if (items.length === 0) {
+    if (items.length === 0 || hasSoldOutSingle) {
       setCheckoutUrl(null);
       setIsCheckingOut(false);
       setShopifyDiscountedSubtotal(null);
@@ -553,9 +566,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, discountCode, manualDiscountCode, getCheckoutLines]);
+  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines]);
 
   const checkout = useCallback(async () => {
+    if (hasSoldOutSingle) return;
     if (items.length === 0 || (isCheckingOut && !bundlePermalink)) return;
     const checkoutUrl = effectiveCheckoutUrl;
 
@@ -579,7 +593,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (tab) tab.location.href = checkoutUrl;
     else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     sessionStorage.setItem("foquz_checkout_pending", "1");
-  }, [items.length, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines]);
+  }, [items.length, hasSoldOutSingle, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines]);
 
   // Only clear the cart once the Shopify checkout was actually completed
   // (i.e. the Shopify cart no longer exists or has 0 items). If the user
