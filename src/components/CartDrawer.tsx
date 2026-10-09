@@ -25,6 +25,7 @@ import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
 import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
+import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 
 const PAYMENT_METHODS = [
   { label: "PayPal", src: payPaypal },
@@ -154,7 +155,7 @@ const CartDrawer = () => {
 
   // Suggestions carousel
   const inCartIds = new Set(items.map((i) => i.id));
-  const suggestions = allSorten.filter((p) => !inCartIds.has(p.name));
+  const suggestions = allSorten.filter((p) => !inCartIds.has(p.name) && !isSoldOutSingleItem(p.name));
 
   const scrollCarousel = (dir: 1 | -1) => {
     const el = carouselRef.current;
