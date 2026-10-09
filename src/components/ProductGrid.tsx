@@ -90,6 +90,16 @@ const InfoButton = ({ onClick }: {onClick: () => void;}) =>
   ?
 </button>;
 
+/** diagonales SOLD-OUT-Banner über dem Produktbild, sobald eine Sorte ausverkauft ist */
+const SoldOutRibbon = () =>
+  <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center overflow-hidden">
+    <div className="w-[140%] -rotate-12 bg-[#e94362] border-y-4 border-black py-2 md:py-2.5 shadow-[4px_4px_0_0_#000] text-center">
+      <span className="font-barlow font-extrabold text-white text-base md:text-lg tracking-[0.2em] whitespace-nowrap">
+        SOLD OUT
+      </span>
+    </div>
+  </div>;
+
 
 
 
