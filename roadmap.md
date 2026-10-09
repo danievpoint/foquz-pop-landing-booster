@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Thai Style aus Einzelprodukt-Upsells ausblenden und alte Einzelpositionen vor Checkout abfangen; gezielt testen, nicht veröffentlichen
+- [x] Thai Style aus Einzelprodukt-Upsells ausblenden und alte Einzelpositionen vor Checkout abfangen; gezielt testen, nicht veröffentlichen
 
 - [x] Mobile Produktseite auf korrekte Bildschirmbreite begrenzen
 - [x] Newsletter-Popup mobil kompakt darstellen
