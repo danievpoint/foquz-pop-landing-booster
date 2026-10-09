@@ -521,19 +521,22 @@ const ProductGrid = () => {
                   style={{ scrollSnapStop: 'always' }}>
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
-                      <MobileVideoWithPoster
-                        key={`slide-${i}-${p.name}`}
-                        src={p.video}
-                        poster={p.videoPoster ?? p.image}
-                        play={i === extendedActiveIndex}
-                        near={Math.abs(i - extendedActiveIndex) <= 1}
-                      />
+                      <div className={isAvailable(p.name) === false ? "grayscale" : undefined}>
+                        <MobileVideoWithPoster
+                          key={`slide-${i}-${p.name}`}
+                          src={p.video}
+                          poster={p.videoPoster ?? p.image}
+                          play={i === extendedActiveIndex}
+                          near={Math.abs(i - extendedActiveIndex) <= 1}
+                        />
+                      </div>
                     ) : (
                       <img
                         src={p.image}
                         alt={p.name}
-                        className="relative w-full aspect-square object-cover" />
+                        className={`relative w-full aspect-square object-cover ${isAvailable(p.name) === false ? "grayscale" : ""}`} />
                     )}
+                    {isAvailable(p.name) === false && <SoldOutRibbon />}
                   </Link>
                 </div>
               ))}
