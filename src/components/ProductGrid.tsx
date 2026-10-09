@@ -448,6 +448,7 @@ const ProductGrid = () => {
             <div className="relative pg-grid">
             <div className="grid grid-cols-5 gap-[clamp(1rem,1.5cqw,1.5rem)]">
               {products.map((p, i) => {
+                const soldOut = isAvailable(p.name) === false;
                 return (
                 <motion.div
                   key={p.name}
@@ -459,10 +460,13 @@ const ProductGrid = () => {
                   className="flex flex-col group min-w-0">
                     <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden pg-card-img block relative">
                       {p.video ? (
-                        <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
+                        <div className={soldOut ? "grayscale" : undefined}>
+                          <DesktopHoverVideo video={p.video} poster={p.videoPoster ?? p.image} />
+                        </div>
                       ) : (
-                        <img src={p.image} alt={p.name} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300" />
+                        <img src={p.image} alt={p.name} className={`w-full aspect-square object-cover hover:scale-105 transition-transform duration-300 ${soldOut ? "grayscale" : ""}`} />
                       )}
+                      {soldOut && <SoldOutRibbon />}
                     </Link>
                     <div className="pg-card-body">
                       <Link to={`/produkt/${p.handle}`} className="pg-card-title font-extrabold block hover:opacity-70 transition-opacity text-center">
