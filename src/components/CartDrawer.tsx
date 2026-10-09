@@ -505,7 +505,7 @@ const CartDrawer = () => {
                         {freeCanFlavor ? "Deine 3. Dose ist gratis" : "Deine 3. Dose ist gratis – wähle deine Sorte"}
                       </p>
                       <div className="mt-3 grid grid-cols-3 gap-2">
-                        {allSorten.map((p) => {
+                        {allSorten.filter((p) => !isSoldOutSingleItem(p.name)).map((p) => {
                           const selected = freeCanFlavor === p.name;
                           return (
                             <button

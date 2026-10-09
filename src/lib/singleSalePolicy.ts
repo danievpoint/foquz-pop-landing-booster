@@ -8,7 +8,7 @@ export function isSoldOutSingleItem(id: string): boolean {
   return SOLD_OUT_SINGLE_IDS.some((name) => {
     const variantId = VARIANT_GID_BY_ID[name];
     return standaloneId === name
-      || standaloneId === name.toLowerCase().replaceAll(" ", "-")
+      || standaloneId === name.toLowerCase().replace(/ /g, "-")
       || (variantId !== undefined && (standaloneId === variantId || standaloneId === variantId.split("/").pop()));
   });
 }
