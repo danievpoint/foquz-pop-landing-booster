@@ -60,7 +60,7 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     expect(screen.getByRole('button', { name: /IN DEN WARENKORB/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'KURZ RIECHEN, AB AUF WOLKE 7' })).toBeDisabled();
-    cleanup(); state.available = null; page();
+    cleanup(); state.available = null; page(); fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     expect(screen.queryByText(/AUF LAGER/)).not.toBeInTheDocument();
   });
   it('opens FAQs and updates the comparison carousel', () => {
