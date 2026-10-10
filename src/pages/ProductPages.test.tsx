@@ -10,7 +10,7 @@ const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | nul
 vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
 vi.mock("@/hooks/useProductAvailability", () => ({ useProductAvailability: () => ({ isAvailable: () => state.available }) }));
 vi.mock("@/lib/klaviyo", () => ({ trackViewedProduct: vi.fn(), variantIdFor: () => null }));
-vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined }));
+vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined, VARIANT_GID_BY_ID: {}, storefrontApiRequest: () => Promise.resolve(null) }));
 vi.mock("@/components/Navbar", () => ({ default: () => null }));
 vi.mock("@/components/Footer", () => ({ default: () => null }));
 vi.mock("@/components/SeoHead", () => ({ default: () => null }));
@@ -38,7 +38,6 @@ describe("Imported product pages keep Shopify identities", () => {
   it.each([['peach-party', 'PEACH PARTY'], ['thai-style', 'THAI STYLE'], ['lemon-breezy', 'LEMON BREEZY']])("buys the correct single and real bundle on %s", (handle, name) => {
     page(handle);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
-    expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
@@ -58,9 +57,10 @@ describe("Imported product pages keep Shopify identities", () => {
   });
   it('blocks sold-out purchases and does not invent availability', () => {
     state.available = false; page();
+    fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     expect(screen.getByRole('button', { name: /IN DEN WARENKORB/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'KURZ RIECHEN, AB AUF WOLKE 7' })).toBeDisabled();
-    cleanup(); state.available = null; page();
+    cleanup(); state.available = null; page(); fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     expect(screen.queryByText(/AUF LAGER/)).not.toBeInTheDocument();
   });
   it('opens FAQs and updates the comparison carousel', () => {
@@ -82,12 +82,11 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
   });
-  it('disables sold-out bundles', () => {
+  it('keeps free-choice sets buyable independent of old bundle products', () => {
     state.available = false;
     page('starter-bundle');
-    const buy = screen.getByRole('button', { name: /IN DEN WARENKORB/ });
-    expect(buy).toBeDisabled();
-    fireEvent.click(buy);
-    expect(state.add).not.toHaveBeenCalled();
+    expect(screen.getByText('3/3 gewählt')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle' }));
   });
 });

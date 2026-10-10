@@ -1,6 +1,7 @@
 import { useProductPage } from "@/hooks/useProductPage";
 import { Sparkles } from "lucide-react";
 import { ProductFlavorSelector } from "@/components/product-pages/ProductFlavorSelector";
+import { SetFlavorPicker } from "@/components/product-pages/SetFlavorPicker";
 
 const price = (value: number) => value.toFixed(2).replace(".", ",");
 
@@ -122,6 +123,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                   BESTER PREIS
                 </span>
               )}
+              {isSelected && <div className="mt-3"><SetFlavorPicker size={b.dosen} /></div>}
             </div>
           );
         }
@@ -164,6 +166,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
             </span>
             </button>
             {isSelected && b.dosen === 1 && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
+            {isSelected && b.dosen > 1 && <div className="mt-3"><SetFlavorPicker size={b.dosen} /></div>}
           </div>
         );
       })}
