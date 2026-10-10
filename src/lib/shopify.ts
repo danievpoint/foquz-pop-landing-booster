@@ -135,6 +135,7 @@ const CART_QUERY = `
 export interface CheckoutLine {
   variantId: string;
   quantity: number;
+  attributes?: Array<{ key: string; value: string }>;
 }
 
 export interface ShopifyCheckout {
@@ -149,7 +150,7 @@ export async function createShopifyCheckout(
   discountCodes?: string[]
 ): Promise<ShopifyCheckout | null> {
   const input: Record<string, unknown> = {
-    lines: lines.map((l) => ({ quantity: l.quantity, merchandiseId: l.variantId })),
+    lines: lines.map((l) => ({ quantity: l.quantity, merchandiseId: l.variantId, ...(l.attributes ? { attributes: l.attributes } : {}) })),
   };
   if (discountCodes && discountCodes.length > 0) {
     input.discountCodes = discountCodes;

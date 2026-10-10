@@ -8,6 +8,10 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
+import { getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+
+const SET_CAN_PRICE = 7.49;
+const isGiftSetItem = (i: { id: string; setSize?: number }) => GIFT_BUNDLE_IDS.includes(i.id) || (i.setSize ?? 0) >= 5;
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -16,6 +20,9 @@ export interface CartItem {
   price: number;
   image: string;
   qty: number;
+  /** Teil eines frei gewählten Sets (3/5/10) – geht als Einzeldose mit `_set` nach Shopify. */
+  setSize?: number;
+  flavor?: string;
 }
 
 interface CartContextType {
@@ -291,6 +298,30 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (isGiftItem(p.id)) return;
     // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
     if (isSoldOutSingleItem(p.id)) return;
+    const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
+    if (setSize) {
+      // Sets werden als einzelne Dosen der gewählten Sorten hinzugefügt.
+      const mix = getSetMix(setSize);
+      const cans = SET_FLAVORS.filter((f) => (mix[f.name] ?? 0) > 0).map((f) => ({
+        id: `set${setSize}:${f.name}`, name: `${f.name} · ${setSize}er Set`, price: SET_CAN_PRICE,
+        image: f.image, setSize, flavor: f.name, qty: (mix[f.name] ?? 0) * qty,
+      }));
+      if (cans.length === 0) return;
+      setItems((prev) => {
+        let next = [...prev];
+        for (const c of cans) {
+          const existing = next.find((i) => i.id === c.id);
+          next = existing ? next.map((i) => (i.id === c.id ? { ...i, qty: i.qty + c.qty } : i)) : [...next, c];
+        }
+        return next;
+      });
+      pendingKlaviyoAdd.current = { ...p, qty };
+      setLastAddedProductId(p.id);
+      setAddToCartTimestamp(Date.now());
+      fireCelebrationConfetti();
+      setIsOpen(true);
+      return;
+    }
     setItems((prev) => {
       const existing = prev.find((i) => i.id === p.id);
       if (existing) {
@@ -326,7 +357,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Bei deaktiviertem Flag werden evtl. gespeicherte Zugaben entfernt.
   useEffect(() => {
     const bundleQty = items
-      .filter((i) => GIFT_BUNDLE_IDS.includes(i.id))
+      .filter(isGiftSetItem)
       .reduce((s, i) => s + i.qty, 0);
 
     const wantedQty = GIFTS_ENABLED && bundleQty > 0 ? 1 : 0;
@@ -448,8 +479,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
+  // Shopify-Summe enthält auch die automatischen Set-Rabatte.
   const discountedTotal =
-    discountCode && shopifyDiscountedSubtotal !== null
+    shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
   if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
@@ -467,20 +499,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
         // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.
-        const lookupId = isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id;
+        const lookupId = i.flavor ?? (isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id);
         const variantId = VARIANT_GID_BY_ID[lookupId];
         if (!variantId) {
           console.warn(`No Shopify variant mapped for cart item id "${i.id}"`);
           return null;
         }
-        return { variantId, quantity: i.qty };
+        return i.setSize
+          ? { variantId, quantity: i.qty, attributes: [{ key: "_set", value: `${i.setSize}er Set` }] }
+          : { variantId, quantity: i.qty };
       })
-      .filter((l): l is { variantId: string; quantity: number } => l !== null)
+      .filter((l): l is NonNullable<typeof l> => l !== null)
       .concat(prioLine);
   }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
-  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id)));
+  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id) || (i.setSize ?? 0) >= 5));
   const prevFreeShippingRef = useRef(freeShippingUnlocked);
   useEffect(() => {
     if (freeShippingUnlocked && !prevFreeShippingRef.current) {
