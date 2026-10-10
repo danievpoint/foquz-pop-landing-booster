@@ -10,7 +10,7 @@ const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | nul
 vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
 vi.mock("@/hooks/useProductAvailability", () => ({ useProductAvailability: () => ({ isAvailable: () => state.available }) }));
 vi.mock("@/lib/klaviyo", () => ({ trackViewedProduct: vi.fn(), variantIdFor: () => null }));
-vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined }));
+vi.mock("@/lib/shopify", () => ({ SHOPIFY_PRODUCT_ID_BY_HANDLE: {}, fetchProductGalleryImages: () => Promise.resolve([]), shopifyImageUrl: (url: string) => url, shopifyImageSrcSet: () => undefined, VARIANT_GID_BY_ID: {}, storefrontApiRequest: () => Promise.resolve(null) }));
 vi.mock("@/components/Navbar", () => ({ default: () => null }));
 vi.mock("@/components/Footer", () => ({ default: () => null }));
 vi.mock("@/components/SeoHead", () => ({ default: () => null }));
