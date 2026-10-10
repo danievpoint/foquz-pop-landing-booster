@@ -1,3 +1,4 @@
+import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -1247,7 +1248,7 @@ const ProductDetail = () => {
         <SectionHeading>ENTDECKE AUCH</SectionHeading>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {allProducts
-            .filter((p) => p.handle !== product.handle)
+            .filter((p) => p.handle !== product.handle && !isSoldOutSingleItem(p.name))
             .map((p) => (
               <CrossSellCard key={p.handle} p={p} addToCart={addToCart} isAvailable={isAvailable} />
             ))}
