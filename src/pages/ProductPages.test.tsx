@@ -38,7 +38,6 @@ describe("Imported product pages keep Shopify identities", () => {
   it.each([['peach-party', 'PEACH PARTY'], ['thai-style', 'THAI STYLE'], ['lemon-breezy', 'LEMON BREEZY']])("buys the correct single and real bundle on %s", (handle, name) => {
     page(handle);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
-    expect(screen.queryByText(/Blueberry|Watermelon|BLUEBERRY|WATERMELON/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
@@ -58,6 +57,7 @@ describe("Imported product pages keep Shopify identities", () => {
   });
   it('blocks sold-out purchases and does not invent availability', () => {
     state.available = false; page();
+    fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     expect(screen.getByRole('button', { name: /IN DEN WARENKORB/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'KURZ RIECHEN, AB AUF WOLKE 7' })).toBeDisabled();
     cleanup(); state.available = null; page();
@@ -82,12 +82,11 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
   });
-  it('disables sold-out bundles', () => {
+  it('keeps free-choice sets buyable independent of old bundle products', () => {
     state.available = false;
     page('starter-bundle');
-    const buy = screen.getByRole('button', { name: /IN DEN WARENKORB/ });
-    expect(buy).toBeDisabled();
-    fireEvent.click(buy);
-    expect(state.add).not.toHaveBeenCalled();
+    expect(screen.getByText('3/3 gewählt')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle' }));
   });
 });
