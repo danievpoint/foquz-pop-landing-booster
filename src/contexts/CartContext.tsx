@@ -8,7 +8,7 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { ensureFlavorStock, getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
 const isGiftSetItem = (i: { id: string; setSize?: number }) => GIFT_BUNDLE_IDS.includes(i.id) || (i.setSize ?? 0) >= 5;
@@ -291,6 +291,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const pendingKlaviyoAdd = useRef<CartItem | null>(null);
+  useEffect(() => { ensureFlavorStock(); }, []);
 
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
