@@ -144,27 +144,19 @@ const BundleSection = () => {
                   <div className="flex items-center gap-3 md:gap-4 mb-0 flex-wrap">
                     <span className="text-xl md:text-3xl font-black text-black">{bundle.price ? `Nur ${bundle.price}` : "Bald verfügbar"}</span>
                     {bundle.oldPrice && <span className="text-xs md:text-sm text-black/50">statt <span className="line-through">{bundle.oldPrice}</span> einzeln</span>}
-                    {bundle.enabled && <StockBadge variant="dark" available={isAvailable(bundle.name)} />}
+                    {bundle.enabled && isAvailable(bundle.name) === true && <StockBadge variant="dark" available={true} />}
                   </div>
                   <span className="text-[11px] md:text-xs font-semibold text-black/60">{bundle.perKg}</span>
                 </div>
 
-                {/* CTA */}
-                <button
-                  onClick={() =>
-                    bundle.enabled && bundle.cartPrice !== null && isAvailable(bundle.name) !== false && addToCart(1, {
-                      id: bundle.id,
-                      name: bundle.name,
-                      price: bundle.cartPrice,
-                      image: bundle.image,
-                    })
-                  }
-                  disabled={!bundle.enabled || isAvailable(bundle.name) === false}
-                  className="comic-btn disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-fit text-sm py-3 px-4 font-black text-center"
+                {/* CTA: führt auf die Bundle-Seite, dort werden die Sorten zusammengestellt */}
+                <Link
+                  to={bundle.link}
+                  className="comic-btn w-full sm:w-fit text-sm py-3 px-4 font-black text-center"
                   style={{ backgroundColor: "#ffd618", color: "#000" }}
                 >
-                  {bundle.enabled ? (bundle.id === "vorrats-bundle" ? "JETZT VORRATS-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN") : "BALD VERFÜGBAR"}
-                </button>
+                  {bundle.id === "vorrats-bundle" ? "JETZT VORRATS-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN"}
+                </Link>
                 {bundle.link && <Link
                   to={bundle.link}
                   className="mt-3 inline-block text-xs md:text-sm font-black uppercase underline underline-offset-4 text-black/70 hover:text-black"
