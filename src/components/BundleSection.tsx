@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { bundleProduct, crewBundleProduct } from "@/data/products";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
-import { useCart } from "@/contexts/CartContext";
 import StockBadge from "@/components/StockBadge";
 import bundleBg from "@/assets/bundle-bg.webp";
 const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
@@ -71,7 +70,6 @@ const squads = [
 ];
 
 const BundleSection = () => {
-  const { addToCart } = useCart();
   const { isAvailable } = useProductAvailability();
 
   return (
