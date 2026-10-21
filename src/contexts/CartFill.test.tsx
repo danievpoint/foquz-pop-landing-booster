@@ -8,7 +8,10 @@ import { trackAddedToCart } from "@/lib/klaviyo";
 vi.mock("canvas-confetti", () => ({ default: { create: () => vi.fn() } }));
 vi.mock("@/lib/tracking", () => ({ trackPixelAddToCart: vi.fn(), syncShopifyConsentWithTimeout: vi.fn() }));
 vi.mock("@/lib/klaviyo", () => ({ trackAddedToCart: vi.fn(), variantIdFor: () => null }));
-vi.mock("@/lib/shopify", async (original) => ({ ...await original<typeof import("@/lib/shopify")>(), createShopifyCheckout: vi.fn(), isShopifyCartCompleted: vi.fn(async () => false), storefrontApiRequest: vi.fn(async () => null) }));
+vi.mock("@/lib/shopify", async (original) => ({ ...await original<typeof import("@/lib/shopify")>(), createShopifyCheckout: vi.fn(), isShopifyCartCompleted: vi.fn(async () => false), storefrontApiRequest: vi.fn() }));
+import { storefrontApiRequest } from "@/lib/shopify";
+import { writeConsent } from "@/lib/consent";
+import { refreshFlavorStock } from "@/lib/setMix";
 
 let cart: ReturnType<typeof useCart>;
 function Probe() { cart = useCart(); return null; }
@@ -19,7 +22,8 @@ const gifts = () => cart.items.filter((i) => i.id.startsWith("gift-"));
 const res = (v: number, id: string): ShopifyCheckout => ({ url: `https://checkout.foquz.de/${id}`, cartId: id, discountedSubtotal: v, discountApplicable: true, discounts: [] });
 const stock = { "PEACH PARTY": { available: true, qty: 3 }, "THAI STYLE": { available: false, qty: 0 }, "LEMON BREEZY": { available: true, qty: 2 }, "WATERMELON FLEX": { available: true, qty: 50 }, "BLUEBERRY FLOW": { available: true, qty: 40 } };
 
-beforeEach(() => { localStorage.clear(); vi.clearAllMocks(); let n = 0; vi.mocked(createShopifyCheckout).mockImplementation(async () => res(1, `c${++n}`)); });
+const stockOk = async () => ({ data: { nodes: Array.from({ length: 5 }, () => ({ availableForSale: true, quantityAvailable: 50 })) } });
+beforeEach(() => { localStorage.clear(); vi.clearAllMocks(); vi.mocked(storefrontApiRequest).mockImplementation(stockOk as never); writeConsent({ marketing: true, choiceMade: true }); let n = 0; vi.mocked(createShopifyCheckout).mockImplementation(async () => res(1, `c${++n}`)); });
 afterEach(cleanup);
 
 describe("Auffüllen auf Sets (reine Regel)", () => {
@@ -50,12 +54,10 @@ describe("Auffüllen auf Sets (reine Regel)", () => {
     const p = planFillToSet([], 5, tiny, {}, 7.49)!;
     expect(p.added).toEqual({ "PEACH PARTY": 3, "LEMON BREEZY": 2 });
   });
-  it("altes echtes 5er Bundle zählt 5 Dosen, Geschenke/Prio nicht", () => {
+  it("altes echtes 5er Bundle zählt 5 Dosen; Auffüllen mit alten Bundles wird nicht angeboten", () => {
     const items: CartItem[] = [{ id: "squad-bundle", name: "5er", qty: 1, price: 34.9, image: "" }, { id: "gift-sticker", name: "g", qty: 1, price: 0, image: "" }, { id: "prio-versand", name: "p", qty: 1, price: 2, image: "" }];
     expect(paidCanCount(items)).toBe(5);
-    const plan = planFillToSet(items, 10, stock, {}, 7.49)!;
-    expect(Object.values(plan.added).reduce((a, b) => a + b, 0)).toBe(5);
-    expect(plan.items.some((i) => i.id === "squad-bundle")).toBe(true);
+    expect(planFillToSet(items, 10, stock, {}, 7.49)).toBeNull();
   });
 });
 
@@ -73,7 +75,10 @@ describe("Auffüllen im Warenkorb", () => {
     expect(cart.items.find((i) => i.flavor === "PEACH PARTY")!.qty).toBeGreaterThanOrEqual(1);
     expect(gifts().map((g) => g.qty)).toEqual([1, 1]);
     await waitFor(() => expect(trackAddedToCart).toHaveBeenCalledTimes(2));
-    const [, , confirmed] = vi.mocked(trackAddedToCart).mock.calls[1];
+    const [, cartAfter, confirmed] = vi.mocked(trackAddedToCart).mock.calls[1];
+    // Vollständiger Warenkorb inkl. Gratis-Positionen (Preis 0)
+    expect(cartAfter.filter((l) => l.id.startsWith("gift-")).map((l) => l.price)).toEqual([0, 0]);
+    expect(cartAfter.reduce((s, l) => s + (l.id.startsWith("gift-") ? 0 : l.qty), 0)).toBe(5);
     expect(confirmed).toEqual({ value: 34.9, checkoutUrl: expect.stringContaining("checkout.foquz.de/five") });
     // no-op: 5 → 3 und erneutes 5 erzeugen weder Mutation noch Event
     await act(async () => { expect(await cart.fillCartToSet(3, {})).toBe(false); expect(await cart.fillCartToSet(5, {})).toBe(false); });
@@ -96,5 +101,34 @@ describe("Auffüllen im Warenkorb", () => {
     await new Promise((r) => setTimeout(r, 20));
     expect(trackAddedToCart).not.toHaveBeenCalled();
     expect(cart.checkoutUrl).toBeNull();
+  });
+  it("Bestandsabfrage scheitert: Aktion verweigert, keine Mutation", async () => {
+    mount();
+    const plan = cart.planFill(3)!;
+    vi.mocked(storefrontApiRequest).mockRejectedValue(new Error("offline"));
+    let ok = true;
+    await act(async () => { ok = await cart.fillCartToSet(3, plan.added); });
+    expect(ok).toBe(false);
+    expect(cart.items).toHaveLength(0);
+  });
+  it("nicht lieferbare Sorte im Warenkorb sperrt die Kasse", async () => {
+    mount();
+    act(() => cart.addToCart(1, { id: "PEACH PARTY", name: "PEACH PARTY", price: 7.49, image: "" }));
+    vi.mocked(storefrontApiRequest).mockResolvedValue({ data: { nodes: [{ availableForSale: false, quantityAvailable: 0 }, null, null, null, null] } } as never);
+    await act(async () => { await refreshFlavorStock(); });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(cart.unavailableFlavors.length).toBeGreaterThan(0);
+    expect(cart.checkoutUrl).toBeNull();
+  });
+  it("ohne Marketing-Einwilligung beim Hinzufügen kein Event, auch nach späterer Zustimmung", async () => {
+    writeConsent({ marketing: false, choiceMade: true });
+    let release!: () => void;
+    vi.mocked(createShopifyCheckout).mockImplementation(() => new Promise((r) => { release = () => r(res(7.49, "late")); }));
+    mount();
+    act(() => cart.addToCart(1, { id: "PEACH PARTY", name: "PEACH PARTY", price: 7.49, image: "" }));
+    await waitFor(() => expect(release).toBeDefined());
+    act(() => { writeConsent({ marketing: true, choiceMade: true }); });
+    await act(async () => { release(); await new Promise((r) => setTimeout(r, 20)); });
+    expect(trackAddedToCart).not.toHaveBeenCalled();
   });
 });
