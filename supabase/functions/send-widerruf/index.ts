@@ -1,135 +1,87 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { handleWithdrawal } from './logic.ts';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const FROM = 'FOQUZ <noreply@foquz.de>';
 const TO_SHOP = 'info@foquz.de';
 
-interface Payload {
-  name: string;
-  email: string;
-  address: string;
-  orderNumber?: string;
-  orderDate: string;
-  body: string;
-}
-
-function esc(s: string) {
-  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
-}
-
 async function sendMail(to: string, subject: string, html: string) {
+  if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY missing');
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-    },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
     body: JSON.stringify({ from: FROM, to: [to], subject, html }),
   });
-  if (!r.ok) {
-    const t = await r.text();
-    throw new Error(`Resend ${r.status}: ${t}`);
-  }
-  return r.json();
+  if (!r.ok) throw new Error(`Resend ${r.status}: ${await r.text()}`);
 }
+
+const json = (status: number, body: unknown) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+  if (req.method !== 'POST') return json(405, { error: 'Method not allowed' });
+
+  let raw: unknown;
+  try {
+    const text = await req.text();
+    if (text.length > 20000) return json(413, { error: 'Anfrage zu groß.' });
+    raw = JSON.parse(text);
+  } catch {
+    return json(400, { error: 'Ungültige Anfrage.' });
+  }
+
+  const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('cf-connecting-ip') || null;
+  const userAgent = req.headers.get('user-agent')?.slice(0, 500) ?? null;
 
   try {
-    const p = (await req.json()) as Payload;
-    if (!p.name || !p.email || !p.address || !p.orderDate || !p.body) {
-      return new Response(JSON.stringify({ error: 'Pflichtfelder fehlen' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) {
-      return new Response(JSON.stringify({ error: 'Ungültige E-Mail' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    );
-
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
-    const ua = req.headers.get('user-agent') ?? null;
-
-    const { data: row, error: insErr } = await supabase
-      .from('withdrawal_requests')
-      .insert({
-        customer_name: p.name,
-        customer_email: p.email,
-        customer_address: p.address,
-        order_number: p.orderNumber ?? null,
-        order_date: p.orderDate,
-        withdrawal_body: p.body,
-        ip_address: ip,
-        user_agent: ua,
-      })
-      .select('id')
-      .single();
-    if (insErr) throw insErr;
-
-    const dateStr = new Date(p.orderDate).toLocaleDateString('de-DE');
-
-    // Notification to shop
-    const shopHtml = `
-      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#111;">
-        <h2 style="margin:0 0 16px">Neuer Widerruf eingegangen</h2>
-        <table style="border-collapse:collapse;width:100%;font-size:14px">
-          <tr><td style="padding:6px 0;width:160px"><b>Name</b></td><td>${esc(p.name)}</td></tr>
-          <tr><td style="padding:6px 0"><b>E-Mail</b></td><td>${esc(p.email)}</td></tr>
-          <tr><td style="padding:6px 0"><b>Anschrift</b></td><td>${esc(p.address)}</td></tr>
-          <tr><td style="padding:6px 0"><b>Bestellnummer</b></td><td>${esc(p.orderNumber ?? '—')}</td></tr>
-          <tr><td style="padding:6px 0"><b>Bestellt am</b></td><td>${esc(dateStr)}</td></tr>
-        </table>
-        <h3 style="margin:20px 0 8px">Widerrufstext</h3>
-        <p style="white-space:pre-wrap;background:#f6f6f6;padding:12px;border-radius:8px">${esc(p.body)}</p>
-        <p style="color:#666;font-size:12px;margin-top:24px">ID: ${row.id}<br/>IP: ${esc(ip ?? '—')}</p>
-      </div>`;
-
-    // Confirmation to customer
-    const custHtml = `
-      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#111;">
-        <h2 style="margin:0 0 16px">Bestätigung Ihres Widerrufs</h2>
-        <p>Hallo ${esc(p.name)},</p>
-        <p>wir haben Ihren Widerruf erhalten und bestätigen hiermit dessen Eingang. Wir kümmern uns schnellstmöglich um die Bearbeitung.</p>
-        <h3 style="margin:20px 0 8px;font-size:15px">Ihre Angaben</h3>
-        <table style="border-collapse:collapse;width:100%;font-size:14px">
-          <tr><td style="padding:6px 0;width:160px"><b>Name</b></td><td>${esc(p.name)}</td></tr>
-          <tr><td style="padding:6px 0"><b>Anschrift</b></td><td>${esc(p.address)}</td></tr>
-          <tr><td style="padding:6px 0"><b>Bestellnummer</b></td><td>${esc(p.orderNumber ?? '—')}</td></tr>
-          <tr><td style="padding:6px 0"><b>Bestellt am</b></td><td>${esc(dateStr)}</td></tr>
-        </table>
-        <p style="white-space:pre-wrap;background:#f6f6f6;padding:12px;border-radius:8px;margin-top:16px">${esc(p.body)}</p>
-        <p style="margin-top:24px">Bei Rückfragen erreichen Sie uns unter <a href="mailto:info@foquz.de">info@foquz.de</a>.</p>
-        <p style="margin-top:24px">Viele Grüße<br/>Ihr FOQUZ Team</p>
-        <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
-        <p style="color:#888;font-size:12px">FOQUZ GmbH · Gewerbering am Brand 8 · 82549 Königsdorf</p>
-      </div>`;
-
-    await sendMail(TO_SHOP, `Neuer Widerruf – ${p.name}`, shopHtml);
-    await sendMail(p.email, 'Bestätigung Ihres Widerrufs – FOQUZ', custHtml);
-
-    await supabase
-      .from('withdrawal_requests')
-      .update({ confirmation_sent_at: new Date().toISOString(), notification_sent_at: new Date().toISOString() })
-      .eq('id', row.id);
-
-    return new Response(JSON.stringify({ ok: true, id: row.id }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    const result = await handleWithdrawal(raw, { ip, userAgent }, {
+      shopAddress: TO_SHOP,
+      now: () => new Date(),
+      sendMail,
+      recentCount: async (addr) => {
+        const since = new Date(Date.now() - 3600_000).toISOString();
+        const { count } = await supabase
+          .from('withdrawal_requests')
+          .select('id', { count: 'exact', head: true })
+          .eq('ip_address', addr)
+          .gte('created_at', since);
+        return count ?? 0;
+      },
+      store: async (v, meta) => {
+        const { data, error } = await supabase
+          .from('withdrawal_requests')
+          .insert({
+            customer_name: v.name,
+            customer_email: v.email,
+            customer_address: v.address,
+            order_number: v.orderNumber,
+            contract_description: v.contractDescription,
+            order_date: v.orderDate,
+            withdrawal_body: v.statement,
+            received_at: meta.receivedAt,
+            ip_address: meta.ip,
+            user_agent: meta.userAgent,
+          })
+          .select('id, received_at')
+          .single();
+        if (error || !data) throw error ?? new Error('insert failed');
+        return { id: data.id, receivedAt: new Date(data.received_at).toISOString() };
+      },
+      markSent: async (id, field, err) => {
+        const now = new Date().toISOString();
+        const patch = field === 'confirmation'
+          ? (err ? { confirmation_error: err } : { confirmation_sent_at: now, confirmation_error: null })
+          : (err ? { notification_error: err } : { notification_sent_at: now, notification_error: null });
+        await supabase.from('withdrawal_requests').update(patch).eq('id', id);
+      },
     });
+    return json(result.status, result.body);
   } catch (e) {
-    console.error('send-widerruf error', e);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    console.error('send-widerruf store error', e);
+    // Nicht gespeichert → Kunde muss es erneut versuchen oder per E-Mail widerrufen.
+    return json(500, { error: 'Ihr Widerruf konnte nicht gespeichert werden.' });
   }
 });
