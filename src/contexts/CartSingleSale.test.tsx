@@ -5,12 +5,9 @@ import { CartProvider, useCart } from "./CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { createShopifyCheckout, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { CART_STORAGE_KEY } from "@/lib/cartRules";
 
 const state = vi.hoisted(() => ({ legacy: [] as Array<{ id: string; name: string; price: number; image: string; qty: number }> }));
-vi.mock("react", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("react")>();
-  return { ...actual, useState: (initial: unknown) => actual.useState(Array.isArray(initial) && initial.length === 0 ? state.legacy : initial) };
-});
 vi.mock("canvas-confetti", () => ({ default: { create: () => vi.fn() } }));
 vi.mock("@/lib/tracking", () => ({ trackPixelAddToCart: vi.fn(), syncShopifyConsentWithTimeout: vi.fn() }));
 vi.mock("@/lib/klaviyo", () => ({ trackAddedToCart: vi.fn(), variantIdFor: () => null }));
@@ -28,7 +25,7 @@ function Controls() {
   </>;
 }
 const item = (id: string, price = 7.49) => ({ id, name: id, price, image: "", qty: 1 });
-function mount() { render(<MemoryRouter><CartProvider><Controls /><CartDrawer /></CartProvider></MemoryRouter>); }
+function mount() { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify({ version: 1, items: state.legacy })); render(<MemoryRouter><CartProvider><Controls /><CartDrawer /></CartProvider></MemoryRouter>); }
 afterEach(() => { cleanup(); state.legacy = []; vi.clearAllMocks(); localStorage.clear(); });
 
 describe("Thai standalone sale restrictions", () => {

@@ -293,8 +293,10 @@ export async function isShopifyCartCompleted(cartId: string): Promise<boolean> {
   try {
     const data = await storefrontApiRequest(CART_QUERY, { id: cartId });
     const cart = data?.data?.cart;
-    if (!cart) return true;
-    return (cart.totalQuantity ?? 0) === 0;
+    // A missing cart can also be expired or inaccessible, not a paid order.
+    // Only an explicit emptied checkout cart may clear the local snapshot.
+    if (!cart) return false;
+    return cart.totalQuantity === 0;
   } catch (e) {
     console.error('Failed to check Shopify cart status:', e);
     return false;

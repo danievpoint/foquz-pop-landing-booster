@@ -448,7 +448,8 @@ const ProductGrid = () => {
             <div className="relative pg-grid">
             <div className="grid grid-cols-5 gap-[clamp(1rem,1.5cqw,1.5rem)]">
               {products.map((p, i) => {
-                const soldOut = isAvailable(p.name) === false;
+                const detailsOnly = p.name === "THAI STYLE";
+                const soldOut = !detailsOnly && isAvailable(p.name) === false;
                 return (
                 <motion.div
                   key={p.name}
@@ -475,17 +476,17 @@ const ProductGrid = () => {
                       <p className="pg-card-desc text-muted-foreground whitespace-pre-line text-center">{p.desc}</p>
                       <div className="pg-card-gap flex items-center justify-center">
                         <span className="pg-card-price font-black">{p.price}</span>
-                        <StockBadge available={isAvailable(p.name)} />
+                        {!detailsOnly && <StockBadge available={isAvailable(p.name)} />}
                       </div>
                       <span className="pg-card-tax text-muted-foreground block text-center">inkl. MwSt.</span>
                       <div className="pg-card-actions flex items-center justify-center gap-3">
-                        <button
+                        {detailsOnly ? <Link to={`/produkt/${p.handle}`} className="comic-btn text-black pg-card-btn" style={{ backgroundColor: p.color }}>DETAILS ANSEHEN</Link> : <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                           disabled={isAvailable(p.name) === false}
                           className="comic-btn text-black pg-card-btn disabled:opacity-50 disabled:cursor-not-allowed"
                           style={{ backgroundColor: p.color }}>
                           {isAvailable(p.name) === false ? "AUSVERKAUFT" : "IN DEN WARENKORB"}
-                        </button>
+                        </button>}
                         <InfoButton onClick={() => setInfoProduct(p)} />
                       </div>
                     </div>
@@ -521,7 +522,7 @@ const ProductGrid = () => {
                   style={{ scrollSnapStop: 'always' }}>
                   <Link to={`/produkt/${p.handle}`} className="rounded-2xl overflow-hidden mb-1 block relative" style={{ backgroundColor: p.color + '22' }}>
                     {p.video ? (
-                      <div className={isAvailable(p.name) === false ? "grayscale" : undefined}>
+                      <div className={p.name !== "THAI STYLE" && isAvailable(p.name) === false ? "grayscale" : undefined}>
                         <MobileVideoWithPoster
                           key={`slide-${i}-${p.name}`}
                           src={p.video}
@@ -534,9 +535,9 @@ const ProductGrid = () => {
                       <img
                         src={p.image}
                         alt={p.name}
-                        className={`relative w-full aspect-square object-cover ${isAvailable(p.name) === false ? "grayscale" : ""}`} />
+                        className={`relative w-full aspect-square object-cover ${p.name !== "THAI STYLE" && isAvailable(p.name) === false ? "grayscale" : ""}`} />
                     )}
-                    {isAvailable(p.name) === false && <SoldOutRibbon />}
+                    {p.name !== "THAI STYLE" && isAvailable(p.name) === false && <SoldOutRibbon />}
                   </Link>
                 </div>
               ))}
@@ -549,11 +550,11 @@ const ProductGrid = () => {
               <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[realActiveIndex].desc}</p>
               <div className="flex items-center justify-center gap-2 mb-0.5">
                 <span className="text-xl font-black">{products[realActiveIndex].price}</span>
-                <StockBadge available={isAvailable(products[realActiveIndex].name)} />
+                {products[realActiveIndex].name !== "THAI STYLE" && <StockBadge available={isAvailable(products[realActiveIndex].name)} />}
               </div>
               <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
               <div className="flex items-center justify-center gap-3">
-                <button
+                {products[realActiveIndex].name === "THAI STYLE" ? <Link to={`/produkt/${products[realActiveIndex].handle}`} className="comic-btn text-black text-xs py-2 px-5" style={{ backgroundColor: products[realActiveIndex].color }}>DETAILS ANSEHEN</Link> : <button
                   onClick={() => {
                     setAutoPlay(false);
                     const p = products[realActiveIndex];
@@ -563,7 +564,7 @@ const ProductGrid = () => {
                   className="comic-btn text-black text-xs py-2 px-5 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: products[realActiveIndex].color }}>
                   {isAvailable(products[realActiveIndex].name) === false ? "AUSVERKAUFT" : "IN DEN WARENKORB"}
-                </button>
+                </button>}
                 <InfoButton onClick={() => setInfoProduct(products[realActiveIndex])} />
               </div>
             </div>

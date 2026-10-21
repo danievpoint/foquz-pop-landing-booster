@@ -25,6 +25,7 @@ import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
 import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
+import { completeSetSizes, hasGuaranteedFreeShipping } from "@/lib/cartRules";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 
 const PAYMENT_METHODS = [
@@ -56,7 +57,7 @@ const SHIPPING_COST_DE = 4.49;
 
 const getProductHandle = (item: CartItem): string | null => {
   if (item.id === "bundle" || item.id === "starter-bundle") return "starter-bundle";
-  const byName = allProducts.find((p) => p.name === item.name);
+  const byName = allProducts.find((p) => p.name === (item.flavor ?? item.name));
   if (byName) return byName.handle;
   const byId = allProducts.find((p) => p.handle === item.id);
   if (byId) return byId.handle;
@@ -83,6 +84,8 @@ const CartDrawer = () => {
     isCheckingOut,
     checkoutUrl,
     addToCart,
+    replaceCartWithSet,
+    markCheckoutPending,
     freeCanEligible,
     freeCanFlavor,
     chooseFreeCan,
@@ -119,11 +122,11 @@ const CartDrawer = () => {
   const discountRatio = total > 0 && hasAppliedDiscount ? discountedTotal / total : 1;
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
-  const hasBundle = items.some((i) => i.id === BUNDLE_ID);
-  const hasSquad = items.some((i) => i.id === "squad-bundle");
-  const hasCrew = items.some((i) => i.id === "vorrats-bundle");
-  const singlesInCart = items.filter((i) => i.id !== BUNDLE_ID);
-  const singlesCount = singlesInCart.reduce((s, i) => s + i.qty, 0);
+  const setSizes = completeSetSizes(items);
+  const hasBundle = setSizes.includes(3);
+  const hasSquad = setSizes.includes(5);
+  const hasCrew = setSizes.includes(10);
+  const singlesCount = items.filter((item) => !isGiftItem(item.id) && !isFreeCanItem(item.id)).reduce((sum, item) => sum + item.qty, 0);
   const paidSingleCanQty = items
     .filter((i) => SINGLE_CAN_IDS.includes(i.id))
     .reduce((s, i) => s + i.qty, 0);
@@ -146,7 +149,7 @@ const CartDrawer = () => {
   }
 
   // Shipping/savings
-  const hasAlwaysFreeBundle = items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id));
+  const hasAlwaysFreeBundle = hasGuaranteedFreeShipping(items);
   const freeShipping = hasAlwaysFreeBundle || discountedTotal >= FREE_SHIPPING_THRESHOLD;
   const missingForFreeShip = freeShipping ? 0 : Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
   const shipProgress = freeShipping ? 100 : Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
@@ -595,7 +598,7 @@ const CartDrawer = () => {
                             </p>
                             <button
                               onClick={() =>
-                                addToCart(1, { id: u.id, name: u.name, price: u.price, image: u.image })
+                                replaceCartWithSet({ id: u.id, name: u.name, price: u.price, image: u.image })
                               }
                               className={`comic-btn text-xs py-1.5 px-4 mt-2 ${featured ? "bg-[#ffd618] text-black" : "bg-primary text-primary-foreground"}`}
                             >
@@ -763,7 +766,7 @@ const CartDrawer = () => {
 
                 <div className="flex items-center justify-between text-base pt-1 border-t border-foreground/20 mt-1">
                   <span className="font-black uppercase">Gesamt:</span>
-                  <span className="font-black">€{(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}</span>
+                  <span className="font-black" aria-live="polite">{isCheckingOut ? "LÄDT…" : `€${(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}`}</span>
                 </div>
 
                 {totalSavings > 0 && (
@@ -780,7 +783,9 @@ const CartDrawer = () => {
                     href={checkoutUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => sessionStorage.setItem("foquz_checkout_pending", "1")}
+                    onClick={markCheckoutPending}
+                    onAuxClick={markCheckoutPending}
+                    onContextMenu={markCheckoutPending}
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>ZUR KASSE</span>
