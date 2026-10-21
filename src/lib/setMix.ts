@@ -28,6 +28,15 @@ const STOCK_QUERY_BASIC = `
 `;
 
 let loading: Promise<void> | null = null;
+export const getFlavorStock = () => stock;
+/** Bestand vor einer Warenkorbaktion neu bei Shopify abfragen. */
+export async function refreshFlavorStock(): Promise<Record<string, StockInfo> | null> {
+  if (loading) await loading.catch(() => undefined);
+  loading = null;
+  ensureFlavorStock();
+  await loading;
+  return stock;
+}
 export function ensureFlavorStock() {
   if (loading || typeof window === "undefined") return;
   const ids = SET_FLAVORS.map((f) => VARIANT_GID_BY_ID[f.name]);
@@ -35,6 +44,7 @@ export function ensureFlavorStock() {
     let data;
     try { data = await storefrontApiRequest(STOCK_QUERY, { ids }); }
     catch { try { data = await storefrontApiRequest(STOCK_QUERY_BASIC, { ids }); } catch { data = null; } }
+    if (!data?.data?.nodes) { emit(); return; } // Fehler: bisherigen Stand behalten, nichts erfinden
     const nodes: Array<{ id: string; availableForSale: boolean; quantityAvailable?: number | null } | null> = data?.data?.nodes ?? [];
     const next: Record<string, StockInfo> = {};
     SET_FLAVORS.forEach((f, i) => {

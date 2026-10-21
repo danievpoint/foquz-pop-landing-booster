@@ -1,7 +1,7 @@
 # Agent rules
 
 - Standalone sale restrictions use `singleSalePolicy` and guard both cart offers and checkout preparation; check cart IDs only, never expand or filter Shopify bundle components.
-- Cart mutations reconcile gifts through `cartRules`; set benefits require complete set groups, and only cart upsells replace paid cans/sets so product-page adds stay additive.
+- Cart mutations reconcile gifts through `cartRules`; set benefits require complete set groups, and cart set cards fill up to the target via `planFillToSet` (keep existing cans, add only missing available ones, no-op at/above target) so product-page adds stay additive.
 - Persist validated versioned cart items, not prices or checkout results; keyed Shopify preparation is the sole publisher of cart/code totals and links to prevent async races.
 - Track the launched checkout snapshot separately from newer prepared carts; never interpret an expired/missing Shopify cart as proof of payment.
 
@@ -13,3 +13,5 @@
 - Cart 'free shipping' for can-sets follows `hasCheckoutFreeShipping`/`SHOPIFY_FREE_SHIPPING_FOR_CAN_SETS`; only enable it once Shopify itself makes those carts free, so the cart never promises what checkout charges.
 - Third-party scripts (Klaviyo, Loox, pixels, Shopify Monorail, Collabs attribution) start only via consent checks in `consent`/`consentRuntime`; never hardcode them in index.html, and revocation clears known IDs then reloads, because loaded SDKs cannot be stopped reliably.
 - Legal texts live once in `src/legal/*.html` and are rendered by the site and exported to `legal/shopify` via `scripts/build-legal.ts`; a test enforces both stay identical.
+
+- Klaviyo 'Added to Cart' is queued per successful cart action and sent once only after Shopify confirms the current cart (value after discounts, real checkoutUrl); dropped on failure, quantity mismatch or legacy-bundle permalink carts, so events never carry invented values.

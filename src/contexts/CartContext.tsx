@@ -8,10 +8,10 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { ensureFlavorStock, getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { ensureFlavorStock, getFlavorStock, getSetMix, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
-import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -42,7 +42,9 @@ interface CartContextType {
   openCart: () => void;
   closeCart: () => void;
   addToCart: (qty?: number, product?: Omit<CartItem, "qty">) => void;
-  replaceCartWithSet: (product: Omit<CartItem, "qty">) => void;
+  /** Warenkorb auf ein 3er/5er/10er Set auffüllen (bestehende Sorten bleiben). */
+  fillCartToSet: (target: number, expected: FillPlan["added"]) => Promise<boolean>;
+  planFill: (target: number) => FillPlan | null;
   markCheckoutPending: () => void;
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
@@ -80,7 +82,8 @@ const CartContext = createContext<CartContextType>({
   openCart: () => {},
   closeCart: () => {},
   addToCart: () => {},
-  replaceCartWithSet: () => {},
+  fillCartToSet: async () => false,
+  planFill: () => null,
   markCheckoutPending: () => {},
   removeFromCart: () => {},
   updateQty: () => {},
@@ -293,6 +296,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const pendingKlaviyoAdd = useRef<CartItem | null>(null);
+  /** Erfolgreiche Aktionen, deren Klaviyo-Event auf den bestätigten Shopify-Warenkorb wartet. */
+  const klaviyoQueue = useRef<CartItem[]>([]);
   useEffect(() => { ensureFlavorStock(); }, []);
 
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
@@ -320,6 +325,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return next;
       });
       pendingKlaviyoAdd.current = { ...p, qty };
+      klaviyoQueue.current.push({ ...p, qty });
       setLastAddedProductId(p.id);
       setAddToCartTimestamp(Date.now());
       fireCelebrationConfetti();
@@ -335,6 +341,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
 
     pendingKlaviyoAdd.current = { ...p, qty };
+    klaviyoQueue.current.push({ ...p, qty });
     setLastAddedProductId(p.id);
     setAddToCartTimestamp(Date.now());
 
@@ -358,21 +365,44 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const replaceCartWithSet = useCallback((product: Omit<CartItem, "qty">) => {
-    const size = SET_SIZE_BY_BUNDLE_ID[product.id];
-    if (!size) return;
-    const mix = getSetMix(size);
-    const cans = SET_FLAVORS.filter((flavor) => (mix[flavor.name] ?? 0) > 0).map((flavor) => ({
-      id: `set${size}:${flavor.name}`, name: `${flavor.name} · ${size}er Set`,
-      price: SET_CAN_PRICE, image: flavor.image, setSize: size, flavor: flavor.name, qty: mix[flavor.name] ?? 0,
-    }));
-    if (cans.reduce((sum, can) => sum + can.qty, 0) !== size) return;
-    setItems((previous) => replaceWithSet(previous, cans));
-    pendingKlaviyoAdd.current = { ...product, qty: 1 };
-    setLastAddedProductId(product.id);
-    setAddToCartTimestamp(Date.now());
-    fireCelebrationConfetti();
-    setIsOpen(true);
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  const fillInFlight = useRef(false);
+  const flavorImages = Object.fromEntries(SET_FLAVORS.map((f) => [f.name, f.image]));
+  const planFill = useCallback(
+    (target: number) => planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [items]
+  );
+
+  const fillCartToSet = useCallback(async (target: number, expected: FillPlan["added"]) => {
+    if (fillInFlight.current) return false; // Doppelklick/schnelle Aktionen: no-op
+    fillInFlight.current = true;
+    try {
+      const before = itemsRef.current;
+      // Bestand direkt vor der Aktion neu prüfen.
+      const fresh = await refreshFlavorStock();
+      if (itemsRef.current !== before) return false; // Warenkorb hat sich inzwischen geändert
+      const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE);
+      if (!plan) return false;
+      if (JSON.stringify(plan.added) !== JSON.stringify(expected)) {
+        toast.error("Der Bestand hat sich geändert. Bitte prüfe die neue Zusammenstellung.");
+        return false;
+      }
+      setItems(plan.items);
+      const addedQty = Object.values(plan.added).reduce((s, q) => s + q, 0);
+      const product = { id: `fill-${target}`, name: `Auf ${target}er Set aufgefüllt`, price: SET_CAN_PRICE, image: plan.items.find((i) => i.setSize)?.image ?? "" };
+      pendingKlaviyoAdd.current = { ...product, qty: addedQty };
+      klaviyoQueue.current.push({ ...product, qty: addedQty });
+      setLastAddedProductId(product.id);
+      setAddToCartTimestamp(Date.now());
+      fireCelebrationConfetti();
+      setIsOpen(true);
+      return true;
+    } finally {
+      fillInFlight.current = false;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setItems]);
 
   // ---- Aktion "3 FÜR 2" ----
@@ -415,7 +445,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const added = pendingKlaviyoAdd.current;
     if (!added || addToCartTimestamp === 0) return;
     pendingKlaviyoAdd.current = null;
-    trackAddedToCart(added, items);
     trackPixelAddToCart({
       contentId: variantIdFor(added.id) ?? added.id,
       name: added.name,
@@ -560,6 +589,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Bundles (Shopify-Bundles-App) sind nur im Onlineshop kaufbar → Cart-Permalink.
     // Der Link wird synchron beim Rendern abgeleitet (siehe bundlePermalink), nicht hier.
     if (lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) {
+      // Kein von Shopify bestätigter Warenwert → kein Klaviyo-Event mit erfundenem Wert.
+      klaviyoQueue.current = [];
       shopifyCartIdRef.current = null;
       setShopifyDiscountedSubtotal(null);
       setCheckoutUrl(null);
@@ -574,6 +605,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
         if (cancelled || currentKeyRef.current !== currentKey) return;
+        if (result?.quantityMismatch) {
+          klaviyoQueue.current = [];
+          setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
+          toast.error("Eine Sorte ist gerade nicht in der gewünschten Menge lieferbar. Bitte passe deinen Warenkorb an.");
+          return;
+        }
         if (result) {
           shopifyCartIdRef.current = result.cartId;
           checkoutIdKeyRef.current = currentKey;
@@ -589,12 +627,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             toast.error("Dieser Rabattcode ist für deinen Warenkorb nicht gültig.");
           }
         } else {
+          klaviyoQueue.current = [];
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
         }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
+        klaviyoQueue.current = [];
         if (!cancelled && currentKeyRef.current === currentKey) {
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
@@ -608,6 +648,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cancelled = true;
     };
   }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey]);
+
+  // Klaviyo "Added to Cart": genau einmal je erfolgreicher Aktion, sobald Shopify den
+  // aktuellen Warenkorb bestätigt hat (Warenwert nach Rabatt ohne Versand, echter Kassen-Link).
+  useEffect(() => {
+    if (klaviyoQueue.current.length === 0) return;
+    if (resolvedKey !== currentKey || !checkoutUrl || shopifyDiscountedSubtotal === null || isCheckingOut) return;
+    const queued = klaviyoQueue.current;
+    klaviyoQueue.current = [];
+    const paidLines = items.filter((i) => !isGiftItem(i.id));
+    for (const added of queued) trackAddedToCart(added, paidLines, { value: shopifyDiscountedSubtotal, checkoutUrl });
+  }, [resolvedKey, currentKey, checkoutUrl, shopifyDiscountedSubtotal, isCheckingOut, items]);
 
   const markCheckoutPending = useCallback(() => {
     if (!effectiveCheckoutUrl || checkoutIdKeyRef.current !== currentKey || !shopifyCartIdRef.current) return;
@@ -690,7 +741,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       activeDiscountPercent, discountLines, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
-      isOpen, openCart, closeCart, addToCart, replaceCartWithSet, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
+      isOpen, openCart, closeCart, addToCart, fillCartToSet, planFill, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
       checkout, isCheckingOut: isCheckingOut || (items.length > 0 && !effectiveCheckoutUrl), checkoutUrl: effectiveCheckoutUrl,
