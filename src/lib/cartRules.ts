@@ -136,8 +136,8 @@ export function planFillToSet(items: CartItem[], target: number, stock: FillStoc
   const missing = target - current;
   const ranked = FLAVORS
     .map((name, i) => ({ name, i, info: stock?.[name] }))
-    .filter((f) => f.info?.available ?? !(stock === null && f.name === "THAI STYLE" && isSoldOutSingleItem(f.name)))
-    .filter((f) => f.info !== undefined || stock === null)
+    // Ohne Bestandsdaten nur Sorten, die nicht als ausverkauft gesperrt sind.
+    .filter((f) => (stock ? f.info?.available === true : !isSoldOutSingleItem(f.name)))
     .sort((a, b) => ((b.info?.qty ?? 0) - (a.info?.qty ?? 0)) || a.i - b.i);
   const added: Record<string, number> = {};
   let left = missing, guard = 0;
