@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
-import { applyDiscountCodeToCart, buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
 import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
 import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
@@ -11,7 +11,7 @@ import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { ensureFlavorStock, getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
-const isGiftSetItem = (i: { id: string; setSize?: number }) => GIFT_BUNDLE_IDS.includes(i.id) || (i.setSize ?? 0) >= 5;
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasGuaranteedFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -40,6 +40,8 @@ interface CartContextType {
   openCart: () => void;
   closeCart: () => void;
   addToCart: (qty?: number, product?: Omit<CartItem, "qty">) => void;
+  replaceCartWithSet: (product: Omit<CartItem, "qty">) => void;
+  markCheckoutPending: () => void;
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   activateNewsletterDiscount: () => void;
@@ -75,6 +77,8 @@ const CartContext = createContext<CartContextType>({
   openCart: () => {},
   closeCart: () => {},
   addToCart: () => {},
+  replaceCartWithSet: () => {},
+  markCheckoutPending: () => {},
   removeFromCart: () => {},
   updateQty: () => {},
   activateNewsletterDiscount: () => {},
@@ -205,7 +209,11 @@ const DISCOUNT_KEY = "foquz_newsletter_discount";
 const NEWSLETTER_DISCOUNT_CODE = "CLOUD10";
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [restored] = useState(readStoredCart);
+  const [items, setRawItems] = useState<CartItem[]>(() => reconcileCart(restored.items, GIFT_ITEMS, GIFTS_ENABLED));
+  const setItems = useCallback((update: CartItem[] | ((previous: CartItem[]) => CartItem[])) => {
+    setRawItems((previous) => reconcileCart(typeof update === "function" ? update(previous) : update, GIFT_ITEMS, GIFTS_ENABLED));
+  }, []);
   const [isOpen, setIsOpen] = useState(false);
   const [hasNewsletterDiscount, setHasNewsletterDiscount] = useState(() => {
     return localStorage.getItem(DISCOUNT_KEY) === "true";
@@ -216,13 +224,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
-  const [prioShipping, setPrioShipping] = useState(false);
+  const [prioShipping, setPrioShipping] = useState(restored.prioShipping);
+  const [resolvedKey, setResolvedKey] = useState<string | null>(null);
+  const currentKeyRef = useRef("");
+  const cartFingerprintRef = useRef("");
+  const checkoutIdKeyRef = useRef<string | null>(null);
+  useEffect(() => { saveStoredCart(items, prioShipping); }, [items, prioShipping]);
   const shopifyCartIdRef = useRef<string | null>(null);
 
-  const hasSoldOutSingle = items.some((item) => isSoldOutSingleItem(item.id));
+  const hasSoldOutSingle = items.some((item) => (!isSetCan(item) && isSoldOutSingleItem(item.id)));
   useEffect(() => {
     if (!hasSoldOutSingle) return;
-    setItems((previous) => previous.filter((item) => !isSoldOutSingleItem(item.id)));
+    setItems((previous) => previous.filter((item) => !(!isSetCan(item) && isSoldOutSingleItem(item.id))));
     shopifyCartIdRef.current = null;
     setCheckoutUrl(null);
     setShopifyDiscountedSubtotal(null);
@@ -264,24 +277,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setPendingDiscountCode(normalized);
     setManualDiscountCode(normalized);
 
-    // If a Shopify cart already exists, update it in place via
-    // cartDiscountCodesUpdate instead of recreating the cart.
-    const cartId = shopifyCartIdRef.current;
-    if (cartId) {
-      void applyDiscountCodeToCart(cartId, [normalized])
-        .then((result) => {
-          if (!result) return;
-          setCheckoutUrl(result.url);
-          setShopifyDiscountedSubtotal(result.discountedSubtotal);
-          if (!result.discountApplicable) {
-            localStorage.removeItem(MANUAL_CODE_KEY);
-            setPendingDiscountCode(null);
-            setManualDiscountCode(null);
-            toast.error("Dieser Rabattcode ist f\u00fcr deinen Warenkorb nicht g\u00fcltig.");
-          }
-        })
-        .catch((e) => console.error("cartDiscountCodesUpdate failed:", e));
-    }
+    // Code changes use the same keyed preparation pipeline as item changes.
+    // No independent mutation may publish a result for an older cart/code.
+
   }, []);
 
   const clearManualDiscountCode = useCallback(() => {
@@ -298,7 +296,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Gratis-Zugaben können nicht direkt gekauft werden.
     if (isGiftItem(p.id)) return;
     // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
-    if (isSoldOutSingleItem(p.id)) return;
+    if (isSoldOutSingleItem(p.id) && !isSetCan({ ...p, qty })) return;
+    if (!Number.isInteger(qty) || qty <= 0) return;
     const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
     if (setSize) {
       // Sets werden als einzelne Dosen der gewählten Sorten hinzugefügt.
@@ -354,26 +353,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Gratis-Zugaben automatisch mit dem Power Bundle synchronisieren.
-  // Bei deaktiviertem Flag werden evtl. gespeicherte Zugaben entfernt.
-  useEffect(() => {
-    const bundleQty = items
-      .filter(isGiftSetItem)
-      .reduce((s, i) => s + i.qty, 0);
-
-    const wantedQty = GIFTS_ENABLED && bundleQty > 0 ? 1 : 0;
-    const needsUpdate = GIFT_ITEMS.some((g) => {
-      const current = items.find((i) => i.id === g.id);
-      return (current?.qty ?? 0) !== wantedQty;
-    });
-    if (!needsUpdate) return;
-
-    setItems((prev) => {
-      const withoutGifts = prev.filter((i) => !isGiftItemId(i.id));
-      if (wantedQty <= 0) return withoutGifts;
-      return [...withoutGifts, ...GIFT_ITEMS.map((g) => ({ ...g, qty: 1 }))];
-    });
-  }, [items]);
+  const replaceCartWithSet = useCallback((product: Omit<CartItem, "qty">) => {
+    const size = SET_SIZE_BY_BUNDLE_ID[product.id];
+    if (!size) return;
+    const mix = getSetMix(size);
+    const cans = SET_FLAVORS.filter((flavor) => (mix[flavor.name] ?? 0) > 0).map((flavor) => ({
+      id: `set${size}:${flavor.name}`, name: `${flavor.name} · ${size}er Set`,
+      price: SET_CAN_PRICE, image: flavor.image, setSize: size, flavor: flavor.name, qty: mix[flavor.name] ?? 0,
+    }));
+    if (cans.reduce((sum, can) => sum + can.qty, 0) !== size) return;
+    setItems((previous) => replaceWithSet(previous, cans));
+    pendingKlaviyoAdd.current = { ...product, qty: 1 };
+    setLastAddedProductId(product.id);
+    setAddToCartTimestamp(Date.now());
+    fireCelebrationConfetti();
+    setIsOpen(true);
+  }, [setItems]);
 
   // ---- Aktion "3 FÜR 2" ----
   const paidCanQty = items
@@ -481,11 +476,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   // Shopify-Summe enthält auch die automatischen Set-Rabatte.
+  const currentKey = JSON.stringify([cartFingerprint(items, prioShipping), discountCode]);
+  currentKeyRef.current = currentKey;
+  cartFingerprintRef.current = cartFingerprint(items, prioShipping);
+  const hasCurrentShopifyResult = resolvedKey === currentKey && shopifyDiscountedSubtotal !== null;
   const discountedTotal =
-    shopifyDiscountedSubtotal !== null
+    hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && shopifyDiscountedSubtotal !== null && total > 0) {
+  if (discountCode && hasCurrentShopifyResult && total > 0) {
     activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
   }
 
@@ -496,7 +495,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         ? [{ variantId: VARIANT_GID_BY_ID[PRIO_SHIPPING_ID], quantity: 1 }]
         : [];
     return items
-      .filter((item) => !isSoldOutSingleItem(item.id))
+      .filter((item) => !(!isSetCan(item) && isSoldOutSingleItem(item.id)))
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
         // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.
@@ -515,7 +514,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
-  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || items.some((i) => ALWAYS_FREE_SHIPPING_IDS.includes(i.id) || (i.setSize ?? 0) >= 5));
+  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || hasGuaranteedFreeShipping(items));
   const prevFreeShippingRef = useRef(freeShippingUnlocked);
   useEffect(() => {
     if (freeShippingUnlocked && !prevFreeShippingRef.current) {
@@ -535,7 +534,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Für Nicht-Bundle-Warenkörbe nie einen (veralteten) Permalink ausgeben.
   const effectiveCheckoutUrl =
     hasSoldOutSingle || items.length === 0 ? null :
-      bundlePermalink ?? (checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
+      bundlePermalink ?? (resolvedKey === currentKey && checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
 
 
   useEffect(() => {
@@ -570,9 +569,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
-        if (cancelled) return;
+        if (cancelled || currentKeyRef.current !== currentKey) return;
         if (result) {
           shopifyCartIdRef.current = result.cartId;
+          checkoutIdKeyRef.current = currentKey;
+          setResolvedKey(currentKey);
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
 
@@ -589,19 +590,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
-        if (!cancelled) {
+        if (!cancelled && currentKeyRef.current === currentKey) {
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
         }
       })
       .finally(() => {
-        if (!cancelled) setIsCheckingOut(false);
+        if (!cancelled && currentKeyRef.current === currentKey) setIsCheckingOut(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines]);
+  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey]);
+
+  const markCheckoutPending = useCallback(() => {
+    if (!effectiveCheckoutUrl || checkoutIdKeyRef.current !== currentKey || !shopifyCartIdRef.current) return;
+    try { localStorage.setItem(CHECKOUT_PENDING_KEY, JSON.stringify({ version: 1, cartId: shopifyCartIdRef.current, fingerprint: cartFingerprint(items, prioShipping) })); } catch { /* Storage disabled. */ }
+  }, [effectiveCheckoutUrl, currentKey, items, prioShipping]);
 
   const checkout = useCallback(async () => {
     if (hasSoldOutSingle) return;
@@ -625,10 +631,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Einwilligung an Shopify übergeben, damit der Checkout die Pixel lädt.
     await syncShopifyConsentWithTimeout(1500);
 
+    if (currentKeyRef.current !== currentKey) { tab?.close(); return; }
+    markCheckoutPending();
     if (tab) tab.location.href = checkoutUrl;
     else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
-    sessionStorage.setItem("foquz_checkout_pending", "1");
-  }, [items.length, hasSoldOutSingle, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines]);
+
+  }, [items.length, hasSoldOutSingle, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines, currentKey, markCheckoutPending]);
 
   // Only clear the cart once the Shopify checkout was actually completed
   // (i.e. the Shopify cart no longer exists or has 0 items). If the user
@@ -637,14 +645,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     let checking = false;
     const handleVisibility = async () => {
       if (document.visibilityState !== "visible") return;
-      if (sessionStorage.getItem("foquz_checkout_pending") !== "1") return;
-      const cartId = shopifyCartIdRef.current;
-      if (!cartId || checking) return;
+      let pending: { version: number; cartId: string; fingerprint: string };
+      try { pending = JSON.parse(localStorage.getItem(CHECKOUT_PENDING_KEY) ?? "null"); } catch { return; }
+      if (!pending || pending.version !== 1 || typeof pending.cartId !== "string" || typeof pending.fingerprint !== "string" || checking) return;
+      const cartId = pending.cartId;
+      // The checkout snapshot is independent of later cart preparations/reloads.
+      if (pending.fingerprint !== cartFingerprintRef.current) return;
       checking = true;
       try {
         const completed = await isShopifyCartCompleted(cartId);
-        if (completed) {
-          sessionStorage.removeItem("foquz_checkout_pending");
+        if (completed && pending.fingerprint === cartFingerprintRef.current) {
+          localStorage.removeItem(CHECKOUT_PENDING_KEY);
+          localStorage.removeItem(CART_STORAGE_KEY);
           shopifyCartIdRef.current = null;
           setItems([]);
           setPrioShipping(false);
@@ -660,6 +672,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         checking = false;
       }
     };
+    void handleVisibility();
     document.addEventListener("visibilitychange", handleVisibility);
     window.addEventListener("focus", handleVisibility);
     return () => {
@@ -672,10 +685,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
       activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
-      isOpen, openCart, closeCart, addToCart, removeFromCart, updateQty, activateNewsletterDiscount,
+      isOpen, openCart, closeCart, addToCart, replaceCartWithSet, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
-      checkout, isCheckingOut, checkoutUrl: effectiveCheckoutUrl,
+      checkout, isCheckingOut: isCheckingOut || (items.length > 0 && !effectiveCheckoutUrl), checkoutUrl: effectiveCheckoutUrl,
       prioShipping, setPrioShipping,
     }}>
 
