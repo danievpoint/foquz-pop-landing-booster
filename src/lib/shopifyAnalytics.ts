@@ -8,6 +8,7 @@
  */
 
 import { SHOPIFY_STORE_PERMANENT_DOMAIN } from "./shopify";
+import { hasConsent } from "./consent";
 
 const MONORAIL_ENDPOINT = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/.well-known/shopify/monorail/unstable/produce_batch`;
 const SCHEMA_ID = "custom_storefront_customer_tracking/1.2";
@@ -34,23 +35,31 @@ function readCookie(name: string): string | null {
 function getUniqueToken(): string {
   const shopifyCookie = readCookie("_shopify_y");
   if (shopifyCookie) return shopifyCookie;
-  let token = localStorage.getItem(UNIQUE_TOKEN_KEY);
-  if (!token) {
-    token = uuid();
-    localStorage.setItem(UNIQUE_TOKEN_KEY, token);
+  try {
+    let token = localStorage.getItem(UNIQUE_TOKEN_KEY);
+    if (!token) {
+      token = uuid();
+      localStorage.setItem(UNIQUE_TOKEN_KEY, token);
+    }
+    return token;
+  } catch {
+    return uuid();
   }
-  return token;
 }
 
 function getSessionToken(): string {
   const shopifyCookie = readCookie("_shopify_s");
   if (shopifyCookie) return shopifyCookie;
-  let token = sessionStorage.getItem(SESSION_TOKEN_KEY);
-  if (!token) {
-    token = uuid();
-    sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+  try {
+    let token = sessionStorage.getItem(SESSION_TOKEN_KEY);
+    if (!token) {
+      token = uuid();
+      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+    }
+    return token;
+  } catch {
+    return uuid();
   }
-  return token;
 }
 
 function send(payload: Record<string, unknown>) {
@@ -90,6 +99,8 @@ function send(payload: Record<string, unknown>) {
 
 export function trackPageView(path: string, search = "") {
   if (typeof window === "undefined") return;
+  // Ohne Analyse-Einwilligung: keine IDs lesen/erzeugen, nichts senden, nichts merken.
+  if (!hasConsent("analytics")) return;
 
   // De-duplicate: one page view per unique location per page load.
   const key = `pageview:${path}${search}`;
@@ -106,7 +117,7 @@ export function trackPageView(path: string, search = "") {
     event_time: Date.now(),
     event_id: uuid(),
     ccpa_enforced: false,
-    gdpr_enforced: false,
+    gdpr_enforced: true,
     canonical_url: url,
     url,
     normalized_page_type: "index",

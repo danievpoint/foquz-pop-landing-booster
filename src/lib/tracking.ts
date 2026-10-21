@@ -11,6 +11,8 @@
  * Shopify im Checkout ueber seine eigenen Web Pixel / Conversions API.
  */
 
+import { hasConsent, readConsent } from "./consent";
+
 export const TRACKING_IDS = {
   metaPixelId: "835106479686262",
   tiktokPixelId: "DAPBT4RC77U9CL93V270",
@@ -18,7 +20,6 @@ export const TRACKING_IDS = {
   googleAdsConversionLabel: "",
 };
 
-const CONSENT_KEY = "foquz-consent-v2";
 const CURRENCY = "EUR";
 
 type Props = Record<string, unknown>;
@@ -35,15 +36,8 @@ declare global {
 }
 
 export function hasMarketingConsent(): boolean {
-  try {
-    if (typeof window === "undefined") return false;
-    const raw = window.localStorage.getItem(CONSENT_KEY);
-    if (!raw) return false;
-    const parsed = JSON.parse(raw) as { marketing?: boolean };
-    return parsed?.marketing === true;
-  } catch {
-    return false;
-  }
+  // Wird bei jedem Event frisch gelesen, damit ein Widerruf sofort greift.
+  return hasConsent("marketing");
 }
 
 let metaLoaded = false;
@@ -296,7 +290,8 @@ export function syncShopifyConsent(consent: {
             {
               analytics: consent.analytics,
               marketing: consent.marketing,
-              preferences: consent.marketing,
+              // Keine eigene Präferenz-Kategorie im Banner → nicht erteilt.
+              preferences: false,
               sale_of_data: consent.marketing,
               headlessStorefront: true,
               checkoutRootDomain: CHECKOUT_ROOT_DOMAIN,
@@ -321,9 +316,9 @@ export function syncShopifyConsent(consent: {
 export function syncShopifyConsentWithTimeout(ms = 1500): Promise<void> {
   try {
     if (typeof window === "undefined") return Promise.resolve();
-    const raw = window.localStorage.getItem(CONSENT_KEY);
-    if (!raw) return Promise.resolve();
-    const parsed = JSON.parse(raw) as { analytics?: boolean; marketing?: boolean };
+    const parsed = readConsent();
+    // Ohne gespeicherte Auswahl nichts an Shopify melden (keine Ersatz-Einwilligung).
+    if (!parsed) return Promise.resolve();
     return Promise.race([
       syncShopifyConsent({
         analytics: parsed.analytics === true,

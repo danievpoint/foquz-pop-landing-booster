@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
-import CookieBanner from "@/components/CookieBanner";
 import NewsletterPopup, { NEWSLETTER_POPUP_ENABLED } from "@/components/NewsletterPopup";
 
 const HowToSection = lazy(() => import("@/components/HowToSection"));
@@ -46,7 +45,6 @@ const Index = () => {
           <Footer />
         </Suspense>
       </div>
-      <CookieBanner />
     </>
   );
 };

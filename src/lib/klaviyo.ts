@@ -6,6 +6,7 @@
  */
 import { SHOPIFY_STORE_PERMANENT_DOMAIN, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { allProducts } from "@/data/products";
+import { hasConsent } from "@/lib/consent";
 
 type KlaviyoQueue = unknown[] & { push: (args: unknown) => void };
 
@@ -15,8 +16,10 @@ declare global {
   }
 }
 
+// Ohne Marketing-Einwilligung wird keine Queue angelegt: nichts wird gesammelt
+// und später nachgesendet.
 const getQueue = (): KlaviyoQueue | null => {
-  if (typeof window === "undefined") return null;
+  if (typeof window === "undefined" || !hasConsent("marketing")) return null;
   window.klaviyo = window.klaviyo || ([] as unknown as KlaviyoQueue);
   return window.klaviyo;
 };

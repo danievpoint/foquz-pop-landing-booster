@@ -33,6 +33,7 @@ import ScrollToHash from "./components/ScrollToHash";
 import GlobalMarquee from "./components/GlobalMarquee";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import KlaviyoNewsletterBridge from "./components/KlaviyoNewsletterBridge";
+import CookieBanner from "./components/CookieBanner";
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DiscountRedirect = lazy(() => import("./pages/DiscountRedirect"));
@@ -72,6 +73,7 @@ const App = () => {
                 <ScrollToHash />
                 <AnalyticsTracker />
                 <GlobalMarquee />
+                <CookieBanner />
               <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<Index />} />

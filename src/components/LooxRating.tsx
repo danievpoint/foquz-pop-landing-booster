@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useConsent } from "@/lib/consent";
+import { loadLooxIfAllowed } from "@/lib/consentRuntime";
 
 interface LooxRatingProps {
   productId: string;
@@ -7,20 +9,21 @@ interface LooxRatingProps {
 
 /**
  * Offizielles Loox Sterne-Aggregat-Badge.
- * Wird automatisch ausgeblendet, solange Loox keine Bewertungen rendert.
+ * Erst nach Einwilligung in externe Bewertungsinhalte; der Platzhalter mit
+ * Laden-Knopf steht im Bewertungsbereich (LooxReviews).
  */
 const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
+  const { reviews } = useConsent();
   const ref = useRef<HTMLDivElement>(null);
   const [hasContent, setHasContent] = useState(false);
 
   useEffect(() => {
+    if (!reviews) return;
     const el = ref.current;
     if (!el) return;
     setHasContent(false);
 
     const check = () => {
-      // Nur anzeigen, wenn Loox echte Sterne gerendert hat (SVG/Icon),
-      // nicht bei leerem Markup oder blosser Zahl wie " (1)".
       const hasStars = !!el.querySelector('svg, img, .loox-icon, [class*="star"]');
       setHasContent(hasStars);
     };
@@ -28,15 +31,9 @@ const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
     observer.observe(el, { childList: true, subtree: true, attributes: true });
 
     const t = setTimeout(() => {
-      try {
-        const loox = (window as unknown as { loox?: { intg?: { reload?: () => void } } }).loox;
-        loox?.intg?.reload?.();
-      } catch {
-        /* noop */
-      }
+      loadLooxIfAllowed();
       check();
     }, 150);
-
     const t2 = setTimeout(check, 2500);
 
     return () => {
@@ -44,8 +41,9 @@ const LooxRating = ({ productId, className = "" }: LooxRatingProps) => {
       clearTimeout(t);
       clearTimeout(t2);
     };
+  }, [productId, reviews]);
 
-  }, [productId]);
+  if (!reviews) return null;
 
   return (
     <div className={hasContent ? className : "hidden"}>
