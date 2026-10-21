@@ -156,3 +156,38 @@ describe("CookieBanner & Loox", () => {
     expect(readConsent()).toMatchObject({ reviews: true, marketing: false, choiceMade: false });
   });
 });
+
+describe("Review-Korrekturen", () => {
+  it("entfernte Auswahl (z. B. in anderem Tab) lässt alten Marketing-Consent nicht wiederaufleben", () => {
+    writeConsent({ marketing: true, choiceMade: true });
+    localStorage.removeItem(CONSENT_STORAGE_KEY);
+    expect(readConsent()).toBeNull();
+    expect(hasConsent("marketing")).toBe(false);
+    localStorage.setItem(CONSENT_STORAGE_KEY, "{kaputt");
+    expect(readConsent()).toBeNull();
+  });
+  it("Speicher-Fallback nur bei tatsächlich fehlgeschlagenem Schreiben", () => {
+    const spy = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("blocked"); });
+    writeConsent({ marketing: true, choiceMade: true });
+    spy.mockRestore();
+    expect(hasConsent("marketing")).toBe(true);
+  });
+  it("Widerruf sperrt geladene SDKs sofort und lädt ohne Wartezeit neu", () => {
+    const w = window as unknown as Record<string, unknown>;
+    const fbq = vi.fn();
+    w.fbq = fbq;
+    const reload = vi.fn();
+    handleConsentTransition(valid({ marketing: true }) as never, valid() as never, reload);
+    expect(reload).toHaveBeenCalledTimes(1);
+    (w.fbq as (...a: unknown[]) => void)("track", "Purchase");
+    expect(fbq).not.toHaveBeenCalledWith("track", "Purchase");
+    for (const k of ["fbq", "_fbq", "gtag", "ttq", "klaviyo", "_learnq", "dataLayer"]) delete w[k];
+  });
+  it("eigene Analyse-Kennung läuft nach 12 Monaten ab", async () => {
+    const { getUniqueToken, UNIQUE_TOKEN_MAX_AGE_MS } = await import("@/lib/shopifyAnalytics");
+    localStorage.setItem("foquz_shopify_y", `alt|${Date.now() - UNIQUE_TOKEN_MAX_AGE_MS - 1}`);
+    expect(getUniqueToken()).not.toBe("alt");
+    const fresh = localStorage.getItem("foquz_shopify_y")!.split("|")[0];
+    expect(getUniqueToken()).toBe(fresh);
+  });
+});
