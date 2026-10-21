@@ -118,6 +118,8 @@ const CookieBanner = () => {
         }
       >
         <div
+          role="dialog"
+          aria-label={view === "settings" ? "Cookie-Einstellungen" : "Cookies & Privatsphäre"}
           className={
             "bg-card border-4 border-foreground rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative " +
             (view === "settings"
