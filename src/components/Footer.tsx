@@ -94,7 +94,7 @@ const Footer = () => {
                     <Link to="/widerrufsbelehrung" className="hover:opacity-100 transition-opacity ft-link">Widerrufsbelehrung</Link>
                   </li>
                   <li>
-                    <Link to="/widerrufsbelehrung#widerrufsformular" className="hover:opacity-100 transition-opacity ft-link">Widerrufsformular</Link>
+                    <Link to="/vertrag-widerrufen" className="hover:opacity-100 transition-opacity ft-link">Vertrag widerrufen</Link>
                   </li>
                   <li>
                     <Link to="/versandbedingungen" className="hover:opacity-100 transition-opacity ft-link">Versand</Link>
@@ -110,8 +110,8 @@ const Footer = () => {
 
         <div className="mb-4 md:mb-6 flex justify-center">
           <Button asChild variant="ghost" size="sm" className="text-xs md:text-sm opacity-70 hover:opacity-100 font-medium normal-case tracking-normal">
-            <Link to="/widerrufsbelehrung#widerrufsformular">
-              Widerrufsformular
+            <Link to="/vertrag-widerrufen">
+              Vertrag widerrufen
             </Link>
           </Button>
         </div>
