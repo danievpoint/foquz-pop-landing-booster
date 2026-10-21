@@ -70,6 +70,8 @@ const productUrlFor = (cartItemId: string, name: string): string => {
 
 export interface KlaviyoCartLine {
   id: string;
+  /** Set-Dosen: echte Sorte für die Varianten-ID. */
+  flavor?: string;
   name: string;
   price: number;
   image: string;
@@ -94,31 +96,36 @@ export const buildCheckoutUrl = (items: KlaviyoCartLine[]): string => {
 
 export const buildKlaviyoItems = (items: KlaviyoCartLine[]) =>
   items.map((i) => ({
-    ProductID: variantIdFor(i.id) ?? i.id,
+    ProductID: variantIdFor(i.flavor ?? i.id) ?? i.id,
     ProductName: i.name,
     Quantity: i.qty,
     ItemPrice: i.price,
     RowTotal: Number((i.price * i.qty).toFixed(2)),
     ImageURL: absoluteUrl(i.image),
-    ProductURL: productUrlFor(i.id, i.name),
+    ProductURL: productUrlFor(i.flavor ?? i.id, i.flavor ?? i.name),
   }));
 
-/** "Added to Cart" mit dem kompletten Warenkorb NACH dem Hinzufügen. */
-export const trackAddedToCart = (added: KlaviyoCartLine, cartAfter: KlaviyoCartLine[]) => {
+/**
+ * "Added to Cart" mit dem kompletten Warenkorb NACH der Aktion. Wert und Kassen-Link
+ * kommen ausschließlich aus dem von Shopify bestätigten Warenkorb (Warenwert nach
+ * Rabatten, ohne Versand) – keine aus Set-IDs gebauten Permalinks.
+ */
+export const trackAddedToCart = (
+  added: KlaviyoCartLine,
+  cartAfter: KlaviyoCartLine[],
+  confirmed: { value: number; checkoutUrl: string }
+) => {
   try {
-    const value = Number(
-      cartAfter.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2)
-    );
     klaviyoTrack("Added to Cart", {
-      $value: value,
+      $value: Number(confirmed.value.toFixed(2)),
       AddedItemProductName: added.name,
-      AddedItemProductID: variantIdFor(added.id) ?? added.id,
+      AddedItemProductID: variantIdFor(added.flavor ?? added.id) ?? added.id,
       AddedItemImageURL: absoluteUrl(added.image),
       AddedItemPrice: added.price,
       AddedItemQuantity: added.qty,
       ItemNames: cartAfter.map((i) => i.name),
       Items: buildKlaviyoItems(cartAfter),
-      CheckoutURL: buildCheckoutUrl(cartAfter),
+      CheckoutURL: confirmed.checkoutUrl,
     });
   } catch (e) {
     console.warn("Klaviyo Added to Cart failed:", e);
