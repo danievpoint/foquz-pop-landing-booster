@@ -101,3 +101,20 @@ describe("Abwärtskompatibilität", () => {
     expect(r.ok).toBe(true);
   });
 });
+
+describe("Versandbedingungen", () => {
+  const v = readFileSync("src/legal/versand.html", "utf8");
+  it("nennt die in Shopify konfigurierten Tarife in EUR", () => {
+    for (const row of [["Deutschland", "4,49 EUR", "29,00 EUR"], ["Österreich", "7,30 EUR", "29,00 EUR"], ["Dänemark", "4,49 EUR", "29,00 EUR"], ["Schweiz", "6,45 EUR", "60,00 EUR"]]) {
+      expect(v).toMatch(new RegExp(`<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>`));
+    }
+  });
+  it("verbindliche Lieferzeiten ohne unverbindliche Richtwerte", () => {
+    expect(v).toContain("Deutschland: <strong>2–5 Werktage</strong>");
+    expect(v).toContain("Österreich, Dänemark und Schweiz: <strong>3–5 Werktage</strong>");
+    expect(v).not.toMatch(/unverbindlich|Richtwert/);
+  });
+  it("Garantie gilt in allen vier Lieferländern", () => {
+    for (const f of ["src/legal/garantie.html", "legal/garantie-bestellmail.html"]) expect(readFileSync(f, "utf8")).toContain("Deutschland, Österreich, Dänemark oder in die Schweiz");
+  });
+});
