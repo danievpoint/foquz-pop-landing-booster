@@ -290,7 +290,7 @@ const HOW_TO_STEPS = [
 ];
 
 const CLAIM_POINTS = [
-  "Echte Kräuter statt Chemie",
+  "Mit Kräutern und Menthol",
   "Kein Nikotin, kein Koffein",
   "Wird gerochen, nicht geschnupft",
   "Frei verkäufliches Lifestyle-Produkt",
@@ -1231,8 +1231,8 @@ const ProductDetail = () => {
             DIE ORIGINAL FOQUZ RIECHDOSE
           </h2>
           <p className="text-sm md:text-lg font-bold max-w-2xl mx-auto text-black/75">
-            Die Original Foquz Riechdose aus Deutschland. 100 Prozent aromatisch, 100 Prozent legal,
-            100 Prozent Wolke 7.
+            FOQUZ – Riechdosen mit Kräutern, Menthol und verschiedenen Duftprofilen.
+            Kurz riechen, ab auf Wolke 7.
           </p>
         </div>
       </section>

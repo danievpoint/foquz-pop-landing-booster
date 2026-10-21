@@ -585,7 +585,7 @@ const BlueberryFlowInner = () => {
               <div className="bg-white px-6 py-5 md:px-8 md:py-6">
                 <ul className="divide-y divide-border">
                   {[
-                    "Natürliche Kräuter und ätherische Öle* – sonst nichts.",
+                    "Kräuter, Menthol und ein eigenes Duftprofil",
                     "Mobil, wiederverschließbar & jederzeit griffbereit",
                     "Deutsche Marke, deutscher Versand & Support",
                   ].map((t) => (

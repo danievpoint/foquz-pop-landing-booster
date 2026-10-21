@@ -6,7 +6,7 @@ import SeoHead from "@/components/SeoHead";
 import { supabase } from "@/integrations/supabase/client";
 
 type Result =
-  | { kind: "stored"; id: string; receivedLabel: string; confirmationSent: boolean }
+  | { kind: "stored"; id: string; receivedLabel: string; confirmationSent: boolean; content: Array<[string, string]> }
   | { kind: "error"; message: string };
 
 const field = "w-full rounded-lg border border-foreground/20 bg-background px-3 py-2 text-sm";
@@ -43,7 +43,12 @@ const VertragWiderrufen = () => {
       });
       const body = data as { ok?: boolean; id?: string; receivedLabel?: string; confirmationSent?: boolean; error?: string } | null;
       if (body?.ok && body.id) {
-        setResult({ kind: "stored", id: body.id, receivedLabel: body.receivedLabel ?? "", confirmationSent: body.confirmationSent === true });
+        const content: Array<[string, string]> = ([
+          ["Name", get("name")], ["E-Mail", get("email")], ["Bestellnummer", get("orderNumber")],
+          ["Vertragsbeschreibung", get("contractDescription")], ["Anschrift", get("address")],
+          ["Bestelldatum", get("orderDate")], ["Erklärung", get("statement")],
+        ] as Array<[string, string]>).filter(([, v]) => v);
+        setResult({ kind: "stored", id: body.id, receivedLabel: body.receivedLabel ?? "", confirmationSent: body.confirmationSent === true, content });
         return;
       }
       let message = body?.error;
@@ -75,11 +80,17 @@ const VertragWiderrufen = () => {
           <div role="status" className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-6 text-sm space-y-2">
             <p className="font-semibold">Ihr Widerruf ist bei uns eingegangen.</p>
             <p>Eingang: {result.receivedLabel}<br />Vorgangsnummer: {result.id}</p>
+            <dl className="grid grid-cols-[auto,1fr] gap-x-3 gap-y-1 pt-2">
+              {result.content.map(([k, v]) => (
+                <div key={k} className="contents"><dt className="font-semibold">{k}:</dt><dd className="whitespace-pre-wrap break-words">{v}</dd></div>
+              ))}
+            </dl>
             {result.confirmationSent ? (
               <p className="opacity-80">Die Eingangsbestätigung haben wir an Ihre E-Mail-Adresse gesendet.</p>
             ) : (
-              <p className="opacity-80">Ihr Widerruf ist gespeichert und damit wirksam übermittelt. Die Bestätigungs-E-Mail konnte gerade nicht versendet werden – bitte notieren Sie die Angaben oben; wir senden die Bestätigung nach. Fragen: info@foquz.de</p>
+              <p className="opacity-80">Ihr Widerruf ist gespeichert und damit bei uns eingegangen. Die Bestätigungs-E-Mail konnte jedoch nicht versendet werden. Bitte drucken oder speichern Sie diese Seite als Nachweis. Eine Kopie der Eingangsbestätigung erhalten Sie auf Anfrage unter <a href="mailto:info@foquz.de" className="underline">info@foquz.de</a> unter Angabe der Vorgangsnummer.</p>
             )}
+            <button type="button" onClick={() => window.print()} className="underline font-semibold print:hidden">Seite drucken oder als PDF speichern</button>
           </div>
         ) : (
           <form onSubmit={onSubmit} noValidate={false} className="space-y-4 bg-foreground/[0.03] border border-foreground/10 rounded-2xl p-5 md:p-6">
