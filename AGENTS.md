@@ -1,6 +1,9 @@
 # Agent rules
 
 - Standalone sale restrictions use `singleSalePolicy` and guard both cart offers and checkout preparation; check cart IDs only, never expand or filter Shopify bundle components.
+- Cart mutations reconcile gifts through `cartRules`; set benefits require complete set groups, and only cart upsells replace paid cans/sets so product-page adds stay additive.
+- Persist validated versioned cart items, not prices or checkout results; keyed Shopify preparation is the sole publisher of cart/code totals and links to prevent async races.
+- Track the launched checkout snapshot separately from newer prepared carts; never interpret an expired/missing Shopify cart as proof of payment.
 
 - Marquee and navbar are both `position: fixed` and shifted with the same `transform` driven by `--marquee-height`/`--marquee-full`; never animate their `top` — separate movement causes visible gaps while scrolling.
 - Fixed header elements carry `data-chrome`; the white preload overlay in `index.html` ignores them when deciding if page content is ready, so the header can never appear alone.
