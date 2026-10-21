@@ -11,6 +11,7 @@ export const LEGAL_PAGES = [
   { src: "agb", out: "agb", title: "Allgemeine Geschäftsbedingungen (AGB)" },
   { src: "widerruf", out: "widerruf", title: "Widerrufsbelehrung" },
   { src: "datenschutz", out: "datenschutz", title: "Datenschutzerklärung" },
+  { src: "versand", out: "versand", title: "Versandbedingungen" },
 ] as const;
 
 /** Relative Links werden für Shopify zu absoluten foquz.de-Links. */
