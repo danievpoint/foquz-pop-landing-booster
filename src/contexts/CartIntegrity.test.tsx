@@ -13,7 +13,7 @@ function Probe() { cart = useCart(); return null; }
 const single = (name = "PEACH PARTY"): CartItem => ({ id: name, name, qty: 1, price: 7.49, image: "" });
 const set = (size: number, qty = size, flavor = "WATERMELON FLEX"): CartItem[] => [{ ...single(flavor), id: `set${size}:${flavor}`, name: `${flavor} · ${size}er Set`, setSize: size, flavor, qty }];
 const bundle = (size: number) => ({ id: size === 3 ? "starter-bundle" : size === 5 ? "squad-bundle" : "vorrats-bundle", name: "Set", price: 34.9, image: "" });
-const result = (amount: number, id = "cart"): ShopifyCheckout => ({ url: `https://example.com/${id}?channel=online_store`, cartId: id, discountedSubtotal: amount, discountApplicable: true });
+const result = (amount: number, id = "cart"): ShopifyCheckout => ({ url: `https://example.com/${id}?channel=online_store`, cartId: id, discountedSubtotal: amount, discountApplicable: true, discounts: [] });
 function deferred() { let resolve: (value: ShopifyCheckout) => void = () => {}; const promise = new Promise<ShopifyCheckout>((done) => { resolve = done; }); return { promise, resolve }; }
 function mount() { return render(<CartProvider><Probe /></CartProvider>); }
 beforeEach(() => { localStorage.clear(); vi.clearAllMocks(); vi.mocked(createShopifyCheckout).mockResolvedValue(result(7.49)); vi.mocked(isShopifyCartCompleted).mockResolvedValue(false); });
