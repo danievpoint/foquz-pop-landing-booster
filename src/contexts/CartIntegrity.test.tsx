@@ -125,3 +125,30 @@ describe("Current-only Shopify prices and links", () => {
     expect(hasGuaranteedFreeShipping(cart.items)).toBe(true);
   });
 });
+import { parseDiscountAllocations } from "@/lib/shopify";
+import { hasCheckoutFreeShipping } from "@/lib/cartRules";
+
+describe("Shopify-Rabattdarstellung", () => {
+  it("trennt 5er-Set-Produktrabatt und DROP20-Bestellrabatt (37,45 − 2,55 − 6,98)", () => {
+    const lines = parseDiscountAllocations({
+      discountAllocations: [{ discountedAmount: { amount: "6.98" }, code: "drop20" }],
+      lines: { edges: [
+        { node: { discountAllocations: [{ discountedAmount: { amount: "1.50" }, title: "5er Set" }] } },
+        { node: { discountAllocations: [{ discountedAmount: { amount: "1.05" }, title: "5er Set" }] } },
+      ] },
+    });
+    expect(lines).toEqual([
+      { kind: "automatic", label: "5er Set", amount: 2.55 },
+      { kind: "code", label: "DROP20", amount: 6.98 },
+    ]);
+  });
+  it("zeigt unbekannte Codes mit Shopify-Betrag", () => {
+    expect(parseDiscountAllocations({ discountAllocations: [{ discountedAmount: { amount: "3.00" }, code: "NEU5" }] }))
+      .toEqual([{ kind: "code", label: "NEU5", amount: 3 }]);
+  });
+  it("freie Dosen-Sets gelten an der Kasse nicht als versandfrei, echte Bundle-Produkte schon", () => {
+    const cans = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"].map((f) => ({ id: `set5:${f}`, name: f, price: 7.49, qty: 1, setSize: 5, flavor: f, image: "" }));
+    expect(hasCheckoutFreeShipping(cans)).toBe(false);
+    expect(hasCheckoutFreeShipping([{ id: "squad-bundle", name: "5er", price: 34.9, qty: 1, image: "" }])).toBe(true);
+  });
+});

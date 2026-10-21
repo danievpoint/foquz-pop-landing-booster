@@ -118,6 +118,7 @@ const CartDrawer = () => {
   };
 
   const discountAmount = Math.max(0, total - discountedTotal);
+  const hasAppliedDiscount = Boolean(discountCode) && discountLines.some((d) => d.kind === "code");
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const setSizes = completeSetSizes(items);
