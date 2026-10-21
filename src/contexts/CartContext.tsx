@@ -10,7 +10,7 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { ensureFlavorStock, getFlavorStock, getSetMix, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -63,6 +63,8 @@ interface CartContextType {
   checkout: () => Promise<void>;
   isCheckingOut: boolean;
   checkoutUrl: string | null;
+  /** Sorten im Warenkorb, die Shopify aktuell als nicht lieferbar meldet – Kasse gesperrt. */
+  unavailableFlavors: string[];
   /** Prio-Versand als Zusatzposition (zählt nicht zur Gratisversand-Schwelle). */
   prioShipping: boolean;
   setPrioShipping: (v: boolean) => void;
@@ -241,6 +243,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => { saveStoredCart(items, prioShipping); }, [items, prioShipping]);
   const shopifyCartIdRef = useRef<string | null>(null);
 
+  const liveStock = useFlavorStock();
+  const unavailableFlavors = Array.from(new Set(items
+    .filter((i) => i.qty > 0)
+    .map((i) => i.flavor ?? (isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id))
+    .filter((f) => liveStock?.[f]?.available === false)));
   const hasSoldOutSingle = items.some((item) => (!isSetCan(item) && isSoldOutSingleItem(item.id)));
   useEffect(() => {
     if (!hasSoldOutSingle) return;
@@ -590,7 +597,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   })();
   // Für Nicht-Bundle-Warenkörbe nie einen (veralteten) Permalink ausgeben.
   const effectiveCheckoutUrl =
-    hasSoldOutSingle || items.length === 0 ? null :
+    hasSoldOutSingle || items.length === 0 || unavailableFlavors.length > 0 ? null :
       bundlePermalink ?? (resolvedKey === currentKey && checkoutUrl && !/\/cart\/\d/.test(checkoutUrl) ? checkoutUrl : null);
 
 
@@ -765,7 +772,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       isOpen, openCart, closeCart, addToCart, fillCartToSet, planFill, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
-      checkout, isCheckingOut: isCheckingOut || (items.length > 0 && !effectiveCheckoutUrl), checkoutUrl: effectiveCheckoutUrl,
+      checkout, isCheckingOut: isCheckingOut || (items.length > 0 && !effectiveCheckoutUrl && unavailableFlavors.length === 0), checkoutUrl: effectiveCheckoutUrl, unavailableFlavors,
       prioShipping, setPrioShipping,
     }}>
 

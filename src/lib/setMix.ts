@@ -85,6 +85,12 @@ export const getSetMix = (size: number): SetMix => mixes[size] ?? defaultMix(siz
 export const mixCount = (mix: SetMix) => Object.values(mix).reduce((s, q) => s + q, 0);
 export function setSetMix(size: number, mix: SetMix) { mixes[size] = mix; emit(); }
 
+/** Live-Bestand (Re-Render bei jeder neuen Shopify-Antwort). */
+export function useFlavorStock() {
+  useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
+  return stock;
+}
+
 export function useSetMix(size: number) {
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
   return getSetMix(size);
