@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { useHeroReady } from "@/components/HeroSection";
 
 const items = [
-  "100% ÄTHERISCHE ÖLE",
+  "KRÄUTER & MENTHOL",
   "INSTANT-FRISCHE",
   "KEIN KOFFEIN",
   "100% LEGAL",

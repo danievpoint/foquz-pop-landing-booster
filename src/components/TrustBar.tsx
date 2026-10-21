@@ -6,7 +6,7 @@ import iconShipping from "@/assets/icon-trust-shipping.png";
 import iconLegal from "@/assets/icon-trust-legal.webp";
 
 const trustItems = [
-  { icon: iconLeaf, label: "100% ÄTHERISCHE ÖLE" },
+  { icon: iconLeaf, label: "KRÄUTER & MENTHOL" },
   { icon: iconBolt, label: "INSTANT-FRISCHE IN 2 SEK" },
   { icon: iconNoCoffee, label: "KEIN KOFFEIN, KEIN CRASH" },
   { icon: iconShipping, label: "VERSAND IN 24H · MADE IN GERMANY 🇩🇪" },

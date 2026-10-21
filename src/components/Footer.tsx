@@ -27,7 +27,7 @@ const Footer = () => {
           <div className="md:order-1">
             <img src={foquzLogo} alt="FOQUZ Logo" className="h-14 md:h-20 mb-2 md:mb-3 -ml-2 ft-logo" />
             <p className="text-sm md:text-lg opacity-80 mb-0.5 md:mb-1 font-bold ft-claim">
-              Die Original Foquz Riechdose aus Deutschland.
+              FOQUZ – die deutsche Marke für Riechdosen.
             </p>
             <p className="text-sm md:text-lg opacity-80 mb-3 md:mb-4 ft-claim">
               100% aromatisch, 100% legal, 100% Wolke 7!
