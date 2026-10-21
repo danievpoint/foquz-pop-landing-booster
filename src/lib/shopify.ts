@@ -295,6 +295,7 @@ export async function applyDiscountCodeToCart(
     cartId: cart.id,
     discountedSubtotal,
     discountApplicable,
+    discounts: [],
   };
 }
 
