@@ -122,6 +122,7 @@ const CART_CREATE_MUTATION = `
       cart {
         id
         checkoutUrl
+        totalQuantity
         cost {
           subtotalAmount { amount currencyCode }
           totalAmount { amount currencyCode }
@@ -230,7 +231,10 @@ export async function createShopifyCheckout(
   const codes: Array<{ code: string; applicable: boolean }> = cart?.discountCodes ?? [];
   const discountApplicable = codes.length === 0 ? true : codes.every((c) => c.applicable);
 
-  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable, discounts: parseDiscountAllocations(cart) };
+  // Shopify lässt nicht lieferbare Mengen teils stillschweigend weg – das nie akzeptieren.
+  const requested = lines.reduce((sum, l) => sum + l.quantity, 0);
+  const quantityMismatch = typeof cart?.totalQuantity === "number" && cart.totalQuantity !== requested;
+  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable, discounts: parseDiscountAllocations(cart), quantityMismatch };
 }
 
 /**

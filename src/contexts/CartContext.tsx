@@ -605,6 +605,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
         if (cancelled || currentKeyRef.current !== currentKey) return;
+        if (result?.quantityMismatch) {
+          klaviyoQueue.current = [];
+          setCheckoutUrl(null);
+          setShopifyDiscountedSubtotal(null);
+          toast.error("Eine Sorte ist gerade nicht in der gewünschten Menge lieferbar. Bitte passe deinen Warenkorb an.");
+          return;
+        }
         if (result) {
           shopifyCartIdRef.current = result.cartId;
           checkoutIdKeyRef.current = currentKey;
