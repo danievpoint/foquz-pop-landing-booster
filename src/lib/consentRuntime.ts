@@ -79,8 +79,11 @@ export function clearCategoryData(categories: OptionalCategory[]) {
     safe(() => w.gtag?.("consent", "update", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied" }));
     safe(() => w.ttq?.holdConsent?.());
     safe(() => w.ttq?.disableCookie?.());
-    delete w.klaviyo;
-    delete w._learnq;
+    // Sofort sperren: weitere Aufrufe der geladenen SDKs laufen ins Leere.
+    const noop = () => undefined;
+    for (const key of ["fbq", "_fbq", "gtag", "ttq", "klaviyo", "_learnq", "dataLayer"]) {
+      safe(() => Object.defineProperty(w, key, { value: key === "dataLayer" || key === "_learnq" ? { push: noop } : noop, writable: false, configurable: true }));
+    }
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }
@@ -132,9 +135,10 @@ export function handleConsentTransition(
       klaviyoTimer = null;
     }
     clearCategoryData(revoked);
-    // Widerruf zuerst an Shopify geben, dann neu laden: geladene SDKs lassen sich
-    // nicht zuverlässig entladen.
-    void syncShopifyConsentWithTimeout(1500).then(reload, reload);
+    // SDKs sind bereits gesperrt; sofort neu laden. Die gespeicherte Auswahl hat
+    // Vorrang und wird beim nächsten Start erneut an Shopify übergeben.
+    void syncShopifyConsentWithTimeout(0);
+    reload();
     return;
   }
   loadKlaviyoIfAllowed();
