@@ -3,7 +3,9 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID, type DiscountLine } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
-import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
+import { trackAddedToCart, variantIdFor, type KlaviyoCartLine } from "@/lib/klaviyo";
+import { AddToCartTracker } from "@/lib/addToCartTracker";
+import { CONSENT_CHANGE_EVENT, hasConsent } from "@/lib/consent";
 import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
@@ -297,7 +299,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const pendingKlaviyoAdd = useRef<CartItem | null>(null);
   /** Erfolgreiche Aktionen, deren Klaviyo-Event auf den bestätigten Shopify-Warenkorb wartet. */
-  const klaviyoQueue = useRef<CartItem[]>([]);
+  const trackerRef = useRef<AddToCartTracker<CartItem, { lines: KlaviyoCartLine[]; prio: boolean }> | null>(null);
+  if (!trackerRef.current) trackerRef.current = new AddToCartTracker();
+  const tracker = trackerRef.current;
+  // Widerruf: gesammelte Aktionen endgültig verwerfen (keine Wiederbelebung nach neuer Zustimmung).
+  useEffect(() => {
+    const onChange = () => { if (!hasConsent("marketing")) tracker.clear(); };
+    window.addEventListener(CONSENT_CHANGE_EVENT, onChange);
+    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, onChange);
+  }, [tracker]);
   useEffect(() => { ensureFlavorStock(); }, []);
 
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
@@ -325,7 +335,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return next;
       });
       pendingKlaviyoAdd.current = { ...p, qty };
-      klaviyoQueue.current.push({ ...p, qty });
+      tracker.enqueue({ ...p, qty }, hasConsent("marketing"));
       setLastAddedProductId(p.id);
       setAddToCartTimestamp(Date.now());
       fireCelebrationConfetti();
@@ -341,7 +351,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
 
     pendingKlaviyoAdd.current = { ...p, qty };
-    klaviyoQueue.current.push({ ...p, qty });
+    tracker.enqueue({ ...p, qty }, hasConsent("marketing"));
     setLastAddedProductId(p.id);
     setAddToCartTimestamp(Date.now());
 
@@ -382,6 +392,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const before = itemsRef.current;
       // Bestand direkt vor der Aktion neu prüfen.
       const fresh = await refreshFlavorStock();
+      if (!fresh) {
+        toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal.");
+        return false;
+      }
       if (itemsRef.current !== before) return false; // Warenkorb hat sich inzwischen geändert
       const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE);
       if (!plan) return false;
@@ -393,7 +407,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const addedQty = Object.values(plan.added).reduce((s, q) => s + q, 0);
       const product = { id: `fill-${target}`, name: `Auf ${target}er Set aufgefüllt`, price: SET_CAN_PRICE, image: plan.items.find((i) => i.setSize)?.image ?? "" };
       pendingKlaviyoAdd.current = { ...product, qty: addedQty };
-      klaviyoQueue.current.push({ ...product, qty: addedQty });
+      tracker.enqueue({ ...product, qty: addedQty }, hasConsent("marketing"));
       setLastAddedProductId(product.id);
       setAddToCartTimestamp(Date.now());
       fireCelebrationConfetti();
@@ -559,6 +573,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Bundle-Warenkörbe: Permalink synchron aus den aktuellen Items ableiten, damit der
   // href des Kassen-Links nie einer Änderung hinterherhinkt (auch bei Mittelklick/neuem Tab).
+  // Aktionen an den Warenkorb binden, den sie erzeugt haben (vollständig inkl. Geschenke und Prio).
+  useEffect(() => {
+    if (tracker.size === 0) return;
+    const lines: KlaviyoCartLine[] = items.map((i) => ({ id: i.id, flavor: i.flavor ?? (isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : undefined), name: i.name, price: i.price, image: i.image, qty: i.qty }));
+    if (prioShipping && items.length > 0) lines.push({ id: PRIO_SHIPPING_ID, name: "Prio-Versand", price: PRIO_SHIPPING_PRICE, image: "", qty: 1 });
+    const legacy = getCheckoutLines().some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId));
+    tracker.bind(currentKey, { lines, prio: prioShipping }, items.length > 0 && !legacy);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentKey]);
+
   const bundlePermalink = (() => {
     const lines = getCheckoutLines();
     if (!lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) return null;
@@ -590,7 +614,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Der Link wird synchron beim Rendern abgeleitet (siehe bundlePermalink), nicht hier.
     if (lines.some((l) => ONLINE_STORE_BUNDLE_VARIANTS.has(l.variantId))) {
       // Kein von Shopify bestätigter Warenwert → kein Klaviyo-Event mit erfundenem Wert.
-      klaviyoQueue.current = [];
+      tracker.fail(currentKey);
       shopifyCartIdRef.current = null;
       setShopifyDiscountedSubtotal(null);
       setCheckoutUrl(null);
@@ -604,9 +628,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
+        // Tracking hängt nur an GENAU diesem Schlüssel – auch wenn die Antwort inzwischen veraltet ist.
+        if (!result || result.quantityMismatch || result.discountedSubtotal === null) {
+          tracker.fail(currentKey);
+        } else {
+          const prioPart = prioShipping ? PRIO_SHIPPING_PRICE : 0; // Prio ist Versand, kein Warenwert
+          const value = Math.max(0, result.discountedSubtotal - prioPart);
+          for (const e of tracker.confirm(currentKey, { value, checkoutUrl: result.url }, hasConsent("marketing"))) {
+            trackAddedToCart(e.added, e.snapshot.lines, e.confirmed);
+          }
+        }
         if (cancelled || currentKeyRef.current !== currentKey) return;
         if (result?.quantityMismatch) {
-          klaviyoQueue.current = [];
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
           toast.error("Eine Sorte ist gerade nicht in der gewünschten Menge lieferbar. Bitte passe deinen Warenkorb an.");
@@ -627,14 +660,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             toast.error("Dieser Rabattcode ist für deinen Warenkorb nicht gültig.");
           }
         } else {
-          klaviyoQueue.current = [];
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
         }
       })
       .catch((e) => {
         console.error("Checkout preparation error:", e);
-        klaviyoQueue.current = [];
+        tracker.fail(currentKey);
         if (!cancelled && currentKeyRef.current === currentKey) {
           setCheckoutUrl(null);
           setShopifyDiscountedSubtotal(null);
@@ -647,18 +679,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey]);
-
-  // Klaviyo "Added to Cart": genau einmal je erfolgreicher Aktion, sobald Shopify den
-  // aktuellen Warenkorb bestätigt hat (Warenwert nach Rabatt ohne Versand, echter Kassen-Link).
-  useEffect(() => {
-    if (klaviyoQueue.current.length === 0) return;
-    if (resolvedKey !== currentKey || !checkoutUrl || shopifyDiscountedSubtotal === null || isCheckingOut) return;
-    const queued = klaviyoQueue.current;
-    klaviyoQueue.current = [];
-    const paidLines = items.filter((i) => !isGiftItem(i.id));
-    for (const added of queued) trackAddedToCart(added, paidLines, { value: shopifyDiscountedSubtotal, checkoutUrl });
-  }, [resolvedKey, currentKey, checkoutUrl, shopifyDiscountedSubtotal, isCheckingOut, items]);
+  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey, prioShipping, tracker]);
 
   const markCheckoutPending = useCallback(() => {
     if (!effectiveCheckoutUrl || checkoutIdKeyRef.current !== currentKey || !shopifyCartIdRef.current) return;
