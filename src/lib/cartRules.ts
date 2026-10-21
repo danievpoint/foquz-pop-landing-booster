@@ -29,7 +29,8 @@ export function completeSetSizes(items: CartItem[]): number[] {
     if (legacy && item.qty > 0) complete.add(legacy);
     if (isSetCan(item) && item.setSize !== undefined) counts.set(item.setSize, (counts.get(item.setSize) ?? 0) + item.qty);
   }
-  counts.forEach((qty, size) => { if (qty >= size) complete.add(size); });
+  const legacyCans = items.reduce((sum, item) => sum + (legacySetSize(item.id) ?? 0) * item.qty, 0);
+  counts.forEach((qty, size) => { if (qty + legacyCans >= size) complete.add(size); });
   return [...complete];
 }
 
@@ -103,4 +104,58 @@ export function readStoredCart(): { items: CartItem[]; prioShipping: boolean } {
 
 export function saveStoredCart(items: CartItem[], prioShipping: boolean): void {
   try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify({ version: 1, items, prioShipping })); } catch { /* Storage can be disabled. */ }
+}
+const PAID_FLAVOR_OF = (item: CartItem): string | null => {
+  if (isSetCan(item)) return item.flavor ?? null;
+  if (FLAVORS.includes(item.id)) return item.id;
+  const hit = Object.entries(VARIANT_GID_BY_ID).find(([name, gid]) => FLAVORS.includes(name) && (item.id === gid || item.id === gid.split("/").pop()));
+  return hit ? hit[0] : null;
+};
+
+/** Bezahlte Dosen im Warenkorb: Einzeldosen, Set-Dosen und echte alte Bundles. Ohne Geschenke, Gratisdose, Prio. */
+export function paidCanCount(items: CartItem[]): number {
+  return items.reduce((sum, item) => sum + (PAID_FLAVOR_OF(item) ? item.qty : (legacySetSize(item.id) ?? 0) * item.qty), 0);
+}
+
+export interface FillStock { [flavor: string]: { available: boolean; qty: number | null } | undefined }
+export interface FillPlan { target: number; items: CartItem[]; kept: Record<string, number>; added: Record<string, number> }
+
+/**
+ * Auffüllen auf ein Set: vorhandene bezahlte Dosen bleiben (Sorte/Menge), nur fehlende
+ * verfügbare Dosen kommen dazu. null = no-op (schon genug Dosen oder Bestand reicht nicht).
+ */
+export function planFillToSet(items: CartItem[], target: number, stock: FillStock | null, flavorImages: Record<string, string>, canPrice: number): FillPlan | null {
+  const legacyCans = items.reduce((s, i) => s + (legacySetSize(i.id) ?? 0) * i.qty, 0);
+  const kept: Record<string, number> = {};
+  for (const item of items) {
+    const flavor = PAID_FLAVOR_OF(item);
+    if (flavor) kept[flavor] = (kept[flavor] ?? 0) + item.qty;
+  }
+  const current = legacyCans + Object.values(kept).reduce((s, q) => s + q, 0);
+  if (![3, 5, 10].includes(target) || current >= target) return null;
+  const missing = target - current;
+  const ranked = FLAVORS
+    .map((name, i) => ({ name, i, info: stock?.[name] }))
+    .filter((f) => f.info?.available ?? !(stock === null && f.name === "THAI STYLE" && isSoldOutSingleItem(f.name)))
+    .filter((f) => f.info !== undefined || stock === null)
+    .sort((a, b) => ((b.info?.qty ?? 0) - (a.info?.qty ?? 0)) || a.i - b.i);
+  const added: Record<string, number> = {};
+  let left = missing, guard = 0;
+  while (left > 0 && ranked.length > 0 && guard++ < 1000) {
+    let progressed = false;
+    for (const f of ranked) {
+      if (left === 0) break;
+      const cap = f.info?.qty;
+      if (cap != null && (kept[f.name] ?? 0) + (added[f.name] ?? 0) >= cap) continue;
+      added[f.name] = (added[f.name] ?? 0) + 1; left--; progressed = true;
+    }
+    if (!progressed) break;
+  }
+  if (left > 0) return null;
+  const others = items.filter((item) => !PAID_FLAVOR_OF(item) && !giftIds.includes(item.id));
+  const cans: CartItem[] = FLAVORS.filter((f) => (kept[f] ?? 0) + (added[f] ?? 0) > 0).map((f) => ({
+    id: `set${target}:${f}`, name: `${f} · ${target}er Set`, price: canPrice, image: flavorImages[f] ?? "",
+    setSize: target, flavor: f, qty: (kept[f] ?? 0) + (added[f] ?? 0),
+  }));
+  return { target, items: [...others, ...cans], kept, added };
 }
