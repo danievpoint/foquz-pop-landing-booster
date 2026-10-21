@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Aktuelle Warenkorbfehler: ersetzende Upsells, Set-Berechtigung, Zugaben, Reload, Preis-Races, Sortenlinks und neutrale Thai-Startseitenanzeige; gezielt prüfen, nicht veröffentlichen
 
 - [x] Thai Style aus Einzelprodukt-Upsells ausblenden und alte Einzelpositionen vor Checkout abfangen; gezielt testen, nicht veröffentlichen
 
