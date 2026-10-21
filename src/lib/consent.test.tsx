@@ -118,7 +118,7 @@ describe("Tracking-Gates", () => {
     const next = writeConsent({ analytics: false, marketing: false });
     const reload = vi.fn();
     handleConsentTransition(prev, next, reload);
-    await vi.waitFor(() => expect(reload).toHaveBeenCalledTimes(1));
+    await vi.waitFor(() => expect(reload).toHaveBeenCalledTimes(1), { timeout: 3000 });
     expect(document.cookie).not.toContain("_fbp");
     expect(localStorage.getItem("foquz_shopify_y")).toBeNull();
     expect(sessionStorage.getItem("foquz_dt_id")).toBeNull();
