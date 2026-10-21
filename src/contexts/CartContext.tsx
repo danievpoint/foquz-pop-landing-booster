@@ -11,7 +11,7 @@ import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { ensureFlavorStock, getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
-import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasGuaranteedFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {

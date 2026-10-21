@@ -25,7 +25,7 @@ import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
 import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
-import { completeSetSizes, hasGuaranteedFreeShipping } from "@/lib/cartRules";
+import { completeSetSizes, hasCheckoutFreeShipping } from "@/lib/cartRules";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 
 const PAYMENT_METHODS = [
@@ -72,7 +72,7 @@ const CartDrawer = () => {
     discountedTotal,
     hasNewsletterDiscount,
     discountCode,
-    activeDiscountPercent,
+    discountLines,
     manualDiscountCode,
     applyManualDiscountCode,
     clearManualDiscountCode,
@@ -118,8 +118,6 @@ const CartDrawer = () => {
   };
 
   const discountAmount = Math.max(0, total - discountedTotal);
-  const hasAppliedDiscount = Boolean(discountCode) && discountAmount > 0;
-  const discountRatio = total > 0 && hasAppliedDiscount ? discountedTotal / total : 1;
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const setSizes = completeSetSizes(items);
@@ -149,7 +147,7 @@ const CartDrawer = () => {
   }
 
   // Shipping/savings
-  const hasAlwaysFreeBundle = hasGuaranteedFreeShipping(items);
+  const hasAlwaysFreeBundle = hasCheckoutFreeShipping(items);
   const freeShipping = hasAlwaysFreeBundle || discountedTotal >= FREE_SHIPPING_THRESHOLD;
   const missingForFreeShip = freeShipping ? 0 : Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
   const shipProgress = freeShipping ? 100 : Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
@@ -375,10 +373,6 @@ const CartDrawer = () => {
                       const isBundleItem = item.id === BUNDLE_ID;
                       const isFreeCan = isFreeCanItem(item.id);
                       const isGift = isGiftItem(item.id) || isFreeCan;
-                      const hasDiscount = hasAppliedDiscount && !isGift;
-                      const finalPrice = hasDiscount
-                        ? item.price * discountRatio
-                        : item.price;
                       const productHandle = isGift ? null : getProductHandle(item);
                       const productLink = productHandle ? `/produkt/${productHandle}` : "#";
                       return (
@@ -418,11 +412,6 @@ const CartDrawer = () => {
                                 </div>
                               )
                             )}
-                            {hasDiscount && (
-                              <div className="mt-2 inline-block bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-2 py-1 rounded">
-                                Aktion -{activeDiscountPercent}%
-                              </div>
-                            )}
                           </div>
 
                           <div className="flex-1 min-w-0">
@@ -455,15 +444,6 @@ const CartDrawer = () => {
                             <div className="mt-1 flex items-baseline gap-2 flex-wrap">
                               {isGift ? (
                                 <span className="text-base sm:text-lg font-black text-green-700 uppercase">Gratis</span>
-                              ) : hasDiscount ? (
-                                <>
-                                  <span className="text-sm text-muted-foreground line-through">
-                                    €{item.price.toFixed(2).replace(".", ",")}
-                                  </span>
-                                  <span className="text-base sm:text-lg font-black text-pink-600">
-                                    €{finalPrice.toFixed(2).replace(".", ",")}
-                                  </span>
-                                </>
                               ) : (
                                 <span className="text-base sm:text-lg font-black">
                                   €{item.price.toFixed(2).replace(".", ",")}
@@ -624,10 +604,7 @@ const CartDrawer = () => {
                           className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6 pb-1"
                         >
                           {suggestions.map((p) => {
-                            const discounted =
-                              hasAppliedDiscount
-                                ? p.numericPrice * discountRatio
-                                : null;
+                            const discounted: number | null = null;
                             return (
                               <Link
                                 key={p.handle}
@@ -684,11 +661,6 @@ const CartDrawer = () => {
                                       <PlusIcon size={16} strokeWidth={3} />
                                     </button>
                                   </div>
-                                  {discounted !== null && (
-                                    <div className="mt-1 inline-block self-start bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded">
-                                      Aktion -{activeDiscountPercent}%
-                                    </div>
-                                  )}
                                 </div>
                               </Link>
                             );
@@ -741,17 +713,17 @@ const CartDrawer = () => {
                   <span className="font-black">€{total.toFixed(2).replace(".", ",")}</span>
                 </div>
 
-                {hasAppliedDiscount && discountCode && (
-                  <div className="flex items-center justify-between text-sm">
+                {discountLines.map((d) => (
+                  <div key={`${d.kind}:${d.label}`} className="flex items-center justify-between text-sm">
                     <span className="text-foreground/80 flex items-center gap-1.5">
                       <Tag size={14} className="text-pink-600" />
-                      Rabatt (<span className="font-black uppercase">{discountCode}</span>):
+                      {d.kind === "code" ? <>Rabattcode (<span className="font-black uppercase">{d.label}</span>):</> : <>{d.label}:</>}
                     </span>
                     <span className="font-black text-pink-600">
-                      −€{discountAmount.toFixed(2).replace(".", ",")}
+                      −€{d.amount.toFixed(2).replace(".", ",")}
                     </span>
                   </div>
-                )}
+                ))}
 
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-foreground/80">Versand (DE):</span>
