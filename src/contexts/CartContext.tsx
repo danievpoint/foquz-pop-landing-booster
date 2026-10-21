@@ -637,11 +637,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     createShopifyCheckout(lines, discountCode ? [discountCode] : undefined)
       .then((result) => {
         // Tracking hängt nur an GENAU diesem Schlüssel – auch wenn die Antwort inzwischen veraltet ist.
-        if (!result || result.quantityMismatch || result.discountedSubtotal === null) {
+        // Warenwert ohne Prio-Versand stammt aus Shopifys Zeilenkosten (kein fester Abzug).
+        const value = result?.merchandiseValue ?? null;
+        if (!result || result.quantityMismatch || value === null) {
           tracker.fail(currentKey);
         } else {
-          const prioPart = prioShipping ? PRIO_SHIPPING_PRICE : 0; // Prio ist Versand, kein Warenwert
-          const value = Math.max(0, result.discountedSubtotal - prioPart);
           for (const e of tracker.confirm(currentKey, { value, checkoutUrl: result.url }, hasConsent("marketing"))) {
             trackAddedToCart(e.added, e.snapshot.lines, e.confirmed);
           }
