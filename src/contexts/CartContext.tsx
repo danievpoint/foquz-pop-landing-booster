@@ -346,6 +346,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const updateQty = useCallback((id: string, qty: number) => {
     if (isGiftItem(id)) return;
+    if (!Number.isInteger(qty) || qty > 999) return;
     if (qty <= 0) {
       setItems((prev) => prev.filter((i) => i.id !== id));
     } else {

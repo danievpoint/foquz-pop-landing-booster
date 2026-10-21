@@ -44,6 +44,7 @@ describe("Set eligibility and upgrades", () => {
     expect(hasGuaranteedFreeShipping(partial)).toBe(false);
     expect(partial).toHaveLength(1);
     expect(hasGuaranteedFreeShipping(set(size, size - 1))).toBe(false);
+    expect(hasGuaranteedFreeShipping(set(size, size * 2 - 1))).toBe(true);
   });
   it("removes gifts immediately on reducing/removing the eligible set", () => {
     saveStoredCart(set(5), false); mount();

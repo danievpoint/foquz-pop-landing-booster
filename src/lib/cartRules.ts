@@ -29,7 +29,7 @@ export function completeSetSizes(items: CartItem[]): number[] {
     if (legacy && item.qty > 0) complete.add(legacy);
     if (isSetCan(item) && item.setSize !== undefined) counts.set(item.setSize, (counts.get(item.setSize) ?? 0) + item.qty);
   }
-  counts.forEach((qty, size) => { if (qty >= size && qty % size === 0) complete.add(size); });
+  counts.forEach((qty, size) => { if (qty >= size) complete.add(size); });
   return [...complete];
 }
 

@@ -785,6 +785,7 @@ const CartDrawer = () => {
                     rel="noopener noreferrer"
                     onClick={markCheckoutPending}
                     onAuxClick={markCheckoutPending}
+                    onContextMenu={markCheckoutPending}
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>ZUR KASSE</span>
