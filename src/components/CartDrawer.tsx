@@ -247,6 +247,14 @@ const CartDrawer = () => {
                   <ShoppingBag size={64} strokeWidth={1} />
                   <p className="mt-4 text-lg font-bold">Dein Warenkorb ist leer</p>
                   <p className="text-sm mt-1">Füge Produkte hinzu, um loszulegen!</p>
+                  {upsells[0]?.target === 3 && (
+                    <div className="mt-5 text-center">
+                      <p className="text-xs">{upsells[0].desc}</p>
+                      <button onClick={() => { void fillCartToSet(3, upsells[0].added); }} className="comic-btn text-xs py-1.5 px-4 mt-2 bg-primary text-primary-foreground">
+                        Auf 3er Set auffüllen
+                      </button>
+                    </div>
+                  )}
                   {hasNewsletterDiscount && (
                     <div className="flex items-center gap-2 bg-green-100 border-2 border-green-400 rounded-xl px-4 py-2.5 mt-6 text-left">
                       <Tag size={18} className="text-green-600 shrink-0" />
