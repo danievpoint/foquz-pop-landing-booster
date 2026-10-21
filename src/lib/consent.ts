@@ -36,56 +36,56 @@ export const CONSENT_SERVICES: ConsentService[] = [
     provider: "Shopify International Ltd., Irland",
     category: "necessary",
     purpose: "Warenkorb, Rabattcodes, Checkout, Übergabe Ihrer Cookie-Auswahl an Shopify",
-    duration: "Session bis max. 12 Monate",
+    duration: "Warenkorb lokal bis Bestellabschluss oder Leeren; Shopify-Checkout-Cookies nach Vorgabe von Shopify (siehe Shopify-Datenschutzhinweise)",
   },
   {
     name: "Consent-Speicherung",
     provider: "FOQUZ GmbH (lokal im Browser)",
     category: "necessary",
     purpose: "Speicherung Ihrer Cookie-Auswahl",
-    duration: "12 Monate",
+    duration: "12 Monate, danach erneute Abfrage; bis dahin bis zur Änderung oder Löschung im Browser",
   },
   {
     name: "Shopify Analytics (Seitenaufrufe)",
     provider: "Shopify International Ltd., Irland",
     category: "analytics",
     purpose: "Statistik über Seitenaufrufe des Shops",
-    duration: "bis zu 12 Monate",
+    duration: "Eigene Kennung foquz_shopify_y 12 Monate ab Erzeugung, Sitzungskennung bis Ende der Browsersitzung; jeweils Löschung bei Widerruf",
   },
   {
     name: "Meta Pixel",
     provider: "Meta Platforms Ireland Ltd., Irland",
     category: "marketing",
     purpose: "Conversion-Messung, Retargeting, Anzeigenoptimierung",
-    duration: "bis zu 180 Tage",
+    duration: "Vom Anbieter festgelegt (siehe dessen Datenschutzhinweise); bei Widerruf löschen wir bekannte Kennungen auf dieser Website",
   },
   {
     name: "TikTok Pixel",
     provider: "TikTok Technology Ltd., Irland",
     category: "marketing",
     purpose: "Conversion-Messung, Retargeting, Anzeigenoptimierung",
-    duration: "bis zu 13 Monate",
+    duration: "Vom Anbieter festgelegt (siehe dessen Datenschutzhinweise); bei Widerruf löschen wir bekannte Kennungen auf dieser Website",
   },
   {
     name: "Google Ads",
     provider: "Google Ireland Ltd., Irland",
     category: "marketing",
     purpose: "Conversion-Messung, Remarketing, Anzeigenoptimierung",
-    duration: "bis zu 540 Tage",
+    duration: "Vom Anbieter festgelegt (siehe dessen Datenschutzhinweise); bei Widerruf löschen wir bekannte Kennungen auf dieser Website",
   },
   {
     name: "Klaviyo (Onsite-Tracking & Pop-up)",
     provider: "Klaviyo Inc., USA",
     category: "marketing",
     purpose: "Newsletter-Pop-up, Web-Tracking, Kampagnenanalyse, Personalisierung",
-    duration: "bis zu 2 Jahre",
+    duration: "Vom Anbieter festgelegt (siehe dessen Datenschutzhinweise); bei Widerruf löschen wir bekannte Kennungen auf dieser Website",
   },
   {
     name: "Loox (Kundenbewertungen)",
-    provider: "Loox Ltd., Israel",
+    provider: "Loox Online Ltd., Israel",
     category: "reviews",
     purpose: "Anzeige externer Kundenbewertungen und Sterne",
-    duration: "bis zu 12 Monate",
+    duration: "Vom Anbieter festgelegt (siehe dessen Datenschutzhinweise); bei Widerruf löschen wir bekannte Kennungen auf dieser Website",
   },
 ];
 
@@ -107,6 +107,17 @@ export const DEFAULT_CONSENT: ConsentState = {
 
 // Fallback, wenn localStorage blockiert ist: Auswahl gilt nur für diesen Seitenaufruf.
 let memoryConsent: ConsentState | null = null;
+// Nur wenn Schreiben/Lesen tatsächlich fehlgeschlagen ist, gilt der Speicher-Fallback.
+let storageFailed = false;
+const fromMemory = () => (storageFailed && memoryConsent && parseConsent(memoryConsent) ? memoryConsent : null);
+
+function safe(fn: () => void) {
+  try {
+    fn();
+  } catch {
+    /* ignorieren */
+  }
+}
 
 function storage(): Storage | null {
   try {
@@ -143,16 +154,25 @@ export function parseConsent(raw: unknown, now = Date.now()): ConsentState | nul
 export function readConsent(): ConsentState | null {
   if (typeof window === "undefined") return null;
   const s = storage();
-  if (!s) return memoryConsent && parseConsent(memoryConsent) ? memoryConsent : null;
+  if (!s) {
+    storageFailed = true;
+    return fromMemory();
+  }
   try {
     OLD_KEYS.forEach((k) => s.removeItem(k));
     const raw = s.getItem(CONSENT_STORAGE_KEY);
-    if (!raw) return memoryConsent && parseConsent(memoryConsent) ? memoryConsent : null;
+    if (!raw) return fromMemory();
     const parsed = parseConsent(JSON.parse(raw));
     if (!parsed) s.removeItem(CONSENT_STORAGE_KEY); // ungültig oder abgelaufen → neu fragen
     return parsed;
-  } catch {
-    return memoryConsent && parseConsent(memoryConsent) ? memoryConsent : null;
+  } catch (e) {
+    // Ungültiges JSON ist ein fehlender Wert, kein Speicherfehler.
+    if (e instanceof SyntaxError) {
+      safe(() => s.removeItem(CONSENT_STORAGE_KEY));
+      return null;
+    }
+    storageFailed = true;
+    return fromMemory();
   }
 }
 
@@ -175,9 +195,14 @@ export function writeConsent(
   };
   memoryConsent = next;
   try {
-    storage()?.setItem(CONSENT_STORAGE_KEY, JSON.stringify(next));
+    const s = storage();
+    if (!s) storageFailed = true;
+    else {
+      s.setItem(CONSENT_STORAGE_KEY, JSON.stringify(next));
+      storageFailed = false;
+    }
   } catch {
-    /* Storage blockiert: Auswahl gilt nur im Speicher. */
+    storageFailed = true; // Storage blockiert: Auswahl gilt nur im Speicher.
   }
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(CONSENT_CHANGE_EVENT, { detail: { previous, next } }));
@@ -198,6 +223,7 @@ export function openCookieSettings() {
 /** Nur für Tests. */
 export function __resetConsentMemory() {
   memoryConsent = null;
+  storageFailed = false;
 }
 
 export function useConsent(): ConsentState {

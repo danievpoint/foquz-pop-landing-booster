@@ -14,6 +14,7 @@ const MONORAIL_ENDPOINT = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/.well-known
 const SCHEMA_ID = "custom_storefront_customer_tracking/1.2";
 
 const UNIQUE_TOKEN_KEY = "foquz_shopify_y";
+export const UNIQUE_TOKEN_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 const SESSION_TOKEN_KEY = "foquz_shopify_s";
 
 /** Guards against sending the identical event twice. */
@@ -32,15 +33,16 @@ function readCookie(name: string): string | null {
 }
 
 /** Prefer Shopify's own cookies when present, otherwise keep our own stable ids. */
-function getUniqueToken(): string {
+export function getUniqueToken(): string {
   const shopifyCookie = readCookie("_shopify_y");
   if (shopifyCookie) return shopifyCookie;
   try {
-    let token = localStorage.getItem(UNIQUE_TOKEN_KEY);
-    if (!token) {
-      token = uuid();
-      localStorage.setItem(UNIQUE_TOKEN_KEY, token);
-    }
+    // Format "<id>|<erzeugt ms>": nach 12 Monaten wird die Kennung neu erzeugt.
+    const [id, created] = (localStorage.getItem(UNIQUE_TOKEN_KEY) ?? "").split("|");
+    const age = Date.now() - Number(created);
+    if (id && Number.isFinite(age) && age >= 0 && age < UNIQUE_TOKEN_MAX_AGE_MS) return id;
+    const token = uuid();
+    localStorage.setItem(UNIQUE_TOKEN_KEY, `${token}|${Date.now()}`);
     return token;
   } catch {
     return uuid();

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
-import { LEGAL_PAGES, shopifyPage } from "../../scripts/build-legal";
+import { LEGAL_PAGES, shopifyPage, pageBody } from "../../scripts/build-legal";
 import { handleWithdrawal, validate, esc, formatReceived, MAX_PER_HOUR, type Deps } from "../../supabase/functions/send-widerruf/logic";
 
 const read = (p: string) => readFileSync(p, "utf8");
@@ -9,7 +9,7 @@ const all = ["impressum", "agb", "widerruf", "datenschutz", "garantie"].map((n) 
 describe("Rechtstexte", () => {
   it("Shopify-Dateien sind synchron mit den Website-Texten", () => {
     for (const p of LEGAL_PAGES) {
-      expect(read(`legal/shopify/${p.out}.html`)).toBe(shopifyPage(p.title, read(`src/legal/${p.src}.html`)));
+      expect(read(`legal/shopify/${p.out}.html`)).toBe(shopifyPage(p.title, pageBody(p, (n) => read(`src/legal/${n}.html`))));
     }
   });
   it("einheitliche Stammdaten, keine erfundene USt-IdNr.", () => {
@@ -117,4 +117,10 @@ describe("Versandbedingungen", () => {
   it("Garantie gilt in allen vier Lieferländern", () => {
     for (const f of ["src/legal/garantie.html", "legal/garantie-bestellmail.html"]) expect(readFileSync(f, "utf8")).toContain("Deutschland, Österreich, Dänemark oder in die Schweiz");
   });
+});
+
+it("Shopify-Widerruf enthält am Ende die Garantiebedingungen", () => {
+  const w = read("legal/shopify/widerruf.html");
+  expect(w).toContain("Garantiebedingungen – 4 Wochen Duftgarantie");
+  expect(w.indexOf("Garantiegeber")).toBeGreaterThan(w.indexOf("Muster-Widerrufsformular") );
 });
