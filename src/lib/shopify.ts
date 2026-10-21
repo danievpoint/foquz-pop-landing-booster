@@ -161,6 +161,7 @@ export interface ShopifyCheckout {
   discountedSubtotal: number | null;
   discountApplicable: boolean;
   discounts: DiscountLine[];
+  quantityMismatch?: boolean;
 }
 
 type RawAllocation = { discountedAmount?: { amount?: string }; title?: string; code?: string };

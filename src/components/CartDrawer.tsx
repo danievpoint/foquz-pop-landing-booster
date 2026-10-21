@@ -84,7 +84,8 @@ const CartDrawer = () => {
     isCheckingOut,
     checkoutUrl,
     addToCart,
-    replaceCartWithSet,
+    fillCartToSet,
+    planFill,
     markCheckoutPending,
     freeCanEligible,
     freeCanFlavor,
@@ -132,20 +133,29 @@ const CartDrawer = () => {
   const showBundleUpsell = !hasBundle && singlesCount > 0;
   const showThreeForTwoTeaser = THREE_FOR_TWO_ENABLED && !hasBundle && paidSingleCanQty === 1;
 
-  type Upsell = { id: string; name: string; title: string; desc: string; price: number; compareAt: number; image: string; label: string; featured?: boolean };
-  const upsell5: Upsell = { id: "squad-bundle", name: squadBundleProduct.name, title: "5er Squad Bundle", desc: "Je 1× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: squadBundleProduct.numericPrice, compareAt: 37.45, image: squadBundleProduct.image, label: "Beliebteste Option", featured: true };
-  const upsell3: Upsell = { id: BUNDLE_ID, name: "FOQUZ Power Bundle (3 Sorten)", title: "3er Power Bundle", desc: "Thai Style, Lemon Breezy & Peach Party", price: BUNDLE_LIST_PRICE, compareAt: 22.47, image: foquzBox, label: "Empfehlung" };
-  const upsell10: Upsell = { id: "vorrats-bundle", name: crewBundleProduct.name, title: "10er Vorrats-Bundle", desc: "Je 2× alle fünf Sorten – inkl. Sticker & Nasenstrips, versandkostenfrei", price: crewBundleProduct.numericPrice, compareAt: 74.90, image: crewBundleProduct.image, label: "Empfehlung" };
-  const upsells: Upsell[] = [];
-  if (!hasCrew) {
-    if (hasSquad) {
-      upsells.push(upsell10);
-    } else if (hasBundle) {
-      upsells.push(upsell5);
-    } else if (showBundleUpsell) {
-      upsells.push(upsell3, upsell5, upsell10);
-    }
-  }
+  // Set-Karten füllen auf 3/5/10 bezahlte Dosen auf; Inhalt = exakt die geplante Mutation.
+  const paidCans = paidCanCount(items);
+  const SET_PRICES: Record<number, number> = { 3: 21.9, 5: 34.9, 10: 59.9 };
+  const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  const upsells = [3, 5, 10]
+    .filter((target) => target > paidCans)
+    .map((target) => ({ target, plan: planFill(target) }))
+    .filter((u): u is { target: number; plan: NonNullable<ReturnType<typeof planFill>> } => u.plan !== null)
+    .map(({ target, plan }) => {
+      const total = Object.fromEntries(Object.keys({ ...plan.kept, ...plan.added }).map((f) => [f, (plan.kept[f] ?? 0) + (plan.added[f] ?? 0)]));
+      const mix = Object.entries(total).map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ");
+      const addedList = Object.entries(plan.added).map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ");
+      const gifts = target >= 5 ? " – inkl. Sticker & Nasenstrips" : "";
+      return {
+        target, added: plan.added,
+        title: `${target}er Set`,
+        desc: `${mix}${gifts}`,
+        addedDesc: addedList ? `Neu dazu: ${addedList}` : "",
+        price: SET_PRICES[target], compareAt: Math.round(target * 7.49 * 100) / 100,
+        image: target === 3 ? foquzBox : target === 5 ? squadBundleProduct.image : crewBundleProduct.image,
+        label: target === 5 ? "Beliebteste Wahl" : "Empfehlung", featured: target === 5,
+      };
+    });
 
   // Shipping/savings
   const hasAlwaysFreeBundle = hasCheckoutFreeShipping(items);
@@ -153,7 +163,8 @@ const CartDrawer = () => {
   const missingForFreeShip = freeShipping ? 0 : Math.max(0, FREE_SHIPPING_THRESHOLD - discountedTotal);
   const shipProgress = freeShipping ? 100 : Math.min(100, (discountedTotal / FREE_SHIPPING_THRESHOLD) * 100);
   const shippingCost = freeShipping ? 0 : SHIPPING_COST_DE;
-  const totalSavings = discountAmount + (freeShipping ? SHIPPING_COST_DE : 0);
+  // Nur Warenrabatte – Versandersparnis zählt nicht als "gespart".
+  const totalSavings = discountAmount;
 
   // Suggestions carousel
   const inCartIds = new Set(items.map((i) => i.id));
@@ -531,7 +542,7 @@ const CartDrawer = () => {
                     const featured = !!u.featured;
                     return (
                       <motion.div
-                        key={u.id}
+                        key={u.target}
                         layout
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -568,6 +579,7 @@ const CartDrawer = () => {
                               {u.title}
                             </h3>
                             <p className={`text-xs mt-1 ${featured ? "text-white/85" : "text-muted-foreground"}`}>{u.desc}</p>
+                            {u.addedDesc && <p className={`text-[11px] mt-0.5 font-bold ${featured ? "text-white" : "text-foreground"}`}>{u.addedDesc}</p>}
                             <p className={`text-xs mt-0.5 ${featured ? "text-white/85" : "text-muted-foreground"}`}>
                               <span className="line-through">€{u.compareAt.toFixed(2).replace(".", ",")}</span>{" "}
                               <span className={`font-black ${featured ? "text-white" : "text-foreground"}`}>
@@ -578,12 +590,10 @@ const CartDrawer = () => {
                               </span>
                             </p>
                             <button
-                              onClick={() =>
-                                replaceCartWithSet({ id: u.id, name: u.name, price: u.price, image: u.image })
-                              }
+                              onClick={() => { void fillCartToSet(u.target, u.added); }}
                               className={`comic-btn text-xs py-1.5 px-4 mt-2 ${featured ? "bg-[#ffd618] text-black" : "bg-primary text-primary-foreground"}`}
                             >
-                              BUNDLE HINZUFÜGEN
+                              {`AUF ${u.target}ER SET AUFFÜLLEN`}
                             </button>
                           </div>
                         </div>
