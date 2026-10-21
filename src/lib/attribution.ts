@@ -6,6 +6,8 @@
  * available when the Shopify cart (and therefore the checkout) is created.
  */
 
+import { hasConsent } from "./consent";
+
 const DT_ID_KEY = "foquz_dt_id";
 const CREATOR_KEY = "foquz_creator";
 const PENDING_DISCOUNT_KEY = "foquz_pending_discount";
@@ -28,41 +30,47 @@ function safeSession(): Storage | null {
 
 export function setDtId(value: string | null) {
   const s = safeSession();
-  if (!s || !value) return;
-  s.setItem(DT_ID_KEY, value);
+  // Marketing-Attribution erst nach Marketing-Einwilligung speichern.
+  if (!s || !value || !hasConsent("marketing")) return;
+  try { s.setItem(DT_ID_KEY, value); } catch { /* Storage blockiert */ }
 }
 
 export function getDtId(): string | null {
-  return safeSession()?.getItem(DT_ID_KEY) ?? null;
+  if (!hasConsent("marketing")) return null;
+  try { return safeSession()?.getItem(DT_ID_KEY) ?? null; } catch { return null; }
 }
 
 export function setCreator(handle: string | null) {
   const s = safeSession();
-  if (!s || !handle) return;
-  s.setItem(CREATOR_KEY, handle);
+  if (!s || !handle || !hasConsent("marketing")) return;
+  try { s.setItem(CREATOR_KEY, handle); } catch { /* Storage blockiert */ }
 }
 
 export function getCreator(): string | null {
-  return safeSession()?.getItem(CREATOR_KEY) ?? null;
+  if (!hasConsent("marketing")) return null;
+  try { return safeSession()?.getItem(CREATOR_KEY) ?? null; } catch { return null; }
 }
 
 export function setPendingDiscountCode(code: string | null) {
   const s = safeSession();
   if (!s) return;
-  if (!code) {
-    s.removeItem(PENDING_DISCOUNT_KEY);
-    return;
-  }
-  s.setItem(PENDING_DISCOUNT_KEY, code.trim().toUpperCase());
+  try {
+    if (!code) {
+      s.removeItem(PENDING_DISCOUNT_KEY);
+      return;
+    }
+    s.setItem(PENDING_DISCOUNT_KEY, code.trim().toUpperCase());
+  } catch { /* Storage blockiert */ }
 }
 
 export function getPendingDiscountCode(): string | null {
-  return safeSession()?.getItem(PENDING_DISCOUNT_KEY) ?? null;
+  try { return safeSession()?.getItem(PENDING_DISCOUNT_KEY) ?? null; } catch { return null; }
 }
 
 /** Reads attribution params off any URL/search string and persists them. */
 export function captureAttributionFromSearch(search: string) {
   const params = new URLSearchParams(search);
+  // Funktionaler Rabattcode immer; dt_id/creator nur mit Marketing-Einwilligung (in setDtId/setCreator).
   const dtId = params.get("dt_id");
   if (dtId !== null) setDtId(dtId);
   const creator = params.get("ref") || params.get("creator");
@@ -109,8 +117,11 @@ export function mergeTrackingParams(target: string, incoming: string): string {
   const [path, targetSearch = ""] = pathPart.split("?");
   const merged = new URLSearchParams(targetSearch);
 
+  const marketing = hasConsent("marketing");
   incomingParams.forEach((value, key) => {
     if (key === "redirect") return;
+    // Attribution nur mit Marketing-Einwilligung weiterreichen.
+    if (!marketing && (key === "dt_id" || key === "ref" || key === "creator")) return;
     if (
       key === "dt_id" ||
       key === "ref" ||

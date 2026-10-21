@@ -53,7 +53,7 @@ const Widerrufsbelehrung = () => {
         </p>
         <p>
           E-Mail: info@foquz.de<br />
-          Telefon: 01702420257<br />
+          Telefon: +49 179 1599764<br />
           www.foquz.de
         </p>
 
@@ -64,7 +64,7 @@ const Widerrufsbelehrung = () => {
         <p>
           <strong>FOQUZ GmbH</strong><br />
           Gewerbering am Brand 8, 82549 Königsdorf<br />
-          Telefon: 01702420257<br />
+          Telefon: +49 179 1599764<br />
           E-Mail: info@foquz.de
         </p>
         <p>mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist. Sie können das Muster-Widerrufsformular oder eine andere eindeutige Erklärung auch auf unserer Webseite www.foquz.de elektronisch ausfüllen und übermitteln. Machen Sie von dieser Möglichkeit Gebrauch, so werden wir Ihnen unverzüglich (z. B. per E-Mail) eine Bestätigung über den Eingang eines solchen Widerrufs übermitteln.</p>

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { captureAttributionFromSearch } from "@/lib/attribution";
 import { trackPageView } from "@/lib/shopifyAnalytics";
 import { initTracking, trackPixelPageView } from "@/lib/tracking";
+import { initConsentRuntime } from "@/lib/consentRuntime";
 
 /**
  * Sends one Shopify page view per navigation and keeps Collabs attribution
@@ -14,6 +15,7 @@ const AnalyticsTracker = () => {
 
   useEffect(() => {
     initTracking();
+    initConsentRuntime();
   }, []);
 
   useEffect(() => {

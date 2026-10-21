@@ -21,8 +21,8 @@ const Datenschutz = () => (
           Gewerbering am Brand 8<br />
           82549 Königsdorf<br />
           Deutschland<br />
-          E-Mail: matyas@achtabahn.de<br />
-          Telefon: 01702420257
+          E-Mail: info@foquz.de<br />
+          Telefon: +49 179 1599764
         </p>
         <p>Ein Datenschutzbeauftragter ist nicht bestellt.</p>
 

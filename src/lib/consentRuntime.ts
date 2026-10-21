@@ -12,6 +12,7 @@ import {
   type ConsentState,
   type OptionalCategory,
 } from "./consent";
+import { syncShopifyConsentWithTimeout } from "./tracking";
 
 export const KLAVIYO_SRC = "https://static.klaviyo.com/onsite/js/WE63iq/klaviyo.js";
 export const LOOX_SRC = "https://loox.io/widget/loox.js?shop=foquz-pop-landing-booster-xb8ca.myshopify.com";
@@ -131,8 +132,9 @@ export function handleConsentTransition(
       klaviyoTimer = null;
     }
     clearCategoryData(revoked);
-    // Bereits geladene SDKs lassen sich nicht zuverlässig entladen → neu laden.
-    reload();
+    // Widerruf zuerst an Shopify geben, dann neu laden: geladene SDKs lassen sich
+    // nicht zuverlässig entladen.
+    void syncShopifyConsentWithTimeout(1500).then(reload, reload);
     return;
   }
   loadKlaviyoIfAllowed();
