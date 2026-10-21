@@ -25,7 +25,7 @@ ${absolutize(body).trim()}
 `;
 }
 
-if (import.meta.main) {
+if ((import.meta as ImportMeta & { main?: boolean }).main) {
   mkdirSync(join(root, "legal/shopify"), { recursive: true });
   for (const p of LEGAL_PAGES) {
     const body = readFileSync(join(root, `src/legal/${p.src}.html`), "utf8");

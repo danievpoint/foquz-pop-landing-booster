@@ -123,7 +123,7 @@ export interface HandleResult {
 
 export async function handleWithdrawal(raw: unknown, meta: { ip: string | null; userAgent: string | null }, deps: Deps): Promise<HandleResult> {
   const parsed = validate(raw);
-  if (!parsed.ok) return { status: 400, body: { error: parsed.error } };
+  if (parsed.ok === false) return { status: 400, body: { error: parsed.error } };
 
   if (meta.ip && (await deps.recentCount(meta.ip)) >= MAX_PER_HOUR) {
     return { status: 429, body: { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut oder schreiben Sie an info@foquz.de." } };
