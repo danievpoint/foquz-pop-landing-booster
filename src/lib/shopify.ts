@@ -109,6 +109,13 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "gift-sticker": "gid://shopify/ProductVariant/55135962988886",
 };
 
+const ALLOCATION_FIELDS = `
+  discountedAmount { amount }
+  ... on CartAutomaticDiscountAllocation { title }
+  ... on CartCodeDiscountAllocation { code }
+  ... on CartCustomDiscountAllocation { title }
+`;
+
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
@@ -120,6 +127,8 @@ const CART_CREATE_MUTATION = `
           totalAmount { amount currencyCode }
         }
         discountCodes { code applicable }
+        discountAllocations { ${ALLOCATION_FIELDS} }
+        lines(first: 100) { edges { node { discountAllocations { ${ALLOCATION_FIELDS} } } } }
       }
       userErrors { field message }
     }
@@ -138,11 +147,47 @@ export interface CheckoutLine {
   attributes?: Array<{ key: string; value: string }>;
 }
 
+/** Ein von Shopify tatsächlich zugeordneter Rabatt, getrennt nach Herkunft. */
+export interface DiscountLine {
+  kind: "automatic" | "code";
+  label: string;
+  amount: number;
+}
+
 export interface ShopifyCheckout {
   url: string;
   cartId: string;
   discountedSubtotal: number | null;
   discountApplicable: boolean;
+  discounts: DiscountLine[];
+}
+
+type RawAllocation = { discountedAmount?: { amount?: string }; title?: string; code?: string };
+
+/**
+ * Summiert Shopify-Allokationen (Positions- und Warenkorb-Ebene) je Rabatt.
+ * Automatische Rabatte (z.B. "5er Set") und Codes (z.B. DROP20) bleiben getrennt;
+ * unbekannte Codes erscheinen mit ihrem echten Shopify-Betrag.
+ */
+export function parseDiscountAllocations(cart: {
+  discountAllocations?: RawAllocation[];
+  lines?: { edges?: Array<{ node?: { discountAllocations?: RawAllocation[] } }> };
+} | null | undefined): DiscountLine[] {
+  const all: RawAllocation[] = [
+    ...(cart?.discountAllocations ?? []),
+    ...(cart?.lines?.edges ?? []).flatMap((e) => e.node?.discountAllocations ?? []),
+  ];
+  const map = new Map<string, DiscountLine>();
+  for (const a of all) {
+    const amount = parseFloat(a.discountedAmount?.amount ?? "");
+    if (!Number.isFinite(amount) || amount <= 0) continue;
+    const kind: DiscountLine["kind"] = a.code ? "code" : "automatic";
+    const label = (a.code ? a.code.toUpperCase() : a.title) || "Rabatt";
+    const key = `${kind}:${label}`;
+    const prev = map.get(key);
+    map.set(key, { kind, label, amount: Math.round(((prev?.amount ?? 0) + amount) * 100) / 100 });
+  }
+  return [...map.values()].sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "automatic" ? -1 : 1));
 }
 
 export async function createShopifyCheckout(
@@ -185,7 +230,7 @@ export async function createShopifyCheckout(
   const codes: Array<{ code: string; applicable: boolean }> = cart?.discountCodes ?? [];
   const discountApplicable = codes.length === 0 ? true : codes.every((c) => c.applicable);
 
-  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable };
+  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable, discounts: parseDiscountAllocations(cart) };
 }
 
 /**

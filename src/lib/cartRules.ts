@@ -36,6 +36,24 @@ export function completeSetSizes(items: CartItem[]): number[] {
 export const hasEligibleGiftSet = (items: CartItem[]) => completeSetSizes(items).some((size) => size === 5 || size === 10);
 export const hasGuaranteedFreeShipping = hasEligibleGiftSet;
 
+/**
+ * Shopify setzt den Gratisversand unabhängig vom Warenwert aktuell nur für die
+ * echten Bundle-Produkte (eigenes Versandprofil) um. Freie Sets aus Einzeldosen
+ * liegen im allgemeinen Profil – erst wenn Shopify dafür einen Mechanismus hat,
+ * darf dieses Flag auf true gehen. Sonst zeigt der Warenkorb "Gratis", die Kasse nicht.
+ */
+export const SHOPIFY_FREE_SHIPPING_FOR_CAN_SETS = false;
+const FREE_SHIPPING_LEGACY = ["squad-bundle", "vorrats-bundle"];
+
+/** Nur was Shopify an der Kasse tatsächlich versandfrei stellt (ohne Warenwertschwelle). */
+export function hasCheckoutFreeShipping(items: CartItem[]): boolean {
+  if (items.some((item) => item.qty > 0 && FREE_SHIPPING_LEGACY.some((key) => {
+    const gid = VARIANT_GID_BY_ID[key];
+    return item.id === key || item.id === gid || item.id === gid?.split("/").pop();
+  }))) return true;
+  return SHOPIFY_FREE_SHIPPING_FOR_CAN_SETS && hasEligibleGiftSet(items);
+}
+
 export function reconcileCart(items: CartItem[], gifts: Omit<CartItem, "qty">[], enabled: boolean): CartItem[] {
   const paid = items.filter((item) => !giftIds.includes(item.id) && (isSetCan(item) || !isSoldOutSingleItem(item.id)));
   return enabled && hasEligibleGiftSet(paid) ? [...paid, ...gifts.map((gift) => ({ ...gift, qty: 1 }))] : paid;
