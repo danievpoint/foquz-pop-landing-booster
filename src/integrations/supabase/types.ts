@@ -178,44 +178,56 @@ export type Database = {
       }
       withdrawal_requests: {
         Row: {
+          confirmation_error: string | null
           confirmation_sent_at: string | null
+          contract_description: string | null
           created_at: string
-          customer_address: string
+          customer_address: string | null
           customer_email: string
           customer_name: string
           id: string
           ip_address: string | null
+          notification_error: string | null
           notification_sent_at: string | null
-          order_date: string
+          order_date: string | null
           order_number: string | null
+          received_at: string
           user_agent: string | null
           withdrawal_body: string
         }
         Insert: {
+          confirmation_error?: string | null
           confirmation_sent_at?: string | null
+          contract_description?: string | null
           created_at?: string
-          customer_address: string
+          customer_address?: string | null
           customer_email: string
           customer_name: string
           id?: string
           ip_address?: string | null
+          notification_error?: string | null
           notification_sent_at?: string | null
-          order_date: string
+          order_date?: string | null
           order_number?: string | null
+          received_at?: string
           user_agent?: string | null
           withdrawal_body: string
         }
         Update: {
+          confirmation_error?: string | null
           confirmation_sent_at?: string | null
+          contract_description?: string | null
           created_at?: string
-          customer_address?: string
+          customer_address?: string | null
           customer_email?: string
           customer_name?: string
           id?: string
           ip_address?: string | null
+          notification_error?: string | null
           notification_sent_at?: string | null
-          order_date?: string
+          order_date?: string | null
           order_number?: string | null
+          received_at?: string
           user_agent?: string | null
           withdrawal_body?: string
         }
