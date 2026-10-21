@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
-import { buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { buildOnlineStoreCartPermalink, ONLINE_STORE_BUNDLE_VARIANTS, createShopifyCheckout, isShopifyCartCompleted, VARIANT_GID_BY_ID, type DiscountLine } from "@/lib/shopify";
 import { getPendingDiscountCode, setPendingDiscountCode } from "@/lib/attribution";
 import { trackAddedToCart, variantIdFor } from "@/lib/klaviyo";
 import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracking";
@@ -11,7 +11,7 @@ import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { ensureFlavorStock, getSetMix, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
-import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasGuaranteedFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -33,6 +33,8 @@ interface CartContextType {
   hasNewsletterDiscount: boolean;
   discountCode: string | null;
   activeDiscountPercent: number;
+  /** Shopify-Rabatte für den aktuellen Warenkorb, getrennt nach automatisch/Code. */
+  discountLines: DiscountLine[];
   manualDiscountCode: string | null;
   applyManualDiscountCode: (code: string) => void;
   clearManualDiscountCode: () => void;
@@ -70,6 +72,7 @@ const CartContext = createContext<CartContextType>({
   hasNewsletterDiscount: false,
   discountCode: null,
   activeDiscountPercent: 0,
+  discountLines: [],
   manualDiscountCode: null,
   applyManualDiscountCode: () => {},
   clearManualDiscountCode: () => {},
@@ -224,6 +227,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
+  const [shopifyDiscounts, setShopifyDiscounts] = useState<DiscountLine[]>([]);
   const [prioShipping, setPrioShipping] = useState(restored.prioShipping);
   const [resolvedKey, setResolvedKey] = useState<string | null>(null);
   const currentKeyRef = useRef("");
@@ -485,9 +489,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  if (discountCode && hasCurrentShopifyResult && total > 0) {
-    activeDiscountPercent = Math.max(0, Math.round(((total - discountedTotal) / total) * 100));
-  }
+  // Nur echte Shopify-Allokationen anzeigen – keine daraus abgeleiteten Prozentwerte.
+  const discountLines: DiscountLine[] = hasCurrentShopifyResult ? shopifyDiscounts : [];
 
 
   const getCheckoutLines = useCallback(() => {
@@ -515,7 +518,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items, prioShipping]);
 
   // Fire celebration confetti when free-shipping threshold is unlocked.
-  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || hasGuaranteedFreeShipping(items));
+  const freeShippingUnlocked = items.length > 0 && (discountedTotal >= FREE_SHIPPING_THRESHOLD || hasCheckoutFreeShipping(items));
   const prevFreeShippingRef = useRef(freeShippingUnlocked);
   useEffect(() => {
     if (freeShippingUnlocked && !prevFreeShippingRef.current) {
@@ -577,6 +580,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setResolvedKey(currentKey);
           setCheckoutUrl(result.url);
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
+          setShopifyDiscounts(result.discounts);
 
           if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
             localStorage.removeItem(MANUAL_CODE_KEY);
@@ -685,7 +689,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
-      activeDiscountPercent, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
+      activeDiscountPercent, discountLines, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, replaceCartWithSet, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
