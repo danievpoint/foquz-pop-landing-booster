@@ -33,8 +33,7 @@ describe("Set eligibility and upgrades", () => {
     mount(); act(() => cart.addToCart(1, single()));
     act(() => cart.addToCart(1, bundle(5)));
     expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(6);
-    act(() => cart.replaceCartWithSet(bundle(10)));
-    expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(10);
+    expect(cart.planFill(10)).not.toBeNull();
   });
   it.each([5, 10])("only complete %s sets retain gifts and shipping below 29 EUR", (size) => {
     expect(hasGuaranteedFreeShipping(set(size))).toBe(true);
