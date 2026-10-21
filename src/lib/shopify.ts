@@ -129,7 +129,7 @@ const CART_CREATE_MUTATION = `
         }
         discountCodes { code applicable }
         discountAllocations { ${ALLOCATION_FIELDS} }
-        lines(first: 100) { edges { node { discountAllocations { ${ALLOCATION_FIELDS} } } } }
+        lines(first: 100) { edges { node { quantity merchandise { ... on ProductVariant { id } } cost { totalAmount { amount } } discountAllocations { ${ALLOCATION_FIELDS} } } } }
       }
       userErrors { field message }
     }
@@ -162,6 +162,8 @@ export interface ShopifyCheckout {
   discountApplicable: boolean;
   discounts: DiscountLine[];
   quantityMismatch?: boolean;
+  /** Warenwert nach allen Rabatten ohne Prio-Versand, aus Shopifys Zeilenkosten; null wenn nicht belegbar. */
+  merchandiseValue?: number | null;
 }
 
 type RawAllocation = { discountedAmount?: { amount?: string }; title?: string; code?: string };
@@ -190,6 +192,33 @@ export function parseDiscountAllocations(cart: {
     map.set(key, { kind, label, amount: Math.round(((prev?.amount ?? 0) + amount) * 100) / 100 });
   }
   return [...map.values()].sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "automatic" ? -1 : 1));
+}
+
+type RawCostLine = { node?: { merchandise?: { id?: string }; cost?: { totalAmount?: { amount?: string } } } };
+/**
+ * Warenwert ohne Prio-Versand aus Shopifys Antwort.
+ * Semantik: line.cost.totalAmount enthält nur Positions-Rabatte (z. B. automatische Set-Rabatte);
+ * Bestellrabatte (z. B. DROP20) stehen nur in cart.discountAllocations und sind in cart.cost.totalAmount
+ * enthalten. Shopify verteilt Bestellrabatte anteilig auf die Positionen; deshalb wird der Prio-Anteil
+ * am Gesamtbetrag als Prio-Zeilenkosten × (Gesamtbetrag / Summe aller Zeilenkosten) rekonstruiert.
+ */
+export function merchandiseValueExcluding(
+  cart: { cost?: { totalAmount?: { amount?: string } }; lines?: { edges?: RawCostLine[] } } | null | undefined,
+  excludedVariantId: string | undefined
+): number | null {
+  const total = parseFloat(cart?.cost?.totalAmount?.amount ?? "");
+  const edges = cart?.lines?.edges;
+  if (!Number.isFinite(total) || !edges) return null;
+  let sum = 0; let excluded = 0;
+  for (const e of edges) {
+    const amount = parseFloat(e.node?.cost?.totalAmount?.amount ?? "");
+    if (!Number.isFinite(amount)) return null;
+    sum += amount;
+    if (excludedVariantId && e.node?.merchandise?.id === excludedVariantId) excluded += amount;
+  }
+  if (excluded === 0) return Math.round(total * 100) / 100;
+  if (sum <= 0) return null;
+  return Math.round(Math.max(0, total - excluded * (total / sum)) * 100) / 100;
 }
 
 export async function createShopifyCheckout(
@@ -235,7 +264,8 @@ export async function createShopifyCheckout(
   // Shopify lässt nicht lieferbare Mengen teils stillschweigend weg – das nie akzeptieren.
   const requested = lines.reduce((sum, l) => sum + l.quantity, 0);
   const quantityMismatch = typeof cart?.totalQuantity === "number" && cart.totalQuantity !== requested;
-  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable, discounts: parseDiscountAllocations(cart), quantityMismatch };
+  const merchandiseValue = merchandiseValueExcluding(cart, VARIANT_GID_BY_ID["prio-versand"]);
+  return { url: decorateCheckoutUrl(checkoutUrl), cartId, discountedSubtotal, discountApplicable, discounts: parseDiscountAllocations(cart), quantityMismatch, merchandiseValue };
 }
 
 /**
