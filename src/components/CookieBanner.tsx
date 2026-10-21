@@ -11,6 +11,12 @@ import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import mascotLemon from "@/assets/mascot-lemon.png";
 import { heroReadyPromise } from "@/components/HeroSection";
 
+/** Startseite wartet kurz auf das Hero-Bild (max. 3 s), Unterseiten nie. */
+const bannerReady = (): Promise<unknown> =>
+  window.location.pathname === "/"
+    ? Promise.race([heroReadyPromise, new Promise((r) => setTimeout(r, 3000))])
+    : Promise.resolve();
+
 type View = "hidden" | "banner" | "settings";
 
 const CATEGORY_LABELS: Record<ConsentCategory, { title: string; desc: string }> = {
@@ -24,7 +30,11 @@ const CATEGORY_LABELS: Record<ConsentCategory, { title: string; desc: string }> 
   },
   marketing: {
     title: "Marketing",
-    desc: "Conversion-Messung, Retargeting und personalisierte Werbung. Lädt erst nach Ihrer Einwilligung.",
+    desc: "Conversion-Messung, Retargeting, personalisierte Werbung und das Klaviyo-Newsletter-Pop-up. Lädt erst nach Ihrer Einwilligung. Den Newsletter können Sie unabhängig davon jederzeit über das Formular auf der Startseite abonnieren.",
+  },
+  reviews: {
+    title: "Externe Bewertungen",
+    desc: "Lädt Kundenbewertungen von Loox. Dabei werden u. a. Ihre IP-Adresse und Geräteinformationen an Loox übertragen. Freiwillig – ohne Einwilligung sehen Sie einen Platzhalter mit Laden-Knopf.",
   },
 };
 
@@ -32,27 +42,31 @@ const CookieBanner = () => {
   const [view, setView] = useState<View>("hidden");
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
+  const [reviews, setReviews] = useState(false);
   const [expanded, setExpanded] = useState<ConsentCategory | null>(null);
   useLockBodyScroll(view === "settings");
 
   useEffect(() => {
     const current = readConsent();
-    if (!current) {
+    if (current) {
+      setAnalytics(current.analytics);
+      setMarketing(current.marketing);
+      setReviews(current.reviews);
+    }
+    if (!current?.choiceMade) {
       // Erst zeigen, wenn die Seite (Hero-Bilder + Schriften) fertig geladen ist,
       // damit das Banner nicht vor dem Rest der Seite erscheint.
       let timer: ReturnType<typeof setTimeout> | undefined;
       let cancelled = false;
-      heroReadyPromise.then(() => {
+      bannerReady().then(() => {
         if (cancelled) return;
-        timer = setTimeout(() => setView("banner"), 800);
+        timer = setTimeout(() => setView((v) => (v === "hidden" ? "banner" : v)), 800);
       });
       return () => {
         cancelled = true;
         if (timer) clearTimeout(timer);
       };
     }
-    setAnalytics(current.analytics);
-    setMarketing(current.marketing);
   }, []);
 
   useEffect(() => {
@@ -60,6 +74,7 @@ const CookieBanner = () => {
       const current = readConsent();
       setAnalytics(current?.analytics ?? false);
       setMarketing(current?.marketing ?? false);
+      setReviews(current?.reviews ?? false);
       setView("settings");
     };
     window.addEventListener("foquz-open-cookie-settings", open);
@@ -67,15 +82,15 @@ const CookieBanner = () => {
   }, []);
 
   const acceptAll = () => {
-    writeConsent({ analytics: true, marketing: true });
+    writeConsent({ analytics: true, marketing: true, reviews: true, choiceMade: true });
     setView("hidden");
   };
   const rejectAll = () => {
-    writeConsent({ analytics: false, marketing: false });
+    writeConsent({ analytics: false, marketing: false, reviews: false, choiceMade: true });
     setView("hidden");
   };
   const saveSelection = () => {
-    writeConsent({ analytics, marketing });
+    writeConsent({ analytics, marketing, reviews, choiceMade: true });
     setView("hidden");
   };
 
@@ -85,6 +100,7 @@ const CookieBanner = () => {
     necessary: CONSENT_SERVICES.filter((s) => s.category === "necessary"),
     analytics: CONSENT_SERVICES.filter((s) => s.category === "analytics"),
     marketing: CONSENT_SERVICES.filter((s) => s.category === "marketing"),
+    reviews: CONSENT_SERVICES.filter((s) => s.category === "reviews"),
   };
 
   return (
@@ -110,7 +126,7 @@ const CookieBanner = () => {
           }
         >
           <button
-            onClick={() => (view === "settings" ? setView("hidden") : rejectAll())}
+            onClick={() => (view === "settings" && readConsent()?.choiceMade ? setView("hidden") : view === "settings" ? setView("banner") : rejectAll())}
             className="absolute top-3 right-3 p-1 hover:bg-muted rounded-full transition-colors"
             aria-label="Schließen"
           >
@@ -123,7 +139,7 @@ const CookieBanner = () => {
               <div className="flex-1">
                 <h3 className="font-black text-lg mb-1">Cookies & Privatsphäre</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  Wir nutzen technisch notwendige Cookies, damit Shop, Warenkorb und Checkout funktionieren. Mit Ihrer Einwilligung verwenden wir zusätzlich Analyse- und Marketing-Dienste, um unser Angebot zu verbessern. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen" im Footer ändern. Details in der{" "}
+                  Wir nutzen technisch notwendige Cookies, damit Shop, Warenkorb und Checkout funktionieren. Mit Ihrer Einwilligung verwenden wir zusätzlich Analyse- und Marketing-Dienste sowie externe Kundenbewertungen (Loox). Ohne Einwilligung funktionieren Shop, Checkout und Newsletter-Anmeldung uneingeschränkt. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen" im Footer ändern. Details in der{" "}
                   <a href="/datenschutz" className="underline font-semibold">Datenschutzerklärung</a>.
                 </p>
                 <div className="flex flex-wrap gap-2 items-center">
@@ -152,11 +168,12 @@ const CookieBanner = () => {
               </p>
 
               <div className="space-y-3">
-                {(["necessary", "analytics", "marketing"] as ConsentCategory[]).map((cat) => {
-                  const isOn = cat === "necessary" ? true : cat === "analytics" ? analytics : marketing;
+                {(["necessary", "analytics", "marketing", "reviews"] as ConsentCategory[]).map((cat) => {
+                  const isOn = cat === "necessary" ? true : cat === "analytics" ? analytics : cat === "marketing" ? marketing : reviews;
                   const toggle = () => {
                     if (cat === "analytics") setAnalytics((v) => !v);
                     if (cat === "marketing") setMarketing((v) => !v);
+                    if (cat === "reviews") setReviews((v) => !v);
                   };
                   const isExpanded = expanded === cat;
                   return (
@@ -177,6 +194,7 @@ const CookieBanner = () => {
                             checked={isOn}
                             disabled={cat === "necessary"}
                             onChange={toggle}
+                            aria-label={CATEGORY_LABELS[cat].title}
                             className="sr-only peer"
                           />
                           <div className="relative w-11 h-6 bg-muted border-2 border-foreground rounded-full peer-checked:bg-[#ffd618] peer-disabled:opacity-60 transition-colors">
