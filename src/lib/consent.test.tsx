@@ -175,7 +175,7 @@ describe("Review-Korrekturen", () => {
   it("Widerruf sperrt geladene SDKs sofort und lädt ohne Wartezeit neu", () => {
     const w = window as unknown as Record<string, unknown>;
     const fbq = vi.fn();
-    w.fbq = fbq;
+    Object.defineProperty(w, "fbq", { value: fbq, writable: true, configurable: true });
     const reload = vi.fn();
     handleConsentTransition(valid({ marketing: true }) as never, valid() as never, reload);
     expect(reload).toHaveBeenCalledTimes(1);
