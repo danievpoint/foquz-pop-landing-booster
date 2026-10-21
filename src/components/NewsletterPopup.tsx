@@ -253,10 +253,8 @@ const NewsletterPopup = () => {
                         required
                       />
                       <span>
-                        Mit der Anmeldung erklärst du dich mit unseren{" "}
-                        <a href="/agb" className="font-bold text-foquz-peach underline underline-offset-2">AGB</a>{" "}und unserer{" "}
-                        <a href="/datenschutz" className="font-bold text-foquz-peach underline underline-offset-2">Datenschutzerklärung</a>{" "}
-                        einverstanden. Kein Spam · Jederzeit kündbar.
+                        Ich möchte per E-Mail Neuigkeiten und Angebote der FOQUZ GmbH erhalten. Ich kann meine Einwilligung jederzeit über den Abmeldelink widerrufen. Hinweise zur Verarbeitung meiner Daten finde ich in der{" "}
+              <a href="/datenschutz" className="font-bold text-foquz-peach underline underline-offset-2">Datenschutzerklärung</a>.
                       </span>
                     </label>
                     {consentError && (

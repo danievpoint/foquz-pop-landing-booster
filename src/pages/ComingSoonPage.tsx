@@ -165,9 +165,8 @@ const ComingSoonPage = () => {
             </form>
 
             <p className="text-xs mt-4" style={{ color: "rgba(29,29,27,0.4)" }}>
-              Mit der Anmeldung erklärst du dich mit unserer{" "}
-              <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>{" "}
-              einverstanden. Kein Spam · Jederzeit kündbar.
+              Mit der Anmeldung möchte ich per E-Mail Neuigkeiten und Angebote der FOQUZ GmbH erhalten. Ich kann meine Einwilligung jederzeit über den Abmeldelink widerrufen. Hinweise zur Verarbeitung meiner Daten finde ich in der{" "}
+              <a href="https://www.foquz.de/datenschutz" className="underline" style={{ color: "#f07e26" }}>Datenschutzerklärung</a>.
             </p>
 
             {/* Deko-Sterne */}
