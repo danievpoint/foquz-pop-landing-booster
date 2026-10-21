@@ -83,6 +83,7 @@ const CartDrawer = () => {
     checkout,
     isCheckingOut,
     checkoutUrl,
+    unavailableFlavors,
     addToCart,
     fillCartToSet,
     planFill,
@@ -769,7 +770,11 @@ const CartDrawer = () => {
                   </div>
                 )}
 
-                {checkoutUrl ? (
+                {unavailableFlavors.length > 0 ? (
+                  <p role="alert" className="mt-3 text-sm font-bold text-destructive text-center">
+                    {unavailableFlavors.join(", ")} {unavailableFlavors.length === 1 ? "ist" : "sind"} gerade nicht lieferbar. Bitte entferne die Dose{unavailableFlavors.length === 1 ? "" : "n"} oder wähle eine andere Sorte, um zur Kasse zu gehen.
+                  </p>
+                ) : checkoutUrl ? (
                   <a
                     href={checkoutUrl}
                     target="_blank"

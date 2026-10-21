@@ -132,6 +132,8 @@ export function planFillToSet(items: CartItem[], target: number, stock: FillStoc
     if (flavor) kept[flavor] = (kept[flavor] ?? 0) + item.qty;
   }
   const current = legacyCans + Object.values(kept).reduce((s, q) => s + q, 0);
+  // Alte Bundle-Produkte + freie Dosen: Preis/Tracking in Shopify nicht belegt → kein Auffüllen.
+  if (legacyCans > 0) return null;
   if (![3, 5, 10].includes(target) || current >= target) return null;
   const missing = target - current;
   const ranked = FLAVORS

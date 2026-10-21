@@ -14,4 +14,5 @@
 - Third-party scripts (Klaviyo, Loox, pixels, Shopify Monorail, Collabs attribution) start only via consent checks in `consent`/`consentRuntime`; never hardcode them in index.html, and revocation clears known IDs then reloads, because loaded SDKs cannot be stopped reliably.
 - Legal texts live once in `src/legal/*.html` and are rendered by the site and exported to `legal/shopify` via `scripts/build-legal.ts`; a test enforces both stay identical.
 
-- Klaviyo 'Added to Cart' is queued per successful cart action and sent once only after Shopify confirms the current cart (value after discounts, real checkoutUrl); dropped on failure, quantity mismatch or legacy-bundle permalink carts, so events never carry invented values.
+- Klaviyo 'Added to Cart' goes through `AddToCartTracker`: enqueued only with marketing consent at action time, bound to the cart key that action produced (full cart incl. gifts/prio), sent once only when Shopify confirms exactly that key; failures drop only that key and revocation clears everything, so events never carry another action's cart or pre-consent data.
+- Set fills require a freshly confirmed stock read and are never offered next to legacy bundle products; carts containing flavours Shopify reports unavailable block checkout instead of letting Shopify drop lines.

@@ -28,6 +28,7 @@ const STOCK_QUERY_BASIC = `
 `;
 
 let loading: Promise<void> | null = null;
+let lastFetchOk = false;
 export const getFlavorStock = () => stock;
 /** Bestand vor einer Warenkorbaktion neu bei Shopify abfragen. */
 export async function refreshFlavorStock(): Promise<Record<string, StockInfo> | null> {
@@ -35,7 +36,8 @@ export async function refreshFlavorStock(): Promise<Record<string, StockInfo> | 
   loading = null;
   ensureFlavorStock();
   await loading;
-  return stock;
+  // Nur frisch bestätigter Bestand zählt – kein Rückfall auf alten/fehlenden Stand.
+  return lastFetchOk ? stock : null;
 }
 export function ensureFlavorStock() {
   if (loading || typeof window === "undefined") return;
@@ -44,7 +46,7 @@ export function ensureFlavorStock() {
     let data;
     try { data = await storefrontApiRequest(STOCK_QUERY, { ids }); }
     catch { try { data = await storefrontApiRequest(STOCK_QUERY_BASIC, { ids }); } catch { data = null; } }
-    if (!data?.data?.nodes) { emit(); return; } // Fehler: bisherigen Stand behalten, nichts erfinden
+    if (!data?.data?.nodes) { lastFetchOk = false; emit(); return; } // Fehler: bisherigen Stand behalten, nichts erfinden
     const nodes: Array<{ id: string; availableForSale: boolean; quantityAvailable?: number | null } | null> = data?.data?.nodes ?? [];
     const next: Record<string, StockInfo> = {};
     SET_FLAVORS.forEach((f, i) => {
@@ -52,6 +54,7 @@ export function ensureFlavorStock() {
       next[f.name] = { available: n ? n.availableForSale : true, qty: n?.quantityAvailable ?? null };
     });
     stock = next;
+    lastFetchOk = true;
     // Unvollständige/ungültige Mischungen nach Bestandsdaten neu aufbauen.
     Object.keys(mixes).forEach((k) => {
       const size = Number(k);
@@ -81,6 +84,12 @@ export function defaultMix(size: number): SetMix {
 export const getSetMix = (size: number): SetMix => mixes[size] ?? defaultMix(size);
 export const mixCount = (mix: SetMix) => Object.values(mix).reduce((s, q) => s + q, 0);
 export function setSetMix(size: number, mix: SetMix) { mixes[size] = mix; emit(); }
+
+/** Live-Bestand (Re-Render bei jeder neuen Shopify-Antwort). */
+export function useFlavorStock() {
+  useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
+  return stock;
+}
 
 export function useSetMix(size: number) {
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
