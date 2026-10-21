@@ -158,6 +158,6 @@ export function FreeShippingStatus({ selectedPrice }: { selectedPrice: number })
 export function ProductPromise() {
   return <div className="mt-4 mb-24 lg:mb-0 rounded-2xl border-2 border-black bg-white p-4 pb-5 shadow-[4px_4px_0_0_#000]">
     <h2 className="font-barlow font-extrabold text-base">UNSER VERSPRECHEN</h2>
-    <p className="mt-2 text-xs font-semibold leading-relaxed"><span className="font-extrabold">4 Wochen Duftgarantie:</span> Riecht die Dose nach 4 Wochen nicht mehr, bekommst du 100 % dein Geld zurück — auch geöffnet. Ungeöffnet: 14 Tage Rückgabe (geöffnete aus Hygienegründen ausgeschlossen, § 312g Abs. 2 Nr. 3 BGB). Fragen? info@foquz.de</p>
+    <p className="mt-2 text-xs font-semibold leading-relaxed"><span className="font-extrabold">4 Wochen Duftgarantie:</span> Riecht die Dose innerhalb von 4 Wochen ab Erhalt nicht mehr, bekommst du 100 % dein Geld für die Dose zurück — auch geöffnet (<a href="/garantie" className="underline">Garantiebedingungen</a>). Dazu gilt dein gesetzliches 14-tägiges Widerrufsrecht. Fragen? info@foquz.de</p>
   </div>;
 }

@@ -4,7 +4,7 @@ import SeoHead from "@/components/SeoHead";
 
 const DasIstDrin = () => (
   <div className="min-h-screen">
-    <SeoHead title={"Das ist drin – FOQUZ Inhaltsstoffe"} description={"100% natürliche ätherische Öle und Kräuter in jeder FOQUZ Dose. Erfahre, was FOQUZ so wirkungsvoll macht."} path={"/das-ist-drin"} />
+    <SeoHead title={"Das ist drin – FOQUZ Inhaltsstoffe"} description={"FOQUZ – Riechdosen mit Kräutern, Menthol und verschiedenen Duftprofilen. Kurz riechen, ab auf Wolke 7. Erfahre, was in jeder FOQUZ Dose steckt."} path={"/das-ist-drin"} />
     <Navbar />
     <div className="container mx-auto px-4 pt-44 md:pt-56 pb-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8">Das ist drin</h1>

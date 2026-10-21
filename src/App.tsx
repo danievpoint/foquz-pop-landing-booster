@@ -22,6 +22,8 @@ const UeberUns = lazy(() => import("./pages/UeberUns"));
 const DasIstDrin = lazy(() => import("./pages/DasIstDrin"));
 const AGB = lazy(() => import("./pages/AGB"));
 const Widerrufsbelehrung = lazy(() => import("./pages/Widerrufsbelehrung"));
+const VertragWiderrufen = lazy(() => import("./pages/VertragWiderrufen"));
+const Garantie = lazy(() => import("./pages/Garantie"));
 const Versandbedingungen = lazy(() => import("./pages/Versandbedingungen"));
 const B2BAnfragen = lazy(() => import("./pages/B2BAnfragen"));
 const Anleitung = lazy(() => import("./pages/Anleitung"));
@@ -87,6 +89,8 @@ const App = () => {
                 <Route path="/das-ist-drin" element={<DasIstDrin />} />
                 <Route path="/agb" element={<AGB />} />
                 <Route path="/widerrufsbelehrung" element={<Widerrufsbelehrung />} />
+                <Route path="/vertrag-widerrufen" element={<VertragWiderrufen />} />
+                <Route path="/garantie" element={<Garantie />} />
                 <Route path="/versandbedingungen" element={<Versandbedingungen />} />
                 <Route path="/b2b-anfragen" element={<B2BAnfragen />} />
                 <Route path="/anleitung" element={<Anleitung />} />

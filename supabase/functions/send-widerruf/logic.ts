@@ -47,10 +47,11 @@ export function validate(raw: unknown): ValidationResult {
     name: str(r.name),
     email: str(r.email).toLowerCase(),
     orderNumber: str(r.orderNumber) || null,
-    contractDescription: str(r.contractDescription) || null,
+    // `body` = Feld der bisherigen Formularversion (Abwärtskompatibilität).
+    contractDescription: str(r.contractDescription) || str(r.body) || null,
     address: str(r.address) || null,
     orderDate: str(r.orderDate) || null,
-    statement: str(r.statement) || DEFAULT_STATEMENT,
+    statement: str(r.statement) || str(r.body) || DEFAULT_STATEMENT,
   };
   if (!v.name) return { ok: false, error: "Bitte geben Sie Ihren Namen an." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return { ok: false, error: "Bitte geben Sie eine gültige E-Mail-Adresse an." };
@@ -123,7 +124,7 @@ export interface HandleResult {
 
 export async function handleWithdrawal(raw: unknown, meta: { ip: string | null; userAgent: string | null }, deps: Deps): Promise<HandleResult> {
   const parsed = validate(raw);
-  if (!parsed.ok) return { status: 400, body: { error: parsed.error } };
+  if (parsed.ok === false) return { status: 400, body: { error: parsed.error } };
 
   if (meta.ip && (await deps.recentCount(meta.ip)) >= MAX_PER_HOUR) {
     return { status: 429, body: { error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut oder schreiben Sie an info@foquz.de." } };

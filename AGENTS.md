@@ -12,3 +12,4 @@
 - Discount display shows only Shopify discountAllocations per discount (automatic vs code); never derive percentages or per-item prices from totals, since stacked set and code discounts make them wrong.
 - Cart 'free shipping' for can-sets follows `hasCheckoutFreeShipping`/`SHOPIFY_FREE_SHIPPING_FOR_CAN_SETS`; only enable it once Shopify itself makes those carts free, so the cart never promises what checkout charges.
 - Third-party scripts (Klaviyo, Loox, pixels, Shopify Monorail, Collabs attribution) start only via consent checks in `consent`/`consentRuntime`; never hardcode them in index.html, and revocation clears known IDs then reloads, because loaded SDKs cannot be stopped reliably.
+- Legal texts live once in `src/legal/*.html` and are rendered by the site and exported to `legal/shopify` via `scripts/build-legal.ts`; a test enforces both stay identical.
