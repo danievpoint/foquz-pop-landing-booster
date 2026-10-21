@@ -19,7 +19,7 @@ const mount = () => render(<CartProvider><Probe /></CartProvider>);
 const single = (name: string, qty = 1): CartItem => ({ id: name, name, qty, price: 7.49, image: "" });
 const paid = () => paidCanCount(cart.items);
 const gifts = () => cart.items.filter((i) => i.id.startsWith("gift-"));
-const res = (v: number, id: string): ShopifyCheckout => ({ url: `https://checkout.foquz.de/${id}`, cartId: id, discountedSubtotal: v, discountApplicable: true, discounts: [] });
+const res = (v: number, id: string): ShopifyCheckout => ({ url: `https://checkout.foquz.de/${id}`, cartId: id, discountedSubtotal: v, discountApplicable: true, discounts: [], merchandiseValue: v });
 const stock = { "PEACH PARTY": { available: true, qty: 3 }, "THAI STYLE": { available: false, qty: 0 }, "LEMON BREEZY": { available: true, qty: 2 }, "WATERMELON FLEX": { available: true, qty: 50 }, "BLUEBERRY FLOW": { available: true, qty: 40 } };
 
 const stockOk = async () => ({ data: { nodes: Array.from({ length: 5 }, () => ({ availableForSale: true, quantityAvailable: 50 })) } });
