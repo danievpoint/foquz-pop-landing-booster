@@ -25,7 +25,7 @@ import payMastercard from "@/assets/payment/mastercard.svg";
 import payAmex from "@/assets/payment/amex.svg";
 import payApplePay from "@/assets/payment/apple-pay.svg";
 import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
-import { completeSetSizes, hasCheckoutFreeShipping } from "@/lib/cartRules";
+import { completeSetSizes, hasCheckoutFreeShipping, paidCanCount } from "@/lib/cartRules";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 
 const PAYMENT_METHODS = [
@@ -593,7 +593,7 @@ const CartDrawer = () => {
                               onClick={() => { void fillCartToSet(u.target, u.added); }}
                               className={`comic-btn text-xs py-1.5 px-4 mt-2 ${featured ? "bg-[#ffd618] text-black" : "bg-primary text-primary-foreground"}`}
                             >
-                              {`AUF ${u.target}ER SET AUFFÜLLEN`}
+                              {`Auf ${u.target}er Set auffüllen`}
                             </button>
                           </div>
                         </div>
