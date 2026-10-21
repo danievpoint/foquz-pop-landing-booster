@@ -102,6 +102,7 @@ const CartContext = createContext<CartContextType>({
   checkout: async () => {},
   isCheckingOut: false,
   checkoutUrl: null,
+  unavailableFlavors: [],
   prioShipping: false,
   setPrioShipping: () => {},
 });
