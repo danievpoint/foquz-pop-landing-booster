@@ -94,3 +94,10 @@ describe("Widerrufsfunktion § 356a (Mocks, keine echten Mails)", () => {
     expect(formatReceived("2026-01-15T10:00:00Z")).toContain("MEZ");
   });
 });
+
+describe("Abwärtskompatibilität", () => {
+  it("akzeptiert Anfragen der bisherigen Formularversion", () => {
+    const r = validate({ name: "A", email: "a@b.de", address: "X", orderDate: "2026-10-01", body: "Hiermit widerrufe ich: 2 Dosen" });
+    expect(r.ok).toBe(true);
+  });
+});
