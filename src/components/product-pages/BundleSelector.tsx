@@ -104,7 +104,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       {price(b.price)} €
                     </span>
                     <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
-                      {b.perDose} € / Dose · {b.perKg} €/kg
+                      {b.perDose} € / Dose
                     </span>
                   </span>
                 </span>
@@ -161,7 +161,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 {price(b.price)} €
               </span>
               <span className="block text-[11px] font-semibold text-muted-foreground">
-                {b.perDose} € / Dose{b.perKg ? ` · ${b.perKg} €/kg` : ""}
+                {b.perDose} € / Dose
               </span>
             </span>
             </button>

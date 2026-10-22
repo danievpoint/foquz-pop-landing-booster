@@ -24,15 +24,15 @@ export function useProductPage(handle: string) {
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
   const options = [
-    { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", perKg: "1.498,00", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name, boxImage: null },
-    { label: "3 DOSEN – STARTER SET", desc: "Sorten frei wählbar", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "7,30", perKg: "1.460,00", dosen: 3, tag: null, productName: bundleProduct.name, id: "starter-bundle", boxImage: { url: bundleProduct.image, altText: "FOQUZ Starter Set – 3er Box" } },
-    { label: "5 DOSEN – SQUAD BUNDLE", desc: "Sorten frei wählbar", price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "6,98", perKg: "1.396,00", dosen: 5, tag: null, productName: squadBundleProduct.name, id: "squad-bundle", boxImage: { url: squadBundleProduct.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
-    { label: "10 DOSEN – VORRATS-BUNDLE", desc: "Sorten frei wählbar", price: crewBundleProduct.numericPrice, oldPrice: "74,90 €", perDose: "5,99", perKg: "1.198,00", dosen: 10, tag: null, productName: crewBundleProduct.name, id: "vorrats-bundle", boxImage: { url: crewBundleProduct.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
+    { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name, boxImage: null },
+    { label: "3 DOSEN – STARTER SET", desc: "Sorten frei wählbar", price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "7,30", dosen: 3, tag: null, productName: bundleProduct.name, id: "starter-bundle", boxImage: { url: bundleProduct.image, altText: "FOQUZ Starter Set – 3er Box" } },
+    { label: "5 DOSEN – SQUAD BUNDLE", desc: "Sorten frei wählbar", price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "6,98", dosen: 5, tag: null, productName: squadBundleProduct.name, id: "squad-bundle", boxImage: { url: squadBundleProduct.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
+    { label: "10 DOSEN – VORRATS-BUNDLE", desc: "Sorten frei wählbar", price: crewBundleProduct.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: null, productName: crewBundleProduct.name, id: "vorrats-bundle", boxImage: { url: crewBundleProduct.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
   ];
   const bundles = handle === "vorrats-bundle" ? [
-    { label: "10 DOSEN – VORRATS-BUNDLE", desc: "Sorten frei wählbar", price: product.numericPrice, oldPrice: "74,90 €", perDose: "5,99", perKg: "1.198,00", dosen: 10, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
+    { label: "10 DOSEN – VORRATS-BUNDLE", desc: "Sorten frei wählbar", price: product.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
   ] : handle === "squad-bundle" ? [
-    { label: "5 DOSEN – SQUAD BUNDLE", desc: "Sorten frei wählbar", price: product.numericPrice, oldPrice: "37,45 €", perDose: "6,98", perKg: "1.396,00", dosen: 5, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
+    { label: "5 DOSEN – SQUAD BUNDLE", desc: "Sorten frei wählbar", price: product.numericPrice, oldPrice: "37,45 €", perDose: "6,98", dosen: 5, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
   ] : options;
   const addSingle = () => {
     if (isAvailable(product.name) !== false) {
