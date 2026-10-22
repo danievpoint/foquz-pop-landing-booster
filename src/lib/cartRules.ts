@@ -124,7 +124,7 @@ export interface FillPlan { target: number; items: CartItem[]; kept: Record<stri
  * Auffüllen auf ein Set: vorhandene bezahlte Dosen bleiben (Sorte/Menge), nur fehlende
  * verfügbare Dosen kommen dazu. null = no-op (schon genug Dosen oder Bestand reicht nicht).
  */
-export function planFillToSet(items: CartItem[], target: number, stock: FillStock | null, flavorImages: Record<string, string>, canPrice: number): FillPlan | null {
+export function planFillToSet(items: CartItem[], target: number, stock: FillStock | null, flavorImages: Record<string, string>, canPrice: number, fixedMix?: Record<number, Record<string, number>> | null): FillPlan | null {
   const legacyCans = items.reduce((s, i) => s + (legacySetSize(i.id) ?? 0) * i.qty, 0);
   const kept: Record<string, number> = {};
   for (const item of items) {
@@ -136,6 +136,25 @@ export function planFillToSet(items: CartItem[], target: number, stock: FillStoc
   if (legacyCans > 0) return null;
   if (![3, 5, 10].includes(target) || current >= target) return null;
   const missing = target - current;
+  const others = items.filter((item) => !PAID_FLAVOR_OF(item) && !giftIds.includes(item.id));
+  const build = (added: Record<string, number>): FillPlan => ({ target, kept, added, items: [...others, ...FLAVORS.filter((f) => (kept[f] ?? 0) + (added[f] ?? 0) > 0).map((f) => ({
+    id: `set${target}:${f}`, name: `${f} · ${target}er Set`, price: canPrice, image: flavorImages[f] ?? "",
+    setSize: target, flavor: f, qty: (kept[f] ?? 0) + (added[f] ?? 0),
+  }))] });
+  // Fester Modus: exakt auf die feste Zielmischung auffüllen; inkompatible Carts bekommen keine Karte.
+  const fixed = fixedMix?.[target];
+  if (fixed) {
+    if (Object.entries(kept).some(([f, q]) => q > (fixed[f] ?? 0))) return null;
+    const added: Record<string, number> = {};
+    for (const f of FLAVORS) {
+      const need = (fixed[f] ?? 0) - (kept[f] ?? 0);
+      if (need <= 0) continue;
+      const info = stock?.[f];
+      if (!info?.available || (info.qty != null && info.qty < (fixed[f] ?? 0))) return null;
+      added[f] = need;
+    }
+    return build(added);
+  }
   const ranked = FLAVORS
     .map((name, i) => ({ name, i, info: stock?.[name] }))
     // Ohne Bestandsdaten nur Sorten, die nicht als ausverkauft gesperrt sind.
@@ -154,10 +173,5 @@ export function planFillToSet(items: CartItem[], target: number, stock: FillStoc
     if (!progressed) break;
   }
   if (left > 0) return null;
-  const others = items.filter((item) => !PAID_FLAVOR_OF(item) && !giftIds.includes(item.id));
-  const cans: CartItem[] = FLAVORS.filter((f) => (kept[f] ?? 0) + (added[f] ?? 0) > 0).map((f) => ({
-    id: `set${target}:${f}`, name: `${f} · ${target}er Set`, price: canPrice, image: flavorImages[f] ?? "",
-    setSize: target, flavor: f, qty: (kept[f] ?? 0) + (added[f] ?? 0),
-  }));
-  return { target, items: [...others, ...cans], kept, added };
+  return build(added);
 }

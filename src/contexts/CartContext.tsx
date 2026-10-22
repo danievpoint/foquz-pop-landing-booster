@@ -10,7 +10,7 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, getSetMode, setModeFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, getSetMode, setModeFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -412,7 +412,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const fillInFlight = useRef(false);
   const flavorImages = Object.fromEntries(SET_FLAVORS.map((f) => [f.name, f.image]));
   const planFill = useCallback(
-    (target: number) => planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE),
+    (target: number) => planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, getSetMode() === "fixed" ? FIXED_SET_MIX : null),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items]
   );
@@ -429,7 +429,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
       if (itemsRef.current !== before) return false; // Warenkorb hat sich inzwischen geändert
-      const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE);
+      const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE, setModeFor(fresh) === "fixed" ? FIXED_SET_MIX : null);
       if (!plan) return false;
       if (JSON.stringify(plan.added) !== JSON.stringify(expected)) {
         toast.error("Der Bestand hat sich geändert. Bitte prüfe die neue Zusammenstellung.");
