@@ -23,11 +23,14 @@ export function useProductPage(handle: string) {
   const setMode = useSetMode();
   const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
   /** Inhaltstext je Setgröße – im festen Modus die echte Zusammenstellung statt "frei wählbar". */
-  const setDesc = (size: number) => setMode === "fixed" && FIXED_SET_MIX[size]
-    ? Object.entries(FIXED_SET_MIX[size]).every(([, q]) => q === FIXED_SET_MIX[size][Object.keys(FIXED_SET_MIX[size])[0]]) && Object.keys(FIXED_SET_MIX[size]).length === 5
-      ? `Je ${FIXED_SET_MIX[size]["PEACH PARTY"]}× alle 5 Sorten`
-      : Object.entries(FIXED_SET_MIX[size]).map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ")
-    : "Sorten frei wählbar";
+  const setDesc = (size: number) => {
+    const fixed = setMode === "fixed" ? FIXED_SET_MIX[size] : undefined;
+    if (!fixed) return "Sorten frei wählbar";
+    const entries = Object.entries(fixed);
+    return entries.length === 5 && entries.every(([, q]) => q === entries[0][1])
+      ? `Feste Mischung: je ${entries[0][1]}× alle 5 Sorten`
+      : `Feste Mischung: ${entries.map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ")}`;
+  };
   const ctaRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
