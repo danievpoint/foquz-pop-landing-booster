@@ -2,6 +2,7 @@ import { act, cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CartProvider, GIFT_ITEMS, useCart, type CartItem } from "./CartContext";
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, completeSetSizes, hasGuaranteedFreeShipping, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
+import { refreshFlavorStock } from "@/lib/setMix";
 import { createShopifyCheckout, isShopifyCartCompleted, storefrontApiRequest, type ShopifyCheckout } from "@/lib/shopify";
 
 vi.mock("canvas-confetti", () => ({ default: { create: () => vi.fn() } }));
@@ -31,6 +32,7 @@ describe("Set eligibility and upgrades", () => {
   });
   it("keeps product-page adds additive but cart upgrades atomic", async () => {
     vi.mocked(storefrontApiRequest).mockResolvedValue({ data: { nodes: Array.from({ length: 5 }, () => ({ availableForSale: true, quantityAvailable: 50 })) } } as never);
+    await refreshFlavorStock();
     mount(); act(() => cart.addToCart(1, single()));
     act(() => cart.addToCart(1, bundle(5)));
     await waitFor(() => expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(6));
