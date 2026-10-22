@@ -11,9 +11,10 @@ export function useProductAvailability() {
   const { data: availability = [], isLoading: loading } = useQuery({
     queryKey: ["shopify-availability"],
     queryFn: fetchProductsAvailability,
-    staleTime: 5 * 60 * 1000, // 5 min cache
+    staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: 2 * 60 * 1000,
     refetchOnMount: false,
   });
 
@@ -27,8 +28,6 @@ export function useProductAvailability() {
   });
 
   const isAvailable = (productName: string): boolean | null => {
-    // THAI STYLE ist als Einzeldose ausverkauft – nur noch über Bundles erhältlich.
-    if (productName === "THAI STYLE") return false;
     if (BUNDLE_VARIANT_BY_NAME[productName]) {
       if (bundlesLoading) return null;
       return bundleAvailability?.[productName] ?? false;

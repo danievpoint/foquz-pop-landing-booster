@@ -256,7 +256,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     shopifyCartIdRef.current = null;
     setCheckoutUrl(null);
     setShopifyDiscountedSubtotal(null);
-    toast.error("Thai Style ist einzeln ausverkauft und wurde aus deinem Warenkorb entfernt. Bundles bleiben unverändert.");
+    toast.error("Eine Sorte ist einzeln nicht mehr erhältlich und wurde aus deinem Warenkorb entfernt. Sets bleiben unverändert.");
   }, [hasSoldOutSingle]);
 
   const openCart = useCallback(() => setIsOpen(true), []);

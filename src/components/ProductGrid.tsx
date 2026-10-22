@@ -475,17 +475,17 @@ const ProductGrid = () => {
                       <p className="pg-card-desc text-muted-foreground whitespace-pre-line text-center">{p.desc}</p>
                       <div className="pg-card-gap flex items-center justify-center">
                         <span className="pg-card-price font-black">{p.price}</span>
-                        {!detailsOnly && <StockBadge available={isAvailable(p.name)} />}
+                        <StockBadge available={isAvailable(p.name)} />
                       </div>
                       <span className="pg-card-tax text-muted-foreground block text-center">inkl. MwSt.</span>
                       <div className="pg-card-actions flex items-center justify-center gap-3">
-                        {detailsOnly ? <Link to={`/produkt/${p.handle}`} className="comic-btn text-black pg-card-btn" style={{ backgroundColor: p.color }}>DETAILS ANSEHEN</Link> : <button
+                        <button
                           onClick={() => addToCart(1, { id: p.name, name: p.name, price: p.numericPrice, image: p.image })}
                           disabled={isAvailable(p.name) === false}
                           className="comic-btn text-black pg-card-btn disabled:opacity-50 disabled:cursor-not-allowed"
                           style={{ backgroundColor: p.color }}>
                           {isAvailable(p.name) === false ? "AUSVERKAUFT" : "IN DEN WARENKORB"}
-                        </button>}
+                        </button>
                         <InfoButton onClick={() => setInfoProduct(p)} />
                       </div>
                     </div>
@@ -549,7 +549,7 @@ const ProductGrid = () => {
               <p className="text-xs text-muted-foreground mb-1.5 whitespace-pre-line leading-snug min-h-[2.5rem]">{products[realActiveIndex].desc}</p>
               <div className="flex items-center justify-center gap-2 mb-0.5">
                 <span className="text-xl font-black">{products[realActiveIndex].price}</span>
-                {<StockBadge available={isAvailable(products[realActiveIndex].name)} />}
+                <StockBadge available={isAvailable(products[realActiveIndex].name)} />
               </div>
               <span className="text-[10px] text-muted-foreground mb-1.5 block px-4 text-center">inkl. MwSt.</span>
               <div className="flex items-center justify-center gap-3">
