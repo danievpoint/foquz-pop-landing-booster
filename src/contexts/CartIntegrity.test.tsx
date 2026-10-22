@@ -2,7 +2,8 @@ import { act, cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CartProvider, GIFT_ITEMS, useCart, type CartItem } from "./CartContext";
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, completeSetSizes, hasGuaranteedFreeShipping, readStoredCart, reconcileCart, replaceWithSet, saveStoredCart } from "@/lib/cartRules";
-import { createShopifyCheckout, isShopifyCartCompleted, type ShopifyCheckout } from "@/lib/shopify";
+import { refreshFlavorStock } from "@/lib/setMix";
+import { createShopifyCheckout, isShopifyCartCompleted, storefrontApiRequest, type ShopifyCheckout } from "@/lib/shopify";
 
 vi.mock("canvas-confetti", () => ({ default: { create: () => vi.fn() } }));
 vi.mock("@/lib/tracking", () => ({ trackPixelAddToCart: vi.fn(), syncShopifyConsentWithTimeout: vi.fn() }));
@@ -29,10 +30,12 @@ describe("Set eligibility and upgrades", () => {
     expect(completeSetSizes(replaceWithSet(set(from), set(to)))).toEqual([to]);
     expect(replaceWithSet([{ ...bundle(from), qty: 1 }], set(to))).toEqual(set(to));
   });
-  it("keeps product-page adds additive but cart upgrades atomic", () => {
+  it("keeps product-page adds additive but cart upgrades atomic", async () => {
+    vi.mocked(storefrontApiRequest).mockResolvedValue({ data: { nodes: Array.from({ length: 5 }, () => ({ availableForSale: true, quantityAvailable: 50 })) } } as never);
+    await refreshFlavorStock();
     mount(); act(() => cart.addToCart(1, single()));
     act(() => cart.addToCart(1, bundle(5)));
-    expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(6);
+    await waitFor(() => expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(6));
     expect(cart.planFill(10)).not.toBeNull();
   });
   it.each([5, 10])("only complete %s sets retain gifts and shipping below 29 EUR", (size) => {
@@ -72,9 +75,9 @@ describe("Reload validation", () => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify({ version: 99, items: [single()] })); expect(readStoredCart().items).toEqual([]);
     saveStoredCart([{ ...single(), qty: -1 }, { ...single(), id: "unknown" }], false); expect(readStoredCart().items).toEqual([]);
   });
-  it("removes Thai standalone but never a Thai set component", () => {
+  it("keeps Thai standalone and Thai set components (no hardcoded sold-out)", () => {
     saveStoredCart([single("THAI STYLE"), ...set(5, 5, "THAI STYLE")], false);
-    expect(readStoredCart().items).toEqual(set(5, 5, "THAI STYLE"));
+    expect(readStoredCart().items).toEqual([single("THAI STYLE"), ...set(5, 5, "THAI STYLE")]);
   });
   it("keeps pending abandoned checkouts over reload and clears only matching completed snapshots", async () => {
     saveStoredCart([single()], false); mount(); await waitFor(() => expect(cart.checkoutUrl).not.toBeNull());

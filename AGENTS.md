@@ -1,6 +1,6 @@
 # Agent rules
 
-- Standalone sale restrictions use `singleSalePolicy` and guard both cart offers and checkout preparation; check cart IDs only, never expand or filter Shopify bundle components.
+- Standalone sale restrictions use `singleSalePolicy` (currently empty; availability comes live from Shopify) and guard both cart offers and checkout preparation; check cart IDs only, never expand or filter Shopify bundle components.
 - Cart mutations reconcile gifts through `cartRules`; set benefits require complete set groups, and cart set cards fill up to the target via `planFillToSet` (keep existing cans, add only missing available ones, no-op at/above target) so product-page adds stay additive.
 - Persist validated versioned cart items, not prices or checkout results; keyed Shopify preparation is the sole publisher of cart/code totals and links to prevent async races.
 - Track the launched checkout snapshot separately from newer prepared carts; never interpret an expired/missing Shopify cart as proof of payment.
@@ -16,3 +16,4 @@
 
 - Klaviyo 'Added to Cart' goes through `AddToCartTracker`: enqueued only with marketing consent at action time, bound to the cart key that action produced (full cart incl. gifts/prio), sent once only when Shopify confirms exactly that key; failures drop only that key and revocation clears everything, so events never carry another action's cart or pre-consent data.
 - Set fills require a freshly confirmed stock read and are never offered next to legacy bundle products; carts containing flavours Shopify reports unavailable block checkout instead of letting Shopify drop lines.
+- Set mode (fixed vs free mix) is decided once in `setMix` (`setModeFor`/`getSetMode`) from freshly confirmed Shopify stock; set adds re-check stock and refuse when the mode or mix changed since the click, so customers never silently buy a different mix. Existing carts are never re-mixed.

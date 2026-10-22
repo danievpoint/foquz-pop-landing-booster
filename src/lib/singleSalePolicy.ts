@@ -1,6 +1,7 @@
 import { VARIANT_GID_BY_ID } from "@/lib/shopify";
 
-export const SOLD_OUT_SINGLE_IDS = ["THAI STYLE"];
+/** Standalone-Sperrliste. Leer: Verfügbarkeit kommt ausschließlich live aus Shopify. */
+export const SOLD_OUT_SINGLE_IDS: string[] = [];
 
 /** Only standalone cart IDs are checked; Shopify bundle components are never inspected. */
 export function isSoldOutSingleItem(id: string): boolean {

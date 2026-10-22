@@ -10,7 +10,7 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, getSetMode, setModeFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -256,7 +256,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     shopifyCartIdRef.current = null;
     setCheckoutUrl(null);
     setShopifyDiscountedSubtotal(null);
-    toast.error("Thai Style ist einzeln ausverkauft und wurde aus deinem Warenkorb entfernt. Bundles bleiben unverändert.");
+    toast.error("Eine Sorte ist einzeln nicht mehr erhältlich und wurde aus deinem Warenkorb entfernt. Sets bleiben unverändert.");
   }, [hasSoldOutSingle]);
 
   const openCart = useCallback(() => setIsOpen(true), []);
@@ -316,7 +316,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     window.addEventListener(CONSENT_CHANGE_EVENT, onChange);
     return () => window.removeEventListener(CONSENT_CHANGE_EVENT, onChange);
   }, [tracker]);
-  useEffect(() => { ensureFlavorStock(); }, []);
+  useEffect(() => { ensureFlavorStock(); return startFlavorStockPolling(); }, []);
+  const setAddInFlight = useRef(false);
 
   const addToCart = useCallback((qty = 1, product?: Omit<CartItem, "qty">) => {
     const p = product || DEFAULT_PRODUCT;
@@ -327,27 +328,50 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (!Number.isInteger(qty) || qty <= 0) return;
     const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
     if (setSize) {
-      // Sets werden als einzelne Dosen der gewählten Sorten hinzugefügt.
-      const mix = getSetMix(setSize);
-      const cans = SET_FLAVORS.filter((f) => (mix[f.name] ?? 0) > 0).map((f) => ({
-        id: `set${setSize}:${f.name}`, name: `${f.name} · ${setSize}er Set`, price: SET_CAN_PRICE,
-        image: f.image, setSize, flavor: f.name, qty: (mix[f.name] ?? 0) * qty,
-      }));
-      if (cans.length === 0) return;
-      setItems((prev) => {
-        let next = [...prev];
-        for (const c of cans) {
-          const existing = next.find((i) => i.id === c.id);
-          next = existing ? next.map((i) => (i.id === c.id ? { ...i, qty: i.qty + c.qty } : i)) : [...next, c];
+      // Sets werden als einzelne Dosen hinzugefügt. Modus + Mischung gelten so, wie der Kunde sie gesehen hat;
+      // vor dem Hinzufügen wird der Bestand frisch geprüft. Ändert sich der Modus, wird nichts still anders gekauft.
+      const modeAtClick = getSetMode();
+      const mix = { ...getSetMix(setSize) };
+      if (setAddInFlight.current) return;
+      setAddInFlight.current = true;
+      void (async () => {
+        try {
+          const fresh = await refreshFlavorStock();
+          if (!fresh) { toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal."); return; }
+          const mode = setModeFor(fresh);
+          if (mode === "unknown" || (mode !== modeAtClick && !(modeAtClick === "unknown" && mode === "free"))) {
+            toast.error(mode === "fixed"
+              ? "Alle Sorten sind wieder lieferbar – das Set hat jetzt eine feste Zusammenstellung. Bitte prüfe sie und lege das Set erneut in den Warenkorb."
+              : "Eine Sorte ist gerade ausverkauft – die Sorten sind jetzt frei wählbar. Bitte prüfe deine Auswahl und lege das Set erneut in den Warenkorb.");
+            return;
+          }
+          const inCart: Record<string, number> = {};
+          for (const i of itemsRef.current) { const f = i.flavor ?? (SINGLE_CAN_IDS.includes(i.id) ? i.id : null); if (f && i.price > 0) inCart[f] = (inCart[f] ?? 0) + i.qty; }
+          const error = validateSetMix(setSize, mix, fresh, inCart, qty);
+          if (error) { toast.error(error); return; }
+          const cans = SET_FLAVORS.filter((f) => (mix[f.name] ?? 0) > 0).map((f) => ({
+            id: `set${setSize}:${f.name}`, name: `${f.name} · ${setSize}er Set`, price: SET_CAN_PRICE,
+            image: f.image, setSize, flavor: f.name, qty: (mix[f.name] ?? 0) * qty,
+          }));
+          if (cans.length === 0) return;
+          setItems((prev) => {
+            let next = [...prev];
+            for (const c of cans) {
+              const existing = next.find((i) => i.id === c.id);
+              next = existing ? next.map((i) => (i.id === c.id ? { ...i, qty: i.qty + c.qty } : i)) : [...next, c];
+            }
+            return next;
+          });
+          pendingKlaviyoAdd.current = { ...p, qty };
+          tracker.enqueue({ ...p, qty }, hasConsent("marketing"));
+          setLastAddedProductId(p.id);
+          setAddToCartTimestamp(Date.now());
+          fireCelebrationConfetti();
+          setIsOpen(true);
+        } finally {
+          setAddInFlight.current = false;
         }
-        return next;
-      });
-      pendingKlaviyoAdd.current = { ...p, qty };
-      tracker.enqueue({ ...p, qty }, hasConsent("marketing"));
-      setLastAddedProductId(p.id);
-      setAddToCartTimestamp(Date.now());
-      fireCelebrationConfetti();
-      setIsOpen(true);
+      })();
       return;
     }
     setItems((prev) => {
@@ -713,15 +737,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     // Tab sofort öffnen (sonst blockt der Browser nach dem await).
     const tab = window.open("", "_blank", "noopener,noreferrer");
-    // Einwilligung an Shopify übergeben, damit der Checkout die Pixel lädt.
-    await syncShopifyConsentWithTimeout(1500);
+    // Einwilligung an Shopify übergeben + Bestand frisch prüfen (keine Kasse mit nicht lieferbaren Sorten).
+    const [, fresh] = await Promise.all([syncShopifyConsentWithTimeout(1500), refreshFlavorStock()]);
+    const flavorsInCart = items.filter((i) => i.qty > 0 && i.price > 0).map((i) => i.flavor ?? (SINGLE_CAN_IDS.includes(i.id) ? i.id : null)).filter((f): f is string => Boolean(f));
+    if (flavorsInCart.length > 0 && (!fresh || flavorsInCart.some((f) => fresh[f]?.available !== true))) {
+      tab?.close();
+      toast.error(fresh ? "Eine Sorte in deinem Warenkorb ist gerade ausverkauft. Bitte passe deinen Warenkorb an." : "Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal.");
+      return;
+    }
 
     if (currentKeyRef.current !== currentKey) { tab?.close(); return; }
     markCheckoutPending();
     if (tab) tab.location.href = checkoutUrl;
     else window.open(checkoutUrl, "_blank", "noopener,noreferrer");
 
-  }, [items.length, hasSoldOutSingle, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines, currentKey, markCheckoutPending]);
+  }, [items, hasSoldOutSingle, isCheckingOut, effectiveCheckoutUrl, bundlePermalink, getCheckoutLines, currentKey, markCheckoutPending]);
 
   // Only clear the cart once the Shopify checkout was actually completed
   // (i.e. the Shopify cart no longer exists or has 0 items). If the user

@@ -8,6 +8,7 @@ import { BundleSelector } from "@/components/product-pages/BundleSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { Check, ChevronDown } from "lucide-react";
+import { useSetMode } from "@/lib/setMix";
 import PaymentLogos from "@/components/PaymentLogos";
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
@@ -38,6 +39,7 @@ export interface BundleProductConfig {
 
 const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
   const shop = useProductPage(config.handle ?? "starter-bundle");
+  const setMode = useSetMode();
   const { product, bundles, addSelection, isAvailable } = shop;
   const [bundle, setBundle] = useState(() => {
     const own = bundles.find((option) => option.id === (config.handle ?? "starter-bundle"));
@@ -193,6 +195,11 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
             <p className="text-center text-sm md:text-base text-foreground/80 leading-relaxed mb-6 md:mb-8">
               {config.description}
             </p>
+            {setMode !== "fixed" && (
+              <p className="text-center text-sm md:text-base font-bold mb-6 md:mb-8">
+                Gerade ist nicht jede Sorte lieferbar – deshalb stellst du dein Set aktuell selbst aus den verfügbaren Sorten zusammen.
+              </p>
+            )}
             <div className={`grid gap-4 md:gap-6 ${config.contents.length > 3 ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" : "grid-cols-1 sm:grid-cols-3"}`}>
               {config.contents.map((c) => (
                 <div key={c.name} className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] p-4 flex flex-col items-center text-center">
