@@ -51,7 +51,8 @@ export function ensureFlavorStock() {
     const next: Record<string, StockInfo> = {};
     SET_FLAVORS.forEach((f, i) => {
       const n = nodes[i];
-      next[f.name] = { available: n ? n.availableForSale : true, qty: n?.quantityAvailable ?? null };
+      // Fehlende Variante = unbekannt (nicht als lieferbar erfinden).
+      if (n) next[f.name] = { available: n.availableForSale, qty: n.quantityAvailable ?? null };
     });
     stock = next;
     lastFetchOk = true;
@@ -81,7 +82,57 @@ export function defaultMix(size: number): SetMix {
   return mix;
 }
 
-export const getSetMix = (size: number): SetMix => mixes[size] ?? defaultMix(size);
+/** Feste Zusammenstellungen, solange alle fünf Sorten lieferbar sind. */
+export const FIXED_SET_MIX: Record<number, SetMix> = {
+  3: { "THAI STYLE": 1, "LEMON BREEZY": 1, "PEACH PARTY": 1 },
+  5: Object.fromEntries(SET_FLAVORS.map((f) => [f.name, 1])),
+  10: Object.fromEntries(SET_FLAVORS.map((f) => [f.name, 2])),
+};
+/** Größter Bedarf je Sorte über alle festen Sets (10er = 2). */
+const FIXED_MIN_PER_FLAVOR = Math.max(...Object.values(FIXED_SET_MIX).flatMap((m) => Object.values(m)));
+
+export type SetMode = "fixed" | "free" | "unknown";
+/**
+ * Gemeinsame Modusentscheidung für alle Sets:
+ * fixed = alle fünf Sorten laut Shopify lieferbar (und, falls Menge bekannt, je ≥ 2 Stück);
+ * free = mind. eine Sorte ausverkauft/zu knapp; unknown = kein bestätigter Bestand.
+ */
+export function setModeFor(s: Record<string, StockInfo | undefined> | null): SetMode {
+  if (!s) return "unknown";
+  const infos = SET_FLAVORS.map((f) => s[f.name]);
+  if (infos.some((i) => !i)) return "unknown";
+  if (infos.some((i) => !i!.available || (i!.qty !== null && i!.qty < FIXED_MIN_PER_FLAVOR))) return "free";
+  return "fixed";
+}
+export const getSetMode = (): SetMode => setModeFor(lastFetchOk ? stock : null);
+
+/**
+ * Prüft eine Mischung gegen frisch bestätigten Bestand. `inCart` = bereits im Warenkorb liegende
+ * bezahlte Dosen je Sorte (Mengenobergrenze). Gibt eine Fehlermeldung oder null zurück.
+ */
+export function validateSetMix(size: number, mix: SetMix, s: Record<string, StockInfo | undefined>, inCart: Record<string, number> = {}, times = 1): string | null {
+  if (mixCount(mix) !== size) return `Bitte genau ${size} Dosen wählen.`;
+  for (const [name, q] of Object.entries(mix)) {
+    if (q <= 0) continue;
+    const info = s[name];
+    if (!info || !info.available) return "Eine gewählte Sorte ist gerade ausverkauft. Bitte prüfe deine Auswahl.";
+    if (info.qty !== null && (inCart[name] ?? 0) + q * times > info.qty) return "Eine gewählte Sorte ist nicht mehr in dieser Menge lieferbar. Bitte prüfe deine Auswahl.";
+  }
+  return null;
+}
+
+export const getSetMix = (size: number): SetMix =>
+  getSetMode() === "fixed" && FIXED_SET_MIX[size] ? FIXED_SET_MIX[size] : mixes[size] ?? defaultMix(size);
+
+/** Bestand bei Fokus, Sichtbarkeit und alle 60 s neu laden, damit der Modus ohne Deploy umschaltet. */
+export function startFlavorStockPolling(intervalMs = 60_000): () => void {
+  if (typeof window === "undefined") return () => undefined;
+  const refresh = () => { if (document.visibilityState !== "hidden") { loading = null; ensureFlavorStock(); } };
+  window.addEventListener("focus", refresh);
+  document.addEventListener("visibilitychange", refresh);
+  const id = window.setInterval(refresh, intervalMs);
+  return () => { window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", refresh); window.clearInterval(id); };
+}
 export const mixCount = (mix: SetMix) => Object.values(mix).reduce((s, q) => s + q, 0);
 export function setSetMix(size: number, mix: SetMix) { mixes[size] = mix; emit(); }
 
@@ -89,6 +140,11 @@ export function setSetMix(size: number, mix: SetMix) { mixes[size] = mix; emit()
 export function useFlavorStock() {
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
   return stock;
+}
+
+export function useSetMode(): SetMode {
+  useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
+  return getSetMode();
 }
 
 export function useSetMix(size: number) {
