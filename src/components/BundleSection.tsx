@@ -24,7 +24,6 @@ const squads = [
     checks: ["3 Klassiker entdecken", "Exklusive Box", "3 Dosen im Set"],
     price: bundleProduct.price,
     oldPrice: bundleProduct.originalPrice,
-    perKg: "1.460,00 €/kg",
     dosen: 1,
     cartPrice: bundleProduct.numericPrice,
     enabled: true,
@@ -44,7 +43,6 @@ const squads = [
     checks: ["5 Dosen voller Power", "Maximale Auswahl", "Kostenloser Versand in Deutschland"],
     price: "34,90€",
     oldPrice: "37,45€",
-    perKg: "1.396,00 €/kg",
     dosen: 1,
     cartPrice: 34.9,
     enabled: true,
@@ -62,7 +60,6 @@ const squads = [
     checks: ["Jede Sorte zweimal", "Sticker & Nasen-Strips inklusive", "Kostenloser Versand in Deutschland"],
     price: crewBundleProduct.price,
     oldPrice: crewBundleProduct.originalPrice,
-    perKg: "1.198,00 €/kg",
     dosen: 1,
     cartPrice: crewBundleProduct.numericPrice,
     enabled: true,
@@ -144,7 +141,6 @@ const BundleSection = () => {
                     {bundle.oldPrice && <span className="text-xs md:text-sm text-black/50">statt <span className="line-through">{bundle.oldPrice}</span> einzeln</span>}
                     {bundle.enabled && isAvailable(bundle.name) === true && <StockBadge variant="dark" available={true} />}
                   </div>
-                  <span className="text-[11px] md:text-xs font-semibold text-black/60">{bundle.perKg}</span>
                 </div>
 
                 {/* CTA: führt auf die Bundle-Seite, dort werden die Sorten zusammengestellt */}
