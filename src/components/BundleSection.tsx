@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { bundleProduct, crewBundleProduct } from "@/data/products";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import StockBadge from "@/components/StockBadge";
+import { useSetMode } from "@/lib/setMix";
 import bundleBg from "@/assets/bundle-bg.webp";
 const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
 const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.webp";
@@ -68,6 +69,7 @@ const squads = [
 
 const BundleSection = () => {
   const { isAvailable } = useProductAvailability();
+  const setMode = useSetMode();
 
   return (
     <section id="bundle"
@@ -118,7 +120,7 @@ const BundleSection = () => {
                   )}
                 </h2>
                 <p className="text-black/70 text-sm leading-relaxed lg:text-base mb-4 md:mb-6">
-                  {bundle.description}
+                  {setMode === "fixed" ? bundle.description : "Sorten frei wählbar aus den aktuell lieferbaren Sorten."}
                 </p>
 
                 {/* Checkpoints */}
