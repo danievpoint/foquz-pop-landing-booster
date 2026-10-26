@@ -15,8 +15,7 @@ import {
   Plus as PlusIcon,
 } from "lucide-react";
 import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
-import foquzBox from "@/assets/foquz-box.webp";
-import { products as allSorten, allProducts, squadBundleProduct, crewBundleProduct } from "@/data/products";
+import { products as allSorten, allProducts, bundleProduct, squadBundleProduct, crewBundleProduct } from "@/data/products";
 import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
@@ -153,7 +152,7 @@ const CartDrawer = () => {
         desc: `${mix}${gifts}`,
         addedDesc: addedList ? `Neu dazu: ${addedList}` : "",
         price: SET_PRICES[target], compareAt: Math.round(target * 7.49 * 100) / 100,
-        image: target === 3 ? foquzBox : target === 5 ? squadBundleProduct.image : crewBundleProduct.image,
+        image: target === 3 ? bundleProduct.image : target === 5 ? squadBundleProduct.image : crewBundleProduct.image,
         label: target === 5 ? "Beliebteste Wahl" : "Empfehlung", featured: target === 5,
       };
     });
