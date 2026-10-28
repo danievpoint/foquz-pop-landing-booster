@@ -2,7 +2,7 @@ import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { allProducts, products, bundleProduct } from "@/data/products";
+import { allProducts, products, fruitPunchProduct as bundleProduct } from "@/data/products";
 import { faqs } from "@/data/faqs";
 import type { CartItem } from "@/contexts/CartContext";
 import { useCart } from "@/contexts/CartContext";
@@ -16,7 +16,6 @@ import LooxRating from "@/components/LooxRating";
 import PaymentLogos from "@/components/PaymentLogos";
 import { useLockBodyScroll } from "@/hooks/use-lock-body-scroll";
 import { ChevronLeft, ChevronDown, X, ShoppingBag, Ban, Coffee, Leaf, Flag, Check, Plus, Truck, Timer, Wind } from "lucide-react";
-import foquzBox from "@/assets/foquz-box.webp";
 
 import { fetchProductGalleryImages, shopifyImageUrl, shopifyImageSrcSet, SHOPIFY_PRODUCT_ID_BY_HANDLE, type ShopifyImage } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
@@ -100,13 +99,13 @@ const BundleBanner = () => {
               <X className="w-6 h-6" />
             </button>
             <Link to="/produkt/starter-bundle" onClick={() => setDismissed(true)}>
-              <img src={foquzBox} alt="FOQUZ Power Bundle" className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
+              <img src={bundleProduct.image} alt={`FOQUZ ${bundleProduct.name}`} className="w-40 h-40 md:w-52 md:h-52 object-cover rounded-2xl drop-shadow-xl" />
             </Link>
             <h3 className="text-white font-extrabold text-xl md:text-2xl leading-tight">
-              FOQUZ POWER BUNDLE – Alle 3 Sorten!
+              FOQUZ {bundleProduct.name} – 3 Dosen
             </h3>
             <p className="text-white/70 text-sm md:text-base">
-              <strong>Spare 3 %</strong> gegenüber dem Einzelkauf und teste alle unsere 3 Sorten in einer Box.
+              {bundleProduct.desc}
             </p>
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-2xl md:text-3xl">{bundleProduct.price}</span>
@@ -116,7 +115,7 @@ const BundleBanner = () => {
             </div>
             <button
               onClick={() => {
-                addToCart(1, { id: "starter-bundle", name: "FOQUZ Power Bundle (3 Sorten)", price: bundleProduct.numericPrice, image: foquzBox });
+                addToCart(1, { id: bundleProduct.handle, name: bundleProduct.name, price: bundleProduct.numericPrice, image: bundleProduct.image });
                 setDismissed(true);
               }}
               className="comic-btn text-base md:text-lg py-3 px-10 md:py-4 md:px-14 font-black flex items-center gap-2 mt-2"
@@ -883,7 +882,7 @@ const ProductDetail = () => {
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block font-black text-sm text-white">{formatPrice(bundleProduct.numericPrice)}</span>
+                    <span className="block font-black text-sm text-white">{(bundleProduct.pricePending ? bundleProduct.price : formatPrice(bundleProduct.numericPrice))}</span>
                     {bundleProduct.originalPrice && (
                       <span className="block text-[10px] line-through text-white/60 font-semibold">
                         {bundleProduct.originalPrice}
@@ -932,7 +931,7 @@ const ProductDetail = () => {
 
             {product.isBundle && (
               <div className="flex flex-wrap items-baseline gap-2.5 mt-4 md:mt-6">
-                <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
+                <span className="font-black text-3xl">{(bundleProduct.pricePending ? bundleProduct.price : formatPrice(bundleProduct.numericPrice))}</span>
                 {bundleProduct.originalPrice && (
                   <span className="text-base line-through text-black/50 font-semibold">
                     {bundleProduct.originalPrice}
