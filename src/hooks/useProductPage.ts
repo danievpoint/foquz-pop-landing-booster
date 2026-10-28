@@ -4,7 +4,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
-import { bundleStatusFor, getFlavorStock, useFlavorStock } from "@/lib/setMix";
+import { getBundleStatus, useFlavorStock } from "@/lib/setMix";
 
 /** Bild, das in der Galerie gezeigt wird, solange ein Bundle-Set gewählt ist. */
 export interface SetBoxImage {
@@ -19,7 +19,8 @@ export function useProductPage(handle: string) {
   const stock = useFlavorStock();
   // Feste Bundles: lieferbar nur, wenn alle Komponenten laut Shopify lieferbar sind (unbekannt = null).
   const bundleAvailable = (size: number): boolean | null => {
-    const status = bundleStatusFor(size, stock ? getFlavorStock() : null);
+    void stock; // Re-Render bei neuem Bestand
+    const status = getBundleStatus(size);
     return status === "available" ? true : status === "unavailable" ? false : null;
   };
   const isAvailable = (name: string) => {

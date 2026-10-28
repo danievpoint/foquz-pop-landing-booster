@@ -31,8 +31,8 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
       {bundles.map((b) => {
         const isSelected = selected === b.label;
         const save = savings(b);
-        // Farbcode: 1 + 3 Dosen weiß, 5 Dosen lila, 10 Dosen gelb (#FFD11A)
-        const highlight = b.dosen >= 10 ? "yellow" : b.dosen >= 5 ? "violet" : null;
+        // Farbcode: 1 + 3 Dosen weiß, 4 Dosen lila, 8 Dosen gelb (#FFD11A)
+        const highlight = b.dosen >= 8 ? "yellow" : b.dosen >= 4 ? "violet" : null;
 
         if (highlight) {
           const yellow = highlight === "yellow";
@@ -83,10 +83,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                         </span>
                       )}
                       <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
-                        GRATIS VERSAND
-                      </span>
-                      <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-black leading-none ${yellow ? "border-black/70 text-black" : "border-white/50 text-white"}`}>
-                        + Sticker & Nasen-Stripes gratis
+                        inkl. Sticker & Nasen-Stripes
                       </span>
                     </span>
                     <span className={`block text-[10px] font-semibold leading-tight sm:text-xs ${yellow ? "text-black/80" : "text-white/90"}`}>
@@ -101,26 +98,20 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       </span>
                     )}
                     <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                      {price(b.price)} €
+                      {b.pricePending ? "Preis folgt" : `${price(b.price)} €`}
                     </span>
-                    <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
+                    {!b.pricePending && b.perDose && <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
                       {b.perDose} € / Dose
-                    </span>
+                    </span>}
                   </span>
                 </span>
               </button>
 
               {/* Badge über der Karte */}
-              {b.dosen === 5 && (
+              {b.dosen === 4 && (
                 <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-[#FFD11A] px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   BELIEBTESTE WAHL
-                </span>
-              )}
-              {b.dosen === 10 && (
-                <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-black px-2 py-0.5 text-[9px] font-black uppercase leading-none text-[#FFD11A] shadow-[2px_2px_0_0_rgba(0,0,0,0.35)] sm:px-2.5 sm:text-[10px]">
-                  <Sparkles className="mr-1 h-3 w-3" />
-                  BESTER PREIS
                 </span>
               )}
               {isSelected && <div className="mt-3"><SetFlavorPicker size={b.dosen} /></div>}
@@ -146,6 +137,11 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                     Du sparst {price(save)} €
                   </span>
                 )}
+                {b.dosen > 1 && (
+                  <span className="rounded-full border border-black px-1.5 py-0.5 text-[9px] font-black leading-none">
+                    inkl. Sticker & Nasen-Stripes
+                  </span>
+                )}
               </span>
               <span className="block text-[10px] font-semibold leading-tight text-muted-foreground sm:text-xs">
                 {b.desc}
@@ -158,11 +154,11 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 </span>
               )}
               <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                {price(b.price)} €
+                {b.pricePending ? "Preis folgt" : `${price(b.price)} €`}
               </span>
-              <span className="block text-[11px] font-semibold text-muted-foreground">
+              {!b.pricePending && b.perDose && <span className="block text-[11px] font-semibold text-muted-foreground">
                 {b.perDose} € / Dose
-              </span>
+              </span>}
             </span>
             </button>
             {isSelected && b.dosen === 1 && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
