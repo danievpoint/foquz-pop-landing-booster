@@ -1,3 +1,4 @@
+import { ONLINE_BUNDLES, ONLINE_STORE_ORIGIN, refreshOnlineBundles } from "@/lib/bundleOnline";
 import { toast } from "sonner";
 import { getCreator, getDtId } from "./attribution";
 import watermelonVorteile from "@/assets/foquz_product_image_watermelon_vorteile.png.asset.json";
@@ -102,6 +103,10 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "6er-vorrats-set": "gid://shopify/ProductVariant/55425602879830",
   "squad-bundle": "gid://shopify/ProductVariant/55628142707030",
   "vorrats-bundle": "gid://shopify/ProductVariant/55628181274966",
+  // Neue feste Bundles (Warenkorb-ID = Bundle-Handle) → echte Shopify-Komponentenbundles.
+  "fruit-punch": "gid://shopify/ProductVariant/55628113117526",
+  "fresh-flash": "gid://shopify/ProductVariant/55628142707030",
+  "family-first": "gid://shopify/ProductVariant/55628181274966",
   // Prio-Versand – wird über den Toggle im Warenkorb zugebucht
   "prio-versand": "gid://shopify/ProductVariant/55430739493206",
   // Gratis-Zugaben – werden ausschließlich automatisch zum Power Bundle gelegt
@@ -564,41 +569,20 @@ export function prefetchProductGallery(handle: string, widths: number[] = [200, 
  * Verfügbarkeit kommt daher aus dem öffentlichen Produkt-JSON des Onlineshops,
  * Warenkörbe mit Bundles gehen per Cart-Permalink über den Onlineshop in den Checkout.
  */
-export const ONLINE_STORE_ORIGIN = "https://checkout.foquz.de";
+export { ONLINE_STORE_ORIGIN };
 
-export const BUNDLE_VARIANT_BY_NAME: Record<string, string> = {
-  "FOQUZ Power Bundle": "gid://shopify/ProductVariant/55628113117526",
-  "5ER SQUAD BUNDLE": "gid://shopify/ProductVariant/55628142707030",
-  "10ER VORRATS-BUNDLE": "gid://shopify/ProductVariant/55628181274966",
-};
-
-const BUNDLE_HANDLE_BY_NAME: Record<string, string> = {
-  "FOQUZ Power Bundle": "3er-starter-bundle",
-  "5ER SQUAD BUNDLE": "5er-squad-bundle-1",
-  "10ER VORRATS-BUNDLE": "10er-vorrats-bundle-1",
-};
+export const BUNDLE_VARIANT_BY_NAME: Record<string, string> = Object.fromEntries(
+  ONLINE_BUNDLES.map((b) => [b.title, `gid://shopify/ProductVariant/${b.variantId}`]),
+);
 
 export const ONLINE_STORE_BUNDLE_VARIANTS = new Set(Object.values(BUNDLE_VARIANT_BY_NAME));
 
 const numericId = (gid: string) => gid.split("/").pop() ?? gid;
 
-/** Liefert je Bundle-Name true/false. Nicht im Onlineshop aktive Bundles gelten als nicht kaufbar. */
+/** Liefert je Bundle-Name true/false (nur verifizierte, lieferbare Bundles sind true). */
 export async function fetchBundleAvailability(): Promise<Record<string, boolean>> {
-  const entries = await Promise.all(
-    Object.entries(BUNDLE_HANDLE_BY_NAME).map(async ([name, handle]) => {
-      try {
-        const res = await fetch(`${ONLINE_STORE_ORIGIN}/products/${handle}.js`, { cache: "no-store" });
-        if (!res.ok) return [name, false] as const;
-        const json: { variants?: Array<{ id: number; available: boolean }> } = await res.json();
-        const wanted = numericId(BUNDLE_VARIANT_BY_NAME[name]);
-        const variant = json.variants?.find((v) => String(v.id) === wanted);
-        return [name, variant?.available === true] as const;
-      } catch {
-        return [name, false] as const;
-      }
-    }),
-  );
-  return Object.fromEntries(entries);
+  const s = await refreshOnlineBundles();
+  return Object.fromEntries(ONLINE_BUNDLES.map((b) => [b.title, s?.[b.size] === "ready"]));
 }
 
 /**
