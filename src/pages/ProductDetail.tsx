@@ -559,6 +559,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (option === "bundle") {
+      if (bundleProduct.checkoutReady === false) return; // Kauf erst nach Shopify-Abgleich freigegeben
       addToCart(1, {
         id: bundleProduct.handle,
         name: bundleProduct.name,
@@ -882,7 +883,7 @@ const ProductDetail = () => {
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block font-black text-sm text-white">{(bundleProduct.pricePending ? bundleProduct.price : formatPrice(bundleProduct.numericPrice))}</span>
+                    <span className="block font-black text-sm text-white">{formatPrice(bundleProduct.numericPrice)}</span>
                     {bundleProduct.originalPrice && (
                       <span className="block text-[10px] line-through text-white/60 font-semibold">
                         {bundleProduct.originalPrice}
@@ -931,7 +932,7 @@ const ProductDetail = () => {
 
             {product.isBundle && (
               <div className="flex flex-wrap items-baseline gap-2.5 mt-4 md:mt-6">
-                <span className="font-black text-3xl">{(bundleProduct.pricePending ? bundleProduct.price : formatPrice(bundleProduct.numericPrice))}</span>
+                <span className="font-black text-3xl">{formatPrice(bundleProduct.numericPrice)}</span>
                 {bundleProduct.originalPrice && (
                   <span className="text-base line-through text-black/50 font-semibold">
                     {bundleProduct.originalPrice}
@@ -965,11 +966,12 @@ const ProductDetail = () => {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="comic-btn w-full text-base py-3 font-black flex items-center justify-center gap-2"
+                disabled={selectedProduct.checkoutReady === false}
+                className="comic-btn w-full text-base py-3 font-black flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
               >
                 <ShoppingBag className="w-5 h-5" />
-                IN DEN WARENKORB – {selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}
+                {selectedProduct.checkoutReady === false ? "BALD BESTELLBAR" : `IN DEN WARENKORB – ${formatPrice(selectedPrice)}`}
               </button>
             </div>
 
@@ -997,11 +999,12 @@ const ProductDetail = () => {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="comic-btn w-full text-base lg:text-lg py-4 font-black flex items-center justify-center gap-2"
+                disabled={selectedProduct.checkoutReady === false}
+                className="comic-btn w-full text-base lg:text-lg py-4 font-black flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
               >
                 <ShoppingBag className="w-5 h-5" />
-                IN DEN WARENKORB – {selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}
+                {selectedProduct.checkoutReady === false ? "BALD BESTELLBAR" : `IN DEN WARENKORB – ${formatPrice(selectedPrice)}`}
               </button>
             </div>
           </div>
@@ -1285,15 +1288,16 @@ const ProductDetail = () => {
               <div className="text-[10px] font-bold uppercase text-black/50 leading-none">
                 {option === "bundle" ? bundleProduct.name : "1 Dose"}
               </div>
-              <div className="font-black text-lg leading-tight">{selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}</div>
+              <div className="font-black text-lg leading-tight">{formatPrice(selectedPrice)}</div>
             </div>
             <button
               type="button"
               onClick={handleAddToCart}
-              className="comic-btn flex-1 text-sm py-3 px-4 font-black"
+              disabled={selectedProduct.checkoutReady === false}
+              className="comic-btn flex-1 text-sm py-3 px-4 font-black disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
             >
-              IN DEN WARENKORB
+              {selectedProduct.checkoutReady === false ? "BALD BESTELLBAR" : "IN DEN WARENKORB"}
             </button>
       </div>
 
