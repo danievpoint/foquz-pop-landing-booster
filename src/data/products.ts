@@ -29,8 +29,8 @@ export interface Product {
   color: string;
   ingredients: string[];
   isBundle?: boolean;
-  /** Preis noch nicht freigegeben – nicht kaufbar, kein Preis/JSON-LD-Angebot. */
-  pricePending?: boolean;
+  /** Kauf erst nach Shopify-Abgleich (Komponenten/IDs/Preis/Zugaben/Versand) freigegeben – kein Kauf, kein JSON-LD-Angebot. Standard: true. */
+  checkoutReady?: boolean;
 }
 
 export const products: Product[] = [
@@ -145,10 +145,17 @@ export const newFlavorProducts: Product[] = [
 export const flavorProducts: Product[] = [...products, ...newFlavorProducts];
 
 /**
- * Feste Bundles (Vorschau). Preise sind noch nicht freigegeben: `pricePending` sperrt Kauf/Upgrade
- * und jede Preisausgabe, bis finales Pricing und echte Shopify-Komponentenbundles abgeglichen sind.
+ * Feste Bundles (Vorschau). Preise sind final, der Kauf bleibt gesperrt (`BUNDLE_CHECKOUT_READY = false`),
+ * bis echte Shopify-Komponentenbundles mit IDs, Preis, Zugaben und Versand verifiziert sind.
  */
-export const BUNDLE_PRICING_PENDING = true;
+export const BUNDLE_CHECKOUT_READY = false;
+
+/** Finale Bundle-Preise in EUR (vom Nutzer freigegeben). */
+export const BUNDLE_PRICES: Record<number, number> = { 3: 21.9, 4: 27.9, 8: 49.9 };
+/** Vergleichspreis: gleiche Dosenzahl als Einzeldosen à 7,49 €. */
+export const BUNDLE_COMPARE_AT: Record<number, string> = { 3: "€22,47", 4: "€29,96", 8: "€59,92" };
+/** Gerundeter Dosenpreis im Bundle. */
+export const BUNDLE_PER_DOSE: Record<number, string> = { 3: "7,30", 4: "6,98", 8: "6,24" };
 
 export interface FixedBundle {
   size: number;
