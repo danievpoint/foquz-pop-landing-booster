@@ -222,8 +222,8 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
           </ul>
         </section>
 
-        {shop.productId && (
         {/* ===== Reviews ===== */}
+        {shop.productId && (
         <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: config.reviewsBgColor ?? config.cardColor }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 className="font-barlow font-extrabold section-title text-center text-black mb-8 leading-none">
