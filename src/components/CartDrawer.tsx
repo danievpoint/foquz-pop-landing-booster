@@ -447,7 +447,7 @@ const CartDrawer = () => {
                                 )}
                                 {isGift && (
                                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                                    {isFreeCan ? "Deine Gratis-Dose (3 für 2)" : "Geschenk zum Power Bundle"}
+                                    {isFreeCan ? "Deine Gratis-Dose (3 für 2)" : "Gratis-Zugabe"}
                                   </p>
                                 )}
                               </div>
