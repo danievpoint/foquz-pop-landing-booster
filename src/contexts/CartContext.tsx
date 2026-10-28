@@ -10,7 +10,8 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, getSetMode, setModeFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID } from "@/lib/setMix";
+import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, bundleStatusFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
+import { BUNDLE_PRICING_PENDING } from "@/data/products";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -326,11 +327,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Ausverkaufte Einzeldosen (z. B. THAI STYLE) können nicht einzeln gekauft werden.
     if (isSoldOutSingleItem(p.id) && !isSetCan({ ...p, qty })) return;
     if (!Number.isInteger(qty) || qty <= 0) return;
+    // Alte 3/5/10-Sets sind nicht mehr bestellbar (bestehende Warenkörbe bleiben unverändert).
+    if (RETIRED_SET_IDS.includes(p.id)) { toast.error("Dieses Set gibt es nicht mehr. Bitte wähle eines der neuen Bundles."); return; }
     const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
     if (setSize) {
-      // Sets werden als einzelne Dosen hinzugefügt. Modus + Mischung gelten so, wie der Kunde sie gesehen hat;
-      // vor dem Hinzufügen wird der Bestand frisch geprüft. Ändert sich der Modus, wird nichts still anders gekauft.
-      const modeAtClick = getSetMode();
+      // Feste Bundles: bis Pricing + Shopify-Abgleich freigegeben sind, nicht kaufbar.
+      if (BUNDLE_PRICING_PENDING) { toast.error("Dieses Bundle ist noch nicht bestellbar – der Preis folgt."); return; }
       const mix = { ...getSetMix(setSize) };
       if (setAddInFlight.current) return;
       setAddInFlight.current = true;
@@ -338,13 +340,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         try {
           const fresh = await refreshFlavorStock();
           if (!fresh) { toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal."); return; }
-          const mode = setModeFor(fresh);
-          if (mode === "unknown" || (mode !== modeAtClick && !(modeAtClick === "unknown" && mode === "free"))) {
-            toast.error(mode === "fixed"
-              ? "Alle Sorten sind wieder lieferbar – das Set hat jetzt eine feste Zusammenstellung. Bitte prüfe sie und lege das Set erneut in den Warenkorb."
-              : "Eine Sorte ist gerade ausverkauft – die Sorten sind jetzt frei wählbar. Bitte prüfe deine Auswahl und lege das Set erneut in den Warenkorb.");
-            return;
-          }
+          if (bundleStatusFor(setSize, fresh) !== "available") { toast.error("Dieses Bundle ist gerade nicht vollständig lieferbar."); return; }
           const inCart: Record<string, number> = {};
           for (const i of itemsRef.current) { const f = i.flavor ?? (SINGLE_CAN_IDS.includes(i.id) ? i.id : null); if (f && i.price > 0) inCart[f] = (inCart[f] ?? 0) + i.qty; }
           const error = validateSetMix(setSize, mix, fresh, inCart, qty);
@@ -412,13 +408,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const fillInFlight = useRef(false);
   const flavorImages = Object.fromEntries(SET_FLAVORS.map((f) => [f.name, f.image]));
   const planFill = useCallback(
-    (target: number) => planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, getSetMode() === "fixed" ? FIXED_SET_MIX : null),
+    (target: number) => BUNDLE_PRICING_PENDING ? null : planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, FIXED_SET_MIX),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items]
   );
 
   const fillCartToSet = useCallback(async (target: number, expected: FillPlan["added"]) => {
     if (fillInFlight.current) return false; // Doppelklick/schnelle Aktionen: no-op
+    if (BUNDLE_PRICING_PENDING) return false; // Auffüllen erst nach finalem Pricing
     fillInFlight.current = true;
     try {
       const before = itemsRef.current;
@@ -429,7 +426,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
       if (itemsRef.current !== before) return false; // Warenkorb hat sich inzwischen geändert
-      const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE, setModeFor(fresh) === "fixed" ? FIXED_SET_MIX : null);
+      const plan = planFillToSet(before, target, fresh, flavorImages, SET_CAN_PRICE, FIXED_SET_MIX);
       if (!plan) return false;
       if (JSON.stringify(plan.added) !== JSON.stringify(expected)) {
         toast.error("Der Bestand hat sich geändert. Bitte prüfe die neue Zusammenstellung.");
