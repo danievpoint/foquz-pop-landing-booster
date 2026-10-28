@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { products, allProducts, bundleProduct, squadBundleProduct, crewBundleProduct, flavorProducts } from "@/data/products";
+import { products, allProducts, flavorProducts, FIXED_BUNDLES, BUNDLE_PRICING_PENDING, bundleContentsText } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
-import { toast } from "sonner";
-import { getSetMix, mixCount, useSetMode, FIXED_SET_MIX } from "@/lib/setMix";
-const price = (value: number) => value.toFixed(2).replace(".", ",");
+import { bundleStatusFor, getFlavorStock, useFlavorStock } from "@/lib/setMix";
 
 /** Bild, das in der Galerie gezeigt wird, solange ein Bundle-Set gewählt ist. */
 export interface SetBoxImage {
@@ -18,52 +16,50 @@ export function useProductPage(handle: string) {
   const product = allProducts.find((p) => p.handle === handle)!;
   const { addToCart, isOpen, popupOpen } = useCart();
   const { isAvailable: rawAvailable } = useProductAvailability();
-  // Sets bestehen aus frei wählbaren Einzeldosen – Verfügbarkeit regelt der Sorten-Picker.
-  const isAvailable = (name: string) => ["FOQUZ Power Bundle", "5ER SQUAD BUNDLE", "10ER VORRATS-BUNDLE"].includes(name) ? true : rawAvailable(name);
-  const setMode = useSetMode();
-  const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-  /** Inhaltstext je Setgröße – im festen Modus die echte Zusammenstellung statt "frei wählbar". */
-  const setDesc = (size: number) => {
-    const fixed = setMode === "fixed" ? FIXED_SET_MIX[size] : undefined;
-    if (!fixed) return "Sorten frei wählbar";
-    const entries = Object.entries(fixed);
-    return entries.length === 5 && entries.every(([, q]) => q === entries[0][1])
-      ? `Feste Mischung: je ${entries[0][1]}× alle 5 Sorten`
-      : `Feste Mischung: ${entries.map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ")}`;
+  const stock = useFlavorStock();
+  // Feste Bundles: lieferbar nur, wenn alle Komponenten laut Shopify lieferbar sind (unbekannt = null).
+  const bundleAvailable = (size: number): boolean | null => {
+    const status = bundleStatusFor(size, stock ? getFlavorStock() : null);
+    return status === "available" ? true : status === "unavailable" ? false : null;
+  };
+  const isAvailable = (name: string) => {
+    const b = FIXED_BUNDLES.find((x) => x.name === name);
+    return b ? bundleAvailable(b.size) : rawAvailable(name);
   };
   const ctaRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
-  const options = [
-    { label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, perDose: "7,49", dosen: 1, tag: null, productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined, id: product.isBundle ? products[0].name : product.name, boxImage: null },
-    { label: "3 DOSEN – STARTER SET", desc: setDesc(3), price: bundleProduct.numericPrice, oldPrice: "22,47 €", perDose: "7,30", dosen: 3, tag: null, productName: bundleProduct.name, id: "starter-bundle", boxImage: { url: bundleProduct.image, altText: "FOQUZ Starter Set – 3er Box" } },
-    { label: "5 DOSEN – SQUAD BUNDLE", desc: setDesc(5), price: squadBundleProduct.numericPrice, oldPrice: "37,45 €", perDose: "6,98", dosen: 5, tag: null, productName: squadBundleProduct.name, id: "squad-bundle", boxImage: { url: squadBundleProduct.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
-    { label: "10 DOSEN – VORRATS-BUNDLE", desc: setDesc(10), price: crewBundleProduct.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: null, productName: crewBundleProduct.name, id: "vorrats-bundle", boxImage: { url: crewBundleProduct.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
-  ];
-  const bundles = handle === "vorrats-bundle" ? [
-    { label: "10 DOSEN – VORRATS-BUNDLE", desc: setDesc(10), price: product.numericPrice, oldPrice: "74,90 €", perDose: "5,99", dosen: 10, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Vorrats-Bundle – 10er Box" } },
-  ] : handle === "squad-bundle" ? [
-    { label: "5 DOSEN – SQUAD BUNDLE", desc: setDesc(5), price: product.numericPrice, oldPrice: "37,45 €", perDose: "6,98", dosen: 5, tag: null, productName: product.name, id: product.handle, boxImage: { url: product.image, altText: "FOQUZ Squad Bundle – 5er Box" } },
-  ] : options;
+  const bundleOption = (b: (typeof FIXED_BUNDLES)[number]) => ({
+    label: `${b.size} DOSEN – ${b.name}`, desc: bundleContentsText(b), price: 0, pricePending: BUNDLE_PRICING_PENDING,
+    oldPrice: undefined as string | undefined, perDose: null as string | null, dosen: b.size, tag: null, productName: b.name, id: b.handle,
+    boxImage: { url: b.image, altText: `FOQUZ ${b.name} – ${b.size}er Box` },
+  });
+  const single = {
+    label: "1 DOSE", desc: "Sorte frei wählbar", price: 7.49, pricePending: false, perDose: "7,49" as string | null, dosen: 1, tag: null,
+    productName: product.isBundle ? products[0].name : product.name, oldPrice: undefined as string | undefined,
+    id: product.isBundle ? products[0].name : product.name, boxImage: null as { url: string; altText: string } | null,
+  };
+  const own = FIXED_BUNDLES.find((b) => b.handle === handle);
+  const bundles = own ? [bundleOption(own)] : [single, ...FIXED_BUNDLES.map(bundleOption)];
   const addSingle = () => {
+    if (product.pricePending) return;
     if (isAvailable(product.name) !== false) {
       addToCart(1, { id: product.isBundle ? product.handle : product.name, name: product.name, price: product.numericPrice, image: product.image });
     }
   };
   const addSelection = (selection: typeof bundles[number]) => {
+    if (selection.pricePending) return; // Preis noch nicht freigegeben
     if (isAvailable(selection.productName) === false) return;
     if (selection.dosen === 1) {
       const single = flavorProducts.find((item) => item.name === selection.productName) ?? products[0];
       addToCart(1, { id: single.name, name: single.name, price: single.numericPrice, image: single.image });
     } else {
-      const left = selection.dosen - mixCount(getSetMix(selection.dosen));
-      if (left > 0) { toast.error(`Bitte noch ${left} ${left === 1 ? "Dose" : "Dosen"} wählen.`, { position: "top-center" }); return; }
-      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.id === product.handle ? product.image : selection.id === "squad-bundle" ? squadBundleProduct.image : selection.id === "vorrats-bundle" ? crewBundleProduct.image : bundleProduct.image });
+      addToCart(1, { id: selection.id, name: selection.productName, price: selection.price, image: selection.boxImage?.url ?? product.image });
     }
   };
 
   useEffect(() => {
-    trackViewedProduct({ id: product.isBundle ? product.handle : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
+    if (!product.pricePending) trackViewedProduct({ id: product.isBundle ? product.handle : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
   }, [product]);
 
   useEffect(() => {
