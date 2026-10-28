@@ -11,6 +11,7 @@ import { CartProvider, useCart } from "@/contexts/CartContext";
 import { bundleStatusFor, FIXED_SET_MIX, getBundleStatus, refreshFlavorStock } from "@/lib/setMix";
 import { BUNDLE_CHECKOUT_READY, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, BUNDLE_PRICES, FIXED_BUNDLES, familyFirstProduct, freshFlashProduct, fruitPunchProduct } from "@/data/products";
 import { saveStoredCart } from "@/lib/cartRules";
+import { __setOnlineBundlesForTest } from "@/lib/bundleOnline";
 
 const ORDER = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
 const all = (qty: number | null = 40) => Object.fromEntries(ORDER.map((f) => [f, { available: true, qty }]));
@@ -64,12 +65,12 @@ describe("Lieferbarkeit je Bundle (kein Rückfall auf freie Auswahl)", () => {
     const partial = all(); delete (partial as Record<string, unknown>)["LEMON BREEZY"];
     expect(bundleStatusFor(4, partial)).toBe("unknown");
   });
-  it("live aus Shopify: Ausverkauf sperrt, Erholung gibt frei, Fehler = unbekannt", async () => {
-    respond(shopify()); await refreshFlavorStock(); expect(getBundleStatus(4)).toBe("available");
-    respond(shopify({ "WATERMELON FLEX": { availableForSale: false, quantityAvailable: 0 } })); await refreshFlavorStock();
+  it("Bestellbarkeit kommt aus den Onlineshop-Daten der echten Bundle-Variante", () => {
+    __setOnlineBundlesForTest(null); expect(getBundleStatus(4)).toBe("unknown");
+    __setOnlineBundlesForTest({ 3: "ready", 4: "soldout", 8: "unverified" });
+    expect(getBundleStatus(3)).toBe("available");
     expect(getBundleStatus(4)).toBe("unavailable");
-    respond(shopify()); await refreshFlavorStock(); expect(getBundleStatus(4)).toBe("available");
-    respond(null); await refreshFlavorStock(); expect(getBundleStatus(4)).toBe("unknown");
+    expect(getBundleStatus(8)).toBe("unverified");
   });
 });
 
@@ -91,13 +92,35 @@ describe("Preise final, Kauf gesperrt", () => {
   it("Dosenpreise gerundet: 7,30 / 6,98 / 6,24", () => {
     expect(BUNDLE_PER_DOSE).toEqual({ 3: "7,30", 4: "6,98", 8: "6,24" });
   });
-  it("Kauf bleibt gesperrt bis zum Shopify-Abgleich", () => {
-    expect(BUNDLE_CHECKOUT_READY).toBe(false);
-    expect(fruitPunchProduct.checkoutReady).toBe(false);
-    expect(freshFlashProduct.checkoutReady).toBe(false);
-    expect(familyFirstProduct.checkoutReady).toBe(false);
+  it("Bundle-Kauf ist freigeschaltet (je Bundle live geprüft)", () => {
+    expect(BUNDLE_CHECKOUT_READY).toBe(true);
   });
-  it.each(["fruit-punch", "fresh-flash", "family-first", "starter-bundle", "squad-bundle", "vorrats-bundle", "bundle"])("%s landet nicht im Warenkorb", async (id) => {
+  it.each(["fruit-punch", "fresh-flash", "family-first"])("%s landet ohne bestätigte Onlineshop-Daten nicht im Warenkorb", async (id) => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 429 })));
+    respond(shopify()); mount();
+    await act(async () => { cart.addToCart(1, { id, name: id, price: 1, image: "" }); });
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    expect(cart.items).toEqual([]);
+    vi.unstubAllGlobals();
+  });
+  it("Fresh Flash wird mit verifizierten Onlineshop-Daten als eine echte Bundle-Zeile hinzugefügt", async () => {
+    const data: Record<string, unknown> = {
+      "3er-starter-bundle": { title: "FRUIT PUNCH – 3ER BUNDLE", variants: [{ id: 55628113117526, price: 2190, compare_at_price: 2247, available: true }] },
+      "5er-squad-bundle-1": { title: "FRESH FLASH – 4ER BUNDLE", variants: [{ id: 55628142707030, price: 2790, compare_at_price: 2996, available: true }] },
+      "10er-vorrats-bundle-1": { title: "10ER VORRATS-BUNDLE", variants: [{ id: 55628181274966, price: 4990, compare_at_price: 5992, available: true }] },
+    };
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => ({ ok: true, status: 200, json: async () => data[url.split("/products/")[1].replace(".js", "")] })));
+    respond(shopify()); mount();
+    await act(async () => { cart.addToCart(1, { id: "fresh-flash", name: "x", price: 1, image: "" }); });
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    expect(cart.items.find((i) => i.id === "fresh-flash")).toMatchObject({ qty: 1, price: 27.9 });
+    expect(cart.items.some((i) => i.setSize)).toBe(false);
+    await act(async () => { cart.addToCart(1, { id: "family-first", name: "x", price: 1, image: "" }); });
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    expect(cart.items.some((i) => i.id === "family-first")).toBe(false); // 8er noch alter Titel
+    vi.unstubAllGlobals();
+  });
+  it.each(["starter-bundle", "squad-bundle", "vorrats-bundle", "bundle"])("%s landet nicht im Warenkorb", async (id) => {
     respond(shopify()); mount();
     await act(async () => { cart.addToCart(1, { id, name: id, price: 1, image: "" }); });
     expect(cart.items).toEqual([]);

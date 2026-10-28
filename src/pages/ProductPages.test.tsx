@@ -4,7 +4,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PeachParty from "./PeachParty";
 import ThaiStyle from "./ThaiStyle";
 import LemonBreezy from "./LemonBreezy";
-import { FruitPunch } from "./FixedBundlePage";
+import { FruitPunch, FamilyFirst } from "./FixedBundlePage";
+import { __setOnlineBundlesForTest } from "@/lib/bundleOnline";
 
 const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | null }));
 vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
@@ -19,6 +20,8 @@ vi.mock("@/components/LooxReviews", () => ({ default: () => null }));
 vi.mock("@/components/AutoVideo", () => ({ default: () => null }));
 beforeEach(() => {
   state.add.mockClear(); state.available = true;
+  // Onlineshop: 3er/4er verifiziert, 8er noch mit altem Titel.
+  __setOnlineBundlesForTest({ 3: "ready", 4: "ready", 8: "unverified" });
   vi.stubGlobal("IntersectionObserver", class { observe() {} disconnect() {} });
   vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} unobserve() {} });
   (Element.prototype as unknown as { scrollTo: () => void }).scrollTo = () => {};
@@ -31,6 +34,7 @@ function page(handle = "peach-party") {
     <Route path="/produkt/thai-style" element={<ThaiStyle />} />
     <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
     <Route path="/produkt/fruit-punch" element={<FruitPunch />} />
+    <Route path="/produkt/family-first" element={<FamilyFirst />} />
   </Routes></MemoryRouter>);
 }
 
@@ -43,6 +47,10 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
     state.add.mockClear();
     fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ }));
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB – 21,90 €/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'fruit-punch', price: 21.9 }));
+    state.add.mockClear();
+    fireEvent.click(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ }));
     expect(screen.getByRole('button', { name: /BALD BESTELLBAR/ })).toBeDisabled();
     expect(state.add).not.toHaveBeenCalled();
   });
@@ -71,7 +79,7 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: 'Nächster Vergleich' }));
     expect(document.querySelector('[style*="translateX(-100%)"]')).not.toBeNull();
   });
-  it('shows fixed 3/4/8 bundles with exact contents, final prices and no purchase', () => {
+  it('shows fixed 3/4/8 bundles with exact contents, final prices; unverified 8er not buyable', () => {
     page();
     expect(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ })).toHaveTextContent('je 1× Watermelon Flex, Peach Party, Lemon Breezy');
     expect(screen.getByRole('button', { name: /4 DOSEN – FRESH FLASH/ })).toHaveTextContent('je 1× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
@@ -88,13 +96,19 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /BALD BESTELLBAR/ }));
     expect(state.add).not.toHaveBeenCalled();
   });
-  it('bundle page lists exactly the Fruit Punch contents and cannot be bought yet', () => {
+  it('bundle page lists exactly the Fruit Punch contents and adds the real bundle', () => {
     page('fruit-punch');
     expect(screen.getByText('1× WATERMELON FLEX')).toBeInTheDocument();
     expect(screen.getByText('1× PEACH PARTY')).toBeInTheDocument();
     expect(screen.getByText('1× LEMON BREEZY')).toBeInTheDocument();
     expect(screen.queryByText(/BLUEBERRY FLOW|THAI STYLE/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB – 21,90 €/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'fruit-punch', price: 21.9 }));
+  });
+  it('Family First stays BALD BESTELLBAR until the online shop shows the new bundle data', () => {
+    page('family-first');
     expect(screen.getByRole('button', { name: /BALD BESTELLBAR/ })).toBeDisabled();
+    expect(state.add).not.toHaveBeenCalled();
   });
 
 });
