@@ -98,9 +98,9 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                       </span>
                     )}
                     <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                      {b.pricePending ? "Preis folgt" : `${price(b.price)} €`}
+                      {price(b.price)} €
                     </span>
-                    {!b.pricePending && b.perDose && <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
+                    {b.perDose && <span className={`block text-[11px] font-semibold ${yellow ? "text-black/70" : "text-white/80"}`}>
                       {b.perDose} € / Dose
                     </span>}
                   </span>
@@ -154,9 +154,9 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
                 </span>
               )}
               <span className="block font-barlow text-base font-extrabold sm:text-lg">
-                {b.pricePending ? "Preis folgt" : `${price(b.price)} €`}
+                {price(b.price)} €
               </span>
-              {!b.pricePending && b.perDose && <span className="block text-[11px] font-semibold text-muted-foreground">
+              {b.perDose && <span className="block text-[11px] font-semibold text-muted-foreground">
                 {b.perDose} € / Dose
               </span>}
             </span>
