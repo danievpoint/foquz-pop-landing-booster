@@ -11,7 +11,7 @@ import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, bundleStatusFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
-import { BUNDLE_PRICING_PENDING } from "@/data/products";
+import { BUNDLE_CHECKOUT_READY } from "@/data/products";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -332,7 +332,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
     if (setSize) {
       // Feste Bundles: bis Pricing + Shopify-Abgleich freigegeben sind, nicht kaufbar.
-      if (BUNDLE_PRICING_PENDING) { toast.error("Dieses Bundle ist noch nicht bestellbar – der Preis folgt."); return; }
+      if (!BUNDLE_CHECKOUT_READY) { toast.error("Dieses Bundle ist bald bestellbar."); return; }
       const mix = { ...getSetMix(setSize) };
       if (setAddInFlight.current) return;
       setAddInFlight.current = true;
@@ -408,14 +408,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const fillInFlight = useRef(false);
   const flavorImages = Object.fromEntries(SET_FLAVORS.map((f) => [f.name, f.image]));
   const planFill = useCallback(
-    (target: number) => BUNDLE_PRICING_PENDING ? null : planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, FIXED_SET_MIX),
+    (target: number) => !BUNDLE_CHECKOUT_READY ? null : planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, FIXED_SET_MIX),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items]
   );
 
   const fillCartToSet = useCallback(async (target: number, expected: FillPlan["added"]) => {
     if (fillInFlight.current) return false; // Doppelklick/schnelle Aktionen: no-op
-    if (BUNDLE_PRICING_PENDING) return false; // Auffüllen erst nach finalem Pricing
+    if (!BUNDLE_CHECKOUT_READY) return false; // Auffüllen erst nach Shopify-Abgleich der Bundles
     fillInFlight.current = true;
     try {
       const before = itemsRef.current;

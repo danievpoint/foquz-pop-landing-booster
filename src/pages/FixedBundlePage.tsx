@@ -22,6 +22,22 @@ const STYLE: Record<string, Pick<BundleProductConfig, "titleTopColor" | "titleBo
   "family-first": { titleTopColor: "#ffffff", titleBottomColor: "#ffd618", cardColor: "#7b6cc0" },
 };
 
+/** Final gelieferte Bundle-Texte. Fresh Flash: Rest des Texts wurde nicht geliefert – generischer Introtext bleibt. */
+const TEXT: Record<string, Partial<Pick<BundleProductConfig, "tagline" | "description" | "introHeadline" | "introText" | "checks">>> = {
+  "fruit-punch": {
+    tagline: "DER FRUCHTIGE DREIFACH-KICK.",
+    description: "Drei fruchtige FOQUZ Sorten, eine Box: Lemon Breezy, Watermelon Flex und Peach Party – je eine Dose pro Sorte.",
+    introHeadline: "DER FRUCHTIGE DREIFACH-KICK.",
+    introText: "Perfekt zum Durchprobieren, Teilen oder um deinen persönlichen Favoriten zu finden. Einfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Drei fruchtige Duftwelten für deinen Refresh-Moment.\n\n3 Dosen · 3 Sorten · Inklusive Stickern & Nasen-Strips gratis\n\nKurz riechen. Ab auf Wolke 7.",
+    checks: ["3 Dosen · 3 Sorten", "Inklusive Sticker & Nasen-Strips gratis"],
+  },
+  "fresh-flash": {
+    tagline: "DER VIERFACH-KICK.",
+    description: "Vier Sorten, eine Box: Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow – je eine Dose pro Sorte.",
+    introHeadline: "DER VIERFACH-KICK.",
+  },
+};
+
 export function fixedBundleConfig(handle: string): BundleProductConfig {
   const b = FIXED_BUNDLES.find((x) => x.handle === handle)!;
   const [top, ...rest] = b.name.split(" ");
@@ -38,6 +54,7 @@ export function fixedBundleConfig(handle: string): BundleProductConfig {
     description: `${contentsText}. Dazu Sticker & Nasen-Stripes.`,
     introHeadline: `${b.size}er ${titleCase(b.name)}`,
     introText: `In der Box: ${contentsText}.\n\nDose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin.`,
+    ...TEXT[b.handle],
     contents: [
       ...Object.entries(b.mix).map(([f, q]) => ({ name: `${q}× ${f}`, ...FLAVOR_INFO[f] })),
       { name: "STICKER PACK", desc: "FOQUZ Sticker", img: stickerAsset },

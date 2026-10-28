@@ -13,7 +13,7 @@ vi.mock("@/lib/tracking", () => ({ trackPixelAddToCart: vi.fn(), syncShopifyCons
 vi.mock("@/lib/klaviyo", () => ({ trackAddedToCart: vi.fn(), variantIdFor: () => null }));
 vi.mock("@/lib/shopify", async (importOriginal) => ({
   ...await importOriginal<typeof import("@/lib/shopify")>(),
-  createShopifyCheckout: vi.fn(async () => ({ url: "https://example.com/checkout?channel=online_store", cartId: "test-cart", discountedSubtotal: 7.49, discountApplicable: true })),
+  createShopifyCheckout: vi.fn(async () => ({ url: "https://example.com/checkout?channel=online_store", cartId: "test-cart", discountedSubtotal: 7.49, discountApplicable: true, discounts: [] })),
 }));
 
 function Controls() {

@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
-import { BUNDLE_PRICING_PENDING } from "@/data/products";
+import { BUNDLE_CHECKOUT_READY } from "@/data/products";
 
-/** Solange Bundle-Preise offen sind, startet die Auswahl auf der kaufbaren Einzeldose. */
-const DEFAULT_SET = BUNDLE_PRICING_PENDING ? "1 DOSE" : "4 DOSEN – FRESH FLASH";
+/** Solange der Bundle-Kauf gesperrt ist, startet die Auswahl auf der kaufbaren Einzeldose. */
+const DEFAULT_SET = BUNDLE_CHECKOUT_READY ? "4 DOSEN – FRESH FLASH" : "1 DOSE";
 
 /**
  * Beim Sortenwechsel wird die gewählte Set-Größe über den Navigations-State

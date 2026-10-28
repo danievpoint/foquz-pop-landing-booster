@@ -15,7 +15,7 @@ import {
   Plus as PlusIcon,
 } from "lucide-react";
 import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
-import { products as allSorten, allProducts, bundleBySize, BUNDLE_PRICING_PENDING } from "@/data/products";
+import { products as allSorten, allProducts, bundleBySize, BUNDLE_CHECKOUT_READY } from "@/data/products";
 import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
@@ -138,7 +138,7 @@ const CartDrawer = () => {
   // Neue feste Bundles 3/4/8: Preise noch offen → keine Auffüll-/Upgrade-Karten bis zur Freigabe.
   const SET_PRICES: Record<number, number> = {};
   const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-  const upsells = (BUNDLE_PRICING_PENDING ? [] : [3, 4, 8])
+  const upsells = (BUNDLE_CHECKOUT_READY ? [3, 4, 8] : [])
     .filter((target) => target > paidCans)
     .map((target) => ({ target, plan: planFill(target) }))
     .filter((u): u is { target: number; plan: NonNullable<ReturnType<typeof planFill>> } => u.plan !== null)

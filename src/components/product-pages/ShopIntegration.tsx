@@ -16,7 +16,7 @@ export function ProductPageMeta({ shop }: { shop: Shop }) {
   const availability = isAvailable(product.name);
   const url = `https://www.foquz.de/produkt/${product.handle}`;
   return <SeoHead title={`${product.name} – FOQUZ Riechdose`} description={product.desc.replace(/\n/g, " ")} path={`/produkt/${product.handle}`} type="product" image={product.image}
-    jsonLd={{ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.desc, image: new URL(product.image, "https://www.foquz.de").href, brand: { "@type": "Brand", name: "FOQUZ" }, ...(product.pricePending ? {} : { offers: { "@type": "Offer", url, priceCurrency: "EUR", price: product.numericPrice, ...(availability === null ? {} : { availability: `https://schema.org/${availability ? "InStock" : "OutOfStock"}` }) } }) }} />;
+    jsonLd={{ "@context": "https://schema.org", "@type": "Product", name: product.name, description: product.desc, image: new URL(product.image, "https://www.foquz.de").href, brand: { "@type": "Brand", name: "FOQUZ" }, ...(product.checkoutReady === false ? {} : { offers: { "@type": "Offer", url, priceCurrency: "EUR", price: product.numericPrice, ...(availability === null ? {} : { availability: `https://schema.org/${availability ? "InStock" : "OutOfStock"}` }) } }) }} />;
 }
 
 export function ProductPageMedia({ product, includeProductImage = false, maxImages = 3, setImage }: { product: Product; includeProductImage?: boolean; maxImages?: number; setImage?: { url: string; altText: string } | null }) {
@@ -141,8 +141,8 @@ export function ProductPageMedia({ product, includeProductImage = false, maxImag
 export function ProductPageSticky({ shop, selectedBundle }: { shop: Shop; selectedBundle: Shop["bundles"][number] }) {
   if (!shop.showSticky) return null;
   return <div className="product-page-design fixed bottom-0 inset-x-0 z-40 bg-white border-t-2 border-black p-3 pb-[max(12px,env(safe-area-inset-bottom))] lg:hidden">
-    <button className="comic-btn w-full text-sm py-3" style={{ backgroundColor: "#ffd618", color: "#000" }} disabled={selectedBundle.pricePending || shop.isAvailable(selectedBundle.productName) === false} onClick={() => shop.addSelection(selectedBundle)}>
-      {selectedBundle.pricePending ? "PREIS FOLGT – BALD BESTELLBAR" : `IN DEN WARENKORB – ${price(selectedBundle.price)} €`}
+    <button className="comic-btn w-full text-sm py-3" style={{ backgroundColor: "#ffd618", color: "#000" }} disabled={selectedBundle.checkoutReady === false || shop.isAvailable(selectedBundle.productName) === false} onClick={() => shop.addSelection(selectedBundle)}>
+      {selectedBundle.checkoutReady === false ? "BALD BESTELLBAR" : `IN DEN WARENKORB – ${price(selectedBundle.price)} €`}
     </button>
   </div>;
 }
