@@ -67,6 +67,9 @@ export function fixedBundleConfig(handle: string): BundleProductConfig {
     description: `${contentsText}. Dazu Sticker & Nasen-Stripes.`,
     introHeadline: `${b.size}er ${titleCase(b.name)}`,
     introText: `In der Box: ${contentsText}.\n\nDose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin.`,
+    // Ursprüngliches Intro-Layout: Bild links, Überschrift + Fließtext rechts daneben.
+    introImage: b.image,
+    introImageAlt: `FOQUZ ${b.name} – ${b.size}er Box`,
     ...TEXT[b.handle],
     contents: [
       ...Object.entries(b.mix).map(([f, q]) => ({ name: `${q}× ${f}`, ...FLAVOR_INFO[f] })),
