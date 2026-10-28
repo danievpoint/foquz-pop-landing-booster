@@ -110,14 +110,14 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
               </p>
               <button
                 ref={shop.ctaRef}
-                disabled={selectedBundle.pricePending || isAvailable(selectedBundle.productName) === false}
+                disabled={selectedBundle.checkoutReady === false || isAvailable(selectedBundle.productName) === false}
                 onClick={() => addSelection(selectedBundle)}
                 className="comic-btn w-full min-h-12 text-center py-3 font-extrabold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "#ffd618", color: "#000" }}
               >
-                {selectedBundle.pricePending ? "PREIS FOLGT – BALD BESTELLBAR" : `IN DEN WARENKORB – ${selectedBundle.price.toFixed(2).replace(".", ",")} €`}
+                {selectedBundle.checkoutReady === false ? "BALD BESTELLBAR" : `IN DEN WARENKORB – ${selectedBundle.price.toFixed(2).replace(".", ",")} €`}
               </button>
-              {!selectedBundle.pricePending && <FreeShippingStatus selectedPrice={selectedBundle.price} />}
+              <FreeShippingStatus selectedPrice={selectedBundle.price} />
 
               {/* Trust */}
               <ul className="pt-4 space-y-2 text-xs font-semibold">
