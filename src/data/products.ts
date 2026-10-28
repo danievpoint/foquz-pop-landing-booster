@@ -11,7 +11,9 @@ import blueberryFlowProductVideo from "@/assets/blueberry-flow-product.mp4.asset
 import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.asset.json";
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
 import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
-import foquzBox from "@/assets/foquz-box.webp";
+import fruitPunchImage from "@/assets/bundles/fruit-punch.jpg.asset.json";
+import freshFlashImage from "@/assets/bundles/fresh-flash.webp.asset.json";
+import familyFirstImage from "@/assets/bundles/family-first.webp.asset.json";
 
 export interface Product {
   name: string;
@@ -27,6 +29,8 @@ export interface Product {
   color: string;
   ingredients: string[];
   isBundle?: boolean;
+  /** Preis noch nicht freigegeben – nicht kaufbar, kein Preis/JSON-LD-Angebot. */
+  pricePending?: boolean;
 }
 
 export const products: Product[] = [
@@ -140,56 +144,55 @@ export const newFlavorProducts: Product[] = [
 /** Alle Einzelsorten (Karussell, Sortenauswahl, Warenkorb). */
 export const flavorProducts: Product[] = [...products, ...newFlavorProducts];
 
-export const bundleProduct: Product = {
-  name: "FOQUZ Power Bundle",
-  handle: "starter-bundle",
-  price: "21,90€",
-  originalPrice: "22,47€",
-  numericPrice: 21.90,
-  desc: "Alle 3 Sorten in einer Box.",
-  longDesc: {
-    heading: "Eine Box. Voller Fokus.",
-    paragraphs: [
-      "Teste alle unsere 3 Sorten in einer Box.",
-      "Alle Sorten testen. Exklusive Box.",
-    ],
-  },
+/**
+ * Feste Bundles (Vorschau). Preise sind noch nicht freigegeben: `pricePending` sperrt Kauf/Upgrade
+ * und jede Preisausgabe, bis finales Pricing und echte Shopify-Komponentenbundles abgeglichen sind.
+ */
+export const BUNDLE_PRICING_PENDING = true;
 
-  image: "/images/product-pages/foquz_produkt_bundle_3er.webp",
-  color: "#75559f",
-  isBundle: true,
-  ingredients: [
-    "Alle 3 Geschmacksrichtungen enthalten",
-    "PEACH PARTY – Fruchtig & leicht",
-    "THAI STYLE – Kräuter-Power",
-    "LEMON BREEZY – Frisch & belebend",
-  ],
+export interface FixedBundle {
+  size: number;
+  handle: string;
+  name: string;
+  image: string;
+  /** Exakter Inhalt je Sorte. */
+  mix: Record<string, number>;
+}
+
+const bundleMix = (names: string[], each: number) => Object.fromEntries(names.map((n) => [n, each]));
+const FOUR = ["PEACH PARTY", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
+
+export const FIXED_BUNDLES: FixedBundle[] = [
+  { size: 3, handle: "fruit-punch", name: "FRUIT PUNCH", image: fruitPunchImage.url, mix: bundleMix(["WATERMELON FLEX", "PEACH PARTY", "LEMON BREEZY"], 1) },
+  { size: 4, handle: "fresh-flash", name: "FRESH FLASH", image: freshFlashImage.url, mix: bundleMix(FOUR, 1) },
+  { size: 8, handle: "family-first", name: "FAMILY FIRST", image: familyFirstImage.url, mix: bundleMix(FOUR, 2) },
+];
+
+const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+/** Sachliche Inhaltsangabe, z. B. "8 Dosen: je 2× Peach Party, Lemon Breezy, …". */
+export const bundleContentsText = (b: FixedBundle) => {
+  const entries = Object.entries(b.mix);
+  const same = entries.every(([, q]) => q === entries[0][1]);
+  return same
+    ? `${b.size} Dosen: je ${entries[0][1]}× ${entries.map(([f]) => titleCase(f)).join(", ")}`
+    : `${b.size} Dosen: ${entries.map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ")}`;
 };
 
-export const squadBundleProduct: Product = {
-  name: "5ER SQUAD BUNDLE",
-  handle: "squad-bundle",
-  price: "34,90€",
-  originalPrice: "37,45€",
-  numericPrice: 34.90,
-  desc: "Alle fünf Sorten in einer Box – je eine Dose pro Sorte.",
-  image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp",
+const toProduct = (b: FixedBundle): Product => ({
+  name: b.name,
+  handle: b.handle,
+  price: "Preis folgt",
+  numericPrice: 0,
+  pricePending: BUNDLE_PRICING_PENDING,
+  desc: `${bundleContentsText(b)}. Inklusive Sticker & Nasen-Stripes.`,
+  image: b.image,
   color: "#85c8b5",
   isBundle: true,
-  ingredients: flavorProducts.map((product) => product.name),
-};
+  ingredients: Object.entries(b.mix).map(([f, q]) => `${q}× ${f}`),
+});
 
-export const crewBundleProduct: Product = {
-  name: "10ER VORRATS-BUNDLE",
-  handle: "vorrats-bundle",
-  price: "59,90€",
-  originalPrice: "74,90€",
-  numericPrice: 59.90,
-  desc: "Zehn Dosen, alle fünf Sorten – je zwei Dosen pro Sorte.",
-  image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp",
-  color: "#85c8b5",
-  isBundle: true,
-  ingredients: flavorProducts.map((product) => `2× ${product.name}`),
-};
+export const [fruitPunchProduct, freshFlashProduct, familyFirstProduct] = FIXED_BUNDLES.map(toProduct);
+export const bundleProducts: Product[] = [fruitPunchProduct, freshFlashProduct, familyFirstProduct];
+export const bundleBySize = (size: number) => FIXED_BUNDLES.find((b) => b.size === size);
 
-export const allProducts: Product[] = [...flavorProducts, bundleProduct, squadBundleProduct, crewBundleProduct];
+export const allProducts: Product[] = [...flavorProducts, ...bundleProducts];
