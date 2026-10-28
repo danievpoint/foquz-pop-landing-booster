@@ -60,7 +60,7 @@ export function useProductPage(handle: string) {
   };
 
   useEffect(() => {
-    if (!product.pricePending) trackViewedProduct({ id: product.isBundle ? product.handle : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
+    if (product.checkoutReady !== false) trackViewedProduct({ id: product.isBundle ? product.handle : product.name, name: product.name, image: product.image, price: product.numericPrice, url: `/produkt/${product.handle}` });
   }, [product]);
 
   useEffect(() => {
