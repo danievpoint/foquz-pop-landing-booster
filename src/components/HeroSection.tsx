@@ -82,8 +82,8 @@ const HeroSection = () => {
             Deine Riechdose für den Frischekick mit<br />echten Kräutern &amp; Menthol.
           </p>
           <div className="foquz-hero-actions">
-            <Link to="/produkt/squad-bundle"
-              className="comic-btn bg-secondary text-secondary-foreground">SQUAD BUNDLE HOLEN</Link>
+            <Link to="/produkt/fresh-flash"
+              className="comic-btn bg-secondary text-secondary-foreground">FRESH FLASH ANSEHEN</Link>
             <a href="#sorten" onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
               className="comic-btn bg-card text-foreground">EINZELN KAUFEN</a>
           </div>

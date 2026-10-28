@@ -17,7 +17,7 @@ export function legacySetSize(id: string): number | undefined {
 }
 
 export function isSetCan(item: CartItem): boolean {
-  return [3, 5, 10].includes(item.setSize ?? 0) && FLAVORS.includes(item.flavor ?? "") && item.id === `set${item.setSize}:${item.flavor}`;
+  return [3, 4, 5, 8, 10].includes(item.setSize ?? 0) && FLAVORS.includes(item.flavor ?? "") && item.id === `set${item.setSize}:${item.flavor}`;
 }
 
 /** A partial group never retains the benefits of its original set size. */
@@ -134,7 +134,8 @@ export function planFillToSet(items: CartItem[], target: number, stock: FillStoc
   const current = legacyCans + Object.values(kept).reduce((s, q) => s + q, 0);
   // Alte Bundle-Produkte + freie Dosen: Preis/Tracking in Shopify nicht belegt → kein Auffüllen.
   if (legacyCans > 0) return null;
-  if (![3, 5, 10].includes(target) || current >= target) return null;
+  const allowed = fixedMix ? Object.keys(fixedMix).map(Number) : [3, 5, 10];
+  if (!allowed.includes(target) || current >= target) return null;
   const missing = target - current;
   const others = items.filter((item) => !PAID_FLAVOR_OF(item) && !giftIds.includes(item.id));
   const build = (added: Record<string, number>): FillPlan => ({ target, kept, added, items: [...others, ...FLAVORS.filter((f) => (kept[f] ?? 0) + (added[f] ?? 0) > 0).map((f) => ({

@@ -1,17 +1,16 @@
 import { useSyncExternalStore } from "react";
-import { flavorProducts } from "@/data/products";
+import { flavorProducts, FIXED_BUNDLES } from "@/data/products";
 import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
 
-/** Frei wählbare Sets: Einzeldosen mit Line-Attribut `_set`. Preise rechnet Shopify (automatische Rabatte). */
-export const SET_SIZE_BY_BUNDLE_ID: Record<string, number> = {
-  bundle: 3, "starter-bundle": 3, "squad-bundle": 5, "vorrats-bundle": 10,
-};
+/** Feste Bundles (3/4/8). Keine freie Sortenwahl mehr. */
+export const SET_SIZE_BY_BUNDLE_ID: Record<string, number> = Object.fromEntries(FIXED_BUNDLES.map((b) => [b.handle, b.size]));
+/** Alte Set-IDs (3/5/10): dürfen nicht mehr neu in den Warenkorb, alte Warenkörbe bleiben unverändert. */
+export const RETIRED_SET_IDS = ["bundle", "starter-bundle", "squad-bundle", "vorrats-bundle"];
 export const SET_FLAVORS = flavorProducts.map((p) => ({ name: p.name, image: p.image }));
 export type SetMix = Record<string, number>;
 
 interface StockInfo { available: boolean; qty: number | null }
 let stock: Record<string, StockInfo> | null = null;
-const mixes: Record<number, SetMix> = {};
 const listeners = new Set<() => void>();
 let version = 0;
 const emit = () => { version++; listeners.forEach((l) => l()); };
@@ -56,55 +55,31 @@ export function ensureFlavorStock() {
     });
     stock = next;
     lastFetchOk = true;
-    // Unvollständige/ungültige Mischungen nach Bestandsdaten neu aufbauen.
-    Object.keys(mixes).forEach((k) => {
-      const size = Number(k);
-      if (Object.entries(mixes[size]).some(([name, q]) => q > 0 && !next[name]?.available)) delete mixes[size];
-    });
     emit();
   })();
 }
 
 export const isFlavorAvailable = (name: string) => stock?.[name]?.available ?? true;
 
-/** Vorauswahl: verfügbare Sorten nach Bestand absteigend, reihum verteilt. */
-export function defaultMix(size: number): SetMix {
-  const ranked = SET_FLAVORS
-    .map((f, i) => ({ name: f.name, i, info: stock?.[f.name] }))
-    .filter((f) => f.info?.available ?? true)
-    .sort((a, b) => ((b.info?.qty ?? 0) - (a.info?.qty ?? 0)) || a.i - b.i);
-  const mix: SetMix = {};
-  if (ranked.length === 0) return mix;
-  for (let n = 0; n < size; n++) {
-    const name = ranked[n % ranked.length].name;
-    mix[name] = (mix[name] ?? 0) + 1;
-  }
-  return mix;
-}
+/** Feste Zusammenstellungen der Bundles (Quelle: FIXED_BUNDLES). */
+export const FIXED_SET_MIX: Record<number, SetMix> = Object.fromEntries(FIXED_BUNDLES.map((b) => [b.size, b.mix]));
 
-/** Feste Zusammenstellungen, solange alle fünf Sorten lieferbar sind. */
-export const FIXED_SET_MIX: Record<number, SetMix> = {
-  3: { "THAI STYLE": 1, "LEMON BREEZY": 1, "PEACH PARTY": 1 },
-  5: Object.fromEntries(SET_FLAVORS.map((f) => [f.name, 1])),
-  10: Object.fromEntries(SET_FLAVORS.map((f) => [f.name, 2])),
-};
-/** Größter Bedarf je Sorte über alle festen Sets (10er = 2). */
-const FIXED_MIN_PER_FLAVOR = Math.max(...Object.values(FIXED_SET_MIX).flatMap((m) => Object.values(m)));
-
-export type SetMode = "fixed" | "free" | "unknown";
+export type BundleStatus = "available" | "unavailable" | "unknown";
 /**
- * Gemeinsame Modusentscheidung für alle Sets:
- * fixed = alle fünf Sorten laut Shopify lieferbar (und, falls Menge bekannt, je ≥ 2 Stück);
- * free = mind. eine Sorte ausverkauft/zu knapp; unknown = kein bestätigter Bestand.
+ * Lieferbarkeit eines festen Bundles aus frisch bestätigtem Bestand:
+ * unavailable = eine Komponente ausverkauft oder (bei bekannter Menge) zu knapp; unknown = kein bestätigter Bestand.
+ * Kein Rückfall auf freie Auswahl.
  */
-export function setModeFor(s: Record<string, StockInfo | undefined> | null): SetMode {
-  if (!s) return "unknown";
-  const infos = SET_FLAVORS.map((f) => s[f.name]);
-  if (infos.some((i) => !i)) return "unknown";
-  if (infos.some((i) => !i!.available || (i!.qty !== null && i!.qty < FIXED_MIN_PER_FLAVOR))) return "free";
-  return "fixed";
+export function bundleStatusFor(size: number, s: Record<string, StockInfo | undefined> | null): BundleStatus {
+  const mix = FIXED_SET_MIX[size];
+  if (!mix || !s) return "unknown";
+  const infos = Object.entries(mix).map(([name, q]) => ({ info: s[name], q }));
+  if (infos.some(({ info }) => info && !info.available)) return "unavailable";
+  if (infos.some(({ info }) => !info)) return "unknown";
+  if (infos.some(({ info, q }) => info!.qty !== null && info!.qty < q)) return "unavailable";
+  return "available";
 }
-export const getSetMode = (): SetMode => setModeFor(lastFetchOk ? stock : null);
+export const getBundleStatus = (size: number): BundleStatus => bundleStatusFor(size, lastFetchOk ? stock : null);
 
 /**
  * Prüft eine Mischung gegen frisch bestätigten Bestand. `inCart` = bereits im Warenkorb liegende
@@ -121,8 +96,7 @@ export function validateSetMix(size: number, mix: SetMix, s: Record<string, Stoc
   return null;
 }
 
-export const getSetMix = (size: number): SetMix =>
-  getSetMode() === "fixed" && FIXED_SET_MIX[size] ? FIXED_SET_MIX[size] : mixes[size] ?? defaultMix(size);
+export const getSetMix = (size: number): SetMix => FIXED_SET_MIX[size] ?? {};
 
 /** Bestand bei Fokus, Sichtbarkeit und alle 60 s neu laden, damit der Modus ohne Deploy umschaltet. */
 export function startFlavorStockPolling(intervalMs = 60_000): () => void {
@@ -134,7 +108,6 @@ export function startFlavorStockPolling(intervalMs = 60_000): () => void {
   return () => { window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", refresh); window.clearInterval(id); };
 }
 export const mixCount = (mix: SetMix) => Object.values(mix).reduce((s, q) => s + q, 0);
-export function setSetMix(size: number, mix: SetMix) { mixes[size] = mix; emit(); }
 
 /** Live-Bestand (Re-Render bei jeder neuen Shopify-Antwort). */
 export function useFlavorStock() {
@@ -142,12 +115,7 @@ export function useFlavorStock() {
   return stock;
 }
 
-export function useSetMode(): SetMode {
+export function useBundleStatus(size: number): BundleStatus {
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
-  return getSetMode();
-}
-
-export function useSetMix(size: number) {
-  useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
-  return getSetMix(size);
+  return getBundleStatus(size);
 }

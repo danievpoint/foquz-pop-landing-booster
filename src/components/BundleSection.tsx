@@ -1,75 +1,31 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { bundleProduct, crewBundleProduct } from "@/data/products";
-import { useProductAvailability } from "@/hooks/useProductAvailability";
+import { FIXED_BUNDLES, bundleContentsText, BUNDLE_PRICING_PENDING } from "@/data/products";
 import StockBadge from "@/components/StockBadge";
-import { useSetMode } from "@/lib/setMix";
+import { useBundleStatus, ensureFlavorStock } from "@/lib/setMix";
+import { useEffect } from "react";
 import bundleBg from "@/assets/bundle-bg.webp";
-const foquzBox = "/images/product-pages/foquz_produkt_bundle_3er.webp";
-const squadBox = "/images/product-pages/foquz_produkt_bundle_5er_text.webp";
-const crewBox = "/images/product-pages/foquz_produkt_bundle_10er_text.webp";
 
-const squads = [
-  {
-    id: "starter-bundle",
-    link: "/produkt/starter-bundle",
-    name: bundleProduct.name,
-    image: foquzBox,
-    imageAlt: "FOQUZ 3er Starter Bundle Box",
-    // Quadratisches Promobild – Rahmen passend zum Bild, nichts beschnitten.
-    imageAspect: "1 / 1",
-    imageClass: "hover:scale-105",
-    title: "3ER STARTER BUNDLE",
-    description:
-      "Die drei Klassiker Peach Party, Lemon Breezy und Thai Style in einer Box. Finde deinen Lieblingsduft.",
-    checks: ["3 Klassiker entdecken", "Exklusive Box", "3 Dosen im Set"],
-    price: bundleProduct.price,
-    oldPrice: bundleProduct.originalPrice,
-    dosen: 1,
-    cartPrice: bundleProduct.numericPrice,
-    enabled: true,
-  },
-  {
-    id: "squad-bundle",
-    link: "/produkt/squad-bundle",
-    name: "5ER SQUAD BUNDLE",
-    image: squadBox,
-    imageAlt: "FOQUZ 5er Squad Bundle",
-    // Quadratisches Promobild – Rahmen passend zum Bild, nichts beschnitten.
-    imageAspect: "1 / 1",
-    imageClass: "hover:scale-105",
-    title: "5ER SQUAD BUNDLE",
-    description:
-      "Dein Vorrat für die ganze Crew. Fünf Dosen, maximale Auswahl – damit nie einer leer ausgeht.",
-    checks: ["5 Dosen voller Power", "Maximale Auswahl", "Kostenloser Versand in Deutschland"],
-    price: "34,90€",
-    oldPrice: "37,45€",
-    dosen: 1,
-    cartPrice: 34.9,
-    enabled: true,
-  },
-  {
-    id: crewBundleProduct.handle,
-    link: "/produkt/zehner-bundle",
-    name: crewBundleProduct.name,
-    image: crewBox,
-    imageAlt: "FOQUZ 10er Crew Bundle",
-    imageAspect: "1 / 1",
-    imageClass: "hover:scale-105",
-    title: crewBundleProduct.name,
-    description: crewBundleProduct.desc,
-    checks: ["Jede Sorte zweimal", "Sticker & Nasen-Strips inklusive", "Kostenloser Versand in Deutschland"],
-    price: crewBundleProduct.price,
-    oldPrice: crewBundleProduct.originalPrice,
-    dosen: 1,
-    cartPrice: crewBundleProduct.numericPrice,
-    enabled: true,
-  },
-];
+const squads = FIXED_BUNDLES.map((b) => ({
+  id: b.handle,
+  size: b.size,
+  link: `/produkt/${b.handle}`,
+  image: b.image,
+  imageAlt: `FOQUZ ${b.name} – ${b.size}er Box`,
+  imageAspect: "1 / 1",
+  imageClass: "hover:scale-105",
+  title: `${b.size}ER ${b.name}`,
+  description: `${bundleContentsText(b)}.`,
+  checks: [`${b.size} Dosen · feste Zusammenstellung`, "Sticker & Nasen-Stripes inklusive"],
+}));
+
+function BundleStock({ size }: { size: number }) {
+  const status = useBundleStatus(size);
+  return status === "available" ? <StockBadge variant="dark" available={true} /> : status === "unavailable" ? <span className="text-xs font-black text-black/70">Gerade nicht vollständig lieferbar</span> : null;
+}
 
 const BundleSection = () => {
-  const { isAvailable } = useProductAvailability();
-  const setMode = useSetMode();
+  useEffect(() => { ensureFlavorStock(); }, []);
 
   return (
     <section id="bundle"
@@ -120,7 +76,7 @@ const BundleSection = () => {
                   )}
                 </h2>
                 <p className="text-black/70 text-sm leading-relaxed lg:text-base mb-4 md:mb-6">
-                  {setMode === "fixed" ? bundle.description : "Sorten frei wählbar aus den aktuell lieferbaren Sorten."}
+                  {bundle.description}
                 </p>
 
                 {/* Checkpoints */}
@@ -139,19 +95,18 @@ const BundleSection = () => {
                 {/* Price */}
                 <div className="mt-auto flex flex-col gap-1 mb-3 md:mb-5">
                   <div className="flex items-center gap-3 md:gap-4 mb-0 flex-wrap">
-                    <span className="text-xl md:text-3xl font-black text-black">{bundle.price ? `Nur ${bundle.price}` : "Bald verfügbar"}</span>
-                    {bundle.oldPrice && <span className="text-xs md:text-sm text-black/50">statt <span className="line-through">{bundle.oldPrice}</span> einzeln</span>}
-                    {bundle.enabled && isAvailable(bundle.name) === true && <StockBadge variant="dark" available={true} />}
+                    <span className="text-xl md:text-3xl font-black text-black">{BUNDLE_PRICING_PENDING ? "Preis folgt" : ""}</span>
+                    <BundleStock size={bundle.size} />
                   </div>
                 </div>
 
-                {/* CTA: führt auf die Bundle-Seite, dort werden die Sorten zusammengestellt */}
+                {/* CTA: führt auf die Bundle-Seite */}
                 <Link
                   to={bundle.link}
                   className="comic-btn w-full sm:w-fit text-sm py-3 px-4 font-black text-center"
                   style={{ backgroundColor: "#ffd618", color: "#000" }}
                 >
-                  {bundle.id === "vorrats-bundle" ? "JETZT VORRATS-BUNDLE SICHERN" : "JETZT SPAR-BUNDLE SICHERN"}
+                  BUNDLE ANSEHEN
                 </Link>
                 {bundle.link && <Link
                   to={bundle.link}

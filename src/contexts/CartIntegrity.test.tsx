@@ -30,13 +30,12 @@ describe("Set eligibility and upgrades", () => {
     expect(completeSetSizes(replaceWithSet(set(from), set(to)))).toEqual([to]);
     expect(replaceWithSet([{ ...bundle(from), qty: 1 }], set(to))).toEqual(set(to));
   });
-  it("keeps product-page adds additive but cart upgrades atomic", async () => {
+  it("retired 3/5/10 set IDs can no longer be added; singles stay additive", async () => {
     vi.mocked(storefrontApiRequest).mockResolvedValue({ data: { nodes: Array.from({ length: 5 }, () => ({ availableForSale: true, quantityAvailable: 50 })) } } as never);
     await refreshFlavorStock();
-    mount(); act(() => cart.addToCart(1, single()));
+    mount(); act(() => cart.addToCart(1, single())); act(() => cart.addToCart(1, single()));
     act(() => cart.addToCart(1, bundle(5)));
-    await waitFor(() => expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(6));
-    expect(cart.planFill(10)).not.toBeNull();
+    await waitFor(() => expect(cart.items.filter((item) => item.price > 0).reduce((sum, item) => sum + item.qty, 0)).toBe(2));
   });
   it.each([5, 10])("only complete %s sets retain gifts and shipping below 29 EUR", (size) => {
     expect(hasGuaranteedFreeShipping(set(size))).toBe(true);

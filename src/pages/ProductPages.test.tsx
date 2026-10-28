@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PeachParty from "./PeachParty";
 import ThaiStyle from "./ThaiStyle";
 import LemonBreezy from "./LemonBreezy";
-import StarterBundle from "./StarterBundle";
+import { FruitPunch } from "./FixedBundlePage";
 
 const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | null }));
 vi.mock("@/contexts/CartContext", () => ({ GIFTS_ENABLED: true, GIFT_ITEMS: [{name: "FOQUZ Sticker (gratis)", image: "/sticker.png"}, {name: "Nasen-Stripes (gratis)", image: "/strips.png"}], useCart: () => ({ addToCart: state.add, isOpen: false, popupOpen: false }) }));
@@ -30,7 +30,7 @@ function page(handle = "peach-party") {
     <Route path="/produkt/peach-party" element={<PeachParty />} />
     <Route path="/produkt/thai-style" element={<ThaiStyle />} />
     <Route path="/produkt/lemon-breezy" element={<LemonBreezy />} />
-    <Route path="/produkt/starter-bundle" element={<StarterBundle />} />
+    <Route path="/produkt/fruit-punch" element={<FruitPunch />} />
   </Routes></MemoryRouter>);
 }
 
@@ -41,9 +41,10 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: /^1 DOSE/ }));
     fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
-    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – STARTER SET/ }));
-    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
+    state.add.mockClear();
+    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ }));
+    expect(screen.getByRole('button', { name: /PREIS FOLGT/ })).toBeDisabled();
+    expect(state.add).not.toHaveBeenCalled();
   });
   it('switches product content and cart identity with the flavor selector', () => {
     page();
@@ -70,23 +71,25 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: 'Nächster Vergleich' }));
     expect(document.querySelector('[style*="translateX(-100%)"]')).not.toBeNull();
   });
-  it('selects the starter set card and buys one Shopify bundle', () => {
+  it('shows fixed 3/4/8 bundles with exact contents, pending price and no purchase', () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – STARTER SET/ }));
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('PEACH PARTY');
-    expect(screen.queryByText(/39,99|44,97|SORTEN WÄHLEN/)).not.toBeInTheDocument();
-    expect(screen.queryByText('FOQUZ Sticker (gratis)')).not.toBeInTheDocument();
-    expect(screen.queryByText('Nasen-Stripes (gratis)')).not.toBeInTheDocument();
-    expect(screen.getByAltText('Google Pay')).toBeInTheDocument();
-    expect(screen.queryByAltText('Klarna')).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle', price: 21.9 }));
+    expect(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ })).toHaveTextContent('je 1× Watermelon Flex, Peach Party, Lemon Breezy');
+    expect(screen.getByRole('button', { name: /4 DOSEN – FRESH FLASH/ })).toHaveTextContent('je 1× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
+    expect(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ })).toHaveTextContent('je 2× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
+    expect(screen.queryByRole('button', { name: /5 DOSEN|10 DOSEN/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ }));
+    expect(screen.queryByText(/Du sparst|21,90|27,92|47,92|59,90|34,90/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /mehr$/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /PREIS FOLGT/ }));
+    expect(state.add).not.toHaveBeenCalled();
   });
-  it('keeps free-choice sets buyable independent of old bundle products', () => {
-    state.available = false;
-    page('starter-bundle');
-    expect(screen.getByText('3/3 gewählt')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /IN DEN WARENKORB/ }));
-    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: 'starter-bundle' }));
+  it('bundle page lists exactly the Fruit Punch contents and cannot be bought yet', () => {
+    page('fruit-punch');
+    expect(screen.getByText('1× WATERMELON FLEX')).toBeInTheDocument();
+    expect(screen.getByText('1× PEACH PARTY')).toBeInTheDocument();
+    expect(screen.getByText('1× LEMON BREEZY')).toBeInTheDocument();
+    expect(screen.queryByText(/BLUEBERRY FLOW|THAI STYLE/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /PREIS FOLGT/ })).toBeDisabled();
   });
+
 });

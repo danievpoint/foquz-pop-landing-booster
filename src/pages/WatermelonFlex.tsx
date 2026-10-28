@@ -1,4 +1,5 @@
 import { useProductPage } from "@/hooks/useProductPage";
+import { MORE_BUNDLES } from "@/components/product-pages/moreBundles";
 import { useSetSelection } from "@/hooks/useInitialSetSize";
 import { useViewContentPixel } from "@/hooks/useViewContentPixel";
 import { FreeShippingStatus, ProductPageMeta, ProductPageMedia, ProductPageSticky, ProductPromise } from "@/components/product-pages/ShopIntegration";
@@ -205,13 +206,13 @@ const WatermelonFlexInner = () => {
             <button
               onClick={() => addSelection(selectedBundle)}
               ref={shop.ctaRef}
-              disabled={isAvailable(selectedBundle.productName) === false}
+              disabled={selectedBundle.pricePending || isAvailable(selectedBundle.productName) === false}
               className="comic-btn w-full min-h-12 text-center py-3 font-extrabold text-sm sm:text-base"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
-              IN DEN WARENKORB – {selectedBundle.price.toFixed(2).replace(".", ",")} €
+              {selectedBundle.pricePending ? "PREIS FOLGT – BALD BESTELLBAR" : `IN DEN WARENKORB – ${selectedBundle.price.toFixed(2).replace(".", ",")} €`}
             </button>
-            <FreeShippingStatus selectedPrice={selectedBundle.price} />
+            {!selectedBundle.pricePending && <FreeShippingStatus selectedPrice={selectedBundle.price} />}
 
             {/* Trust */}
             <ul className="pt-4 space-y-2 text-xs font-semibold">
@@ -662,28 +663,7 @@ const WatermelonFlexInner = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
             {[
-              {
-                name: "5ER SQUAD BUNDLE",
-                desc: "je 1× alle fünf Sorten",
-                price: "34,90 €",
-                compareAt: "37,45 €",
-                tag: "BELIEBTESTE WAHL",
-                tagClass: "bg-yellow-400 text-black",
-                cta: "5ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp",
-                href: "/produkt/squad-bundle",
-              },
-              {
-                name: "10ER VORRATS-BUNDLE",
-                desc: "je 2× alle fünf Sorten",
-                price: "59,90 €",
-                compareAt: "74,90 €",
-                tag: "SPARE 20 %",
-                tagClass: "bg-violet-600 text-white",
-                cta: "10ER HOLEN",
-                image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp",
-                href: "/produkt/zehner-bundle",
-              },
+              ...MORE_BUNDLES,
             ].map((p) => (
               <div key={p.name} className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] overflow-hidden">
                 <div className="relative">
@@ -698,8 +678,7 @@ const WatermelonFlexInner = () => {
                   <Link to={p.href}><h3 className="font-barlow font-extrabold mb-1 text-sm">{p.name}</h3></Link>
                   <p className="text-[11px] text-muted-foreground mb-1">{p.desc}</p>
                   <p className="mb-2 text-[11px]">
-                    <span className="font-extrabold">{p.price}</span>{" "}
-                    <span className="text-muted-foreground line-through">{p.compareAt}</span>
+                    <span className="font-extrabold">{p.price}</span>
                   </p>
                   <Link to={p.href}>
                     <button className="comic-btn w-full text-[10px] sm:text-[11px] py-2 px-2 font-extrabold" style={{ backgroundColor: "#ffd618", color: "#000" }}>

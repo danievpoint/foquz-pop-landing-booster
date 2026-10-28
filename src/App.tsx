@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
-const ZehnerBundle = lazy(() => import("./pages/ZehnerBundle"));
-const SquadBundle = lazy(() => import("./pages/SquadBundle"));
-const StarterBundle = lazy(() => import("./pages/StarterBundle"));
+const FruitPunch = lazy(() => import("./pages/FixedBundlePage").then((m) => ({ default: m.FruitPunch })));
+const FreshFlash = lazy(() => import("./pages/FixedBundlePage").then((m) => ({ default: m.FreshFlash })));
+const FamilyFirst = lazy(() => import("./pages/FixedBundlePage").then((m) => ({ default: m.FamilyFirst })));
 const PeachParty = lazy(() => import("./pages/PeachParty"));
 const ThaiStyle = lazy(() => import("./pages/ThaiStyle"));
 const LemonBreezy = lazy(() => import("./pages/LemonBreezy"));
@@ -12,7 +12,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import PullToRefresh from "@/components/PullToRefresh";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 const Datenschutz = lazy(() => import("./pages/Datenschutz"));
@@ -53,8 +53,8 @@ if (typeof window !== "undefined") {
   const prefetch = () => {
     [
       () => import("./pages/PeachParty"), () => import("./pages/ThaiStyle"), () => import("./pages/LemonBreezy"),
-      () => import("./pages/WatermelonFlex"), () => import("./pages/BlueberryFlow"), () => import("./pages/SquadBundle"),
-      () => import("./pages/ZehnerBundle"), () => import("./pages/StarterBundle"), () => import("./pages/Faq"),
+      () => import("./pages/WatermelonFlex"), () => import("./pages/BlueberryFlow"), () => import("./pages/FixedBundlePage"),
+      () => import("./pages/Faq"),
       () => import("./pages/ProductDetail"),
     ].forEach((f) => f().catch(() => undefined));
   };
@@ -106,20 +106,23 @@ const App = () => {
                 <Route path="/produkte/watermelon-flex" element={<WatermelonFlex />} />
                 <Route path="/produkt/blueberry-flow" element={<BlueberryFlow />} />
                 <Route path="/produkte/blueberry-flow" element={<BlueberryFlow />} />
-                <Route path="/produkt/zehner-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkt/vorrats-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkt/10er-crew-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkt/10er-vorrats-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkte/zehner-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkte/vorrats-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkte/10er-crew-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkte/10er-vorrats-bundle" element={<ZehnerBundle />} />
-                <Route path="/produkt/squad-bundle" element={<SquadBundle />} />
-                <Route path="/produkte/squad-bundle" element={<SquadBundle />} />
-                <Route path="/produkt/5er-squad-bundle" element={<SquadBundle />} />
-                <Route path="/produkte/5er-squad-bundle" element={<SquadBundle />} />
-                <Route path="/produkt/starter-bundle" element={<StarterBundle />} />
-                <Route path="/produkte/starter-bundle" element={<StarterBundle />} />
+                <Route path="/produkt/fruit-punch" element={<FruitPunch />} />
+                <Route path="/produkt/fresh-flash" element={<FreshFlash />} />
+                <Route path="/produkt/family-first" element={<FamilyFirst />} />
+                <Route path="/produkt/zehner-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkt/vorrats-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkt/10er-crew-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkt/10er-vorrats-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkte/zehner-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkte/vorrats-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkte/10er-crew-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkte/10er-vorrats-bundle" element={<Navigate to="/produkt/family-first" replace />} />
+                <Route path="/produkt/squad-bundle" element={<Navigate to="/produkt/fresh-flash" replace />} />
+                <Route path="/produkte/squad-bundle" element={<Navigate to="/produkt/fresh-flash" replace />} />
+                <Route path="/produkt/5er-squad-bundle" element={<Navigate to="/produkt/fresh-flash" replace />} />
+                <Route path="/produkte/5er-squad-bundle" element={<Navigate to="/produkt/fresh-flash" replace />} />
+                <Route path="/produkt/starter-bundle" element={<Navigate to="/produkt/fruit-punch" replace />} />
+                <Route path="/produkte/starter-bundle" element={<Navigate to="/produkt/fruit-punch" replace />} />
                 <Route path="/produkt/:handle" element={<ProductDetail />} />
                 
                 <Route path="/newsletter-bestaetigt" element={<NewsletterConfirmed />} />

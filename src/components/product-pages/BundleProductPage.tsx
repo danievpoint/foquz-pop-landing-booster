@@ -8,7 +8,6 @@ import { BundleSelector } from "@/components/product-pages/BundleSelector";
 import LooxRating from "@/components/LooxRating";
 import LooxReviews from "@/components/LooxReviews";
 import { Check, ChevronDown } from "lucide-react";
-import { useSetMode } from "@/lib/setMix";
 import PaymentLogos from "@/components/PaymentLogos";
 const howToStep1 = { url: "/images/product-pages/how-to-step-1.svg" };
 const howToStep2 = { url: "/images/product-pages/how-to-step-2.svg" };
@@ -39,7 +38,6 @@ export interface BundleProductConfig {
 
 const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
   const shop = useProductPage(config.handle ?? "starter-bundle");
-  const setMode = useSetMode();
   const { product, bundles, addSelection, isAvailable } = shop;
   const [bundle, setBundle] = useState(() => {
     const own = bundles.find((option) => option.id === (config.handle ?? "starter-bundle"));
@@ -89,7 +87,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 
               {/* Bewertung */}
               <div className="flex items-center justify-start gap-2 mt-4">
-                <LooxRating productId={shop.productId} />
+                {shop.productId && <LooxRating productId={shop.productId} />}
               </div>
 
               <h2 className="font-barlow font-extrabold text-base mb-3">DEIN SET WÄHLEN</h2>
@@ -112,14 +110,14 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
               </p>
               <button
                 ref={shop.ctaRef}
-                disabled={isAvailable(selectedBundle.productName) === false}
+                disabled={selectedBundle.pricePending || isAvailable(selectedBundle.productName) === false}
                 onClick={() => addSelection(selectedBundle)}
                 className="comic-btn w-full min-h-12 text-center py-3 font-extrabold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "#ffd618", color: "#000" }}
               >
-                IN DEN WARENKORB – {selectedBundle.price.toFixed(2).replace(".", ",")} €
+                {selectedBundle.pricePending ? "PREIS FOLGT – BALD BESTELLBAR" : `IN DEN WARENKORB – ${selectedBundle.price.toFixed(2).replace(".", ",")} €`}
               </button>
-              <FreeShippingStatus selectedPrice={selectedBundle.price} />
+              {!selectedBundle.pricePending && <FreeShippingStatus selectedPrice={selectedBundle.price} />}
 
               {/* Trust */}
               <ul className="pt-4 space-y-2 text-xs font-semibold">
@@ -195,11 +193,6 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
             <p className="text-center text-sm md:text-base text-foreground/80 leading-relaxed mb-6 md:mb-8">
               {config.description}
             </p>
-            {setMode !== "fixed" && (
-              <p className="text-center text-sm md:text-base font-bold mb-6 md:mb-8">
-                Gerade ist nicht jede Sorte lieferbar – deshalb stellst du dein Set aktuell selbst aus den verfügbaren Sorten zusammen.
-              </p>
-            )}
             <div className={`grid gap-4 md:gap-6 ${config.contents.length > 3 ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" : "grid-cols-1 sm:grid-cols-3"}`}>
               {config.contents.map((c) => (
                 <div key={c.name} className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0_0_#000] p-4 flex flex-col items-center text-center">
@@ -230,6 +223,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
         </section>
 
         {/* ===== Reviews ===== */}
+        {shop.productId && (
         <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: config.reviewsBgColor ?? config.cardColor }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 className="font-barlow font-extrabold section-title text-center text-black mb-8 leading-none">
@@ -238,6 +232,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
             <LooxReviews productId={shop.productId} embedded />
           </div>
         </section>
+        )}
 
         {/* ===== FAQ ===== */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-16">

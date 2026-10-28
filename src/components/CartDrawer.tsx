@@ -15,7 +15,7 @@ import {
   Plus as PlusIcon,
 } from "lucide-react";
 import { useCart, isGiftItem, isFreeCanItem, SINGLE_CAN_IDS, THREE_FOR_TWO_ENABLED, PRIO_SHIPPING_PRICE, ALWAYS_FREE_SHIPPING_IDS, type CartItem } from "@/contexts/CartContext";
-import { products as allSorten, allProducts, bundleProduct, squadBundleProduct, crewBundleProduct } from "@/data/products";
+import { products as allSorten, allProducts, bundleBySize, BUNDLE_PRICING_PENDING } from "@/data/products";
 import { Link } from "react-router-dom";
 import payPaypal from "@/assets/payment/paypal.svg";
 import payKlarna from "@/assets/payment/klarna.svg";
@@ -135,9 +135,10 @@ const CartDrawer = () => {
 
   // Set-Karten füllen auf 3/5/10 bezahlte Dosen auf; Inhalt = exakt die geplante Mutation.
   const paidCans = paidCanCount(items);
-  const SET_PRICES: Record<number, number> = { 3: 21.9, 5: 34.9, 10: 59.9 };
+  // Neue feste Bundles 3/4/8: Preise noch offen → keine Auffüll-/Upgrade-Karten bis zur Freigabe.
+  const SET_PRICES: Record<number, number> = {};
   const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-  const upsells = [3, 5, 10]
+  const upsells = (BUNDLE_PRICING_PENDING ? [] : [3, 4, 8])
     .filter((target) => target > paidCans)
     .map((target) => ({ target, plan: planFill(target) }))
     .filter((u): u is { target: number; plan: NonNullable<ReturnType<typeof planFill>> } => u.plan !== null)
@@ -145,15 +146,15 @@ const CartDrawer = () => {
       const total = Object.fromEntries(Object.keys({ ...plan.kept, ...plan.added }).map((f) => [f, (plan.kept[f] ?? 0) + (plan.added[f] ?? 0)]));
       const mix = Object.entries(total).map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ");
       const addedList = Object.entries(plan.added).map(([f, q]) => `${q}× ${titleCase(f)}`).join(", ");
-      const gifts = target >= 5 ? " – inkl. Sticker & Nasenstrips" : "";
+      const gifts = target >= 3 ? " – inkl. Sticker & Nasenstrips" : "";
       return {
         target, added: plan.added,
-        title: `${target}er Set`,
+        title: bundleBySize(target)?.name ?? `${target}er Set`,
         desc: `${mix}${gifts}`,
         addedDesc: addedList ? `Neu dazu: ${addedList}` : "",
         price: SET_PRICES[target], compareAt: Math.round(target * 7.49 * 100) / 100,
-        image: target === 3 ? bundleProduct.image : target === 5 ? squadBundleProduct.image : crewBundleProduct.image,
-        label: target === 5 ? "Beliebteste Wahl" : "Empfehlung", featured: target === 5,
+        image: bundleBySize(target)?.image ?? "",
+        label: target === 4 ? "Beliebteste Wahl" : "Empfehlung", featured: target === 4,
       };
     });
 
@@ -446,7 +447,7 @@ const CartDrawer = () => {
                                 )}
                                 {isGift && (
                                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                                    {isFreeCan ? "Deine Gratis-Dose (3 für 2)" : "Geschenk zum Power Bundle"}
+                                    {isFreeCan ? "Deine Gratis-Dose (3 für 2)" : "Gratis-Zugabe"}
                                   </p>
                                 )}
                               </div>
