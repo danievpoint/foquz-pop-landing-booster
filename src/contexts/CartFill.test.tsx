@@ -12,7 +12,7 @@ vi.mock("@/lib/shopify", async (original) => ({ ...await original<typeof import(
 import { storefrontApiRequest } from "@/lib/shopify";
 import { writeConsent } from "@/lib/consent";
 import { refreshFlavorStock } from "@/lib/setMix";
-import { BUNDLE_PRICING_PENDING } from "@/data/products";
+import { BUNDLE_CHECKOUT_READY } from "@/data/products";
 
 let cart: ReturnType<typeof useCart>;
 function Probe() { cart = useCart(); return null; }
@@ -62,8 +62,8 @@ describe("Auffüllen auf Sets (reine Regel)", () => {
   });
 });
 
-// Auffüllen ist bis zur Preisfreigabe der neuen Bundles gesperrt (BUNDLE_PRICING_PENDING); bei Freischaltung reaktivieren.
-describe.skipIf(BUNDLE_PRICING_PENDING)("Auffüllen im Warenkorb", () => {
+// Auffüllen ist bis zur Checkout-Freigabe der neuen Bundles gesperrt (BUNDLE_CHECKOUT_READY); bei Freischaltung reaktivieren.
+describe.skipIf(!BUNDLE_CHECKOUT_READY)("Auffüllen im Warenkorb", () => {
   it("1 → 5: Sorte bleibt, Zugaben genau einmal, Klaviyo genau einmal mit Shopify-Wert und -Link", async () => {
     mount();
     act(() => cart.addToCart(1, { id: "PEACH PARTY", name: "PEACH PARTY", price: 7.49, image: "" }));

@@ -43,7 +43,7 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: name, price: 7.49 }));
     state.add.mockClear();
     fireEvent.click(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ }));
-    expect(screen.getByRole('button', { name: /PREIS FOLGT/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /BALD BESTELLBAR/ })).toBeDisabled();
     expect(state.add).not.toHaveBeenCalled();
   });
   it('switches product content and cart identity with the flavor selector', () => {
@@ -71,16 +71,21 @@ describe("Imported product pages keep Shopify identities", () => {
     fireEvent.click(screen.getByRole('button', { name: 'Nächster Vergleich' }));
     expect(document.querySelector('[style*="translateX(-100%)"]')).not.toBeNull();
   });
-  it('shows fixed 3/4/8 bundles with exact contents, pending price and no purchase', () => {
+  it('shows fixed 3/4/8 bundles with exact contents, final prices and no purchase', () => {
     page();
     expect(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ })).toHaveTextContent('je 1× Watermelon Flex, Peach Party, Lemon Breezy');
     expect(screen.getByRole('button', { name: /4 DOSEN – FRESH FLASH/ })).toHaveTextContent('je 1× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
     expect(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ })).toHaveTextContent('je 2× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
     expect(screen.queryByRole('button', { name: /5 DOSEN|10 DOSEN/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ }));
-    expect(screen.queryByText(/Du sparst|21,90|27,92|47,92|59,90|34,90/)).not.toBeInTheDocument();
+    // Finale Preise und Ersparnis gegenüber Einzeldosen à 7,49 €
+    expect(screen.getByRole('button', { name: /3 DOSEN – FRUIT PUNCH/ })).toHaveTextContent('21,90 €');
+    expect(screen.getByRole('button', { name: /4 DOSEN – FRESH FLASH/ })).toHaveTextContent('27,90 €');
+    expect(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ })).toHaveTextContent('49,90 €');
+    expect(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ })).toHaveTextContent('Du sparst 10,02 €');
+    expect(screen.queryByText(/27,92|47,92|59,90|34,90/)).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /mehr$/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /PREIS FOLGT/ }));
+    fireEvent.click(screen.getByRole('button', { name: /BALD BESTELLBAR/ }));
     expect(state.add).not.toHaveBeenCalled();
   });
   it('bundle page lists exactly the Fruit Punch contents and cannot be bought yet', () => {
@@ -89,7 +94,7 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(screen.getByText('1× PEACH PARTY')).toBeInTheDocument();
     expect(screen.getByText('1× LEMON BREEZY')).toBeInTheDocument();
     expect(screen.queryByText(/BLUEBERRY FLOW|THAI STYLE/)).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /PREIS FOLGT/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /BALD BESTELLBAR/ })).toBeDisabled();
   });
 
 });

@@ -9,7 +9,7 @@ vi.mock("@/lib/shopify", async (original) => ({ ...await original<typeof import(
 import { storefrontApiRequest } from "@/lib/shopify";
 import { CartProvider, useCart } from "@/contexts/CartContext";
 import { bundleStatusFor, FIXED_SET_MIX, getBundleStatus, refreshFlavorStock } from "@/lib/setMix";
-import { BUNDLE_PRICING_PENDING, FIXED_BUNDLES, fruitPunchProduct } from "@/data/products";
+import { BUNDLE_CHECKOUT_READY, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, BUNDLE_PRICES, FIXED_BUNDLES, familyFirstProduct, freshFlashProduct, fruitPunchProduct } from "@/data/products";
 import { saveStoredCart } from "@/lib/cartRules";
 
 const ORDER = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
@@ -73,11 +73,29 @@ describe("Lieferbarkeit je Bundle (kein Rückfall auf freie Auswahl)", () => {
   });
 });
 
-describe("Preis offen: nichts kaufbar", () => {
-  it("Bundles sind als pricePending markiert, ohne Preis", () => {
-    expect(BUNDLE_PRICING_PENDING).toBe(true);
-    expect(fruitPunchProduct.pricePending).toBe(true);
-    expect(fruitPunchProduct.numericPrice).toBe(0);
+describe("Preise final, Kauf gesperrt", () => {
+  it("finale Preise: 21,90 / 27,90 / 49,90", () => {
+    expect(BUNDLE_PRICES).toEqual({ 3: 21.9, 4: 27.9, 8: 49.9 });
+    expect(fruitPunchProduct.numericPrice).toBe(21.9);
+    expect(fruitPunchProduct.price).toBe("€21,90");
+    expect(freshFlashProduct.numericPrice).toBe(27.9);
+    expect(familyFirstProduct.numericPrice).toBe(49.9);
+  });
+  it("Vergleich mit 7,49 €/Einzeldose: Ersparnis 0,57 / 2,06 / 10,02", () => {
+    expect(BUNDLE_COMPARE_AT).toEqual({ 3: "€22,47", 4: "€29,96", 8: "€59,92" });
+    for (const size of [3, 4, 8]) {
+      const compare = parseFloat(BUNDLE_COMPARE_AT[size].replace("€", "").replace(",", "."));
+      expect(Math.round((compare - BUNDLE_PRICES[size]) * 100) / 100).toBe({ 3: 0.57, 4: 2.06, 8: 10.02 }[size]);
+    }
+  });
+  it("Dosenpreise gerundet: 7,30 / 6,98 / 6,24", () => {
+    expect(BUNDLE_PER_DOSE).toEqual({ 3: "7,30", 4: "6,98", 8: "6,24" });
+  });
+  it("Kauf bleibt gesperrt bis zum Shopify-Abgleich", () => {
+    expect(BUNDLE_CHECKOUT_READY).toBe(false);
+    expect(fruitPunchProduct.checkoutReady).toBe(false);
+    expect(freshFlashProduct.checkoutReady).toBe(false);
+    expect(familyFirstProduct.checkoutReady).toBe(false);
   });
   it.each(["fruit-punch", "fresh-flash", "family-first", "starter-bundle", "squad-bundle", "vorrats-bundle", "bundle"])("%s landet nicht im Warenkorb", async (id) => {
     respond(shopify()); mount();
