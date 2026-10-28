@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FIXED_BUNDLES, bundleContentsText, BUNDLE_PRICING_PENDING } from "@/data/products";
+import { FIXED_BUNDLES, bundleContentsText, BUNDLE_PRICES, BUNDLE_COMPARE_AT } from "@/data/products";
 import StockBadge from "@/components/StockBadge";
 import { useBundleStatus, ensureFlavorStock } from "@/lib/setMix";
 import { useEffect } from "react";
@@ -95,7 +95,8 @@ const BundleSection = () => {
                 {/* Price */}
                 <div className="mt-auto flex flex-col gap-1 mb-3 md:mb-5">
                   <div className="flex items-center gap-3 md:gap-4 mb-0 flex-wrap">
-                    <span className="text-xl md:text-3xl font-black text-black">{BUNDLE_PRICING_PENDING ? "Preis folgt" : ""}</span>
+                    <span className="text-xl md:text-3xl font-black text-black">{BUNDLE_PRICES[bundle.size].toFixed(2).replace(".", ",")} €</span>
+                    <span className="text-sm md:text-base font-semibold text-black/50 line-through">{BUNDLE_COMPARE_AT[bundle.size]}</span>
                     <BundleStock size={bundle.size} />
                   </div>
                 </div>
