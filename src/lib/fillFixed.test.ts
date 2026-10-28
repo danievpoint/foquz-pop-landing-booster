@@ -10,22 +10,22 @@ const mixOf = (p: ReturnType<typeof planFillToSet>) =>
   Object.fromEntries(p!.items.filter((i) => i.flavor).map((i) => [i.flavor!, i.qty]));
 
 describe("Auffüllen im festen Modus", () => {
-  it.each([3, 5, 10])("leer → %ier exakt fest", (t) => {
+  it.each([3, 4, 8])("leer → %ier exakt fest", (t) => {
     expect(mixOf(planFillToSet([], t, stock, {}, 7.49, FIXED_SET_MIX))).toEqual(FIXED_SET_MIX[t]);
   });
-  it("3er → 5er ergänzt genau 1 Watermelon + 1 Blueberry", () => {
-    const p = planFillToSet(set(3, FIXED_SET_MIX[3]), 5, stock, {}, 7.49, FIXED_SET_MIX)!;
-    expect(p.added).toEqual({ "WATERMELON FLEX": 1, "BLUEBERRY FLOW": 1 });
-    expect(mixOf(p)).toEqual(FIXED_SET_MIX[5]);
+  it("Fruit Punch → Fresh Flash ergänzt genau 1 Blueberry", () => {
+    const p = planFillToSet(set(3, FIXED_SET_MIX[3]), 4, stock, {}, 7.49, FIXED_SET_MIX)!;
+    expect(p.added).toEqual({ "BLUEBERRY FLOW": 1 });
+    expect(mixOf(p)).toEqual(FIXED_SET_MIX[4]);
   });
-  it("5er → 10er ergänzt je 1", () => {
-    const p = planFillToSet(set(5, FIXED_SET_MIX[5]), 10, stock, {}, 7.49, FIXED_SET_MIX)!;
-    expect(p.added).toEqual(Object.fromEntries(F.map((f) => [f, 1])));
-    expect(mixOf(p)).toEqual(FIXED_SET_MIX[10]);
+  it("Fresh Flash → Family First ergänzt je 1 der vier Sorten", () => {
+    const p = planFillToSet(set(4, FIXED_SET_MIX[4]), 8, stock, {}, 7.49, FIXED_SET_MIX)!;
+    expect(p.added).toEqual(FIXED_SET_MIX[4]);
+    expect(mixOf(p)).toEqual(FIXED_SET_MIX[8]);
   });
   it("inkompatible freie Auswahl: keine feste Karte, Warenkorb unverändert", () => {
     const items = set(3, { "WATERMELON FLEX": 3 });
-    expect(planFillToSet(items, 5, stock, {}, 7.49, FIXED_SET_MIX)).toBeNull();
+    expect(planFillToSet(items, 4, stock, {}, 7.49, FIXED_SET_MIX)).toBeNull();
     expect(items[0].qty).toBe(3);
   });
   it("freier Modus behält bisherige Verteilung", () => {
