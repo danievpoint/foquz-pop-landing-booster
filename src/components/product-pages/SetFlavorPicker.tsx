@@ -33,6 +33,7 @@ export function SetFlavorPicker({ size }: { size: number }) {
         <li className="flex items-center gap-2 pt-1 text-xs font-bold">+ Sticker & Nasen-Stripes</li>
       </ul>
       {status === "unknown" && <p className="mt-2 text-xs font-bold">Bestand wird geprüft …</p>}
+      {status === "unverified" && <p className="mt-2 text-xs font-bold">Bald bestellbar.</p>}
       {status === "unavailable" && <p className="mt-2 text-xs font-bold text-[#e94362]">Gerade nicht vollständig lieferbar.</p>}
     </div>
   );
