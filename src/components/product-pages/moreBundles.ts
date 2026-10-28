@@ -5,7 +5,7 @@ export const MORE_BUNDLES = FIXED_BUNDLES.filter((b) => b.size === 4 || b.size =
   name: `${b.size}ER ${b.name}`,
   desc: bundleContentsText(b),
   price: BUNDLE_PRICING_PENDING ? "Preis folgt" : "",
-  tag: b.size === 4 ? "BELIEBTESTE WAHL" : "FAMILY PACK",
+  tag: b.size === 4 ? "BELIEBTESTE WAHL" : "8 DOSEN",
   tagClass: b.size === 4 ? "bg-yellow-400 text-black" : "bg-violet-600 text-white",
   cta: "BUNDLE ANSEHEN",
   image: b.image,
