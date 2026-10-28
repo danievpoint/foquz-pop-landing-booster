@@ -87,7 +87,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 
               {/* Bewertung */}
               <div className="flex items-center justify-start gap-2 mt-4">
-                <LooxRating productId={shop.productId} />
+                {shop.productId && <LooxRating productId={shop.productId} />}
               </div>
 
               <h2 className="font-barlow font-extrabold text-base mb-3">DEIN SET WÄHLEN</h2>
@@ -222,6 +222,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
           </ul>
         </section>
 
+        {shop.productId && (
         {/* ===== Reviews ===== */}
         <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: config.reviewsBgColor ?? config.cardColor }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -231,6 +232,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
             <LooxReviews productId={shop.productId} embedded />
           </div>
         </section>
+        )}
 
         {/* ===== FAQ ===== */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-16">
