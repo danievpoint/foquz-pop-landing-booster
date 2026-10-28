@@ -188,9 +188,10 @@ export const bundleContentsText = (b: FixedBundle) => {
 const toProduct = (b: FixedBundle): Product => ({
   name: b.name,
   handle: b.handle,
-  price: "Preis folgt",
-  numericPrice: 0,
-  pricePending: BUNDLE_PRICING_PENDING,
+  price: `€${BUNDLE_PRICES[b.size].toFixed(2).replace(".", ",")}`,
+  numericPrice: BUNDLE_PRICES[b.size],
+  originalPrice: BUNDLE_COMPARE_AT[b.size],
+  checkoutReady: BUNDLE_CHECKOUT_READY,
   desc: `${bundleContentsText(b)}. Inklusive Sticker & Nasen-Stripes.`,
   image: b.image,
   color: "#85c8b5",
