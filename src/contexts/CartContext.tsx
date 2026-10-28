@@ -10,7 +10,7 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, bundleStatusFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
+import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
 import { BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, SET_FILL_ENABLED } from "@/data/products";
 import { onlineBundleByCartId, refreshOnlineBundles } from "@/lib/bundleOnline";
 
