@@ -411,7 +411,7 @@ const CrossSellCard = ({
         onClick={() =>
           addToCart(1, {
             id: p.isBundle ? "starter-bundle" : p.name,
-            name: p.isBundle ? "FOQUZ Power Bundle (3 Sorten)" : p.name,
+            name: p.name,
             price: p.numericPrice,
             image: p.image,
           })
@@ -560,8 +560,8 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (option === "bundle") {
       addToCart(1, {
-        id: "starter-bundle",
-        name: "FOQUZ Power Bundle (3 Sorten)",
+        id: bundleProduct.handle,
+        name: bundleProduct.name,
         price: bundleProduct.numericPrice,
         image: bundleProduct.image,
       });
@@ -878,7 +878,7 @@ const ProductDetail = () => {
                       {bundleProduct.name}
                     </span>
                     <span className="block text-[11px] text-white/80 font-semibold leading-snug mt-0.5">
-                      Alle 3 Sorten, 3 % sparen
+                      3 Dosen, feste Zusammenstellung
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
@@ -969,7 +969,7 @@ const ProductDetail = () => {
                 style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
               >
                 <ShoppingBag className="w-5 h-5" />
-                IN DEN WARENKORB – {formatPrice(selectedPrice)}
+                IN DEN WARENKORB – {selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}
               </button>
             </div>
 
@@ -1001,7 +1001,7 @@ const ProductDetail = () => {
                 style={{ backgroundColor: YELLOW, color: "#000", borderWidth: 3 }}
               >
                 <ShoppingBag className="w-5 h-5" />
-                IN DEN WARENKORB – {formatPrice(selectedPrice)}
+                IN DEN WARENKORB – {selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}
               </button>
             </div>
           </div>
@@ -1283,9 +1283,9 @@ const ProductDetail = () => {
           >
             <div className="shrink-0">
               <div className="text-[10px] font-bold uppercase text-black/50 leading-none">
-                {option === "bundle" ? "Power Bundle" : "1 Dose"}
+                {option === "bundle" ? bundleProduct.name : "1 Dose"}
               </div>
-              <div className="font-black text-lg leading-tight">{formatPrice(selectedPrice)}</div>
+              <div className="font-black text-lg leading-tight">{selectedProduct.pricePending ? selectedProduct.price : formatPrice(selectedPrice)}</div>
             </div>
             <button
               type="button"
