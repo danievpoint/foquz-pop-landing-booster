@@ -7,6 +7,12 @@ export const CHECKOUT_PENDING_KEY = "foquz_checkout_snapshot_v1";
 const FLAVORS = ["PEACH PARTY", "THAI STYLE", "LEMON BREEZY", "WATERMELON FLEX", "BLUEBERRY FLOW"];
 const LEGACY_SETS: Record<string, number> = { bundle: 3, "starter-bundle": 3, "squad-bundle": 5, "vorrats-bundle": 10 };
 const giftIds = ["gift-nasenstripes", "gift-sticker"];
+/** Neue feste Bundles: Warenkorb-ID = Bundle-Handle, eine Zeile = ein echtes Shopify-Bundle. */
+export const BUNDLE_CART_SIZES: Record<string, number> = { "fruit-punch": 3, "fresh-flash": 4, "family-first": 8 };
+const BUNDLE_CART_PRICES: Record<string, number> = { "fruit-punch": 21.9, "fresh-flash": 27.9, "family-first": 49.9 };
+export const isFixedBundleItem = (item: Pick<CartItem, "id">) => item.id in BUNDLE_CART_SIZES;
+/** Alte 3/5/10-Bundles: bleiben im Warenkorb sichtbar, werden aber nie still auf neue Bundles umgedeutet. */
+export const isRetiredSetItem = (item: Pick<CartItem, "id">) => !isFixedBundleItem(item) && legacySetSize(item.id) !== undefined;
 
 export function legacySetSize(id: string): number | undefined {
   if (LEGACY_SETS[id]) return LEGACY_SETS[id];
@@ -34,7 +40,8 @@ export function completeSetSizes(items: CartItem[]): number[] {
   return [...complete];
 }
 
-export const hasEligibleGiftSet = (items: CartItem[]) => completeSetSizes(items).some((size) => size === 5 || size === 10);
+export const hasEligibleGiftSet = (items: CartItem[]) =>
+  items.some((item) => item.qty > 0 && isFixedBundleItem(item)) || completeSetSizes(items).some((size) => size === 5 || size === 10);
 export const hasGuaranteedFreeShipping = hasEligibleGiftSet;
 
 /**
@@ -48,6 +55,8 @@ const FREE_SHIPPING_LEGACY = ["squad-bundle", "vorrats-bundle"];
 
 /** Nur was Shopify an der Kasse tatsächlich versandfrei stellt (ohne Warenwertschwelle). */
 export function hasCheckoutFreeShipping(items: CartItem[]): boolean {
+  // Family First (8er) ist laut Freigabe versandfrei (DE); Fruit Punch / Fresh Flash nicht pauschal.
+  if (items.some((item) => item.qty > 0 && item.id === "family-first")) return true;
   if (items.some((item) => item.qty > 0 && FREE_SHIPPING_LEGACY.some((key) => {
     const gid = VARIANT_GID_BY_ID[key];
     return item.id === key || item.id === gid || item.id === gid?.split("/").pop();
@@ -83,9 +92,10 @@ export function readStoredCart(): { items: CartItem[]; prioShipping: boolean } {
         if (!isSetCan(candidate)) continue;
         candidate.price = 7.49;
       } else {
-        const legacy = legacySetSize(candidate.id);
+        const legacy = isFixedBundleItem(candidate) ? undefined : legacySetSize(candidate.id);
         const singleName = FLAVORS.find((name) => candidate.id === name || candidate.id === VARIANT_GID_BY_ID[name] || candidate.id === VARIANT_GID_BY_ID[name]?.split("/").pop());
-        if (legacy) {
+        if (isFixedBundleItem(candidate)) { candidate.price = BUNDLE_CART_PRICES[candidate.id]; }
+        else if (legacy) {
           candidate.id = legacy === 3 ? "starter-bundle" : legacy === 5 ? "squad-bundle" : "vorrats-bundle";
           candidate.price = legacy === 3 ? 21.9 : legacy === 5 ? 34.9 : 59.9;
         } else if (singleName) { candidate.id = singleName; candidate.price = 7.49; }
@@ -114,7 +124,7 @@ const PAID_FLAVOR_OF = (item: CartItem): string | null => {
 
 /** Bezahlte Dosen im Warenkorb: Einzeldosen, Set-Dosen und echte alte Bundles. Ohne Geschenke, Gratisdose, Prio. */
 export function paidCanCount(items: CartItem[]): number {
-  return items.reduce((sum, item) => sum + (PAID_FLAVOR_OF(item) ? item.qty : (legacySetSize(item.id) ?? 0) * item.qty), 0);
+  return items.reduce((sum, item) => sum + (PAID_FLAVOR_OF(item) ? item.qty : (BUNDLE_CART_SIZES[item.id] ?? legacySetSize(item.id) ?? 0) * item.qty), 0);
 }
 
 export interface FillStock { [flavor: string]: { available: boolean; qty: number | null } | undefined }
