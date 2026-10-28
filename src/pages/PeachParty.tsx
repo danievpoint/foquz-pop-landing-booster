@@ -205,13 +205,13 @@ const PeachPartyInner = () => {
             <button
               onClick={() => addSelection(selectedBundle)}
               ref={shop.ctaRef}
-              disabled={isAvailable(selectedBundle.productName) === false}
+              disabled={selectedBundle.pricePending || isAvailable(selectedBundle.productName) === false}
               className="comic-btn w-full min-h-12 text-center py-3 font-extrabold text-sm sm:text-base"
               style={{ backgroundColor: "#ffd618", color: "#000" }}
             >
-              IN DEN WARENKORB – {selectedBundle.price.toFixed(2).replace(".", ",")} €
+              {selectedBundle.pricePending ? "PREIS FOLGT – BALD BESTELLBAR" : `IN DEN WARENKORB – ${selectedBundle.price.toFixed(2).replace(".", ",")} €`}
             </button>
-            <FreeShippingStatus selectedPrice={selectedBundle.price} />
+            {!selectedBundle.pricePending && <FreeShippingStatus selectedPrice={selectedBundle.price} />}
 
             {/* Trust */}
             <ul className="pt-4 space-y-2 text-xs font-semibold">
