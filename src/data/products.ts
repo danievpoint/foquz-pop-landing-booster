@@ -12,7 +12,7 @@ import watermelonFlexProductVideo from "@/assets/watermelon-flex-product.mp4.ass
 import peachPartyProductVideo from "@/assets/peach-party-product.mp4.asset.json";
 import thaiStyleProductVideo from "@/assets/thai-style-product.mp4.asset.json";
 import fruitPunchImage from "@/assets/bundles/fruit-punch.jpg.asset.json";
-import freshFlashImage from "@/assets/bundles/fresh-flash.webp.asset.json";
+import freshFlashImage from "@/assets/bundles/fresh-flash.png.asset.json";
 import familyFirstImage from "@/assets/bundles/family-first.webp.asset.json";
 
 export interface Product {
