@@ -22,7 +22,7 @@ const STYLE: Record<string, Pick<BundleProductConfig, "titleTopColor" | "titleBo
   "family-first": { titleTopColor: "#ffffff", titleBottomColor: "#ffd618", cardColor: "#7b6cc0" },
 };
 
-/** Final gelieferte Bundle-Texte. Fresh Flash: Rest des Texts wurde nicht geliefert – generischer Introtext bleibt. */
+/** Final gelieferte Bundle-Texte (vollständig, ungekürzt). */
 const TEXT: Record<string, Partial<Pick<BundleProductConfig, "tagline" | "description" | "introHeadline" | "introText" | "checks">>> = {
   "fruit-punch": {
     tagline: "DER FRUCHTIGE DREIFACH-KICK.",
@@ -35,6 +35,15 @@ const TEXT: Record<string, Partial<Pick<BundleProductConfig, "tagline" | "descri
     tagline: "DER VIERFACH-KICK.",
     description: "Vier Sorten, eine Box: Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow – je eine Dose pro Sorte.",
     introHeadline: "DER VIERFACH-KICK.",
+    introText: "Mehr Auswahl, mehr Abwechslung: Entdecke vier FOQUZ Duftwelten und finde deinen Favoriten – oder wechsel einfach je nach Mood.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Vier Duftwelten für deinen Refresh-Moment.\n\n4 Dosen · 4 Sorten · Inklusive Stickern & Nasen-Strips gratis\n\nKurz riechen. Ab auf Wolke 7.",
+    checks: ["4 Dosen · 4 Sorten", "Inklusive Sticker & Nasen-Strips gratis"],
+  },
+  "family-first": {
+    tagline: "DER ACHTFACH-KICK.",
+    description: "Vier Sorten. Jeweils doppelt am Start. Hol dir Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow jeweils zweimal – insgesamt 8 Dosen FOQUZ.",
+    introHeadline: "DER ACHTFACH-KICK.",
+    introText: "Doppelt ausgestattet für zuhause und unterwegs, zum Teilen oder einfach als Vorrat. Eine Dose griffbereit am Schreibtisch, eine in der Sporttasche – und genug Auswahl für jeden Refresh-Moment.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin. Vier Duftwelten – jeweils doppelt.\n\n8 Dosen · 4 Sorten · Jede Sorte zweimal · Inklusive Stickern & Nasen-Strips gratis · Kostenloser Versand innerhalb Deutschlands\n\nKurz riechen. Ab auf Wolke 7.",
+    checks: ["8 Dosen · 4 Sorten · jede Sorte zweimal", "Inklusive Sticker & Nasen-Strips gratis", "Kostenloser Versand innerhalb Deutschlands"],
   },
 };
 
