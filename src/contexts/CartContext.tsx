@@ -10,11 +10,12 @@ import { trackPixelAddToCart, syncShopifyConsentWithTimeout } from "@/lib/tracki
 import giftSticker from "@/assets/gift-sticker.png.asset.json";
 import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
-import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, getSetMix, bundleStatusFor, validateSetMix, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
-import { BUNDLE_CHECKOUT_READY } from "@/data/products";
+import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
+import { BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, SET_FILL_ENABLED } from "@/data/products";
+import { onlineBundleByCartId, refreshOnlineBundles } from "@/lib/bundleOnline";
 
 const SET_CAN_PRICE = 7.49;
-import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, isRetiredSetItem, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -249,7 +250,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const unavailableFlavors = Array.from(new Set(items
     .filter((i) => i.qty > 0)
     .map((i) => i.flavor ?? (isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id))
-    .filter((f) => liveStock?.[f]?.available === false)));
+    .filter((f) => liveStock?.[f]?.available === false)
+    // Alte 3/5/10-Bundles: nicht still auf die neuen Bundle-Varianten umdeuten → Kasse gesperrt.
+    .concat(items.filter((i) => i.qty > 0 && isRetiredSetItem(i)).map((i) => i.name))));
   const hasSoldOutSingle = items.some((item) => (!isSetCan(item) && isSoldOutSingleItem(item.id)));
   useEffect(() => {
     if (!hasSoldOutSingle) return;
@@ -331,35 +334,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (RETIRED_SET_IDS.includes(p.id)) { toast.error("Dieses Set gibt es nicht mehr. Bitte wähle eines der neuen Bundles."); return; }
     const setSize = SET_SIZE_BY_BUNDLE_ID[p.id];
     if (setSize) {
-      // Feste Bundles: bis Pricing + Shopify-Abgleich freigegeben sind, nicht kaufbar.
+      // Feste Bundles = eine Zeile mit der echten Shopify-Bundle-Variante (Onlineshop-Checkout).
       if (!BUNDLE_CHECKOUT_READY) { toast.error("Dieses Bundle ist bald bestellbar."); return; }
-      const mix = { ...getSetMix(setSize) };
       if (setAddInFlight.current) return;
       setAddInFlight.current = true;
       void (async () => {
         try {
-          const fresh = await refreshFlavorStock();
-          if (!fresh) { toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal."); return; }
-          if (bundleStatusFor(setSize, fresh) !== "available") { toast.error("Dieses Bundle ist gerade nicht vollständig lieferbar."); return; }
-          const inCart: Record<string, number> = {};
-          for (const i of itemsRef.current) { const f = i.flavor ?? (SINGLE_CAN_IDS.includes(i.id) ? i.id : null); if (f && i.price > 0) inCart[f] = (inCart[f] ?? 0) + i.qty; }
-          const error = validateSetMix(setSize, mix, fresh, inCart, qty);
-          if (error) { toast.error(error); return; }
-          const cans = SET_FLAVORS.filter((f) => (mix[f.name] ?? 0) > 0).map((f) => ({
-            id: `set${setSize}:${f.name}`, name: `${f.name} · ${setSize}er Set`, price: SET_CAN_PRICE,
-            image: f.image, setSize, flavor: f.name, qty: (mix[f.name] ?? 0) * qty,
-          }));
-          if (cans.length === 0) return;
+          // Direkt vor dem Hinzufügen frisch gegen den Onlineshop prüfen (Titel, Variante, Preis, Bestand).
+          const online = await refreshOnlineBundles();
+          if (!online) { toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal."); return; }
+          if (online[setSize] === "unverified") { toast.error("Dieses Bundle ist bald bestellbar."); return; }
+          if (online[setSize] !== "ready") { toast.error("Dieses Bundle ist gerade nicht lieferbar."); return; }
+          const b = onlineBundleByCartId(p.id)!;
+          const line = { id: b.cartId, name: `${b.title} – ${b.size}ER BUNDLE`, price: BUNDLE_PRICES[setSize], image: p.image };
           setItems((prev) => {
-            let next = [...prev];
-            for (const c of cans) {
-              const existing = next.find((i) => i.id === c.id);
-              next = existing ? next.map((i) => (i.id === c.id ? { ...i, qty: i.qty + c.qty } : i)) : [...next, c];
-            }
-            return next;
+            const existing = prev.find((i) => i.id === line.id);
+            return existing ? prev.map((i) => (i.id === line.id ? { ...i, qty: Math.min(999, i.qty + qty) } : i)) : [...prev, { ...line, qty }];
           });
-          pendingKlaviyoAdd.current = { ...p, qty };
-          tracker.enqueue({ ...p, qty }, hasConsent("marketing"));
+          pendingKlaviyoAdd.current = { ...line, qty };
+          tracker.enqueue({ ...line, qty }, hasConsent("marketing"));
           setLastAddedProductId(p.id);
           setAddToCartTimestamp(Date.now());
           fireCelebrationConfetti();
@@ -408,14 +401,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const fillInFlight = useRef(false);
   const flavorImages = Object.fromEntries(SET_FLAVORS.map((f) => [f.name, f.image]));
   const planFill = useCallback(
-    (target: number) => !BUNDLE_CHECKOUT_READY ? null : planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, FIXED_SET_MIX),
+    (target: number) => !SET_FILL_ENABLED ? null : planFillToSet(items, target, getFlavorStock(), flavorImages, SET_CAN_PRICE, FIXED_SET_MIX),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items]
   );
 
   const fillCartToSet = useCallback(async (target: number, expected: FillPlan["added"]) => {
     if (fillInFlight.current) return false; // Doppelklick/schnelle Aktionen: no-op
-    if (!BUNDLE_CHECKOUT_READY) return false; // Auffüllen erst nach Shopify-Abgleich der Bundles
+    if (!SET_FILL_ENABLED) return false; // Keine freien Sets mehr – Bundles sind feste Shopify-Produkte
     fillInFlight.current = true;
     try {
       const before = itemsRef.current;
@@ -571,7 +564,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         ? [{ variantId: VARIANT_GID_BY_ID[PRIO_SHIPPING_ID], quantity: 1 }]
         : [];
     return items
-      .filter((item) => !(!isSetCan(item) && isSoldOutSingleItem(item.id)))
+      .filter((item) => !(!isSetCan(item) && isSoldOutSingleItem(item.id)) && !isRetiredSetItem(item))
       .map((i) => {
         // Die Gratis-Dose geht als normale Variante nach Shopify; der
         // Rabattcode zieht den Preis ab. So steht sie auf dem Lieferschein.

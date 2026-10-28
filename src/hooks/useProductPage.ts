@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useOnlineBundles } from "@/lib/bundleOnline";
 import { products, allProducts, flavorProducts, FIXED_BUNDLES, BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, bundleContentsText } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
@@ -13,16 +14,22 @@ export interface SetBoxImage {
 }
 
 export function useProductPage(handle: string) {
-  const product = allProducts.find((p) => p.handle === handle)!;
+  const baseProduct = allProducts.find((p) => p.handle === handle)!;
   const { addToCart, isOpen, popupOpen } = useCart();
   const { isAvailable: rawAvailable } = useProductAvailability();
   const stock = useFlavorStock();
+  useOnlineBundles(); // Re-Render bei neuen Onlineshop-Daten
   // Feste Bundles: lieferbar nur, wenn alle Komponenten laut Shopify lieferbar sind (unbekannt = null).
   const bundleAvailable = (size: number): boolean | null => {
     void stock; // Re-Render bei neuem Bestand
     const status = getBundleStatus(size);
     return status === "available" ? true : status === "unavailable" ? false : null;
   };
+  const ownSize = FIXED_BUNDLES.find((b) => b.handle === handle)?.size;
+  const ownStatus = ownSize ? getBundleStatus(ownSize) : null;
+  // Bundles: Kauf/Angebot erst, wenn der Onlineshop die echte Bundle-Variante mit passenden Daten zeigt.
+  const verified = ownSize ? ownStatus === "available" || ownStatus === "unavailable" : baseProduct.checkoutReady !== false;
+  const product = useMemo(() => (baseProduct.isBundle ? { ...baseProduct, checkoutReady: verified } : baseProduct), [baseProduct, verified]);
   const isAvailable = (name: string) => {
     const b = FIXED_BUNDLES.find((x) => x.name === name);
     return b ? bundleAvailable(b.size) : rawAvailable(name);
@@ -31,7 +38,7 @@ export function useProductPage(handle: string) {
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
   const bundleOption = (b: (typeof FIXED_BUNDLES)[number]) => ({
-    label: `${b.size} DOSEN – ${b.name}`, desc: bundleContentsText(b), price: BUNDLE_PRICES[b.size], checkoutReady: BUNDLE_CHECKOUT_READY,
+    label: `${b.size} DOSEN – ${b.name}`, desc: bundleContentsText(b), price: BUNDLE_PRICES[b.size], checkoutReady: BUNDLE_CHECKOUT_READY && getBundleStatus(b.size) !== "unverified",
     oldPrice: BUNDLE_COMPARE_AT[b.size] as string | undefined, perDose: BUNDLE_PER_DOSE[b.size] as string | null, dosen: b.size, tag: null, productName: b.name, id: b.handle,
     boxImage: { url: b.image, altText: `FOQUZ ${b.name} – ${b.size}er Box` },
   });
@@ -43,7 +50,7 @@ export function useProductPage(handle: string) {
   const own = FIXED_BUNDLES.find((b) => b.handle === handle);
   const bundles = own ? [bundleOption(own)] : [single, ...FIXED_BUNDLES.map(bundleOption)];
   const addSingle = () => {
-    if (product.checkoutReady === false) return;
+    if (product.isBundle ? ownStatus === "unverified" : product.checkoutReady === false) return;
     if (isAvailable(product.name) !== false) {
       addToCart(1, { id: product.isBundle ? product.handle : product.name, name: product.name, price: product.numericPrice, image: product.image });
     }

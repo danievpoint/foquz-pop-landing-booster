@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { flavorProducts, FIXED_BUNDLES } from "@/data/products";
 import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
+import { getOnlineBundleStatus, refreshOnlineBundles, useOnlineBundles } from "@/lib/bundleOnline";
 
 /** Feste Bundles (3/4/8). Keine freie Sortenwahl mehr. */
 export const SET_SIZE_BY_BUNDLE_ID: Record<string, number> = Object.fromEntries(FIXED_BUNDLES.map((b) => [b.handle, b.size]));
@@ -40,6 +41,7 @@ export async function refreshFlavorStock(): Promise<Record<string, StockInfo> | 
 }
 export function ensureFlavorStock() {
   if (loading || typeof window === "undefined") return;
+  void refreshOnlineBundles();
   const ids = SET_FLAVORS.map((f) => VARIANT_GID_BY_ID[f.name]);
   loading = (async () => {
     let data;
@@ -64,7 +66,7 @@ export const isFlavorAvailable = (name: string) => stock?.[name]?.available ?? t
 /** Feste Zusammenstellungen der Bundles (Quelle: FIXED_BUNDLES). */
 export const FIXED_SET_MIX: Record<number, SetMix> = Object.fromEntries(FIXED_BUNDLES.map((b) => [b.size, b.mix]));
 
-export type BundleStatus = "available" | "unavailable" | "unknown";
+export type BundleStatus = "available" | "unavailable" | "unknown" | "unverified";
 /**
  * Lieferbarkeit eines festen Bundles aus frisch bestätigtem Bestand:
  * unavailable = eine Komponente ausverkauft oder (bei bekannter Menge) zu knapp; unknown = kein bestätigter Bestand.
@@ -79,7 +81,11 @@ export function bundleStatusFor(size: number, s: Record<string, StockInfo | unde
   if (infos.some(({ info, q }) => info!.qty !== null && info!.qty < q)) return "unavailable";
   return "available";
 }
-export const getBundleStatus = (size: number): BundleStatus => bundleStatusFor(size, lastFetchOk ? stock : null);
+/** Bestellbarkeit eines festen Bundles ausschließlich aus den Onlineshop-Daten der echten Bundle-Variante. */
+export const getBundleStatus = (size: number): BundleStatus => {
+  const s = getOnlineBundleStatus(size);
+  return s === "ready" ? "available" : s === "soldout" ? "unavailable" : s === "unverified" ? "unverified" : "unknown";
+};
 
 /**
  * Prüft eine Mischung gegen frisch bestätigten Bestand. `inCart` = bereits im Warenkorb liegende
@@ -116,6 +122,7 @@ export function useFlavorStock() {
 }
 
 export function useBundleStatus(size: number): BundleStatus {
+  useOnlineBundles();
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
   return getBundleStatus(size);
 }
