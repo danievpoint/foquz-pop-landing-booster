@@ -22,27 +22,31 @@ const STYLE: Record<string, Pick<BundleProductConfig, "titleTopColor" | "titleBo
   "family-first": { titleTopColor: "#ffffff", titleBottomColor: "#ffd618", cardColor: "#7b6cc0" },
 };
 
-/** Final gelieferte Bundle-Texte (vollständig, ungekürzt). */
+/**
+ * Final gelieferte Bundle-Texte (vollständig, ungekürzt), verteilt auf die ursprünglichen
+ * Textblöcke: tagline = erster beschreibender Satz unter dem Titel, introHeadline = Kick-Zeile
+ * (nur einmal, im Intro), introText = Fließtext-Absätze, description = Mengenzeile über „Was ist drin".
+ */
 const TEXT: Record<string, Partial<Pick<BundleProductConfig, "tagline" | "description" | "introHeadline" | "introText" | "checks">>> = {
   "fruit-punch": {
-    tagline: "DER FRUCHTIGE DREIFACH-KICK.",
-    description: "Drei fruchtige FOQUZ Sorten, eine Box: Lemon Breezy, Watermelon Flex und Peach Party – je eine Dose pro Sorte.",
+    tagline: "Drei fruchtige FOQUZ Sorten, eine Box: Lemon Breezy, Watermelon Flex und Peach Party – je eine Dose pro Sorte.",
     introHeadline: "DER FRUCHTIGE DREIFACH-KICK.",
-    introText: "Perfekt zum Durchprobieren, Teilen oder um deinen persönlichen Favoriten zu finden. Einfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Drei fruchtige Duftwelten für deinen Refresh-Moment.\n\n3 Dosen · 3 Sorten · Inklusive Stickern & Nasen-Strips gratis\n\nKurz riechen. Ab auf Wolke 7.",
+    introText: "Perfekt zum Durchprobieren, Teilen oder um deinen persönlichen Favoriten zu finden. Einfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Drei fruchtige Duftwelten für deinen Refresh-Moment.\n\nKurz riechen. Ab auf Wolke 7.",
+    description: "3 Dosen · 3 Sorten · Inklusive Stickern & Nasen-Strips gratis",
     checks: ["3 Dosen · 3 Sorten", "Inklusive Sticker & Nasen-Strips gratis"],
   },
   "fresh-flash": {
-    tagline: "DER VIERFACH-KICK.",
-    description: "Vier Sorten, eine Box: Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow – je eine Dose pro Sorte.",
+    tagline: "Vier Sorten, eine Box: Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow – je eine Dose pro Sorte.",
     introHeadline: "DER VIERFACH-KICK.",
-    introText: "Mehr Auswahl, mehr Abwechslung: Entdecke vier FOQUZ Duftwelten und finde deinen Favoriten – oder wechsel einfach je nach Mood.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Vier Duftwelten für deinen Refresh-Moment.\n\n4 Dosen · 4 Sorten · Inklusive Stickern & Nasen-Strips gratis\n\nKurz riechen. Ab auf Wolke 7.",
+    introText: "Mehr Auswahl, mehr Abwechslung: Entdecke vier FOQUZ Duftwelten und finde deinen Favoriten – oder wechsel einfach je nach Mood.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nKein Koffein. Kein Nikotin. Vier Duftwelten für deinen Refresh-Moment.\n\nKurz riechen. Ab auf Wolke 7.",
+    description: "4 Dosen · 4 Sorten · Inklusive Stickern & Nasen-Strips gratis",
     checks: ["4 Dosen · 4 Sorten", "Inklusive Sticker & Nasen-Strips gratis"],
   },
   "family-first": {
-    tagline: "DER ACHTFACH-KICK.",
-    description: "Vier Sorten. Jeweils doppelt am Start. Hol dir Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow jeweils zweimal – insgesamt 8 Dosen FOQUZ.",
+    tagline: "Vier Sorten. Jeweils doppelt am Start.",
     introHeadline: "DER ACHTFACH-KICK.",
-    introText: "Doppelt ausgestattet für zuhause und unterwegs, zum Teilen oder einfach als Vorrat. Eine Dose griffbereit am Schreibtisch, eine in der Sporttasche – und genug Auswahl für jeden Refresh-Moment.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin. Vier Duftwelten – jeweils doppelt.\n\n8 Dosen · 4 Sorten · Jede Sorte zweimal · Inklusive Stickern & Nasen-Strips gratis · Kostenloser Versand innerhalb Deutschlands\n\nKurz riechen. Ab auf Wolke 7.",
+    introText: "Hol dir Lemon Breezy, Watermelon Flex, Peach Party und Blueberry Flow jeweils zweimal – insgesamt 8 Dosen FOQUZ.\n\nDoppelt ausgestattet für zuhause und unterwegs, zum Teilen oder einfach als Vorrat. Eine Dose griffbereit am Schreibtisch, eine in der Sporttasche – und genug Auswahl für jeden Refresh-Moment.\n\nEinfach Dose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin. Vier Duftwelten – jeweils doppelt.\n\nKurz riechen. Ab auf Wolke 7.",
+    description: "8 Dosen · 4 Sorten · Jede Sorte zweimal · Inklusive Stickern & Nasen-Strips gratis · Kostenloser Versand innerhalb Deutschlands",
     checks: ["8 Dosen · 4 Sorten · jede Sorte zweimal", "Inklusive Sticker & Nasen-Strips gratis", "Kostenloser Versand innerhalb Deutschlands"],
   },
 };
@@ -63,6 +67,9 @@ export function fixedBundleConfig(handle: string): BundleProductConfig {
     description: `${contentsText}. Dazu Sticker & Nasen-Stripes.`,
     introHeadline: `${b.size}er ${titleCase(b.name)}`,
     introText: `In der Box: ${contentsText}.\n\nDose öffnen, vorsichtig unter die Nase halten, kurz riechen und wieder verschließen.\n\nOhne Koffein. Ohne Nikotin.`,
+    // Ursprüngliches Intro-Layout: Bild links, Überschrift + Fließtext rechts daneben.
+    introImage: b.image,
+    introImageAlt: `FOQUZ ${b.name} – ${b.size}er Box`,
     ...TEXT[b.handle],
     contents: [
       ...Object.entries(b.mix).map(([f, q]) => ({ name: `${q}× ${f}`, ...FLAVOR_INFO[f] })),
