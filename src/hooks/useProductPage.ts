@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useOnlineBundles } from "@/lib/bundleOnline";
 import { products, allProducts, flavorProducts, FIXED_BUNDLES, BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, bundleContentsText } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
@@ -17,6 +18,7 @@ export function useProductPage(handle: string) {
   const { addToCart, isOpen, popupOpen } = useCart();
   const { isAvailable: rawAvailable } = useProductAvailability();
   const stock = useFlavorStock();
+  useOnlineBundles(); // Re-Render bei neuen Onlineshop-Daten
   // Feste Bundles: lieferbar nur, wenn alle Komponenten laut Shopify lieferbar sind (unbekannt = null).
   const bundleAvailable = (size: number): boolean | null => {
     void stock; // Re-Render bei neuem Bestand

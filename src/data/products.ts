@@ -145,10 +145,13 @@ export const newFlavorProducts: Product[] = [
 export const flavorProducts: Product[] = [...products, ...newFlavorProducts];
 
 /**
- * Feste Bundles (Vorschau). Preise sind final, der Kauf bleibt gesperrt (`BUNDLE_CHECKOUT_READY = false`),
- * bis echte Shopify-Komponentenbundles mit IDs, Preis, Zugaben und Versand verifiziert sind.
+ * Feste Bundles 3/4/8 sind bestellbar. Jedes einzelne Bundle wird zusätzlich live gegen den
+ * Onlineshop geprüft (`bundleOnline.ts`: Titel, Variante, Preis, Vergleichspreis, Bestand) und
+ * bleibt "bald bestellbar", solange diese Daten nicht passen.
  */
-export const BUNDLE_CHECKOUT_READY = false;
+export const BUNDLE_CHECKOUT_READY = true;
+/** Kein Auffüllen freier Sets aus Einzeldosen mehr – Bundles sind feste Shopify-Produkte. */
+export const SET_FILL_ENABLED = false;
 
 /** Finale Bundle-Preise in EUR (vom Nutzer freigegeben). */
 export const BUNDLE_PRICES: Record<number, number> = { 3: 21.9, 4: 27.9, 8: 49.9 };
