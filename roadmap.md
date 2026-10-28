@@ -1,7 +1,8 @@
 # Roadmap
 - [x] Vorschau feste Bundles 3/4/8 (Fruit Punch, Fresh Flash, Family First): Bilder, Inhalte, Weiterleitungen, Kauf gesperrt bis Pricing
 - [x] Finale Bundle-Preise/Texte eingearbeitet: 21,90/27,90 (zzgl. Versand)/49,90 (versandfrei DE); Kauf weiter gesperrt via BUNDLE_CHECKOUT_READY=false, CTA "BALD BESTELLBAR", kein JSON-LD-Angebot
-- [ ] Bundle-Freischaltung: echte Shopify-Komponentenbundles/IDs, Zugaben-/Versandregeln für 4/8, Family-First-Text und korrigiertes Fresh-Flash-Bild (ohne eingebranntes "KOSTENLOSER VERSAND") nachliefern (wartet auf Nutzer/Shopify-Admin)
+- [x] Vollständige Bundle-Texte (Fresh Flash, Family First) und korrigiertes Fresh-Flash-Bild ohne Versandbalken eingearbeitet
+- [ ] Bundle-Freischaltung: echte Shopify-Komponentenbundles/IDs, Zugaben-/Versandregeln für 4/8 (wartet auf Nutzer/Shopify-Admin)
 - [x] Aktuelle Warenkorbfehler: ersetzende Upsells, Set-Berechtigung, Zugaben, Reload, Preis-Races, Sortenlinks und neutrale Thai-Startseitenanzeige; 41 Regressionstests und Browserprüfung, nicht veröffentlicht
 - [ ] Sichere automatische Löschung nach bezahlter Bestellung bei fehlendem Shopify-Cart: blockiert durch fehlenden eindeutigen Bestellabschlussnachweis; fehlender/abgelaufener Cart wird nicht als Zahlung gewertet
 
