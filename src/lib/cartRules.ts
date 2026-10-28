@@ -17,7 +17,7 @@ export function legacySetSize(id: string): number | undefined {
 }
 
 export function isSetCan(item: CartItem): boolean {
-  return [3, 5, 10].includes(item.setSize ?? 0) && FLAVORS.includes(item.flavor ?? "") && item.id === `set${item.setSize}:${item.flavor}`;
+  return [3, 4, 5, 8, 10].includes(item.setSize ?? 0) && FLAVORS.includes(item.flavor ?? "") && item.id === `set${item.setSize}:${item.flavor}`;
 }
 
 /** A partial group never retains the benefits of its original set size. */

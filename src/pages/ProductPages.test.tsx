@@ -78,7 +78,7 @@ describe("Imported product pages keep Shopify identities", () => {
     expect(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ })).toHaveTextContent('je 2× Peach Party, Lemon Breezy, Watermelon Flex, Blueberry Flow');
     expect(screen.queryByRole('button', { name: /5 DOSEN|10 DOSEN/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /8 DOSEN – FAMILY FIRST/ }));
-    expect(screen.queryByText(/€ \/ Dose|Du sparst|59,90|34,90/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Du sparst|21,90|27,92|47,92|59,90|34,90/)).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /mehr$/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /PREIS FOLGT/ }));
     expect(state.add).not.toHaveBeenCalled();
