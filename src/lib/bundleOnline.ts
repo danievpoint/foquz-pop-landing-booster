@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { FIXED_BUNDLES, BUNDLE_PRICES, BUNDLE_COMPARE_AT } from "@/data/products";
 
 /**
@@ -64,7 +65,39 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
             cache: "no-store",
           });
           if (!res.ok) throw new Error(String(res.status));
-          return [b.size, verifyOnlineBundle(b.size, await res.json())] as const;
+          let status = verifyOnlineBundle(b.size, await res.json());
+          // Native bundle availability can lag behind a component update in Shopify.
+          // Only override that stale flag with fresh, sufficient component inventory.
+          if (status === "soldout") {
+            const mix = FIXED_BUNDLES.find((bundle) => bundle.size === b.size)?.mix;
+            const components = Object.entries(mix ?? {});
+            const ids = components.map(([name]) => VARIANT_GID_BY_ID[name]);
+            if (components.length > 0 && ids.every(Boolean)) {
+              try {
+                const result = await storefrontApiRequest(
+                  "query BundleComponentStock($ids: [ID!]!) { nodes(ids: $ids) { ... on ProductVariant { id availableForSale quantityAvailable } } }",
+                  { ids },
+                );
+                const nodes = result?.data?.nodes;
+                if (
+                  Array.isArray(nodes) &&
+                  nodes.length === components.length &&
+                  nodes.every(
+                    (node, i) =>
+                      node?.id === ids[i] &&
+                      node.availableForSale === true &&
+                      typeof node.quantityAvailable === "number" &&
+                      node.quantityAvailable >= components[i][1],
+                  )
+                ) {
+                  status = "ready";
+                }
+              } catch {
+                /* Keep the unavailable status when fresh stock cannot be verified. */
+              }
+            }
+          }
+          return [b.size, status] as const;
         }),
       );
       state = Object.fromEntries(entries);
