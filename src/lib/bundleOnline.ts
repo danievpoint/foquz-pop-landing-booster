@@ -67,7 +67,7 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
           if (!res.ok) throw new Error(String(res.status));
           let status = verifyOnlineBundle(b.size, await res.json());
           // Native bundle availability can lag behind a component update in Shopify.
-          // Only override that stale flag with fresh, sufficient component inventory.
+          // Only override that stale flag with fresh component availability; Shopify validates quantities at checkout.
           if (status === "soldout") {
             const mix = FIXED_BUNDLES.find((bundle) => bundle.size === b.size)?.mix;
             const components = Object.entries(mix ?? {});
@@ -75,20 +75,14 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
             if (components.length > 0 && ids.every(Boolean)) {
               try {
                 const result = await storefrontApiRequest(
-                  "query BundleComponentStock($ids: [ID!]!) { nodes(ids: $ids) { ... on ProductVariant { id availableForSale quantityAvailable } } }",
+                  "query BundleComponentStock($ids: [ID!]!) { nodes(ids: $ids) { ... on ProductVariant { id availableForSale } } }",
                   { ids },
                 );
                 const nodes = result?.data?.nodes;
                 if (
                   Array.isArray(nodes) &&
                   nodes.length === components.length &&
-                  nodes.every(
-                    (node, i) =>
-                      node?.id === ids[i] &&
-                      node.availableForSale === true &&
-                      typeof node.quantityAvailable === "number" &&
-                      node.quantityAvailable >= components[i][1],
-                  )
+                  nodes.every((node, i) => node?.id === ids[i] && node.availableForSale === true)
                 ) {
                   status = "ready";
                 }
