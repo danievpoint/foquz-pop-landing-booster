@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
+import { useActiveBundles } from "@/lib/setMix";
 
 const heroBgDesktop = "/images/hero/foquz-desktop.webp";
 const heroBgMobile = "/images/hero/foquz-mobile.webp";
@@ -46,6 +47,7 @@ export const useHeroReady = () => {
 };
 
 const HeroSection = () => {
+  const featuredBundle = useActiveBundles()[1];
   const ready = useHeroReady();
   const heroRef = useRef<HTMLElement>(null);
 
@@ -82,8 +84,8 @@ const HeroSection = () => {
             Deine Riechdose für den Frischekick mit<br />echten Kräutern &amp; Menthol.
           </p>
           <div className="foquz-hero-actions">
-            <Link to="/produkt/fresh-flash"
-              className="comic-btn bg-secondary text-secondary-foreground">FRESH FLASH ANSEHEN</Link>
+            <Link to={`/produkt/${featuredBundle.handle}`}
+              className="comic-btn bg-secondary text-secondary-foreground">{featuredBundle.name} ANSEHEN</Link>
             <a href="#sorten" onClick={(e) => { e.preventDefault(); scrollToSection("#sorten"); }}
               className="comic-btn bg-card text-foreground">EINZELN KAUFEN</a>
           </div>
