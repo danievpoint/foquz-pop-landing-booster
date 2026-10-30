@@ -108,13 +108,13 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
               </button>
 
               {/* Badge über der Karte */}
-              {b.dosen === 4 && (
+              {(b.dosen === 4 || b.dosen === 5) && (
                 <span className="absolute -top-2.5 right-3 z-20 inline-flex items-center rounded-full border-2 border-black bg-[#FFD11A] px-2 py-0.5 text-[9px] font-black uppercase leading-none text-black shadow-[2px_2px_0_0_#000] sm:px-2.5 sm:text-[10px]">
                   <Sparkles className="mr-1 h-3 w-3" />
                   BELIEBTESTE WAHL
                 </span>
               )}
-              {isSelected && <div className="mt-3"><SetFlavorPicker size={b.dosen} /></div>}
+              {isSelected && <div className="mt-3"><SetFlavorPicker size={b.dosen} handle={b.id} /></div>}
             </div>
           );
         }
@@ -162,7 +162,7 @@ export function BundleSelector({ bundles, selected, onSelect, selectedFlavor, on
             </span>
             </button>
             {isSelected && b.dosen === 1 && <div className="mt-4 pl-2"><ProductFlavorSelector selected={selectedFlavor} setSize={b.label} /></div>}
-            {isSelected && b.dosen > 1 && <div className="mt-3"><SetFlavorPicker size={b.dosen} /></div>}
+            {isSelected && b.dosen > 1 && <div className="mt-3"><SetFlavorPicker size={b.dosen} handle={b.id} /></div>}
           </div>
         );
       })}

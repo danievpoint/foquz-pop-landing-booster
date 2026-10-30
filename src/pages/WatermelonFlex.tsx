@@ -1,5 +1,5 @@
 import { useProductPage } from "@/hooks/useProductPage";
-import { MORE_BUNDLES } from "@/components/product-pages/moreBundles";
+import { useMoreBundles } from "@/components/product-pages/moreBundles";
 import { useSetSelection } from "@/hooks/useInitialSetSize";
 import { useViewContentPixel } from "@/hooks/useViewContentPixel";
 import { FreeShippingStatus, ProductPageMeta, ProductPageMedia, ProductPageSticky, ProductPromise } from "@/components/product-pages/ShopIntegration";
@@ -128,6 +128,7 @@ const ComicBox = ({
 );
 
 const WatermelonFlexInner = () => {
+  const MORE_BUNDLES = useMoreBundles();
   const shop = useProductPage("watermelon-flex");
   const { product, bundles, addSingle, addSelection, isAvailable } = shop;
   const touchStart = useRef<number | null>(null);

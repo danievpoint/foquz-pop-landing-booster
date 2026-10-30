@@ -265,7 +265,7 @@ const BundleProductInner = ({ config }: { config: BundleProductConfig }) => {
 };
 
 const BundleProductPage = ({ config }: { config: BundleProductConfig }) => (
-  <BundleProductInner config={config} />
+  <BundleProductInner key={config.handle} config={config} />
 );
 
 export default BundleProductPage;

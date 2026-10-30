@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useOnlineBundles } from "@/lib/bundleOnline";
-import { products, allProducts, flavorProducts, FIXED_BUNDLES, BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, bundleContentsText } from "@/data/products";
+import { products, allProducts, flavorProducts, ALL_FIXED_BUNDLES as FIXED_BUNDLES, BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, bundleContentsText } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useProductAvailability } from "@/hooks/useProductAvailability";
 import { SHOPIFY_PRODUCT_ID_BY_HANDLE } from "@/lib/shopify";
 import { trackViewedProduct } from "@/lib/klaviyo";
-import { getBundleStatus, useFlavorStock } from "@/lib/setMix";
+import { getBundleStatus, useFlavorStock, useActiveBundles } from "@/lib/setMix";
 
 /** Bild, das in der Galerie gezeigt wird, solange ein Bundle-Set gewählt ist. */
 export interface SetBoxImage {
@@ -18,27 +18,28 @@ export function useProductPage(handle: string) {
   const { addToCart, isOpen, popupOpen } = useCart();
   const { isAvailable: rawAvailable } = useProductAvailability();
   const stock = useFlavorStock();
+  const activeBundles = useActiveBundles();
   useOnlineBundles(); // Re-Render bei neuen Onlineshop-Daten
   // Feste Bundles: lieferbar nur, wenn alle Komponenten laut Shopify lieferbar sind (unbekannt = null).
-  const bundleAvailable = (size: number): boolean | null => {
+  const bundleAvailable = (size: number | string): boolean | null => {
     void stock; // Re-Render bei neuem Bestand
     const status = getBundleStatus(size);
     return status === "available" ? true : status === "unavailable" ? false : null;
   };
   const ownSize = FIXED_BUNDLES.find((b) => b.handle === handle)?.size;
-  const ownStatus = ownSize ? getBundleStatus(ownSize) : null;
+  const ownStatus = ownSize ? getBundleStatus(handle) : null;
   // Bundles: Kauf/Angebot erst, wenn der Onlineshop die echte Bundle-Variante mit passenden Daten zeigt.
   const verified = ownSize ? ownStatus === "available" || ownStatus === "unavailable" : baseProduct.checkoutReady !== false;
   const product = useMemo(() => (baseProduct.isBundle ? { ...baseProduct, checkoutReady: verified } : baseProduct), [baseProduct, verified]);
   const isAvailable = (name: string) => {
     const b = FIXED_BUNDLES.find((x) => x.name === name);
-    return b ? bundleAvailable(b.size) : rawAvailable(name);
+    return b ? bundleAvailable(b.handle) : rawAvailable(name);
   };
   const ctaRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
   const bundleOption = (b: (typeof FIXED_BUNDLES)[number]) => ({
-    label: `${b.size} DOSEN – ${b.name}`, desc: bundleContentsText(b), price: BUNDLE_PRICES[b.size], checkoutReady: BUNDLE_CHECKOUT_READY && getBundleStatus(b.size) !== "unverified",
+    label: `${b.size} DOSEN – ${b.name}`, desc: bundleContentsText(b), price: BUNDLE_PRICES[b.size], checkoutReady: BUNDLE_CHECKOUT_READY && getBundleStatus(b.handle) === "available",
     oldPrice: BUNDLE_COMPARE_AT[b.size] as string | undefined, perDose: BUNDLE_PER_DOSE[b.size] as string | null, dosen: b.size, tag: null, productName: b.name, id: b.handle,
     boxImage: { url: b.image, altText: `FOQUZ ${b.name} – ${b.size}er Box` },
   });
@@ -48,7 +49,7 @@ export function useProductPage(handle: string) {
     id: product.isBundle ? products[0].name : product.name, boxImage: null as { url: string; altText: string } | null,
   };
   const own = FIXED_BUNDLES.find((b) => b.handle === handle);
-  const bundles = own ? [bundleOption(own)] : [single, ...FIXED_BUNDLES.map(bundleOption)];
+  const bundles = own ? [bundleOption(own)] : [single, ...activeBundles.map(bundleOption)];
   const addSingle = () => {
     if (product.isBundle ? ownStatus === "unverified" : product.checkoutReady === false) return;
     if (isAvailable(product.name) !== false) {

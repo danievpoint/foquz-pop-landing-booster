@@ -772,14 +772,14 @@ const CartDrawer = () => {
 
                 {unavailableFlavors.length > 0 ? (
                   <p role="alert" className="mt-3 text-sm font-bold text-destructive text-center">
-                    {unavailableFlavors.join(", ")} {unavailableFlavors.length === 1 ? "ist" : "sind"} gerade nicht lieferbar. Bitte entferne die Dose{unavailableFlavors.length === 1 ? "" : "n"} oder wähle eine andere Sorte, um zur Kasse zu gehen.
+                    {unavailableFlavors.join(", ")} {unavailableFlavors.length === 1 ? "ist" : "sind"} gerade nicht lieferbar. Bitte prüfe die betroffenen Artikel oder wähle eines der aktuell verfügbaren Bundles, um zur Kasse zu gehen.
                   </p>
                 ) : checkoutUrl ? (
                   <a
                     href={checkoutUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={markCheckoutPending}
+                    onClick={(event) => { event.preventDefault(); void checkout(); }}
                     onAuxClick={markCheckoutPending}
                     onContextMenu={markCheckoutPending}
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"

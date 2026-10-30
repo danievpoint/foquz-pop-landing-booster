@@ -88,6 +88,7 @@ export const SHOPIFY_PRODUCT_ID_BY_HANDLE: Record<string, string> = {
 
 // Map local cart item IDs to Shopify ProductVariant GIDs
 export const VARIANT_GID_BY_ID: Record<string, string> = {
+  "classic-vorrat": "gid://shopify/ProductVariant/56418685976918",
   // Product names (used in ProductGrid/ProductDetail)
   "PEACH PARTY": "gid://shopify/ProductVariant/52867405513046",
   "THAI STYLE": "gid://shopify/ProductVariant/52867410788694",
@@ -104,6 +105,8 @@ export const VARIANT_GID_BY_ID: Record<string, string> = {
   "squad-bundle": "gid://shopify/ProductVariant/55628142707030",
   "vorrats-bundle": "gid://shopify/ProductVariant/55628181274966",
   // Neue feste Bundles (Warenkorb-ID = Bundle-Handle) → echte Shopify-Komponentenbundles.
+  "classic-squad": "gid://shopify/ProductVariant/56418657173846",
+  "classic-starter": "gid://shopify/ProductVariant/56418593505622",
   "fruit-punch": "gid://shopify/ProductVariant/55628113117526",
   "fresh-flash": "gid://shopify/ProductVariant/55628142707030",
   "family-first": "gid://shopify/ProductVariant/55628181274966",
@@ -582,7 +585,7 @@ const numericId = (gid: string) => gid.split("/").pop() ?? gid;
 /** Liefert je Bundle-Name true/false (nur verifizierte, lieferbare Bundles sind true). */
 export async function fetchBundleAvailability(): Promise<Record<string, boolean>> {
   const s = await refreshOnlineBundles();
-  return Object.fromEntries(ONLINE_BUNDLES.map((b) => [b.title, s?.[b.size] === "ready"]));
+  return Object.fromEntries(ONLINE_BUNDLES.map((b) => [b.title, s?.[b.cartId] === "ready"]));
 }
 
 /**

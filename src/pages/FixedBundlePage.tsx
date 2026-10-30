@@ -1,3 +1,7 @@
+import { useActiveBundles } from "@/lib/setMix";
+import StarterBundle from "./StarterBundle";
+import SquadBundle from "./SquadBundle";
+import ZehnerBundle from "./ZehnerBundle";
 import BundleProductPage, { type BundleProductConfig } from "@/components/product-pages/BundleProductPage";
 import { productImages } from "@/lib/redesignProductImages";
 import { bundleContentsText, FIXED_BUNDLES } from "@/data/products";
@@ -84,6 +88,13 @@ export function fixedBundleConfig(handle: string): BundleProductConfig {
   };
 }
 
-export const FruitPunch = () => <BundleProductPage config={fixedBundleConfig("fruit-punch")} />;
-export const FreshFlash = () => <BundleProductPage config={fixedBundleConfig("fresh-flash")} />;
-export const FamilyFirst = () => <BundleProductPage config={fixedBundleConfig("family-first")} />;
+function BundleSlot({ slot }: { slot: number }) {
+  const b = useActiveBundles()[slot];
+  if (b.handle === "classic-starter") return <StarterBundle />;
+  if (b.handle === "classic-squad") return <SquadBundle />;
+  if (b.handle === "classic-vorrat") return <ZehnerBundle />;
+  return <BundleProductPage key={b.handle} config={fixedBundleConfig(b.handle)} />;
+}
+export const FruitPunch = () => <BundleSlot slot={0} />;
+export const FreshFlash = () => <BundleSlot slot={1} />;
+export const FamilyFirst = () => <BundleSlot slot={2} />;

@@ -1,9 +1,8 @@
 import { useSyncExternalStore } from "react";
-import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
-import { FIXED_BUNDLES, BUNDLE_PRICES, BUNDLE_COMPARE_AT } from "@/data/products";
+import { ALL_FIXED_BUNDLES as FIXED_BUNDLES, BUNDLE_PRICES, BUNDLE_COMPARE_AT } from "@/data/products";
 
 /**
- * Feste Bundles 3/4/8 sind native Shopify-Komponentenbundles, die nur im Onlineshop
+ * Beide festen Bundle-Familien sind native Shopify-Komponentenbundles, die nur im Onlineshop
  * verkauft werden können (Lovable-Kanal unterstützt keine Bundles). Ein Bundle gilt erst
  * als bestellbar, wenn das öffentliche Produkt-JSON des Onlineshops genau diese Variante
  * mit dem neuen Titel, dem freigegebenen Preis und Vergleichspreis zeigt.
@@ -17,16 +16,19 @@ export interface OnlineBundle {
   handle: string;
   title: string;
 }
-const SHOP: Record<number, { variantId: string; handle: string }> = {
-  3: { variantId: "55628113117526", handle: "3er-starter-bundle" },
-  4: { variantId: "55628142707030", handle: "5er-squad-bundle-1" },
-  8: { variantId: "55628181274966", handle: "10er-vorrats-bundle-1" },
+const SHOP: Record<string, { variantId: string; handle: string }> = {
+  "classic-vorrat": { variantId: "56418685976918", handle: "10er-vorrats-bundle-2" },
+  "fruit-punch": { variantId: "55628113117526", handle: "3er-starter-bundle" },
+  "fresh-flash": { variantId: "55628142707030", handle: "5er-squad-bundle-1" },
+  "family-first": { variantId: "55628181274966", handle: "10er-vorrats-bundle-1" },
+  "classic-squad": { variantId: "56418657173846", handle: "5er-squad-bundle-2" },
+  "classic-starter": { variantId: "56418593505622", handle: "3er-starter-bundle-1" },
 };
 export const ONLINE_BUNDLES: OnlineBundle[] = FIXED_BUNDLES.map((b) => ({
   size: b.size,
   cartId: b.handle,
   title: b.name,
-  ...SHOP[b.size],
+  ...SHOP[b.handle],
 }));
 export const onlineBundleByCartId = (id: string) => ONLINE_BUNDLES.find((b) => b.cartId === id);
 
@@ -39,37 +41,40 @@ interface ProductJs {
   title?: string;
   variants?: Array<{ id: number; price: number; compare_at_price: number | null; available: boolean }>;
 }
-export function verifyOnlineBundle(size: number, json: ProductJs | null | undefined): OnlineStatus {
-  const b = ONLINE_BUNDLES.find((x) => x.size === size);
+export function verifyOnlineBundle(size: number | string, json: ProductJs | null | undefined): OnlineStatus {
+  const b = ONLINE_BUNDLES.find((x) => typeof size === "string" ? x.cartId === size : x.size === size);
   if (!b || !json?.title || !json.title.toUpperCase().includes(b.title)) return "unverified";
   const v = json.variants?.find((x) => String(x.id) === b.variantId);
   if (!v || json.variants!.length !== 1) return "unverified";
-  if (v.price !== cents(BUNDLE_PRICES[size]) || v.compare_at_price !== cents(parseEuro(BUNDLE_COMPARE_AT[size])))
+  if (v.price !== cents(BUNDLE_PRICES[b.size]) || v.compare_at_price !== cents(parseEuro(BUNDLE_COMPARE_AT[b.size])))
     return "unverified";
   return v.available ? "ready" : "soldout";
 }
 
-let state: Record<number, OnlineStatus> | null = null;
+let state: Record<string, OnlineStatus> | null = null;
 let version = 0;
 const listeners = new Set<() => void>();
-let inflight: Promise<Record<number, OnlineStatus> | null> | null = null;
+let inflight: Promise<Record<string, OnlineStatus> | null> | null = null;
 
-/** Frische Abfrage aller drei Bundles. null = Onlineshop nicht erreichbar (nichts wird freigegeben). */
-export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | null> {
+/** Frische Abfrage aller sechs Bundles. null = Onlineshop nicht erreichbar (nichts wird freigegeben). */
+export function refreshOnlineBundles(): Promise<Record<string, OnlineStatus> | null> {
   if (inflight) return inflight;
   inflight = (async () => {
     try {
+      // Lazy import breaks the Shopify/catalog initialization cycle.
+      const { storefrontApiRequest, VARIANT_GID_BY_ID } = await import("@/lib/shopify");
       const entries = await Promise.all(
         ONLINE_BUNDLES.map(async (b) => {
+          try {
           const res = await fetch(`${ONLINE_STORE_ORIGIN}/products/${b.handle}.js?availability=${Date.now()}`, {
             cache: "no-store",
           });
           if (!res.ok) throw new Error(String(res.status));
-          let status = verifyOnlineBundle(b.size, await res.json());
+          let status = verifyOnlineBundle(b.cartId, await res.json());
           // Native bundle availability can lag behind a component update in Shopify.
           // Only override that stale flag with fresh component availability; Shopify validates quantities at checkout.
-          if (status === "soldout") {
-            const mix = FIXED_BUNDLES.find((bundle) => bundle.size === b.size)?.mix;
+          if (status !== "unverified") {
+            const mix = FIXED_BUNDLES.find((bundle) => bundle.handle === b.cartId)?.mix;
             const components = Object.entries(mix ?? {});
             const ids = components.map(([name]) => VARIANT_GID_BY_ID[name]);
             if (components.length > 0 && ids.every(Boolean)) {
@@ -85,13 +90,18 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
                   nodes.every((node, i) => node?.id === ids[i] && node.availableForSale === true)
                 ) {
                   status = "ready";
+                } else {
+                  status = "soldout";
                 }
               } catch {
-                /* Keep the unavailable status when fresh stock cannot be verified. */
+                status = "unverified"; // A failed read cannot confirm a sale.
               }
             }
           }
-          return [b.size, status] as const;
+          return [b.cartId, status] as const;
+          } catch {
+            return [b.cartId, "unverified"] as const;
+          }
         }),
       );
       state = Object.fromEntries(entries);
@@ -99,6 +109,9 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
       listeners.forEach((l) => l());
       return state;
     } catch {
+      state = null;
+      version++;
+      listeners.forEach((l) => l());
       return null;
     } finally {
       inflight = null;
@@ -106,7 +119,7 @@ export function refreshOnlineBundles(): Promise<Record<number, OnlineStatus> | n
   })();
   return inflight;
 }
-export const getOnlineBundleStatus = (size: number): OnlineStatus | null => state?.[size] ?? null;
+export const getOnlineBundleStatus = (size: number | string): OnlineStatus | null => state?.[typeof size === "string" ? size : ONLINE_BUNDLES.find((b) => b.size === size)?.cartId ?? ""] ?? null;
 export function useOnlineBundles() {
   useSyncExternalStore(
     (l) => {
@@ -118,8 +131,8 @@ export function useOnlineBundles() {
   return state;
 }
 /** Nur für Tests. */
-export function __setOnlineBundlesForTest(s: Record<number, OnlineStatus> | null) {
-  state = s;
+export function __setOnlineBundlesForTest(s: Record<string, OnlineStatus> | null) {
+  state = s ? Object.fromEntries(Object.entries(s).map(([key, value]) => [ONLINE_BUNDLES.find((b) => b.size === Number(key))?.cartId ?? key, value])) : null;
   version++;
   listeners.forEach((l) => l());
 }

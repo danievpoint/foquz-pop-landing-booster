@@ -106,6 +106,9 @@ const App = () => {
                 <Route path="/produkte/watermelon-flex" element={<WatermelonFlex />} />
                 <Route path="/produkt/blueberry-flow" element={<BlueberryFlow />} />
                 <Route path="/produkte/blueberry-flow" element={<BlueberryFlow />} />
+                <Route path="/produkt/classic-starter" element={<FruitPunch />} />
+                <Route path="/produkt/classic-squad" element={<FreshFlash />} />
+                <Route path="/produkt/classic-vorrat" element={<FamilyFirst />} />
                 <Route path="/produkt/fruit-punch" element={<FruitPunch />} />
                 <Route path="/produkt/fresh-flash" element={<FreshFlash />} />
                 <Route path="/produkt/family-first" element={<FamilyFirst />} />

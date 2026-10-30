@@ -1,10 +1,10 @@
 import { useSyncExternalStore } from "react";
-import { flavorProducts, FIXED_BUNDLES } from "@/data/products";
+import { flavorProducts, FIXED_BUNDLES, ALL_FIXED_BUNDLES, CLASSIC_BUNDLES } from "@/data/products";
 import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { getOnlineBundleStatus, refreshOnlineBundles, useOnlineBundles } from "@/lib/bundleOnline";
 
 /** Feste Bundles (3/4/8). Keine freie Sortenwahl mehr. */
-export const SET_SIZE_BY_BUNDLE_ID: Record<string, number> = Object.fromEntries(FIXED_BUNDLES.map((b) => [b.handle, b.size]));
+export const SET_SIZE_BY_BUNDLE_ID: Record<string, number> = Object.fromEntries(ALL_FIXED_BUNDLES.map((b) => [b.handle, b.size]));
 /** Alte Set-IDs (3/5/10): dürfen nicht mehr neu in den Warenkorb, alte Warenkörbe bleiben unverändert. */
 export const RETIRED_SET_IDS = ["bundle", "starter-bundle", "squad-bundle", "vorrats-bundle"];
 export const SET_FLAVORS = flavorProducts.map((p) => ({ name: p.name, image: p.image }));
@@ -82,7 +82,7 @@ export function bundleStatusFor(size: number, s: Record<string, StockInfo | unde
   return "available";
 }
 /** Bestellbarkeit eines festen Bundles ausschließlich aus den Onlineshop-Daten der echten Bundle-Variante. */
-export const getBundleStatus = (size: number): BundleStatus => {
+export const getBundleStatus = (size: number | string): BundleStatus => {
   const s = getOnlineBundleStatus(size);
   return s === "ready" ? "available" : s === "soldout" ? "unavailable" : s === "unverified" ? "unverified" : "unknown";
 };
@@ -121,8 +121,18 @@ export function useFlavorStock() {
   return stock;
 }
 
-export function useBundleStatus(size: number): BundleStatus {
+export function useBundleStatus(size: number | string): BundleStatus {
   useOnlineBundles();
   useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => version);
   return getBundleStatus(size);
 }
+
+/** Only a confirmed sold-out Thai switches the family. A failed read keeps the previous family. */
+export function activeBundlesFor(s: Record<string, StockInfo | undefined> | null) {
+  return s?.["THAI STYLE"]?.available === false ? FIXED_BUNDLES : CLASSIC_BUNDLES;
+}
+export function useActiveBundles() { return activeBundlesFor(useFlavorStock()); }
+export function getActiveBundles() { return activeBundlesFor(stock); }
+
+/** Test harness: inject a stock snapshot without changing Shopify inventory. */
+export function __setFlavorStockForTest(value: Record<string, StockInfo> | null) { stock = value; emit(); }

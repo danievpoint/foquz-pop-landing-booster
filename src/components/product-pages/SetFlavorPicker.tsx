@@ -1,14 +1,15 @@
+import { ALL_FIXED_BUNDLES } from "@/data/products";
 import { useEffect } from "react";
 import { ensureFlavorStock, FIXED_SET_MIX, isFlavorAvailable, SET_FLAVORS, useBundleStatus, useFlavorStock } from "@/lib/setMix";
 
 const short = (name: string) => name.charAt(0) + name.slice(1).toLowerCase().replace(/ (\w)/g, (_, c) => " " + c.toUpperCase());
 
 /** Feste Bundle-Zusammenstellung (keine freie Sortenwahl). Fehlt eine Komponente, ist das Bundle gesperrt. */
-export function SetFlavorPicker({ size }: { size: number }) {
+export function SetFlavorPicker({ size, handle }: { size: number; handle?: string }) {
   useEffect(() => { ensureFlavorStock(); }, []);
   useFlavorStock();
-  const status = useBundleStatus(size);
-  const mix = FIXED_SET_MIX[size];
+  const status = useBundleStatus(handle ?? size);
+  const mix = handle ? ALL_FIXED_BUNDLES.find((b) => b.handle === handle)?.mix : FIXED_SET_MIX[size];
   if (!mix) return null;
   return (
     <div className="rounded-2xl border-2 border-black bg-white p-3 text-black shadow-[3px_3px_0_0_#000]">

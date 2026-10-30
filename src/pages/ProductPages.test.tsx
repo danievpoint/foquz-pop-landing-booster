@@ -5,6 +5,7 @@ import PeachParty from "./PeachParty";
 import ThaiStyle from "./ThaiStyle";
 import LemonBreezy from "./LemonBreezy";
 import { FruitPunch, FamilyFirst } from "./FixedBundlePage";
+import { __setFlavorStockForTest } from "@/lib/setMix";
 import { __setOnlineBundlesForTest } from "@/lib/bundleOnline";
 
 const state = vi.hoisted(() => ({ add: vi.fn(), available: true as boolean | null }));
@@ -19,6 +20,7 @@ vi.mock("@/components/LooxRating", () => ({ default: () => null }));
 vi.mock("@/components/LooxReviews", () => ({ default: () => null }));
 vi.mock("@/components/AutoVideo", () => ({ default: () => null }));
 beforeEach(() => {
+  __setFlavorStockForTest({ "THAI STYLE": { available: false, qty: 0 } });
   state.add.mockClear(); state.available = true;
   // Onlineshop: 3er/4er verifiziert, 8er noch mit altem Titel.
   __setOnlineBundlesForTest({ 3: "ready", 4: "ready", 8: "unverified" });
@@ -37,6 +39,34 @@ function page(handle = "peach-party") {
     <Route path="/produkt/family-first" element={<FamilyFirst />} />
   </Routes></MemoryRouter>);
 }
+
+describe("Live Thai stock switches the complete bundle presentation", () => {
+  it("switches classic selector prices and contents to fallback and back", () => {
+    __setOnlineBundlesForTest({ "classic-starter": "ready", "classic-squad": "ready", "classic-vorrat": "ready", "fruit-punch": "ready", "fresh-flash": "ready", "family-first": "ready" });
+    __setFlavorStockForTest({ "THAI STYLE": { available: true, qty: 27 } });
+    page();
+    expect(screen.getByRole("button", { name: /5 DOSEN – 5ER SQUAD BUNDLE/ })).toHaveTextContent("34,90 €");
+    expect(screen.getByRole("button", { name: /10 DOSEN – 10ER VORRATS-BUNDLE/ })).toHaveTextContent("59,90 €");
+    act(() => __setFlavorStockForTest({ "THAI STYLE": { available: false, qty: 0 } }));
+    expect(screen.queryByRole("button", { name: /5 DOSEN|10 DOSEN/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /4 DOSEN – FRESH FLASH/ })).toHaveTextContent("27,90 €");
+    act(() => __setFlavorStockForTest({ "THAI STYLE": { available: true, qty: 8 } }));
+    expect(screen.getByRole("button", { name: /3 DOSEN – 3ER STARTER BUNDLE/ })).toHaveTextContent("Thai Style");
+    expect(screen.queryByRole("button", { name: /4 DOSEN|8 DOSEN/ })).not.toBeInTheDocument();
+  });
+  it("changes the detail image, original text and exact cart ID together", () => {
+    __setOnlineBundlesForTest({ "classic-starter": "ready", "fruit-punch": "ready" });
+    __setFlavorStockForTest({ "THAI STYLE": { available: true, qty: 27 } });
+    page("fruit-punch");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("3ER STARTER BUNDLE");
+    fireEvent.click(screen.getByRole("button", { name: /IN DEN WARENKORB – 21,90/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: "classic-starter", image: "/images/product-pages/foquz_produkt_bundle_3er.webp" }));
+    act(() => __setFlavorStockForTest({ "THAI STYLE": { available: false, qty: 0 } }));
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("FRUIT PUNCH");
+    fireEvent.click(screen.getByRole("button", { name: /IN DEN WARENKORB – 21,90/ }));
+    expect(state.add).toHaveBeenLastCalledWith(1, expect.objectContaining({ id: "fruit-punch" }));
+  });
+});
 
 describe("Imported product pages keep Shopify identities", () => {
   it.each([['peach-party', 'PEACH PARTY'], ['thai-style', 'THAI STYLE'], ['lemon-breezy', 'LEMON BREEZY']])("buys the correct single and real bundle on %s", (handle, name) => {

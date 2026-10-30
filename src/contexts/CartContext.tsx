@@ -12,7 +12,7 @@ import giftNasenstripes from "@/assets/gift-nasenstripes.jpg.asset.json";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
 import { FIXED_SET_MIX, useFlavorStock, ensureFlavorStock, getFlavorStock, startFlavorStockPolling, refreshFlavorStock, SET_FLAVORS, SET_SIZE_BY_BUNDLE_ID, RETIRED_SET_IDS } from "@/lib/setMix";
 import { BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, SET_FILL_ENABLED } from "@/data/products";
-import { onlineBundleByCartId, refreshOnlineBundles } from "@/lib/bundleOnline";
+import { onlineBundleByCartId, refreshOnlineBundles, useOnlineBundles } from "@/lib/bundleOnline";
 
 const SET_CAN_PRICE = 7.49;
 import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, isRetiredSetItem, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
@@ -247,12 +247,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const shopifyCartIdRef = useRef<string | null>(null);
 
   const liveStock = useFlavorStock();
+  const onlineStock = useOnlineBundles();
   const unavailableFlavors = Array.from(new Set(items
     .filter((i) => i.qty > 0)
     .map((i) => i.flavor ?? (isFreeCanItem(i.id) ? freeCanFlavorOf(i.id) : i.id))
     .filter((f) => liveStock?.[f]?.available === false)
     // Alte 3/5/10-Bundles: nicht still auf die neuen Bundle-Varianten umdeuten → Kasse gesperrt.
-    .concat(items.filter((i) => i.qty > 0 && isRetiredSetItem(i)).map((i) => i.name))));
+    .concat(items.filter((i) => i.qty > 0 && (isRetiredSetItem(i) || (onlineBundleByCartId(i.id) && onlineStock?.[i.id] !== "ready"))).map((i) => i.name))));
   const hasSoldOutSingle = items.some((item) => (!isSetCan(item) && isSoldOutSingleItem(item.id)));
   useEffect(() => {
     if (!hasSoldOutSingle) return;
@@ -343,10 +344,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           // Direkt vor dem Hinzufügen frisch gegen den Onlineshop prüfen (Titel, Variante, Preis, Bestand).
           const online = await refreshOnlineBundles();
           if (!online) { toast.error("Der aktuelle Bestand konnte nicht geprüft werden. Bitte versuche es gleich noch einmal."); return; }
-          if (online[setSize] === "unverified") { toast.error("Dieses Bundle ist bald bestellbar."); return; }
-          if (online[setSize] !== "ready") { toast.error("Dieses Bundle ist gerade nicht lieferbar."); return; }
+          if (online[p.id] === "unverified") { toast.error("Dieses Bundle ist bald bestellbar."); return; }
+          if (online[p.id] !== "ready") { toast.error("Dieses Bundle ist gerade nicht lieferbar."); return; }
           const b = onlineBundleByCartId(p.id)!;
-          const line = { id: b.cartId, name: `${b.title} – ${b.size}ER BUNDLE`, price: BUNDLE_PRICES[setSize], image: p.image };
+          const line = { id: b.cartId, name: b.title.includes("BUNDLE") ? b.title : `${b.title} – ${b.size}ER BUNDLE`, price: BUNDLE_PRICES[setSize], image: p.image };
           setItems((prev) => {
             const existing = prev.find((i) => i.id === line.id);
             return existing ? prev.map((i) => (i.id === line.id ? { ...i, qty: Math.min(999, i.qty + qty) } : i)) : [...prev, { ...line, qty }];
@@ -728,7 +729,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Tab sofort öffnen (sonst blockt der Browser nach dem await).
     const tab = window.open("", "_blank", "noopener,noreferrer");
     // Einwilligung an Shopify übergeben + Bestand frisch prüfen (keine Kasse mit nicht lieferbaren Sorten).
-    const [, fresh] = await Promise.all([syncShopifyConsentWithTimeout(1500), refreshFlavorStock()]);
+    const [, fresh, freshBundles] = await Promise.all([syncShopifyConsentWithTimeout(1500), refreshFlavorStock(), refreshOnlineBundles()]);
+    if (items.some((i) => i.qty > 0 && onlineBundleByCartId(i.id) && freshBundles?.[i.id] !== "ready")) {
+      tab?.close();
+      toast.error("Ein Bundle ist gerade nicht lieferbar. Bitte prüfe deinen Warenkorb und die aktuellen Bundles.");
+      return;
+    }
     const flavorsInCart = items.filter((i) => i.qty > 0 && i.price > 0).map((i) => i.flavor ?? (SINGLE_CAN_IDS.includes(i.id) ? i.id : null)).filter((f): f is string => Boolean(f));
     if (flavorsInCart.length > 0 && (!fresh || flavorsInCart.some((f) => fresh[f]?.available !== true))) {
       tab?.close();

@@ -6,7 +6,7 @@ vi.mock("@/lib/tracking", () => ({ trackPixelAddToCart: vi.fn(), syncShopifyCons
 vi.mock("@/lib/klaviyo", () => ({ trackAddedToCart: vi.fn(), variantIdFor: () => null }));
 vi.mock("@/lib/shopify", async (original) => ({ ...await original<typeof import("@/lib/shopify")>(), createShopifyCheckout: vi.fn(async () => null), isShopifyCartCompleted: vi.fn(async () => false), storefrontApiRequest: vi.fn() }));
 
-import { storefrontApiRequest } from "@/lib/shopify";
+import { storefrontApiRequest, VARIANT_GID_BY_ID } from "@/lib/shopify";
 import { CartProvider, useCart } from "@/contexts/CartContext";
 import { bundleStatusFor, FIXED_SET_MIX, getBundleStatus, refreshFlavorStock } from "@/lib/setMix";
 import { BUNDLE_CHECKOUT_READY, BUNDLE_COMPARE_AT, BUNDLE_PER_DOSE, BUNDLE_PRICES, FIXED_BUNDLES, familyFirstProduct, freshFlashProduct, fruitPunchProduct } from "@/data/products";
@@ -76,21 +76,21 @@ describe("Lieferbarkeit je Bundle (kein Rückfall auf freie Auswahl)", () => {
 
 describe("Preise final, Kauf gesperrt", () => {
   it("finale Preise: 21,90 / 27,90 / 49,90", () => {
-    expect(BUNDLE_PRICES).toEqual({ 3: 21.9, 4: 27.9, 8: 49.9 });
+    expect(BUNDLE_PRICES).toMatchObject({ 3: 21.9, 4: 27.9, 8: 49.9 });
     expect(fruitPunchProduct.numericPrice).toBe(21.9);
     expect(fruitPunchProduct.price).toBe("€21,90");
     expect(freshFlashProduct.numericPrice).toBe(27.9);
     expect(familyFirstProduct.numericPrice).toBe(49.9);
   });
   it("Vergleich mit 7,49 €/Einzeldose: Ersparnis 0,57 / 2,06 / 10,02", () => {
-    expect(BUNDLE_COMPARE_AT).toEqual({ 3: "€22,47", 4: "€29,96", 8: "€59,92" });
+    expect(BUNDLE_COMPARE_AT).toMatchObject({ 3: "€22,47", 4: "€29,96", 8: "€59,92" });
     for (const size of [3, 4, 8]) {
       const compare = parseFloat(BUNDLE_COMPARE_AT[size].replace("€", "").replace(",", "."));
       expect(Math.round((compare - BUNDLE_PRICES[size]) * 100) / 100).toBe({ 3: 0.57, 4: 2.06, 8: 10.02 }[size]);
     }
   });
   it("Dosenpreise gerundet: 7,30 / 6,98 / 6,24", () => {
-    expect(BUNDLE_PER_DOSE).toEqual({ 3: "7,30", 4: "6,98", 8: "6,24" });
+    expect(BUNDLE_PER_DOSE).toMatchObject({ 3: "7,30", 4: "6,98", 8: "6,24" });
   });
   it("Bundle-Kauf ist freigeschaltet (je Bundle live geprüft)", () => {
     expect(BUNDLE_CHECKOUT_READY).toBe(true);
@@ -109,8 +109,9 @@ describe("Preise final, Kauf gesperrt", () => {
       "5er-squad-bundle-1": { title: "FRESH FLASH – 4ER BUNDLE", variants: [{ id: 55628142707030, price: 2790, compare_at_price: 2996, available: true }] },
       "10er-vorrats-bundle-1": { title: "10ER VORRATS-BUNDLE", variants: [{ id: 55628181274966, price: 4990, compare_at_price: 5992, available: true }] },
     };
-    vi.stubGlobal("fetch", vi.fn(async (url: string) => ({ ok: true, status: 200, json: async () => data[url.split("/products/")[1].replace(".js", "")] })));
-    respond(shopify()); mount();
+    vi.stubGlobal("fetch", vi.fn(async (url: string, options?: RequestInit) => ({ ok: true, status: 200, json: async () => options?.method === "POST" ? { data: { nodes: JSON.parse(String(options.body)).variables.ids.map((id: string) => ({ id, availableForSale: true, quantityAvailable: 40 })) } } : data[new URL(url).pathname.split("/products/")[1].replace(".js", "")] })));
+    vi.mocked(storefrontApiRequest).mockImplementation(async (_query, variables) => ({ data: { nodes: (variables?.ids as string[]).map((id) => ({ id, availableForSale: true, quantityAvailable: 40 })) } }));
+    mount();
     await act(async () => { cart.addToCart(1, { id: "fresh-flash", name: "x", price: 1, image: "" }); });
     await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
     expect(cart.items.find((i) => i.id === "fresh-flash")).toMatchObject({ qty: 1, price: 27.9 });

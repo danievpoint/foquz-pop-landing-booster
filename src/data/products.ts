@@ -154,11 +154,11 @@ export const BUNDLE_CHECKOUT_READY = true;
 export const SET_FILL_ENABLED = false;
 
 /** Finale Bundle-Preise in EUR (vom Nutzer freigegeben). */
-export const BUNDLE_PRICES: Record<number, number> = { 3: 21.9, 4: 27.9, 8: 49.9 };
+export const BUNDLE_PRICES: Record<number, number> = { 3: 21.9, 4: 27.9, 5: 34.9, 8: 49.9, 10: 59.9 };
 /** Vergleichspreis: gleiche Dosenzahl als Einzeldosen à 7,49 €. */
-export const BUNDLE_COMPARE_AT: Record<number, string> = { 3: "€22,47", 4: "€29,96", 8: "€59,92" };
+export const BUNDLE_COMPARE_AT: Record<number, string> = { 3: "€22,47", 4: "€29,96", 5: "€37,45", 8: "€59,92", 10: "€74,90" };
 /** Gerundeter Dosenpreis im Bundle. */
-export const BUNDLE_PER_DOSE: Record<number, string> = { 3: "7,30", 4: "6,98", 8: "6,24" };
+export const BUNDLE_PER_DOSE: Record<number, string> = { 3: "7,30", 4: "6,98", 5: "6,98", 8: "6,24", 10: "5,99" };
 
 export interface FixedBundle {
   size: number;
@@ -177,6 +177,14 @@ export const FIXED_BUNDLES: FixedBundle[] = [
   { size: 4, handle: "fresh-flash", name: "FRESH FLASH", image: freshFlashImage.url, mix: bundleMix(FOUR, 1) },
   { size: 8, handle: "family-first", name: "FAMILY FIRST", image: familyFirstImage.url, mix: bundleMix(FOUR, 2) },
 ];
+
+/** Separate cart IDs preserve earlier saved carts and the stockout collection. */
+export const CLASSIC_BUNDLES: FixedBundle[] = [
+  { size: 3, handle: "classic-starter", name: "3ER STARTER BUNDLE", image: "/images/product-pages/foquz_produkt_bundle_3er.webp", mix: bundleMix(["PEACH PARTY", "THAI STYLE", "LEMON BREEZY"], 1) },
+  { size: 5, handle: "classic-squad", name: "5ER SQUAD BUNDLE", image: "/images/product-pages/foquz_produkt_bundle_5er_text.webp", mix: bundleMix([...FOUR, "THAI STYLE"], 1) },
+  { size: 10, handle: "classic-vorrat", name: "10ER VORRATS-BUNDLE", image: "/images/product-pages/foquz_produkt_bundle_10er_text.webp", mix: bundleMix([...FOUR, "THAI STYLE"], 2) },
+];
+export const ALL_FIXED_BUNDLES = [...FIXED_BUNDLES, ...CLASSIC_BUNDLES];
 
 const titleCase = (f: string) => f.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 /** Sachliche Inhaltsangabe, z. B. "8 Dosen: je 2× Peach Party, Lemon Breezy, …". */
@@ -206,4 +214,4 @@ export const [fruitPunchProduct, freshFlashProduct, familyFirstProduct] = FIXED_
 export const bundleProducts: Product[] = [fruitPunchProduct, freshFlashProduct, familyFirstProduct];
 export const bundleBySize = (size: number) => FIXED_BUNDLES.find((b) => b.size === size);
 
-export const allProducts: Product[] = [...flavorProducts, ...bundleProducts];
+export const allProducts: Product[] = [...flavorProducts, ...bundleProducts, ...CLASSIC_BUNDLES.map(toProduct)];

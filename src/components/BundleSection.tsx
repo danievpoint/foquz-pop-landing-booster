@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FIXED_BUNDLES, bundleContentsText, BUNDLE_PRICES, BUNDLE_COMPARE_AT } from "@/data/products";
 import StockBadge from "@/components/StockBadge";
-import { useBundleStatus, ensureFlavorStock } from "@/lib/setMix";
+import { useBundleStatus, ensureFlavorStock, useActiveBundles } from "@/lib/setMix";
 import { useEffect } from "react";
 import bundleBg from "@/assets/bundle-bg.webp";
 
-const squads = FIXED_BUNDLES.map((b) => ({
+const makeSquads = (items: typeof FIXED_BUNDLES) => items.map((b) => ({
   id: b.handle,
   size: b.size,
   link: `/produkt/${b.handle}`,
@@ -14,17 +14,18 @@ const squads = FIXED_BUNDLES.map((b) => ({
   imageAlt: `FOQUZ ${b.name} – ${b.size}er Box`,
   imageAspect: "1 / 1",
   imageClass: "hover:scale-105",
-  title: `${b.size}ER ${b.name}`,
+  title: b.name.includes("BUNDLE") ? b.name : `${b.size}ER ${b.name}`,
   description: `${bundleContentsText(b)}.`,
   checks: [`${b.size} Dosen · feste Zusammenstellung`, "Sticker & Nasen-Stripes inklusive"],
 }));
 
-function BundleStock({ size }: { size: number }) {
+function BundleStock({ size }: { size: number | string }) {
   const status = useBundleStatus(size);
   return status === "available" ? <StockBadge variant="dark" available={true} /> : status === "unavailable" ? <span className="text-xs font-black text-black/70">Gerade nicht vollständig lieferbar</span> : null;
 }
 
 const BundleSection = () => {
+  const squads = makeSquads(useActiveBundles());
   useEffect(() => { ensureFlavorStock(); }, []);
 
   return (
@@ -97,7 +98,7 @@ const BundleSection = () => {
                   <div className="flex items-center gap-3 md:gap-4 mb-0 flex-wrap">
                     <span className="text-xl md:text-3xl font-black text-black">{BUNDLE_PRICES[bundle.size].toFixed(2).replace(".", ",")} €</span>
                     <span className="text-sm md:text-base font-semibold text-black/50 line-through">{BUNDLE_COMPARE_AT[bundle.size]}</span>
-                    <BundleStock size={bundle.size} />
+                    <BundleStock size={bundle.id} />
                   </div>
                 </div>
 
