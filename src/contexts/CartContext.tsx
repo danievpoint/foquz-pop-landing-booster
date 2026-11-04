@@ -727,7 +727,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Tab sofort öffnen (sonst blockt der Browser nach dem await).
-    const tab = window.open("", "_blank", "noopener,noreferrer");
+    // Ohne "noopener": sonst liefert window.open null und der Tab bleibt about:blank.
+    const tab = window.open("", "_blank");
+    if (tab) tab.opener = null;
     // Einwilligung an Shopify übergeben + Bestand frisch prüfen (keine Kasse mit nicht lieferbaren Sorten).
     const [, fresh, freshBundles] = await Promise.all([syncShopifyConsentWithTimeout(1500), refreshFlavorStock(), refreshOnlineBundles()]);
     if (items.some((i) => i.qty > 0 && onlineBundleByCartId(i.id) && freshBundles?.[i.id] !== "ready")) {
