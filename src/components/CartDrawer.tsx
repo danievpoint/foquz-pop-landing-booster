@@ -299,11 +299,11 @@ const CartDrawer = () => {
                     )}
 
                     {showDiscountCode && (
-                      <div className={`mt-3 inline-flex items-center gap-2 border-2 rounded-full pl-2 pr-1 py-1 ${discountPending ? "bg-muted border-foreground/20" : "bg-green-50 border-green-500"}`}>
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${discountPending ? "bg-muted text-foreground" : "bg-green-500 text-primary-foreground"}`}>
-                          {discountPending ? <Tag size={12} /> : <Check size={12} strokeWidth={3} />}
+                      <div className={`mt-3 inline-flex items-center gap-2 border-2 rounded-full pl-2 pr-1 py-1 ${discountUnavailable && !discountMinimumPending ? "bg-red-50 border-red-500" : discountPending ? "bg-muted border-foreground/20" : "bg-green-50 border-green-500"}`}>
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${discountUnavailable && !discountMinimumPending ? "bg-red-100 text-red-600" : discountPending ? "bg-muted text-foreground" : "bg-green-500 text-primary-foreground"}`}>
+                          {discountUnavailable && !discountMinimumPending ? <X size={12} /> : discountPending ? <Tag size={12} /> : <Check size={12} strokeWidth={3} />}
                         </span>
-                        <span className={`font-black text-xs uppercase tracking-wide ${discountPending ? "text-foreground" : "text-green-800"}`}>
+                        <span className={`font-black text-xs uppercase tracking-wide ${discountUnavailable && !discountMinimumPending ? "text-red-700" : discountPending ? "text-foreground" : "text-green-800"}`}>
                           {discountCode}
                         </span>
                         {manualDiscountCode ? (
@@ -323,7 +323,7 @@ const CartDrawer = () => {
                       <p role="status" className="mt-2 text-xs font-bold text-foreground/80">VIRALVIDEO gilt ab 15,00 € Warenwert. Es fehlen noch {Math.max(0, 15 - total).toLocaleString("de-DE", { style: "currency", currency: "EUR" })}.</p>
                     )}
                     {discountUnavailable && !discountMinimumPending && (
-                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">Dieser Code ist für deinen aktuellen Warenkorb noch nicht anwendbar. Prüfe die Rabattbedingungen.</p>
+                      <p role="alert" className="mt-2 text-xs font-bold text-red-600">Rabattcode ungültig oder für diesen Warenkorb nicht anwendbar. Bitte prüfe die Schreibweise und die Rabattbedingungen.</p>
                     )}
                     {discountCalculatedAtCheckout && (
                       <p role="status" className="mt-2 text-xs font-bold text-foreground/80">{isCheckingOut ? "Rabatt wird geprüft …" : "Rabattprüfung vorübergehend nicht verfügbar. Berechnung im Checkout."}</p>
