@@ -26,6 +26,7 @@ import payApplePay from "@/assets/payment/apple-pay.svg";
 import { useLockBodyScroll, skipNextScrollRestore } from "@/hooks/use-lock-body-scroll";
 import { completeSetSizes, hasCheckoutFreeShipping, paidCanCount } from "@/lib/cartRules";
 import { isSoldOutSingleItem } from "@/lib/singleSalePolicy";
+import { Button } from "@/components/ui/button";
 
 const PAYMENT_METHODS = [
   { label: "PayPal", src: payPaypal },
@@ -72,6 +73,7 @@ const CartDrawer = () => {
     hasNewsletterDiscount,
     discountCode,
     discountLines,
+    discountCalculatedAtCheckout,
     manualDiscountCode,
     applyManualDiscountCode,
     clearManualDiscountCode,
@@ -120,6 +122,7 @@ const CartDrawer = () => {
 
   const discountAmount = Math.max(0, total - discountedTotal);
   const hasAppliedDiscount = Boolean(discountCode) && discountLines.some((d) => d.kind === "code");
+  const showDiscountCode = hasAppliedDiscount || discountCalculatedAtCheckout;
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const setSizes = completeSetSizes(items);
@@ -297,26 +300,29 @@ const CartDrawer = () => {
                       </div>
                     )}
 
-                    {hasAppliedDiscount && (
-                      <div className="mt-3 inline-flex items-center gap-2 bg-green-50 border-2 border-green-500 rounded-full pl-2 pr-1 py-1">
-                        <span className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0">
-                          <Check size={12} className="text-white" strokeWidth={3} />
+                    {showDiscountCode && (
+                      <div className={`mt-3 inline-flex items-center gap-2 border-2 rounded-full pl-2 pr-1 py-1 ${discountCalculatedAtCheckout ? "bg-muted border-foreground/20" : "bg-green-50 border-green-500"}`}>
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${discountCalculatedAtCheckout ? "bg-muted text-foreground" : "bg-green-500 text-primary-foreground"}`}>
+                          {discountCalculatedAtCheckout ? <Tag size={12} /> : <Check size={12} strokeWidth={3} />}
                         </span>
-                        <span className="text-green-800 font-black text-xs uppercase tracking-wide">
+                        <span className={`font-black text-xs uppercase tracking-wide ${discountCalculatedAtCheckout ? "text-foreground" : "text-green-800"}`}>
                           {discountCode}
                         </span>
                         {manualDiscountCode ? (
-                          <button
+                          <Button variant="ghost" size="icon"
                             onClick={clearManualDiscountCode}
-                            className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center hover:bg-green-500/40 transition-colors"
+                            className="w-5 h-5 rounded-full p-0 text-foreground hover:bg-foreground/10"
                             aria-label="Rabattcode entfernen"
                           >
-                            <X size={12} className="text-green-800" strokeWidth={3} />
-                          </button>
+                            <X size={12} strokeWidth={3} />
+                          </Button>
                         ) : (
                           <span className="w-5 h-5" />
                         )}
                       </div>
+                    )}
+                    {discountCalculatedAtCheckout && (
+                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">Rabattberechnung im Checkout.</p>
                     )}
                   </div>
 
