@@ -768,7 +768,7 @@ const CartDrawer = () => {
 
                 <div className="flex items-center justify-between text-base pt-1 border-t border-foreground/20 mt-1">
                   <span className="font-black uppercase">Gesamt:</span>
-                  <span className="font-black" aria-live="polite">{isCheckingOut ? "LÄDT…" : `€${(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}`}</span>
+                  <span className="font-black" aria-live="polite">{isCheckingOut ? "LÄDT…" : discountCalculatedAtCheckout ? "Im Checkout" : `€${(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}`}</span>
                 </div>
 
                 {totalSavings > 0 && (
@@ -795,7 +795,7 @@ const CartDrawer = () => {
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base flex items-center justify-center gap-3"
                   >
                     <span>ZUR KASSE</span>
-                    <span>€{(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}</span>
+                    <span>{isCheckingOut ? "LÄDT…" : discountCalculatedAtCheckout ? "" : `€${(discountedTotal + shippingCost).toFixed(2).replace(".", ",")}`}</span>
                   </a>
                 ) : (
                   <button
@@ -803,7 +803,7 @@ const CartDrawer = () => {
                     disabled={isCheckingOut}
                     className="mt-3 comic-btn bg-primary text-primary-foreground w-full text-base disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    LÄDT...
+                    {isCheckingOut ? "LÄDT…" : "ERNEUT PRÜFEN"}
                   </button>
                 )}
 

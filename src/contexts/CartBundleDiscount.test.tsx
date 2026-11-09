@@ -29,9 +29,11 @@ afterEach(cleanup);
 
 describe("Native bundle discount codes", () => {
   it.each([["fruit-punch", 21.9], ["fresh-flash", 27.9], ["family-first", 49.9], ["classic-starter", 21.9], ["classic-squad", 34.9], ["classic-vorrat", 59.9]] as const)(
-    "%s applies the verified EUR 5 campaign and passes it to Shopify", (id, price) => {
+    "%s displays only the EUR 5 campaign confirmed by Shopify", async (id, price) => {
+      vi.mocked(fetchOnlineCartQuote).mockResolvedValue({ subtotal: price - 5, currency: "EUR", applicable: true, discounts: [{ kind: "code", label: "VIRALVIDEO", amount: 5 }] });
       saveStoredCart([bundle(id, price)], false); mount();
       act(() => cart.applyManualDiscountCode("VIRALVIDEO"));
+      await waitFor(() => expect(cart.discountedTotal).toBe(price - 5));
       expect(cart.discountCode).toBe("VIRALVIDEO");
       expect(cart.discountCalculatedAtCheckout).toBe(false);
       expect(cart.discountLines).toEqual([{ kind: "code", label: "VIRALVIDEO", amount: 5 }]);
@@ -44,8 +46,9 @@ describe("Native bundle discount codes", () => {
     saveStoredCart([bundle("fresh-flash", 27.9), single], false); mount();
     act(() => cart.applyManualDiscountCode("VIRALVIDEO"));
     act(() => cart.updateQty("fresh-flash", 2));
-    expect(cart.discountCalculatedAtCheckout).toBe(false);
-    expect(cart.discountedTotal).toBeCloseTo(27.9 * 2 + 7.49 - 5);
+    expect(cart.discountCalculatedAtCheckout).toBe(true);
+    expect(cart.discountLines).toEqual([]);
+    expect(cart.discountedTotal).toBeCloseTo(27.9 * 2 + 7.49);
     expect(new URL(cart.checkoutUrl ?? "https://invalid.test").pathname).toContain("55628142707030:2");
     act(() => cart.clearManualDiscountCode());
     expect(cart.discountCode).toBeNull();
@@ -99,32 +102,31 @@ describe("Native bundle discount codes", () => {
    act(() => cart.applyManualDiscountCode("VIRALVIDEO"));
    expect(cart.discountCode).toBe("VIRALVIDEO");
    expect(cart.activeDiscountPercent).toBe(0);
-   expect(cart.discountedTotal).toBe(29.9);
+   expect(cart.discountedTotal).toBe(34.9);
  });
 
  describe("Percentage codes on native bundles", () => {
-   it.each([["CLOUD10", 3.49], ["MATYAS", 3.49], ["LIVIO", 3.49], ["WOLKE7", 5.23], ["DROP20", 6.98]] as const)("shows %s as a calculated amount", (code, amount) => {
+   it.each([["CLOUD10", 3.49], ["MATYAS", 3.49], ["LIVIO", 3.49], ["WOLKE7", 5.23], ["DROP20", 6.98]] as const)("shows %s only after Shopify confirms it", async (code, amount) => {
+     vi.mocked(fetchOnlineCartQuote).mockResolvedValue({ subtotal: Math.round((34.9 - amount) * 100) / 100, currency: "EUR", applicable: true, discounts: [{ kind: "code", label: code, amount }] });
      saveStoredCart([bundle("classic-squad", 34.9)], false); mount();
      act(() => cart.applyManualDiscountCode(code));
+     await waitFor(() => expect(cart.discountLines).toHaveLength(1));
      expect(cart.discountCalculatedAtCheckout).toBe(false);
      expect(cart.discountLines).toEqual([{ kind: "code", label: code, amount }]);
      expect(cart.discountedTotal).toBeCloseTo(34.9 - amount);
      expect(new URL(cart.checkoutUrl!).searchParams.get("discount")).toBe(code);
    });
-   it("calculates automatic newsletter CLOUD10 and recomputes mixed-cart quantities", () => {
+   it("does not invent newsletter savings on mixed carts when Shopify is unavailable", async () => {
      saveStoredCart([bundle("classic-squad", 34.9), { ...single, qty: 2 }], false); mount();
      act(() => cart.activateNewsletterDiscount());
+     await waitFor(() => expect(cart.isCheckingOut).toBe(false));
      expect(cart.discountCode).toBe("CLOUD10");
-     expect(cart.discountedTotal).toBe(44.9);
-     expect(cart.discountLines[0].amount).toBe(4.98);
+     expect(cart.discountedTotal).toBeCloseTo(49.88);
+     expect(cart.discountLines).toEqual([]);
+     expect(cart.discountCalculatedAtCheckout).toBe(true);
      act(() => cart.updateQty("classic-squad", 2));
-     expect(cart.discountedTotal).toBe(76.31);
-     expect(cart.discountLines[0].amount).toBe(8.47);
-     act(() => cart.applyManualDiscountCode("VIRALVIDEO"));
-     expect(cart.discountLines[0].amount).toBe(5);
-     act(() => cart.clearManualDiscountCode());
-     expect(cart.discountCode).toBe("CLOUD10");
-     expect(cart.discountLines[0].amount).toBe(8.47);
+     expect(cart.discountedTotal).toBeCloseTo(84.78);
+     expect(cart.discountLines).toEqual([]);
    });
  });
 
@@ -156,5 +158,38 @@ describe("Native bundle discount codes", () => {
      await waitFor(() => expect(cart.discountLines[0]?.label).toBe("NEW"));
      await act(async () => resolveOld({ subtotal: 1, currency: "EUR", applicable: true, discounts: [] }));
      expect(cart.discountedTotal).toBe(29.9);
+   });
+ });
+
+ describe("No guessed discounts", () => {
+   it.each(["VIRALVIDEO", "CLOUD10", "KEVIN"])("does not grant %s during an API outage", async code => {
+     vi.mocked(createShopifyCheckout).mockResolvedValue(null);
+     saveStoredCart([{ ...single, qty: 2 }], false); mount();
+     act(() => cart.applyManualDiscountCode(code));
+     await waitFor(() => expect(cart.isCheckingOut).toBe(false));
+     expect(cart.discountedTotal).toBe(14.98);
+     expect(cart.discountLines).toEqual([]);
+     expect(cart.discountUnavailable).toBe(false);
+     expect(cart.discountCalculatedAtCheckout).toBe(true);
+   });
+   it("does not reuse a previous bundle price while a quantity change is pending or fails", async () => {
+     vi.mocked(fetchOnlineCartQuote).mockResolvedValueOnce(null).mockResolvedValueOnce({ subtotal: 16.9, currency: "EUR", applicable: true, discounts: [{ kind: "code", label: "VIRALVIDEO", amount: 5 }] }).mockResolvedValue(null);
+     saveStoredCart([bundle("classic-starter", 21.9)], false); mount();
+     act(() => cart.applyManualDiscountCode("VIRALVIDEO"));
+     await waitFor(() => expect(cart.discountedTotal).toBe(16.9));
+     act(() => cart.updateQty("classic-starter", 2));
+     expect(cart.discountLines).toEqual([]);
+     expect(cart.discountedTotal).toBe(43.8);
+     await waitFor(() => expect(cart.isCheckingOut).toBe(false));
+     expect(cart.discountCalculatedAtCheckout).toBe(true);
+     expect(cart.discountLines).toEqual([]);
+   });
+   it("keeps Shopify's once-per-order cent rounding for two single cans", async () => {
+     vi.mocked(createShopifyCheckout).mockResolvedValue({ url: "https://example.test/checkout", cartId: "cart", discountedSubtotal: 13.49, discountApplicable: true, discounts: [{ kind: "code", label: "CLOUD10", amount: 1.49 }] });
+     saveStoredCart([{ ...single, qty: 2 }], false); mount();
+     act(() => cart.applyManualDiscountCode("CLOUD10"));
+     expect(cart.discountLines).toEqual([]);
+     await waitFor(() => expect(cart.discountedTotal).toBe(13.49));
+     expect(cart.discountLines[0].amount).toBe(1.49);
    });
  });

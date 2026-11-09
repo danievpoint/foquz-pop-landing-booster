@@ -1,5 +1,5 @@
 import { fetchOnlineCartQuote, type OnlineCartQuote } from "@/lib/onlineCartQuote";
-import { fixedDiscountRule, bundleDiscountAmount as calculateBundleDiscount, hasBundleDiscountRule } from "@/lib/discountRules";
+import { fixedDiscountRule } from "@/lib/discountRules";
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
@@ -41,7 +41,7 @@ interface CartContextType {
   activeDiscountPercent: number;
   /** Shopify-Rabatte für den aktuellen Warenkorb, getrennt nach automatisch/Code. */
   discountLines: DiscountLine[];
-  /** Bundle codes without a verified local campaign rule await checkout calculation. */
+  /** No Shopify price is confirmed yet for the selected code and cart. */
   discountCalculatedAtCheckout: boolean;
   discountMinimumPending: boolean;
   discountUnavailable: boolean;
@@ -154,23 +154,6 @@ export const isFreeCanItem = (id: string) => id.startsWith(FREE_CAN_PREFIX);
 export const freeCanFlavorOf = (id: string) => id.slice(FREE_CAN_PREFIX.length);
 
 
-// Known discount codes and their percentage values.
-// Used so we can locally pick the highest-value code and preview the total.
-// Unknown (e.g. influencer) codes still get passed to Shopify.
-const KNOWN_DISCOUNTS: Record<string, number> = {
-  MATYAS: 10,
-  KEVIN: 10,
-  LIVIO: 10,
-  CLOUD10: 10,
-  WOLKE7: 15,
-  FOQUZ20: 20,
-  DROP20: 20,
-
-};
-
-
-
-
 const MANUAL_CODE_KEY = "foquz_manual_discount_code";
 // Muss identisch zu Shopify-Versandprofil (Zone DE) sein. Änderungen in
 // Shopify müssen hier nachgezogen werden – Storefront API liefert die
@@ -244,6 +227,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
   const [addToCartTimestamp, setAddToCartTimestamp] = useState(0);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutRetry, setCheckoutRetry] = useState(0);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [shopifyDiscountedSubtotal, setShopifyDiscountedSubtotal] = useState<number | null>(null);
   const [shopifyDiscountApplicable, setShopifyDiscountApplicable] = useState(true);
@@ -517,10 +501,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   if (manualDiscountCode) {
     discountCode = manualDiscountCode;
-    activeDiscountPercent = KNOWN_DISCOUNTS[manualDiscountCode] ?? 0;
+
   } else if (bestAuto) {
     discountCode = bestAuto.code;
-    activeDiscountPercent = bestAuto.pct;
+
   }
 
   // Sobald 2 bezahlte Einzeldosen im Warenkorb liegen, gilt AUSSCHLIESSLICH
@@ -535,38 +519,28 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
 
-  // Use Shopify's returned subtotal as source of truth (handles unknown codes).
-  // Falls back to a Shopify-compatible preview while the API response loads.
-  // Shopify kürzt Prozent-Rabatte pro Einheit auf ganze Cent ab.
+  // Never guess discounts while Shopify is pending or unavailable. Local code
+  // tables can be stale, and per-unit rounding differs from order allocations.
   const hasNativeBundle = items.some((item) => item.qty > 0 && isFixedBundleItem(item));
   const fixedRule = fixedDiscountRule(discountCode);
-  const bundleDiscountAmount = hasNativeBundle ? calculateBundleDiscount(discountCode, total) : 0;
   const quoteKey = JSON.stringify([cartFingerprint(items, prioShipping), discountCode]);
   const currentBundleQuote = hasNativeBundle && bundleQuote?.key === quoteKey ? bundleQuote.quote : null;
-  const discountCalculatedAtCheckout = hasNativeBundle && Boolean(discountCode) && !currentBundleQuote && !hasBundleDiscountRule(discountCode);
-  const localDiscountAmount = hasNativeBundle ? bundleDiscountAmount : items.reduce((sum, item) => {
-    const unitDiscount = Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
-    return sum + unitDiscount * item.qty;
-  }, 0);
-
-
-  const localDiscountedTotal = Math.max(0, Math.round((total - localDiscountAmount) * 100) / 100);
   // Shopify-Summe enthält auch die automatischen Set-Rabatte.
   const currentKey = JSON.stringify([cartFingerprint(items, prioShipping), discountCode]);
   currentKeyRef.current = currentKey;
   cartFingerprintRef.current = cartFingerprint(items, prioShipping);
   const hasCurrentShopifyResult = !hasNativeBundle && resolvedKey === currentKey && shopifyDiscountedSubtotal !== null;
+  const discountCalculatedAtCheckout = Boolean(discountCode) && !currentBundleQuote && !hasCurrentShopifyResult;
   const discountUnavailable = Boolean(discountCode && (currentBundleQuote ? !currentBundleQuote.applicable : hasCurrentShopifyResult && !shopifyDiscountApplicable));
   const discountMinimumPending = !currentBundleQuote && Boolean(fixedRule && Math.round(total * 100) < fixedRule.minimumCents);
   const discountedTotal = currentBundleQuote ? currentBundleQuote.subtotal :
     hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
-      ? Math.min(shopifyDiscountedSubtotal, total)
-      : localDiscountedTotal;
-  // Shopify allocations, or the explicitly verified campaigns for permalink bundles.
+      ? shopifyDiscountedSubtotal
+      : total;
+  // Only allocations confirmed for this exact cart/code snapshot.
   // Never derive a percentage from the combined cart savings.
   const discountLines: DiscountLine[] = currentBundleQuote ? currentBundleQuote.discounts : hasCurrentShopifyResult ? shopifyDiscounts
-    : bundleDiscountAmount > 0 && discountCode
-      ? [{ kind: "code", label: discountCode, amount: bundleDiscountAmount }] : [];
+    : [];
 
 
   const getCheckoutLines = useCallback(() => {
@@ -721,7 +695,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey, prioShipping, tracker, discountMinimumPending]);
+  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey, prioShipping, tracker, discountMinimumPending, checkoutRetry]);
 
   const markCheckoutPending = useCallback(() => {
     if (!effectiveCheckoutUrl || checkoutIdKeyRef.current !== currentKey || !shopifyCartIdRef.current) return;
@@ -741,7 +715,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (!checkoutUrl) {
-      toast.error("Checkout wird noch vorbereitet. Bitte kurz erneut klicken.");
+      setCheckoutRetry(attempt => attempt + 1);
       return;
     }
 
@@ -820,7 +794,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       isOpen, openCart, closeCart, addToCart, fillCartToSet, planFill, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
-      checkout, isCheckingOut: isCheckingOut || (items.length > 0 && !effectiveCheckoutUrl && unavailableFlavors.length === 0), checkoutUrl: effectiveCheckoutUrl, unavailableFlavors,
+      checkout, isCheckingOut, checkoutUrl: effectiveCheckoutUrl, unavailableFlavors,
       prioShipping, setPrioShipping,
     }}>
 
