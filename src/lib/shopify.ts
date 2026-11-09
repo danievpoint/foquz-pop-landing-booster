@@ -1,3 +1,4 @@
+import { fixedDiscountRule } from "./discountRules";
 import { ONLINE_BUNDLES, ONLINE_STORE_ORIGIN, refreshOnlineBundles } from "@/lib/bundleOnline";
 import { toast } from "sonner";
 import { getCreator, getDtId } from "./attribution";
@@ -410,6 +411,9 @@ const CART_VALIDATE_DISCOUNT_MUTATION = `
 export async function validateDiscountCode(code: string): Promise<boolean> {
   const normalized = code.trim();
   if (!normalized) return false;
+  // Known minimum-spend campaign: a single 7.49 EUR probe cannot validate it.
+  // Eligibility is evaluated against the actual cart in CartContext/Shopify.
+  if (fixedDiscountRule(normalized)) return true;
 
   // Use any known variant as a stub line so Shopify actually evaluates the code.
   const stubVariantId =

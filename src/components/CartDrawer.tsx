@@ -74,6 +74,7 @@ const CartDrawer = () => {
     discountCode,
     discountLines,
     discountCalculatedAtCheckout,
+    discountMinimumPending,
     manualDiscountCode,
     applyManualDiscountCode,
     clearManualDiscountCode,
@@ -110,7 +111,7 @@ const CartDrawer = () => {
       const { validateDiscountCode } = await import("@/lib/shopify");
       const isValid = await validateDiscountCode(c);
       if (!isValid) {
-        setCodeError("Dieser Rabattcode existiert nicht.");
+        setCodeError("Dieser Rabattcode ist für den geprüften Warenkorb nicht anwendbar.");
         return;
       }
       applyManualDiscountCode(c);
@@ -122,7 +123,8 @@ const CartDrawer = () => {
 
   const discountAmount = Math.max(0, total - discountedTotal);
   const hasAppliedDiscount = Boolean(discountCode) && discountLines.some((d) => d.kind === "code");
-  const showDiscountCode = hasAppliedDiscount || discountCalculatedAtCheckout;
+  const showDiscountCode = hasAppliedDiscount || discountCalculatedAtCheckout || discountMinimumPending;
+  const discountPending = discountCalculatedAtCheckout || discountMinimumPending;
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const setSizes = completeSetSizes(items);
@@ -301,11 +303,11 @@ const CartDrawer = () => {
                     )}
 
                     {showDiscountCode && (
-                      <div className={`mt-3 inline-flex items-center gap-2 border-2 rounded-full pl-2 pr-1 py-1 ${discountCalculatedAtCheckout ? "bg-muted border-foreground/20" : "bg-green-50 border-green-500"}`}>
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${discountCalculatedAtCheckout ? "bg-muted text-foreground" : "bg-green-500 text-primary-foreground"}`}>
-                          {discountCalculatedAtCheckout ? <Tag size={12} /> : <Check size={12} strokeWidth={3} />}
+                      <div className={`mt-3 inline-flex items-center gap-2 border-2 rounded-full pl-2 pr-1 py-1 ${discountPending ? "bg-muted border-foreground/20" : "bg-green-50 border-green-500"}`}>
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${discountPending ? "bg-muted text-foreground" : "bg-green-500 text-primary-foreground"}`}>
+                          {discountPending ? <Tag size={12} /> : <Check size={12} strokeWidth={3} />}
                         </span>
-                        <span className={`font-black text-xs uppercase tracking-wide ${discountCalculatedAtCheckout ? "text-foreground" : "text-green-800"}`}>
+                        <span className={`font-black text-xs uppercase tracking-wide ${discountPending ? "text-foreground" : "text-green-800"}`}>
                           {discountCode}
                         </span>
                         {manualDiscountCode ? (
@@ -320,6 +322,9 @@ const CartDrawer = () => {
                           <span className="w-5 h-5" />
                         )}
                       </div>
+                    )}
+                    {discountMinimumPending && (
+                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">VIRALVIDEO gilt ab 15,00 € Warenwert. Es fehlen noch {Math.max(0, 15 - total).toLocaleString("de-DE", { style: "currency", currency: "EUR" })}.</p>
                     )}
                     {discountCalculatedAtCheckout && (
                       <p role="status" className="mt-2 text-xs font-bold text-foreground/80">Rabattberechnung im Checkout.</p>

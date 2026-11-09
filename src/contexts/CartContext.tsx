@@ -1,3 +1,4 @@
+import { fixedDiscountRule, fixedDiscountAmount } from "@/lib/discountRules";
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
@@ -39,8 +40,9 @@ interface CartContextType {
   activeDiscountPercent: number;
   /** Shopify-Rabatte für den aktuellen Warenkorb, getrennt nach automatisch/Code. */
   discountLines: DiscountLine[];
-  /** Native Bundle-Warenkörbe: der Code wird übergeben, die Berechnung bestätigt erst der Checkout. */
+  /** Bundle codes without a verified local campaign rule await checkout calculation. */
   discountCalculatedAtCheckout: boolean;
+  discountMinimumPending: boolean;
   manualDiscountCode: string | null;
   applyManualDiscountCode: (code: string) => void;
   clearManualDiscountCode: () => void;
@@ -84,6 +86,7 @@ const CartContext = createContext<CartContextType>({
   activeDiscountPercent: 0,
   discountLines: [],
   discountCalculatedAtCheckout: false,
+  discountMinimumPending: false,
   manualDiscountCode: null,
   applyManualDiscountCode: () => {},
   clearManualDiscountCode: () => {},
@@ -509,10 +512,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   if (manualDiscountCode) {
     const knownPct = KNOWN_DISCOUNTS[manualDiscountCode];
-    const manualPct = knownPct ?? (bestAuto?.pct ?? 0);
+    const manualPct = fixedDiscountRule(manualDiscountCode) ? 0 : knownPct ?? (bestAuto?.pct ?? 0);
     const bestAutoPct = bestAuto?.pct ?? 0;
 
-    if (manualPct >= bestAutoPct) {
+    if (fixedDiscountRule(manualDiscountCode) || manualPct >= bestAutoPct) {
       discountCode = manualDiscountCode;
       activeDiscountPercent = manualPct;
     } else if (bestAuto) {
@@ -543,8 +546,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Falls back to a Shopify-compatible preview while the API response loads.
   // Shopify kürzt Prozent-Rabatte pro Einheit auf ganze Cent ab.
   const hasNativeBundle = items.some((item) => item.qty > 0 && isFixedBundleItem(item));
-  const discountCalculatedAtCheckout = hasNativeBundle && Boolean(discountCode);
-  const localDiscountAmount = hasNativeBundle ? 0 : items.reduce((sum, item) => {
+  const fixedRule = fixedDiscountRule(discountCode);
+  const discountMinimumPending = Boolean(fixedRule && Math.round(total * 100) < fixedRule.minimumCents);
+  const bundleDiscountAmount = hasNativeBundle ? fixedDiscountAmount(discountCode, total) : 0;
+  const discountCalculatedAtCheckout = hasNativeBundle && Boolean(discountCode) && !fixedRule;
+  const localDiscountAmount = hasNativeBundle ? bundleDiscountAmount : items.reduce((sum, item) => {
     const unitDiscount = Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
     return sum + unitDiscount * item.qty;
   }, 0);
@@ -560,8 +566,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
       : localDiscountedTotal;
-  // Nur echte Shopify-Allokationen anzeigen – keine daraus abgeleiteten Prozentwerte.
-  const discountLines: DiscountLine[] = hasCurrentShopifyResult ? shopifyDiscounts : [];
+  // Shopify allocations, or the explicitly verified fixed campaign for permalink bundles.
+  // Never derive a percentage from the combined cart savings.
+  const discountLines: DiscountLine[] = hasCurrentShopifyResult ? shopifyDiscounts
+    : bundleDiscountAmount > 0 && fixedRule
+      ? [{ kind: "code", label: fixedRule.code, amount: bundleDiscountAmount }] : [];
 
 
   const getCheckoutLines = useCallback(() => {
@@ -681,7 +690,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setShopifyDiscountedSubtotal(result.discountedSubtotal);
           setShopifyDiscounts(result.discounts);
 
-          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode) {
+          if (discountCode && !result.discountApplicable && manualDiscountCode === discountCode && !discountMinimumPending) {
             localStorage.removeItem(MANUAL_CODE_KEY);
             setPendingDiscountCode(null);
             setManualDiscountCode(null);
@@ -707,7 +716,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey, prioShipping, tracker]);
+  }, [items, hasSoldOutSingle, discountCode, manualDiscountCode, getCheckoutLines, currentKey, prioShipping, tracker, discountMinimumPending]);
 
   const markCheckoutPending = useCallback(() => {
     if (!effectiveCheckoutUrl || checkoutIdKeyRef.current !== currentKey || !shopifyCartIdRef.current) return;
@@ -802,7 +811,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
-      activeDiscountPercent, discountLines, discountCalculatedAtCheckout, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
+      activeDiscountPercent, discountLines, discountCalculatedAtCheckout, discountMinimumPending, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, fillCartToSet, planFill, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
