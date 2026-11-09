@@ -75,6 +75,7 @@ const CartDrawer = () => {
     discountLines,
     discountCalculatedAtCheckout,
     discountMinimumPending,
+    discountUnavailable,
     manualDiscountCode,
     applyManualDiscountCode,
     clearManualDiscountCode,
@@ -108,12 +109,7 @@ const CartDrawer = () => {
     setIsValidatingCode(true);
     setCodeError(null);
     try {
-      const { validateDiscountCode } = await import("@/lib/shopify");
-      const isValid = await validateDiscountCode(c);
-      if (!isValid) {
-        setCodeError("Dieser Rabattcode ist für den geprüften Warenkorb nicht anwendbar.");
-        return;
-      }
+      // Evaluate against the actual cart, not a one-can validation probe.
       applyManualDiscountCode(c);
       setCodeInput("");
     } finally {
@@ -123,8 +119,8 @@ const CartDrawer = () => {
 
   const discountAmount = Math.max(0, total - discountedTotal);
   const hasAppliedDiscount = Boolean(discountCode) && discountLines.some((d) => d.kind === "code");
-  const showDiscountCode = hasAppliedDiscount || discountCalculatedAtCheckout || discountMinimumPending;
-  const discountPending = discountCalculatedAtCheckout || discountMinimumPending;
+  const showDiscountCode = Boolean(discountCode);
+  const discountPending = !hasAppliedDiscount;
 
   // Bundle upsell (gestaffelt): Einzeldosen → 3er/5er/10er, 3er → 5er, 5er → 10er
   const setSizes = completeSetSizes(items);
@@ -326,8 +322,11 @@ const CartDrawer = () => {
                     {discountMinimumPending && (
                       <p role="status" className="mt-2 text-xs font-bold text-foreground/80">VIRALVIDEO gilt ab 15,00 € Warenwert. Es fehlen noch {Math.max(0, 15 - total).toLocaleString("de-DE", { style: "currency", currency: "EUR" })}.</p>
                     )}
+                    {discountUnavailable && !discountMinimumPending && (
+                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">Dieser Code ist für deinen aktuellen Warenkorb noch nicht anwendbar. Prüfe die Rabattbedingungen.</p>
+                    )}
                     {discountCalculatedAtCheckout && (
-                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">Rabattberechnung im Checkout.</p>
+                      <p role="status" className="mt-2 text-xs font-bold text-foreground/80">{isCheckingOut ? "Rabatt wird geprüft …" : "Rabattprüfung vorübergehend nicht verfügbar. Berechnung im Checkout."}</p>
                     )}
                   </div>
 
