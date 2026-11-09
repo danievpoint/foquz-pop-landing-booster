@@ -15,7 +15,7 @@ import { BUNDLE_CHECKOUT_READY, BUNDLE_PRICES, SET_FILL_ENABLED } from "@/data/p
 import { onlineBundleByCartId, refreshOnlineBundles, useOnlineBundles } from "@/lib/bundleOnline";
 
 const SET_CAN_PRICE = 7.49;
-import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isSetCan, isRetiredSetItem, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
+import { CART_STORAGE_KEY, CHECKOUT_PENDING_KEY, cartFingerprint, hasCheckoutFreeShipping, isFixedBundleItem, isSetCan, isRetiredSetItem, readStoredCart, reconcileCart, planFillToSet, saveStoredCart, type FillPlan } from "@/lib/cartRules";
 export { SOLD_OUT_SINGLE_IDS } from "@/lib/singleSalePolicy";
 
 export interface CartItem {
@@ -39,6 +39,8 @@ interface CartContextType {
   activeDiscountPercent: number;
   /** Shopify-Rabatte für den aktuellen Warenkorb, getrennt nach automatisch/Code. */
   discountLines: DiscountLine[];
+  /** Native Bundle-Warenkörbe: der Code wird übergeben, die Berechnung bestätigt erst der Checkout. */
+  discountCalculatedAtCheckout: boolean;
   manualDiscountCode: string | null;
   applyManualDiscountCode: (code: string) => void;
   clearManualDiscountCode: () => void;
@@ -81,6 +83,7 @@ const CartContext = createContext<CartContextType>({
   discountCode: null,
   activeDiscountPercent: 0,
   discountLines: [],
+  discountCalculatedAtCheckout: false,
   manualDiscountCode: null,
   applyManualDiscountCode: () => {},
   clearManualDiscountCode: () => {},
@@ -539,7 +542,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Use Shopify's returned subtotal as source of truth (handles unknown codes).
   // Falls back to a Shopify-compatible preview while the API response loads.
   // Shopify kürzt Prozent-Rabatte pro Einheit auf ganze Cent ab.
-  const localDiscountAmount = items.reduce((sum, item) => {
+  const hasNativeBundle = items.some((item) => item.qty > 0 && isFixedBundleItem(item));
+  const discountCalculatedAtCheckout = hasNativeBundle && Boolean(discountCode);
+  const localDiscountAmount = hasNativeBundle ? 0 : items.reduce((sum, item) => {
     const unitDiscount = Math.floor((item.price * activeDiscountPercent) + Number.EPSILON) / 100;
     return sum + unitDiscount * item.qty;
   }, 0);
@@ -550,7 +555,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const currentKey = JSON.stringify([cartFingerprint(items, prioShipping), discountCode]);
   currentKeyRef.current = currentKey;
   cartFingerprintRef.current = cartFingerprint(items, prioShipping);
-  const hasCurrentShopifyResult = resolvedKey === currentKey && shopifyDiscountedSubtotal !== null;
+  const hasCurrentShopifyResult = !hasNativeBundle && resolvedKey === currentKey && shopifyDiscountedSubtotal !== null;
   const discountedTotal =
     hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
       ? Math.min(shopifyDiscountedSubtotal, total)
@@ -797,7 +802,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items, count, total, discountedTotal, hasNewsletterDiscount, discountCode,
-      activeDiscountPercent, discountLines, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
+      activeDiscountPercent, discountLines, discountCalculatedAtCheckout, manualDiscountCode, applyManualDiscountCode, clearManualDiscountCode,
       isOpen, openCart, closeCart, addToCart, fillCartToSet, planFill, markCheckoutPending, removeFromCart, updateQty, activateNewsletterDiscount,
       freeCanEligible, freeCanFlavor, chooseFreeCan,
       popupOpen, setPopupOpen, lastAddedProductId, addToCartTimestamp,
