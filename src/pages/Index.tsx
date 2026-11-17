@@ -7,6 +7,7 @@ import NewsletterPopup, { NEWSLETTER_POPUP_ENABLED } from "@/components/Newslett
 const HowToSection = lazy(() => import("@/components/HowToSection"));
 const WhyFoquzSection = lazy(() => import("@/components/WhyFoquzSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
+const LooxReviews = lazy(() => import("@/components/LooxReviews"));
 const CrewSection = lazy(() => import("@/components/CrewSection"));
 const FaqSection = lazy(() => import("@/components/FaqSection"));
 
@@ -24,6 +25,9 @@ const Index = () => {
         <ProductGrid />
         <Suspense fallback={<SectionFallback />}>
           <BundleSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <LooxReviews />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <HowToSection />

@@ -147,13 +147,23 @@ describe("CookieBanner & Loox", () => {
     fireEvent.click(screen.getByText("AUSWAHL SPEICHERN"));
     expect(readConsent()).toMatchObject({ analytics: true, marketing: false, reviews: false });
   });
-  it("Loox zeigt Platzhalter und lädt erst nach Klick", () => {
+  it("Loox erlaubt nur reviews und lädt ohne Seitenwechsel nach Klick", async () => {
     render(<LooxReviews productId="1" />);
-    expect(screen.getByText("Kundenbewertungen von Loox")).toBeInTheDocument();
     expect(document.getElementById("looxReviews")).toBeNull();
-    fireEvent.click(screen.getByText("BEWERTUNGEN LADEN"));
+    expect(scripts(LOOX_SRC)).toBe(0);
+    fireEvent.click(screen.getByRole("button", { name: "BEWERTUNGEN ANZEIGEN" }));
     expect(document.getElementById("looxReviews")).not.toBeNull();
-    expect(readConsent()).toMatchObject({ reviews: true, marketing: false, choiceMade: false });
+    expect(readConsent()).toMatchObject({ reviews: true, analytics: false, marketing: false, choiceMade: false });
+    await vi.waitFor(() => expect(scripts(LOOX_SRC)).toBe(1));
+  });
+  it.each([[true, false], [false, true], [true, true]])("Loox bewahrt analytics=%s und marketing=%s", (analytics, marketing) => {
+    writeConsent({ analytics, marketing, reviews: false, choiceMade: true });
+    const view = render(<LooxReviews />);
+    fireEvent.click(screen.getByRole("button", { name: "BEWERTUNGEN ANZEIGEN" }));
+    expect(readConsent()).toMatchObject({ reviews: true, analytics, marketing, choiceMade: true });
+    view.unmount();
+    render(<LooxReviews />);
+    expect(document.getElementById("looxReviews")).not.toBeNull();
   });
 });
 

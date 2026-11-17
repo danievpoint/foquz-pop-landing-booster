@@ -1,29 +1,29 @@
 import { useEffect, useRef } from "react";
-import { openCookieSettings, useConsent, writeConsent } from "@/lib/consent";
+import { useConsent, writeConsent } from "@/lib/consent";
 import { loadLooxIfAllowed } from "@/lib/consentRuntime";
+import { Button } from "@/components/ui/button";
 
 interface LooxReviewsProps {
-  productId: string;
+  productId?: string;
   embedded?: boolean;
 }
 
 /** Platzhalter, solange keine Einwilligung in externe Bewertungsinhalte vorliegt. */
 export const LooxConsentPlaceholder = () => (
-  <div className="mx-auto max-w-xl rounded-2xl border-2 border-dashed border-foreground/40 bg-muted/40 p-6 text-center">
-    <p className="font-black uppercase mb-2">Kundenbewertungen von Loox</p>
-    <p className="text-sm text-muted-foreground mb-4">
-      Die Bewertungen werden vom externen Anbieter Loox (Loox Ltd., Israel) geladen. Dabei werden u. a. Ihre
-      IP-Adresse und Geräteinformationen an Loox übertragen. Ihre Einwilligung können Sie jederzeit in den{" "}
-      <button type="button" onClick={openCookieSettings} className="underline font-semibold">Cookie-Einstellungen</button>{" "}
-      widerrufen. Mehr in der <a href="/datenschutz" className="underline font-semibold">Datenschutzerklärung</a>.
+  <div className="loox-consent-card mx-auto max-w-xl rounded-lg border-4 border-border p-6 sm:p-8 text-center font-barlow">
+    <h2 className="text-2xl md:text-3xl font-extrabold uppercase mb-4 leading-tight">DAS SAGEN UNSERE KUNDEN</h2>
+    <p className="text-base text-foreground leading-relaxed mb-6">
+      Unsere echten Kundenbewertungen werden über unseren Dienstleister Loox geladen. Erst mit deinem Klick werden dabei Daten an Loox übertragen. Mehr dazu in der{" "}
+      <a href="/datenschutz" className="underline font-semibold leading-relaxed">Datenschutzerklärung</a>.
     </p>
-    <button
+    <Button
       type="button"
+      variant="secondary"
       onClick={() => writeConsent({ reviews: true })}
-      className="comic-btn bg-primary text-primary-foreground text-sm py-2 px-4"
+      className="loox-consent-button h-auto min-h-12 w-full sm:w-auto whitespace-normal rounded-lg border-2 border-border text-foreground font-extrabold text-base leading-tight py-3 px-5"
     >
-      BEWERTUNGEN LADEN
-    </button>
+      BEWERTUNGEN ANZEIGEN
+    </Button>
   </div>
 );
 
@@ -34,7 +34,7 @@ export const LooxConsentPlaceholder = () => (
  * einer echten Bestellung abgegeben werden – deshalb gibt es hier
  * bewusst keinen "Bewertung schreiben"-Button.
  */
-const LooxReviews = ({ productId, embedded = false }: LooxReviewsProps) => {
+const LooxReviews = ({ productId = "10276794335574", embedded = false }: LooxReviewsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { reviews } = useConsent();
 
@@ -51,7 +51,7 @@ const LooxReviews = ({ productId, embedded = false }: LooxReviewsProps) => {
   return (
     <section className="w-full py-12 md:py-16">
       <div className="container mx-auto px-4">
-        {!embedded && <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
+        {!embedded && reviews && <h2 className="text-2xl md:text-4xl font-black text-center mb-8 uppercase">
           DAS SAGEN UNSERE KUNDEN
         </h2>}
         {reviews ? (

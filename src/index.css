@@ -165,6 +165,20 @@ section[id] {
 }
 
 @layer components {
+  .loox-consent-card {
+    --reviews-background: #C9E9FD;
+    --reviews-button: #FFD11A;
+    --reviews-shadow: 4px 4px 0 hsl(var(--foreground));
+    background: var(--reviews-background);
+    box-shadow: var(--reviews-shadow);
+  }
+
+  .loox-consent-button,
+  .loox-consent-button:hover {
+    background: var(--reviews-button);
+    box-shadow: var(--reviews-shadow);
+  }
+
   .comic-shadow {
     box-shadow: 4px 4px 0px 0px #000;
   }

@@ -1,4 +1,6 @@
 # Roadmap
+- [ ] Loox: Zwei-Klick-Platzhalter, Classic-Bundle-Bewertungen und Startseiten-Sektion; Tests und Browserprüfung, nicht veröffentlichen.
+- [ ] Rabattanzeige ab 15 €: ausdrücklich pausiert; nicht bearbeiten.
 - [x] Vorschau feste Bundles 3/4/8 (Fruit Punch, Fresh Flash, Family First): Bilder, Inhalte, Weiterleitungen, Kauf gesperrt bis Pricing
 - [x] Finale Bundle-Preise/Texte eingearbeitet: 21,90/27,90 (zzgl. Versand)/49,90 (versandfrei DE); Kauf weiter gesperrt via BUNDLE_CHECKOUT_READY=false, CTA "BALD BESTELLBAR", kein JSON-LD-Angebot
 - [x] Vollständige Bundle-Texte (Fresh Flash, Family First) und korrigiertes Fresh-Flash-Bild ohne Versandbalken eingearbeitet
