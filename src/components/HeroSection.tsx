@@ -80,8 +80,8 @@ const HeroSection = () => {
         <div className="foquz-hero-copy">
           <p className="foquz-hero-shipping-mobile"><strong>Versandkostenfrei</strong> ab 29€ nach DE &amp; AT</p>
           <h1 className="foquz-hero-title text-primary-foreground text-pop">
-            <span>KURZ RIECHEN.</span>
-            <span className="text-secondary">AB AUF WOLKE 7.</span>
+            <span>{campaignActive ? "DOSE AUF." : "KURZ RIECHEN."}</span>
+            <span className="text-secondary">{campaignActive ? "DEALS RAUS." : "AB AUF WOLKE 7."}</span>
           </h1>
           <p className="foquz-hero-subtitle text-primary-foreground">
             Deine Riechdose für den Frischemoment mit<br />echten Kräutern &amp; Menthol.

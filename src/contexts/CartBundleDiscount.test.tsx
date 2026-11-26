@@ -193,3 +193,33 @@ describe("Native bundle discount codes", () => {
      expect(cart.discountLines[0].amount).toBe(1.49);
    });
  });
+
+describe("Black Friday automatic cart code", () => {
+  it("starts and expires on an open cart and never invents savings", () => {
+    const now = vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-27T11:59:59+01:00"));
+    try {
+      saveStoredCart([bundle("classic-squad", 34.9)], false); mount();
+      expect(cart.discountCode).toBeNull();
+      now.mockReturnValue(Date.parse("2026-11-27T12:00:00+01:00"));
+      act(() => window.dispatchEvent(new Event("focus")));
+      expect(cart.discountCode).toBe("BLACKFRIDAY");
+      expect(cart.discountedTotal).toBe(34.9);
+      expect(cart.discountLines).toEqual([]);
+      expect(new URL(cart.checkoutUrl!).searchParams.get("discount")).toBe("BLACKFRIDAY");
+      now.mockReturnValue(Date.parse("2026-11-29T00:00:00+01:00"));
+      act(() => window.dispatchEvent(new Event("focus")));
+      expect(cart.discountCode).toBeNull();
+      expect(new URL(cart.checkoutUrl!).searchParams.has("discount")).toBe(false);
+    } finally { cleanup(); now.mockRestore(); }
+  });
+  it("preserves a manually entered VIP code during the automatic offer", () => {
+    const now = vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-28T20:00:00+01:00"));
+    try {
+      saveStoredCart([bundle("classic-squad", 34.9)], false); mount();
+      act(() => cart.applyManualDiscountCode("MYSTERYVIP"));
+      expect(cart.discountCode).toBe("MYSTERYVIP");
+      act(() => cart.clearManualDiscountCode());
+      expect(cart.discountCode).toBe("BLACKFRIDAY");
+    } finally { cleanup(); now.mockRestore(); }
+  });
+});
