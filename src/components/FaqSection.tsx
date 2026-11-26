@@ -8,12 +8,13 @@ import FaqItem from "@/components/FaqItem";
 const INITIAL_VISIBLE = [0, 1, 3, 9, 10, 21, 22];
 
 const FaqSection = () => {
-  const visibleFaqs = INITIAL_VISIBLE.map((i) => ({ faq: faqs[i], index: i }));
+  const homepageFaqs = faqs.map(f => ({ ...f, a: f.a.replace(/Frische-Kick/g, "Frischemoment") }));
+  const visibleFaqs = INITIAL_VISIBLE.map((i) => ({ faq: homepageFaqs[i], index: i }));
 
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
+    mainEntity: homepageFaqs.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },

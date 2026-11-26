@@ -443,7 +443,7 @@ const ProductGrid = () => {
               WÄHLE DEINEN VIBE
             </h2>
             <p className="pg-subtitle text-muted-foreground font-medium text-center max-w-xl mx-auto leading-relaxed">
-              Fünf Sorten, fünfmal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+              Fünf Sorten, fünf frische Duftprofile.<br />Finde den Duft, der perfekt zu deinem Moment passt.
             </p>
             <div className="relative pg-grid">
             <div className="grid grid-cols-5 gap-[clamp(1rem,1.5cqw,1.5rem)]">
@@ -502,7 +502,7 @@ const ProductGrid = () => {
               WÄHLE DEINEN VIBE
             </h2>
             <p className="text-muted-foreground font-medium md:text-lg text-center max-w-xl mx-auto text-xs leading-relaxed">
-              Fünf Sorten, fünfmal maximale Energie.<br />Finde den Kick, der perfekt zu deiner Session passt.
+              Fünf Sorten, fünf frische Duftprofile.<br />Finde den Duft, der perfekt zu deinem Moment passt.
             </p>
           </div>
 

@@ -268,8 +268,8 @@ const CartDrawer = () => {
                 <div className="px-4 sm:px-6 pt-2 md:pt-6 pb-3 space-y-2.5 md:space-y-5">
                   {/* Rabattcode-Eingabe */}
                   <div>
-                    <div className="text-[11px] md:text-xs font-black uppercase tracking-wide mb-1 md:mb-2">Code einfügen</div>
-                    <div className="flex gap-2">
+                    <label htmlFor="cart-discount-code" className="block text-[11px] font-bold mb-1">Rabattcode</label>
+                    <div className="flex gap-1.5 max-w-[320px]">
                       <input
                         type="text"
                         value={codeInput}
@@ -278,15 +278,16 @@ const CartDrawer = () => {
                           if (codeError) setCodeError(null);
                         }}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyCode()}
+                        id="cart-discount-code"
                         placeholder="Code"
                         disabled={isValidatingCode}
                         style={{ fontSize: "16px" }}
-                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-3 md:px-4 py-1 md:py-2.5 font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary md:!text-sm"
+                        className="flex-1 min-w-0 rounded-lg border-2 border-foreground bg-background px-2 py-1 h-9 font-bold uppercase placeholder:normal-case placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary md:!text-sm"
                       />
                       <button
                         onClick={handleApplyCode}
                         disabled={!codeInput.trim() || isValidatingCode}
-                        className="comic-btn bg-primary text-primary-foreground text-[11px] md:text-xs py-1 md:py-2 px-3 md:px-5 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
+                        className="comic-btn bg-primary text-primary-foreground text-[11px] py-1 px-3 h-9 disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
                       >
                         {isValidatingCode ? "PRÜFT…" : "ANWENDEN"}
                       </button>

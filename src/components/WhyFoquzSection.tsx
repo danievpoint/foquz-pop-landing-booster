@@ -9,7 +9,7 @@ const points = [
   { title: "YOUR FOCUS:", text: "Einfach kurz durchatmen.", icon: iconYourFocus },
   { title: "YOUR CLOUD:", text: "Du entscheidest was du riechst.", icon: iconYourCloud },
   { title: "YOUR NOSE:", text: "Nasenspray war gestern.", icon: iconYourNose },
-  { title: "STAY FRESH:", text: "Energie die nicht lügt.", icon: iconStayFresh },
+  { title: "STAY FRESH:", text: "Dein frischer Moment.", icon: iconStayFresh },
 ];
 
 const SpeechBubble = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -71,7 +71,7 @@ const WhyFoquzSection = () => {
 
               <div className="border-t-2 border-foreground/20 pt-4 lg:pt-6">
                 <p className="text-foreground/90 text-xs md:text-sm lg:text-base font-medium leading-relaxed why-point-text">
-                  <span className="font-extrabold">FOQUZ</span> ist die Frische-Dose für die Nase — entwickelt für alle, die zwischendurch einen intensiven, natürlichen Duft-Kick suchen. Mit Kräutern, Menthol und verschiedenen Duftprofilen sorgt er für einen frischen Duft-Kick. Ob in der Tasche, am Schreibtisch, beim Lernen, Zocken oder im Auto — <span className="font-extrabold">FOQUZ</span> ist immer dabei, wenn du eine Duft-Auszeit brauchst.
+                  <span className="font-extrabold">FOQUZ</span> ist die Frische-Dose für die Nase — entwickelt für alle, die zwischendurch einen intensiven, natürlichen Duftmoment suchen. Mit Kräutern, Menthol und verschiedenen Duftprofilen sorgt er für einen frischen Duftmoment. Ob in der Tasche, am Schreibtisch, beim Lernen, Zocken oder im Auto — <span className="font-extrabold">FOQUZ</span> ist immer dabei, wenn du eine Duft-Auszeit brauchst.
                 </p>
                 <p className="text-foreground font-extrabold text-sm md:text-base lg:text-lg mt-3">
                   Kleine Dose, große Wirkung. Stay FOQUZD.

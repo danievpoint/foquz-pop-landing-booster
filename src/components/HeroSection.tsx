@@ -4,8 +4,9 @@ import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
 import { useActiveBundles } from "@/lib/setMix";
 
-const heroBgDesktop = "/images/hero/foquz-desktop.webp";
-const heroBgMobile = "/images/hero/foquz-mobile.webp";
+import { HERO_END, heroImages } from "@/lib/blackFriday";
+import { useCampaignActive } from "@/hooks/use-campaign-active";
+const { desktop: heroBgDesktop, mobile: heroBgMobile } = heroImages();
 
 // Only fetch the hero image that matches the current screen (not both).
 const heroImagePromise: Promise<void> =
@@ -47,6 +48,8 @@ export const useHeroReady = () => {
 };
 
 const HeroSection = () => {
+  const campaignActive = useCampaignActive(HERO_END);
+  const { desktop: heroBgDesktop, mobile: heroBgMobile } = heroImages(campaignActive ? HERO_END - 1 : HERO_END);
   const featuredBundle = useActiveBundles()[1];
   const ready = useHeroReady();
   const heroRef = useRef<HTMLElement>(null);
@@ -81,7 +84,7 @@ const HeroSection = () => {
             <span className="text-secondary">AB AUF WOLKE 7.</span>
           </h1>
           <p className="foquz-hero-subtitle text-primary-foreground">
-            Deine Riechdose für den Frischekick mit<br />echten Kräutern &amp; Menthol.
+            Deine Riechdose für den Frischemoment mit<br />echten Kräutern &amp; Menthol.
           </p>
           <div className="foquz-hero-actions">
             <Link to={`/produkt/${featuredBundle.handle}`}

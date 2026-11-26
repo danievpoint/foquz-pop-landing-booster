@@ -1,4 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
+import { BANNER_END } from "@/lib/blackFriday";
+import { useCampaignActive } from "@/hooks/use-campaign-active";
 import MarqueeBar from "@/components/MarqueeBar";
 
 /**
@@ -12,6 +14,7 @@ import MarqueeBar from "@/components/MarqueeBar";
  *  --marquee-height = aktuell noch sichtbarer Teil (für Anker-Offsets)
  */
 const GlobalMarquee = () => {
+  const campaignActive = useCampaignActive(BANNER_END);
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -54,7 +57,11 @@ const GlobalMarquee = () => {
           willChange: "transform",
         }}
       >
-        <MarqueeBar />
+        {campaignActive ? (
+          <div className="border-y-[3px] border-black bg-[#FFD11A] px-3 py-2 text-center text-xs md:text-sm font-black text-black">
+            Black Friday: 50 % auf alles, nur 24 Stunden: Fr 27.11. 12 Uhr bis Sa 28.11. 12 Uhr
+          </div>
+        ) : <MarqueeBar />}
       </div>
     </>
   );
