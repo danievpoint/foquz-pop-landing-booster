@@ -17,3 +17,9 @@ export function useCampaignActive(end: number) {
   }, [end]);
   return active;
 }
+
+export function useCampaignWindow(start: number, end: number) {
+  const beforeStart = useCampaignActive(start);
+  const beforeEnd = useCampaignActive(end);
+  return !beforeStart && beforeEnd;
+}

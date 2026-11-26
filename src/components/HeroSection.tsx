@@ -4,8 +4,8 @@ import { scrollToSection } from "@/lib/scrollToSection";
 import "./HeroSection.css";
 import { useActiveBundles } from "@/lib/setMix";
 
-import { HERO_END, heroImages } from "@/lib/blackFriday";
-import { useCampaignActive } from "@/hooks/use-campaign-active";
+import { DESIGN_START, HERO_END, heroImages } from "@/lib/blackFriday";
+import { useCampaignWindow } from "@/hooks/use-campaign-active";
 const { desktop: heroBgDesktop, mobile: heroBgMobile } = heroImages();
 
 // Only fetch the hero image that matches the current screen (not both).
@@ -48,7 +48,7 @@ export const useHeroReady = () => {
 };
 
 const HeroSection = () => {
-  const campaignActive = useCampaignActive(HERO_END);
+  const campaignActive = useCampaignWindow(DESIGN_START, HERO_END);
   const { desktop: heroBgDesktop, mobile: heroBgMobile } = heroImages(campaignActive ? HERO_END - 1 : HERO_END);
   const featuredBundle = useActiveBundles()[1];
   const ready = useHeroReady();

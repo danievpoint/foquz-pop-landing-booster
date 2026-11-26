@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
-import { BANNER_END } from "@/lib/blackFriday";
-import { useCampaignActive } from "@/hooks/use-campaign-active";
+import { DESIGN_START, BANNER_END } from "@/lib/blackFriday";
+import { useCampaignWindow } from "@/hooks/use-campaign-active";
 import BlackFridayCountdown from "@/components/BlackFridayCountdown";
 import MarqueeBar from "@/components/MarqueeBar";
 
@@ -15,7 +15,7 @@ import MarqueeBar from "@/components/MarqueeBar";
  *  --marquee-height = aktuell noch sichtbarer Teil (für Anker-Offsets)
  */
 const GlobalMarquee = () => {
-  const campaignActive = useCampaignActive(BANNER_END);
+  const campaignActive = useCampaignWindow(DESIGN_START, BANNER_END);
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
