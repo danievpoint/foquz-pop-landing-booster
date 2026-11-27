@@ -1,4 +1,4 @@
-import { SALE_START, HERO_END, BLACK_FRIDAY_CODE } from "@/lib/blackFriday";
+import { SALE_START, SALE_END, BLACK_FRIDAY_CODE } from "@/lib/blackFriday";
 import { useCampaignActive } from "@/hooks/use-campaign-active";
 import { fetchOnlineCartQuote, type OnlineCartQuote } from "@/lib/onlineCartQuote";
 import { fixedDiscountRule } from "@/lib/discountRules";
@@ -495,7 +495,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Only ONE code applies. If the user entered a manual code, that wins.
   // Otherwise the highest-percentage auto code wins (no stacking).
   const beforeBlackFriday = useCampaignActive(SALE_START);
-  const beforeBlackFridayEnd = useCampaignActive(HERO_END);
+  const beforeBlackFridayEnd = useCampaignActive(SALE_END);
   const blackFridayActive = !beforeBlackFriday && beforeBlackFridayEnd;
   const autoCandidates: { code: string; pct: number }[] = [];
   if (blackFridayActive) autoCandidates.push({ code: BLACK_FRIDAY_CODE, pct: 50 });
