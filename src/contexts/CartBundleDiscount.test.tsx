@@ -223,3 +223,13 @@ describe("Black Friday automatic cart code", () => {
     } finally { cleanup(); now.mockRestore(); }
   });
 });
+
+
+it("accepts Shopify's confirmed automatic Black Friday allocation when the equivalent code loses priority", async () => {
+  vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-27T01:00:00+01:00"));
+  vi.mocked(fetchOnlineCartQuote).mockResolvedValue({ subtotal: 17.45, currency: "EUR", applicable: false, discounts: [{ kind: "automatic", label: "BLACK FRIDAY: 50 % auf alles – bis Sa 28.11. 23:59 Uhr", amount: 17.45 }] });
+  saveStoredCart([bundle("classic-squad", 34.9)], false); mount();
+  await waitFor(() => expect(cart.discountedTotal).toBe(17.45));
+  expect(cart.discountUnavailable).toBe(false);
+  expect(cart.discountLines[0].kind).toBe("automatic");
+});

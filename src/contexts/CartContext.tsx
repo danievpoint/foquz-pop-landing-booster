@@ -537,7 +537,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   cartFingerprintRef.current = cartFingerprint(items, prioShipping);
   const hasCurrentShopifyResult = !hasNativeBundle && resolvedKey === currentKey && shopifyDiscountedSubtotal !== null;
   const discountCalculatedAtCheckout = Boolean(discountCode) && !currentBundleQuote && !hasCurrentShopifyResult;
-  const discountUnavailable = Boolean(discountCode && (currentBundleQuote ? !currentBundleQuote.applicable : hasCurrentShopifyResult && !shopifyDiscountApplicable));
+
   const discountMinimumPending = !currentBundleQuote && Boolean(fixedRule && Math.round(total * 100) < fixedRule.minimumCents);
   const discountedTotal = currentBundleQuote ? currentBundleQuote.subtotal :
     hasCurrentShopifyResult && shopifyDiscountedSubtotal !== null
@@ -547,7 +547,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Never derive a percentage from the combined cart savings.
   const discountLines: DiscountLine[] = currentBundleQuote ? currentBundleQuote.discounts : hasCurrentShopifyResult ? shopifyDiscounts
     : [];
-
+  // Shopify may prefer the identical automatic offer over the supplied code.
+  // Only suppress the automatic-code warning when Shopify confirms that offer.
+  const confirmedBlackFridayAutomatic = !manualDiscountCode && discountCode === BLACK_FRIDAY_CODE &&
+    discountLines.some(line => line.kind === "automatic" && line.label.startsWith("BLACK FRIDAY: 50 %") && line.amount > 0);
+  const discountUnavailable = Boolean(discountCode && !confirmedBlackFridayAutomatic && (currentBundleQuote ? !currentBundleQuote.applicable : hasCurrentShopifyResult && !shopifyDiscountApplicable));
 
   const getCheckoutLines = useCallback(() => {
     const prioLine =
