@@ -26,7 +26,7 @@ describe("Black Friday Berlin schedule", () => {
 
 it("counts to the real start and then the fixed deadline without resetting", () => {
   expect(campaignCountdown(SALE_START - 1000)).toEqual({phase: "upcoming", hours: 0, minutes: 0, seconds: 1});
-  expect(campaignCountdown(SALE_START)).toEqual({phase: "active", hours: 36, minutes: 0, seconds: 0});
+  expect(campaignCountdown(SALE_START)).toEqual({phase: "active", hours: 48, minutes: 0, seconds: 0});
   expect(campaignCountdown(HERO_END - 1000)).toEqual({phase: "active", hours: 0, minutes: 0, seconds: 1});
   expect(campaignCountdown(HERO_END)).toEqual({phase: "ended", hours: 0, minutes: 0, seconds: 0});
 });

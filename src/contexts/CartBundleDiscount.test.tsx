@@ -24,8 +24,8 @@ function Probe() { cart = useCart(); return null; }
 const single: CartItem = { id: "PEACH PARTY", name: "PEACH PARTY", price: 7.49, qty: 1, image: "" };
 const bundle = (id: string, price: number): CartItem => ({ id, name: id, price, qty: 1, image: "" });
 const mount = () => render(<CartProvider><Probe /></CartProvider>);
-beforeEach(() => { localStorage.clear(); sessionStorage.clear(); vi.clearAllMocks(); vi.mocked(fetchOnlineCartQuote).mockResolvedValue(null); });
-afterEach(cleanup);
+beforeEach(() => { vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-26T12:00:00+01:00")); localStorage.clear(); sessionStorage.clear(); vi.clearAllMocks(); vi.mocked(fetchOnlineCartQuote).mockResolvedValue(null); });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe("Native bundle discount codes", () => {
   it.each([["fruit-punch", 21.9], ["fresh-flash", 27.9], ["family-first", 49.9], ["classic-starter", 21.9], ["classic-squad", 34.9], ["classic-vorrat", 59.9]] as const)(
@@ -196,11 +196,11 @@ describe("Native bundle discount codes", () => {
 
 describe("Black Friday automatic cart code", () => {
   it("starts and expires on an open cart and never invents savings", () => {
-    const now = vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-27T11:59:59+01:00"));
+    const now = vi.spyOn(Date, "now").mockReturnValue(Date.parse("2026-11-26T23:59:59+01:00"));
     try {
       saveStoredCart([bundle("classic-squad", 34.9)], false); mount();
       expect(cart.discountCode).toBeNull();
-      now.mockReturnValue(Date.parse("2026-11-27T12:00:00+01:00"));
+      now.mockReturnValue(Date.parse("2026-11-27T00:00:00+01:00"));
       act(() => window.dispatchEvent(new Event("focus")));
       expect(cart.discountCode).toBe("BLACKFRIDAY");
       expect(cart.discountedTotal).toBe(34.9);

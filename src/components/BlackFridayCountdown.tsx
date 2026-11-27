@@ -28,7 +28,7 @@ export default function BlackFridayCountdown() {
         {!upcoming && <a href="/#sorten" className="underline underline-offset-2">Jetzt zugreifen →</a>}
       </div>
       <p className="mt-1 text-[10px] md:text-xs font-bold">
-        {upcoming ? "Fr 27.11., 12 Uhr bis Sa 28.11., 23:59 Uhr" : "Nur bis Samstag, 28.11., 23:59 Uhr"} · Rabatt automatisch im Warenkorb
+        {upcoming ? "Fr 27.11., 0 Uhr bis Sa 28.11., 23:59 Uhr" : "Nur bis Samstag, 28.11., 23:59 Uhr"} · Rabatt automatisch im Warenkorb
       </p>
     </div>
   );

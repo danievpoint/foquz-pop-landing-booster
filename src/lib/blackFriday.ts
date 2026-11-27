@@ -1,7 +1,7 @@
 // Explicit Berlin offsets keep campaign boundaries independent of visitor timezone.
 export const DESIGN_START = Date.parse("2026-11-26T23:59:00+01:00");
 export const HERO_END = Date.parse("2026-11-29T00:00:00+01:00");
-export const SALE_START = Date.parse("2026-11-27T12:00:00+01:00");
+export const SALE_START = Date.parse("2026-11-27T00:00:00+01:00");
 export const BANNER_END = HERO_END;
 export const BLACK_FRIDAY_CODE = "BLACKFRIDAY";
 export const isCampaignActive = (end: number, now = Date.now()) => now < end;
