@@ -3,9 +3,9 @@ import { act, renderHook } from "@testing-library/react";
 import { DESIGN_START, SALE_START, SALE_END, campaignCountdown, HERO_END, BANNER_END, heroImages, isCampaignActive } from "./blackFriday";
 import { useCampaignActive, useCampaignWindow } from "../hooks/use-campaign-active";
 describe("Black Friday Berlin schedule", () => {
-  it("ends the 24-hour sale at noon and keeps artwork until Berlin midnight", () => {
+  it("ends the extended sale and artwork together at Berlin midnight", () => {
     expect(BANNER_END).toBe(SALE_END);
-    expect(SALE_END - SALE_START).toBe(24 * 60 * 60 * 1000);
+    expect(SALE_END - SALE_START).toBe(36 * 60 * 60 * 1000);
     expect(isCampaignActive(BANNER_END, SALE_END - 1)).toBe(true);
     expect(isCampaignActive(BANNER_END, SALE_END)).toBe(false);
     expect(HERO_END).toBe(Date.parse("2026-11-28T23:00:00Z"));
@@ -27,7 +27,7 @@ describe("Black Friday Berlin schedule", () => {
 
 it("counts to the real start and then the fixed deadline without resetting", () => {
   expect(campaignCountdown(SALE_START - 1000)).toEqual({phase: "upcoming", hours: 0, minutes: 0, seconds: 1});
-  expect(campaignCountdown(SALE_START)).toEqual({phase: "active", hours: 24, minutes: 0, seconds: 0});
+  expect(campaignCountdown(SALE_START)).toEqual({phase: "active", hours: 36, minutes: 0, seconds: 0});
   expect(campaignCountdown(SALE_END - 1000)).toEqual({phase: "active", hours: 0, minutes: 0, seconds: 1});
   expect(campaignCountdown(SALE_END)).toEqual({phase: "ended", hours: 0, minutes: 0, seconds: 0});
 });
